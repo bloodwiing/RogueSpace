@@ -26,13 +26,13 @@ int main() {
 
     glViewport(0, 0, 500, 500);
 
-    Shader shader("./res/shader.vert", "./res/shader.frag");
+    Shader shader("./res/default.vert", "./res/default.frag");
 
     float vertices[] = {
-            -0.5, -0.5, 0.0,
-            0.5, -0.5, 0.0,
-            0.5, 0.5, 0.0,
-            -0.5, 0.5, 0.0
+            -0.5, -0.5, 0.0,    0.0, 0.0,
+            0.5, -0.5, 0.0,     1.0, 0.0,
+            0.5, 0.5, 0.0,      1.0, 1.0,
+            -0.5, 0.5, 0.0,     0.0, 1.0
     };
 
     unsigned int indices[] = {
@@ -46,7 +46,8 @@ int main() {
     VBO vbo(vertices, sizeof(vertices));
     EBO ebo(indices, sizeof(indices));
 
-    vao.linkVBO(vbo, 0);
+    vao.linkAttribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void *)0);
+    vao.linkAttribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     vao.unbind();
     vbo.unbind();
     ebo.unbind();
@@ -60,7 +61,6 @@ int main() {
             shader.activate();
         vao.bind();
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
