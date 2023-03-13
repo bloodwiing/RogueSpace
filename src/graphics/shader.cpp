@@ -95,3 +95,7 @@ bool Shader::checkProgramErrors() {
 bool Shader::isErrored() const {
     return error;
 }
+
+GLuint Shader::getID() const {
+    return ID;
+}

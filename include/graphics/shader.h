@@ -14,6 +14,8 @@ public:
 
     bool isErrored() const;
 
+    GLuint getID() const;
+
 private:
     GLuint ID;
     bool error;

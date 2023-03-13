@@ -23,3 +23,7 @@ void VAO::unbind() {
 void VAO::destroy() {
     glDeleteVertexArrays(1, &ID);
 }
+
+GLuint VAO::getID() const {
+    return ID;
+}

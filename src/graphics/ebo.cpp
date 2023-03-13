@@ -17,3 +17,7 @@ void EBO::unbind() {
 void EBO::destroy() {
     glDeleteBuffers(1, &ID);
 }
+
+GLuint EBO::getID() const {
+    return ID;
+}

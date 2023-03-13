@@ -13,6 +13,8 @@ public:
     void unbind();
     void destroy();
 
+    GLuint getID() const;
+
 private:
     GLuint ID;
 };

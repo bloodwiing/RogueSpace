@@ -17,3 +17,7 @@ void VBO::unbind() {
 void VBO::destroy() {
     glDeleteBuffers(1, &ID);
 }
+
+GLuint VBO::getID() const {
+    return ID;
+}
