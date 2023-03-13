@@ -18,7 +18,9 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 
 add_executable(Build ${SRC_FILES})
 
-target_link_libraries(Build dl X11)
+if(NOT WIN32)
+    target_link_libraries(Build dl X11)
+endif()
 
 target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(Build glfw)
