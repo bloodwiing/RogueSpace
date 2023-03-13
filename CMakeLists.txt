@@ -18,5 +18,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 
 add_executable(RogueSpace ${SRC_FILES})
 
+target_link_libraries(RogueSpace dl X11)
+
 target_include_directories(RogueSpace PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(RogueSpace glfw)
