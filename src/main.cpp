@@ -52,13 +52,17 @@ int main() {
     vbo.unbind();
     ebo.unbind();
 
+    GLint uniID = glGetUniformLocation(shader.getID(), "scale");
+
     while (!glfwWindowShouldClose(window)) {
 
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        if (!shader.isErrored())
+        if (!shader.isErrored()) {
             shader.activate();
+            glUniform1f(uniID, 1.5);
+        }
         vao.bind();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
