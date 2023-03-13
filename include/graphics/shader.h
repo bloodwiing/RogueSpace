@@ -9,12 +9,13 @@ public:
     Shader(const std::string& vertex_file, const std::string& fragment_file);
     ~Shader();
 
-    void enable();
+    void activate();
+    void destroy();
 
     bool isErrored() const;
 
 private:
-    GLuint id;
+    GLuint ID;
     bool error;
 
     static std::string readFileContents(const std::string& file_name);

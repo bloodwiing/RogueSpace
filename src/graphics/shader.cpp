@@ -40,10 +40,10 @@ Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
     if (checkShaderErrors(fragID, "Fragment", fragment_file))
         return;
 
-    id = glCreateProgram();
-    glAttachShader(id, vertID);
-    glAttachShader(id, fragID);
-    glLinkProgram(id);
+    ID = glCreateProgram();
+    glAttachShader(ID, vertID);
+    glAttachShader(ID, fragID);
+    glLinkProgram(ID);
 
     glDeleteShader(vertID);
     glDeleteShader(fragID);
@@ -52,11 +52,15 @@ Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
 }
 
 Shader::~Shader() {
-    glDeleteProgram(id);
+    destroy();
 }
 
-void Shader::enable() {
-    glUseProgram(id);
+void Shader::activate() {
+    glUseProgram(ID);
+}
+
+void Shader::destroy() {
+    glDeleteProgram(ID);
 }
 
 #define ERROR_MESSAGE_LEN 1024
@@ -78,10 +82,10 @@ bool Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const s
 bool Shader::checkProgramErrors() {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
-    glGetProgramiv(id, GL_LINK_STATUS, &status);
+    glGetProgramiv(ID, GL_LINK_STATUS, &status);
     if (!status) {
         error = true;
-        glGetProgramInfoLog(id, ERROR_MESSAGE_LEN, nullptr, infoLog);
+        glGetProgramInfoLog(ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
         std::cout << "Error linking OpenGL program:\n" << infoLog << std::endl;
         return true;
     }

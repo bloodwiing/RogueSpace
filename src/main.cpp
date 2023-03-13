@@ -57,7 +57,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         if (!shader.isErrored())
-            shader.enable();
+            shader.activate();
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
