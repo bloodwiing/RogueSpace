@@ -1,6 +1,7 @@
 #include <iostream>
 #include "glad/glad.h"
 #include <glfw3.h>
+#include "graphics/shader.h"
 
 int main() {
     glfwInit();
@@ -21,34 +22,7 @@ int main() {
 
     glViewport(0, 0, 500, 500);
 
-    const char *vertexShaderSource = ""
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 pos;\n"
-        "void main() {\n"
-        "  gl_Position = vec4(pos, 1.0);\n"
-        "}\0";
-    const char *fragmentShaderSource = ""
-         "#version 330 core\n"
-         "out vec4 FragColor;\n"
-         "void main() {\n"
-         "  FragColor = vec4(0.5, 0.9, 0.4, 1.0);\n"
-         "}\0";
-
-    GLuint vertID = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertID, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertID);
-
-    GLuint fragID = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragID, 1, &fragmentShaderSource, nullptr);
-    glCompileShader(fragID);
-
-    GLuint progID = glCreateProgram();
-    glAttachShader(progID, vertID);
-    glAttachShader(progID, fragID);
-    glLinkProgram(progID);
-
-    glDeleteShader(vertID);
-    glDeleteShader(fragID);
+    Shader shader("./res/shader.vert", "./res/shader.frag");
 
     float vertices[] = {
             -0.5, -0.5, 0.0,
@@ -82,7 +56,8 @@ int main() {
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(progID);
+        if (!shader.isErrored())
+            shader.enable();
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 

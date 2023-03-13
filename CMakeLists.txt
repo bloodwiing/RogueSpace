@@ -16,9 +16,19 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
 
-add_executable(RogueSpace ${SRC_FILES})
+add_executable(Build ${SRC_FILES})
 
-target_link_libraries(RogueSpace dl X11)
+target_link_libraries(Build dl X11)
 
-target_include_directories(RogueSpace PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(RogueSpace glfw)
+target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(Build glfw)
+
+add_custom_target(
+        CopyResources ALL
+        COMMENT "Copying Resources to build directory"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                ${CMAKE_CURRENT_SOURCE_DIR}/res
+                ${CMAKE_BINARY_DIR}/res
+)
+
+add_dependencies(Build CopyResources)
