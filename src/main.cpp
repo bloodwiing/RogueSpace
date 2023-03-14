@@ -1,6 +1,7 @@
 #include <iostream>
 #include "glad/glad.h"
 #include <glfw3.h>
+#include <chrono>
 
 #include "graphics/shader.h"
 #include "graphics/vbo.h"
@@ -52,7 +53,11 @@ int main() {
     vbo.unbind();
     ebo.unbind();
 
+    using namespace std::chrono;
+
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
+
+    auto now = high_resolution_clock::now();
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -61,7 +66,7 @@ int main() {
 
         if (!shader.isErrored()) {
             shader.activate();
-            glUniform1f(uniID, 1.5);
+            glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.0000005f);
         }
         vao.bind();
 
