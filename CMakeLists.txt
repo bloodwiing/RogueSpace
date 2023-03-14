@@ -9,6 +9,11 @@ set_target_properties(glfw PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3.a"
         INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/")
 
+add_library(soil2 STATIC IMPORTED)
+set_target_properties(soil2 PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libsoil2.a"
+        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/SOIL2/")
+
 find_package(OpenGL REQUIRED)
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
@@ -23,7 +28,7 @@ if(NOT WIN32)
 endif()
 
 target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Build glfw)
+target_link_libraries(Build soil2 glfw opengl32)
 
 add_custom_target(
         CopyResources ALL

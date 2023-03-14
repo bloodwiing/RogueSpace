@@ -1,5 +1,6 @@
 #include <iostream>
 #include "glad/glad.h"
+#include <SOIL2.h>
 #include <glfw3.h>
 #include <chrono>
 
@@ -56,6 +57,8 @@ int main() {
     using namespace std::chrono;
 
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
+
+    GLuint res = SOIL_GL_ExtensionSupported("GL_EXT_some_extension");
 
     auto now = high_resolution_clock::now();
 
