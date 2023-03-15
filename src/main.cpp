@@ -58,7 +58,7 @@ int main() {
 
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
 
-    GLuint res = SOIL_GL_ExtensionSupported("GL_EXT_some_extension");
+    GLuint res = SOIL_load_OGL_texture("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
 
     auto now = high_resolution_clock::now();
 
@@ -70,6 +70,8 @@ int main() {
         if (!shader.isErrored()) {
             shader.activate();
             glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.0000005f);
+            glBindTexture(GL_TEXTURE_2D, res);
+            glActiveTexture(0);
         }
         vao.bind();
 
