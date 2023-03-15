@@ -2,9 +2,9 @@
 Roguelike Space Combat
 
 ### Libraries
-* **Glad**
-OpenGL linker
-* **GLFW**
+* **[Glad](https://glad.dav1d.de/)** `0.1.36` for OpenGL `3.3`<br>
+OpenGL loader
+* **[GLFW](https://www.glfw.org/)** `3.3.8`<br>
 OpenGL Window and Input tools
-* **[SOIL2](https://github.com/SpartanJ/SOIL2)**
+* **[SOIL2](https://github.com/SpartanJ/SOIL2)** `58a9458`<br>
 Image loader and OpenGL texture manager
