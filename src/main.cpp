@@ -57,8 +57,12 @@ int main() {
     using namespace std::chrono;
 
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
+    GLint textureID = glGetUniformLocation(shader.getID(), "textureSampler");
 
-    GLuint res = SOIL_load_OGL_texture("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
+    GLuint res = SOIL_load_OGL_texture("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+    glBindTexture(GL_TEXTURE_2D, res);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     auto now = high_resolution_clock::now();
 
@@ -71,7 +75,7 @@ int main() {
             shader.activate();
             glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.0000005f);
             glBindTexture(GL_TEXTURE_2D, res);
-            glActiveTexture(0);
+            glActiveTexture(textureID);
         }
         vao.bind();
 
