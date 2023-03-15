@@ -8,6 +8,7 @@
 #include "graphics/vbo.h"
 #include "graphics/vao.h"
 #include "graphics/ebo.h"
+#include "graphics/texture.h"
 
 int main() {
     glfwInit();
@@ -59,10 +60,7 @@ int main() {
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
     GLint textureID = glGetUniformLocation(shader.getID(), "textureSampler");
 
-    GLuint res = SOIL_load_OGL_texture("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-    glBindTexture(GL_TEXTURE_2D, res);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    Texture grassPNG("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
     auto now = high_resolution_clock::now();
 
@@ -73,8 +71,8 @@ int main() {
 
         if (!shader.isErrored()) {
             shader.activate();
-            glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.0000005f);
-            glBindTexture(GL_TEXTURE_2D, res);
+            glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.00000005f + 0.5f);
+            grassPNG.bind();
             glActiveTexture(textureID);
         }
         vao.bind();
@@ -90,6 +88,7 @@ int main() {
     vbo.destroy();
     ebo.destroy();
     shader.destroy();
+    grassPNG.destroy();
 
     glfwDestroyWindow(window);
     glfwTerminate();
