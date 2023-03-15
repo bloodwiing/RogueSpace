@@ -28,7 +28,13 @@ if(NOT WIN32)
 endif()
 
 target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Build soil2 glfw opengl32)
+target_link_libraries(Build soil2 glfw)
+
+if(WIN32)
+    target_link_libraries(Build opengl32)
+else()
+    target_link_libraries(Build GL)
+endif()
 
 add_custom_target(
         CopyResources ALL
