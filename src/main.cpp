@@ -1,14 +1,20 @@
 #include <iostream>
-#include "glad/glad.h"
+#include <glad/glad.h>
 #include <SOIL2.h>
 #include <glfw3.h>
-#include <chrono>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "graphics/shader.h"
 #include "graphics/vbo.h"
 #include "graphics/vao.h"
 #include "graphics/ebo.h"
 #include "graphics/texture.h"
+
+const int width = 500,
+          height = 500;
 
 int main() {
     glfwInit();
@@ -17,7 +23,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(500, 500, "Testing", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(width, height, "Testing", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to create window" << std::endl;
         glfwTerminate();
@@ -27,20 +33,67 @@ int main() {
 
     gladLoadGL();
 
-    glViewport(0, 0, 500, 500);
+    glViewport(0, 0, width, height);
 
     Shader shader("./res/default.vert", "./res/default.frag");
 
     float vertices[] = {
-            -0.5, -0.5, 0.0,    0.0, 0.0,
-            0.5, -0.5, 0.0,     1.0, 0.0,
-            0.5, 0.5, 0.0,      1.0, 1.0,
-            -0.5, 0.5, 0.0,     0.0, 1.0
+            // front
+            -0.5f, -0.5f, -0.5f,        0.0f, 0.0f,
+            -0.5f, 0.5f, -0.5f,         0.0f, 0.5f,
+            0.5f, 0.5f, -0.5f,         0.5f, 0.5f,
+            0.5f, -0.5f, -0.5f,         0.5f, 0.0f,
+            // back
+            0.5f, -0.5f, 0.5f,         0.0f, 0.0f,
+            0.5f, 0.5f, 0.5f,          0.0f, 0.5f,
+            -0.5f, 0.5f, 0.5f,        0.5f, 0.5f,
+            -0.5f, -0.5f, 0.5f,        0.5f, 0.0f,
+            // top
+            -0.5f, 0.5f, -0.5f,       0.0f, 0.5f,
+            -0.5f, 0.5f, 0.5f,       0.0f, 1.0f,
+            0.5f, 0.5f, 0.5f,       0.5f, 1.0f,
+            0.5f, 0.5f, -0.5f,       0.5f, 0.5f,
+            // bottom
+            -0.5f, -0.5f, 0.5f,       0.5f, 0.5f,
+            -0.5f, -0.5f, -0.5f,       0.5f, 1.0f,
+            0.5f, -0.5f, -0.5f,       1.0f, 1.0f,
+            0.5f, -0.5f, 0.5f,       1.0f, 0.5f,
+            // right
+            0.5f, -0.5f, -0.5f,        0.0f, 0.0f,
+            0.5f, 0.5f, -0.5f,         0.0f, 0.5f,
+            0.5f, 0.5f, 0.5f,         0.5f, 0.5f,
+            0.5f, -0.5f, 0.5f,         0.5f, 0.0f,
+            // left
+            -0.5f, -0.5f, 0.5f,         0.0f, 0.0f,
+            -0.5f, 0.5f, 0.5f,          0.0f, 0.5f,
+            -0.5f, 0.5f, -0.5f,        0.5f, 0.5f,
+            -0.5f, -0.5f, -0.5f,        0.5f, 0.0f,
     };
 
     unsigned int indices[] = {
-            0, 1, 2,
-            0, 2, 3
+            //front
+            0,1,2,
+            2,3,0,
+
+            //back
+            4,5,6,
+            6,7,4,
+
+            //top
+            8,9,10,
+            10,11,8,
+
+            //bottom
+            12,13,14,
+            14,15,12,
+
+            //right
+            16,17,18,
+            18,19,16,
+
+            //left
+            20,21,22,
+            22,23,20
     };
 
     VAO vao;
@@ -55,15 +108,14 @@ int main() {
     vbo.unbind();
     ebo.unbind();
 
-    using namespace std::chrono;
-
     GLint uniID = glGetUniformLocation(shader.getID(), "scale");
     GLint textureID = glGetUniformLocation(shader.getID(), "textureSampler");
 
-    Texture grassPNG("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+    Texture grassPNG("./res/grass.png");
     grassPNG.assign(shader, "textureSampler", 0);
 
-    auto now = high_resolution_clock::now();
+    float rotation = 0.0f;
+    double time = glfwGetTime();
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -72,11 +124,28 @@ int main() {
 
         if (!shader.isErrored()) {
             shader.activate();
-            glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.00000005f + 0.5f);
+
+            double now = glfwGetTime();
+            if (now - time >= 1.0 / 60) {
+                rotation += 0.5f;
+                time = now;
+            }
+
+            glm::mat4 model(1.0f);
+            glm::mat4 view(1.0f);
+            glm::mat4 proj(1.0f);
+
+            model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
+            view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
+            proj = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
+
+            glUniformMatrix4fv(shader.getUniform("model"), 1, GL_FALSE, glm::value_ptr(model));
+            glUniformMatrix4fv(shader.getUniform("view"), 1, GL_FALSE, glm::value_ptr(view));
+            glUniformMatrix4fv(shader.getUniform("proj"), 1, GL_FALSE, glm::value_ptr(proj));
         }
         vao.bind();
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
 
