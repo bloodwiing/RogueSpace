@@ -5,8 +5,6 @@ layout (location = 1) in vec2 texCoord;
 
 out vec2 uv;
 
-uniform float scale;
-
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <glad/glad.h>
-#include <SOIL2.h>
 #include <glfw3.h>
 
 #include <glm/glm.hpp>
@@ -108,8 +107,11 @@ int main() {
     vbo.unbind();
     ebo.unbind();
 
-    GLint uniID = glGetUniformLocation(shader.getID(), "scale");
-    GLint textureID = glGetUniformLocation(shader.getID(), "textureSampler");
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 
     Texture grassPNG("./res/grass.png");
     grassPNG.assign(shader, "textureSampler", 0);
@@ -120,13 +122,13 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
 
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (!shader.isErrored()) {
             shader.activate();
 
             double now = glfwGetTime();
-            if (now - time >= 1.0 / 60) {
+            if (now - time >= 1.0 / 144) {
                 rotation += 0.5f;
                 time = now;
             }
