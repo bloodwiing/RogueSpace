@@ -61,6 +61,7 @@ int main() {
     GLint textureID = glGetUniformLocation(shader.getID(), "textureSampler");
 
     Texture grassPNG("./res/grass.png", SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+    grassPNG.assign(shader, "textureSampler", 0);
 
     auto now = high_resolution_clock::now();
 
@@ -72,8 +73,6 @@ int main() {
         if (!shader.isErrored()) {
             shader.activate();
             glUniform1f(uniID, (float)(duration_cast<microseconds>(high_resolution_clock::now() - now).count()) * 0.00000005f + 0.5f);
-            grassPNG.bind();
-            glActiveTexture(textureID);
         }
         vao.bind();
 

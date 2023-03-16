@@ -22,3 +22,11 @@ void Texture::destroy() {
 GLuint Texture::getID() {
     return ID;
 }
+
+void Texture::assign(Shader &shader, const char *uniform, GLint unit) {
+    if (!shader.isErrored()) {
+        GLint uniformID = shader.getUniform(uniform);
+        shader.activate();
+        glUniform1i(uniformID, unit);
+    }
+}

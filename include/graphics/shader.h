@@ -12,6 +12,8 @@ public:
     void activate();
     void destroy();
 
+    GLint getUniform(const char* uniform);
+
     bool isErrored() const;
 
     GLuint getID() const;

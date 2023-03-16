@@ -99,3 +99,7 @@ bool Shader::isErrored() const {
 GLuint Shader::getID() const {
     return ID;
 }
+
+GLint Shader::getUniform(const char *uniform) {
+    return glGetUniformLocation(ID, uniform);
+}
