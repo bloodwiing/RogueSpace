@@ -21,6 +21,8 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/glm)
+
 add_executable(Build ${SRC_FILES})
 
 if(NOT WIN32)
