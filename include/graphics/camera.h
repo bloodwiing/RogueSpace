@@ -22,6 +22,8 @@ private:
 
     float speed = 1.0f,
           sensitivity = 100000.0f;
+
+    bool clicked = false;
 };
 
 #endif //CAMERA_CLASS_H
