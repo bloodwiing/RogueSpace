@@ -3,6 +3,8 @@
 #include <glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "graphics/shader.h"
 #include "graphics/vbo.h"
@@ -11,8 +13,8 @@
 #include "graphics/texture.h"
 #include "graphics/camera.h"
 
-const int width = 500,
-          height = 500;
+const int width = 1920,
+          height = 1080;
 
 int main() {
     glfwInit();
@@ -32,8 +34,6 @@ int main() {
     gladLoadGL();
 
     glViewport(0, 0, width, height);
-
-    Shader shader("./res/default.vert", "./res/default.frag");
 
     float vertices[] = {
             // front
@@ -94,6 +94,37 @@ int main() {
             22,23,20
     };
 
+    GLfloat lightVertices[] =
+    { //     COORDINATES     //
+            -0.1f, -0.1f,  0.1f,
+            -0.1f, -0.1f, -0.1f,
+            0.1f, -0.1f, -0.1f,
+            0.1f, -0.1f,  0.1f,
+            -0.1f,  0.1f,  0.1f,
+            -0.1f,  0.1f, -0.1f,
+            0.1f,  0.1f, -0.1f,
+            0.1f,  0.1f,  0.1f
+    };
+
+    GLuint lightIndices[] =
+    {
+            0, 1, 2,
+            0, 2, 3,
+            0, 7, 4,
+            0, 3, 7,
+            3, 6, 7,
+            3, 2, 6,
+            2, 5, 6,
+            2, 1, 5,
+            1, 4, 5,
+            1, 0, 4,
+            4, 6, 5,
+            4, 7, 6,
+    };
+
+
+    Shader shader("./res/default.vert", "./res/default.frag");
+
     VAO vao;
     vao.bind();
 
@@ -106,18 +137,57 @@ int main() {
     vbo.unbind();
     ebo.unbind();
 
+
+    Shader lightShader("./res/light.vert", "./res/light.frag");
+
+    VAO lightVAO;
+    lightVAO.bind();
+
+    VBO lightVBO(lightVertices, sizeof(lightVertices));
+    EBO lightEBO(lightIndices, sizeof(lightIndices));
+
+    lightVAO.linkAttribute(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+    lightVAO.unbind();
+    lightVBO.unbind();
+    lightEBO.unbind();
+
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
 
+
     Texture grassPNG("./res/grass.png");
     grassPNG.assign(shader, "textureSampler", 0);
 
+
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
+
+    glm::vec3 lightPos = glm::vec3(0.9f, 0.9f, 0.9f);
+    glm::mat4 lightModel = glm::mat4(1.0f);
+    lightModel = glm::translate(lightModel, lightPos);
+
+    if (!lightShader.isErrored()) {
+        lightShader.activate();
+        glUniformMatrix4fv(lightShader.getUniform("model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+    }
+
+
+    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::mat4 cubeModel = glm::mat4(1.0f);
+    cubeModel = glm::translate(cubeModel, cubePos);
+
+    if (!shader.isErrored()) {
+        shader.activate();
+        glUniformMatrix4fv(shader.getUniform("model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+    }
+
+
     float prev_time = glfwGetTime();
+
 
     while (!glfwWindowShouldClose(window)) {
 
@@ -128,16 +198,22 @@ int main() {
         float delta = new_time - prev_time;
         prev_time = new_time;
 
+        camera.handleInputs(window, delta);
+        camera.updateMatrix(45.0f, 0.001f, 100.0f);
+
         if (!shader.isErrored()) {
             shader.activate();
-
-            camera.handleInputs(window, delta);
-            camera.updateMatrix(45.0f, 0.1f, 100.0f);
-            camera.applyMatrix(shader, "mvp");
+            camera.applyMatrix(shader, "cameraMatrix");
+            vao.bind();
+            glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
         }
-        vao.bind();
 
-        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
+        if (!lightShader.isErrored()) {
+            lightShader.activate();
+            camera.applyMatrix(lightShader, "cameraMatrix");
+            lightVAO.bind();
+            glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
+        }
 
         glfwSwapBuffers(window);
 

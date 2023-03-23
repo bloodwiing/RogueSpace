@@ -5,9 +5,10 @@ layout (location = 1) in vec2 texCoord;
 
 out vec2 uv;
 
-uniform mat4 mvp;
+uniform mat4 model;
+uniform mat4 cameraMatrix;
 
 void main() {
-    gl_Position = mvp * vec4(pos, 1.0);
+    gl_Position = cameraMatrix * model * vec4(pos, 1.0);
     uv = texCoord;
 }
