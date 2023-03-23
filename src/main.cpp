@@ -37,35 +37,35 @@ int main() {
 
     float vertices[] = {
             // front
-            -0.5f, -0.5f, -0.5f,        0.0f, 0.0f,
-            -0.5f, 0.5f, -0.5f,         0.0f, 0.5f,
-            0.5f, 0.5f, -0.5f,         0.5f, 0.5f,
-            0.5f, -0.5f, -0.5f,         0.5f, 0.0f,
+            -0.5f, -0.5f, -0.5f,        0.0f, 0.0f,         0.0f,  0.0f, -1.0f,
+            -0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         0.0f,  0.0f, -1.0f,
+            0.5f,  0.5f, -0.5f,        0.5f, 0.5f,         0.0f,  0.0f, -1.0f,
+            0.5f, -0.5f, -0.5f,        0.5f, 0.0f,         0.0f,  0.0f, -1.0f,
             // back
-            0.5f, -0.5f, 0.5f,         0.0f, 0.0f,
-            0.5f, 0.5f, 0.5f,          0.0f, 0.5f,
-            -0.5f, 0.5f, 0.5f,        0.5f, 0.5f,
-            -0.5f, -0.5f, 0.5f,        0.5f, 0.0f,
+            0.5f, -0.5f,  0.5f,        0.0f, 0.0f,         0.0f,  0.0f,  1.0f,
+            0.5f,  0.5f,  0.5f,        0.0f, 0.5f,         0.0f,  0.0f,  1.0f,
+            -0.5f,  0.5f,  0.5f,        0.5f, 0.5f,         0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f,  0.5f,        0.5f, 0.0f,         0.0f,  0.0f,  1.0f,
             // top
-            -0.5f, 0.5f, -0.5f,       0.0f, 0.5f,
-            -0.5f, 0.5f, 0.5f,       0.0f, 1.0f,
-            0.5f, 0.5f, 0.5f,       0.5f, 1.0f,
-            0.5f, 0.5f, -0.5f,       0.5f, 0.5f,
+            -0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f,        0.0f, 1.0f,         0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,        0.5f, 1.0f,         0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,        0.5f, 0.5f,         0.0f,  1.0f,  0.0f,
             // bottom
-            -0.5f, -0.5f, 0.5f,       0.5f, 0.5f,
-            -0.5f, -0.5f, -0.5f,       0.5f, 1.0f,
-            0.5f, -0.5f, -0.5f,       1.0f, 1.0f,
-            0.5f, -0.5f, 0.5f,       1.0f, 0.5f,
+            -0.5f, -0.5f,  0.5f,        0.5f, 0.5f,         0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f,        0.5f, 1.0f,         0.0f, -1.0f,  0.0f,
+            0.5f, -0.5f, -0.5f,        1.0f, 1.0f,         0.0f, -1.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,        1.0f, 0.5f,         0.0f, -1.0f,  0.0f,
             // right
-            0.5f, -0.5f, -0.5f,        0.0f, 0.0f,
-            0.5f, 0.5f, -0.5f,         0.0f, 0.5f,
-            0.5f, 0.5f, 0.5f,         0.5f, 0.5f,
-            0.5f, -0.5f, 0.5f,         0.5f, 0.0f,
+            0.5f, -0.5f, -0.5f,        0.0f, 0.0f,         1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  0.5f,        0.5f, 0.5f,         1.0f,  0.0f,  0.0f,
+            0.5f, -0.5f,  0.5f,        0.5f, 0.0f,         1.0f,  0.0f,  0.0f,
             // left
-            -0.5f, -0.5f, 0.5f,         0.0f, 0.0f,
-            -0.5f, 0.5f, 0.5f,          0.0f, 0.5f,
-            -0.5f, 0.5f, -0.5f,        0.5f, 0.5f,
-            -0.5f, -0.5f, -0.5f,        0.5f, 0.0f,
+            -0.5f, -0.5f,  0.5f,        0.0f, 0.0f,       -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f,        0.0f, 0.5f,       -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f, -0.5f,        0.5f, 0.5f,       -1.0f,  0.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f,        0.5f, 0.0f,       -1.0f,  0.0f,  0.0f,
     };
 
     unsigned int indices[] = {
@@ -131,8 +131,9 @@ int main() {
     VBO vbo(vertices, sizeof(vertices));
     EBO ebo(indices, sizeof(indices));
 
-    vao.linkAttribute(vbo, 0, 3, GL_FLOAT, 5 * sizeof(float), (void *)0);
-    vao.linkAttribute(vbo, 1, 2, GL_FLOAT, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    vao.linkAttribute(vbo, 0, 3, GL_FLOAT, 8 * sizeof(float), (void *)0);
+    vao.linkAttribute(vbo, 1, 2, GL_FLOAT, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    vao.linkAttribute(vbo, 2, 3, GL_FLOAT, 8 * sizeof(float), (void *)(5 * sizeof(float)));
     vao.unbind();
     vbo.unbind();
     ebo.unbind();
@@ -160,11 +161,13 @@ int main() {
 
 
     Texture grassPNG("./res/grass.png");
-    grassPNG.assign(shader, "textureSampler", 0);
+    grassPNG.assign(shader, "TextureSampler", 0);
 
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
+
+    glm::vec4 lightColour = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
 
     glm::vec3 lightPos = glm::vec3(0.9f, 0.9f, 0.9f);
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -172,17 +175,22 @@ int main() {
 
     if (!lightShader.isErrored()) {
         lightShader.activate();
-        glUniformMatrix4fv(lightShader.getUniform("model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+        glUniformMatrix4fv(lightShader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+        glUniform4f(lightShader.getUniform("LightColour"), lightColour.r, lightColour.g, lightColour.b, lightColour.a);
     }
 
 
     glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+    float cubeRot = 12.0f;
     glm::mat4 cubeModel = glm::mat4(1.0f);
     cubeModel = glm::translate(cubeModel, cubePos);
+    cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
     if (!shader.isErrored()) {
         shader.activate();
-        glUniformMatrix4fv(shader.getUniform("model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+        glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+        glUniform4f(shader.getUniform("LightColour"), lightColour.r, lightColour.g, lightColour.b, lightColour.a);
+        glUniform3f(shader.getUniform("LightPos"), lightPos.x, lightPos.y, lightPos.z);
     }
 
 
@@ -203,14 +211,14 @@ int main() {
 
         if (!shader.isErrored()) {
             shader.activate();
-            camera.applyMatrix(shader, "cameraMatrix");
+            camera.applyMatrix(shader, "CameraMatrix");
             vao.bind();
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
         }
 
         if (!lightShader.isErrored()) {
             lightShader.activate();
-            camera.applyMatrix(lightShader, "cameraMatrix");
+            camera.applyMatrix(lightShader, "CameraMatrix");
             lightVAO.bind();
             glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
         }
