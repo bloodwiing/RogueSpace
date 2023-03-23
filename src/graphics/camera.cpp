@@ -21,6 +21,10 @@ void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) 
     matrix = proj * view;
 }
 
+glm::vec3 Camera::getPosition() const {
+    return position;
+}
+
 void Camera::applyMatrix(Shader& shader, const char* uniform) {
     glUniformMatrix4fv(shader.getUniform(uniform), 1, GL_FALSE, glm::value_ptr(matrix));
 }

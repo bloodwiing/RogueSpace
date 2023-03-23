@@ -13,8 +13,8 @@
 #include "graphics/texture.h"
 #include "graphics/camera.h"
 
-const int width = 1920,
-          height = 1080;
+const int width = 500,
+          height = 500;
 
 int main() {
     glfwInit();
@@ -167,7 +167,7 @@ int main() {
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 
-    glm::vec4 lightColour = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
+    glm::vec4 lightColour = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::vec3 lightPos = glm::vec3(0.9f, 0.9f, 0.9f);
     glm::mat4 lightModel = glm::mat4(1.0f);
@@ -180,27 +180,34 @@ int main() {
     }
 
 
-    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
-    float cubeRot = 12.0f;
-    glm::mat4 cubeModel = glm::mat4(1.0f);
-    cubeModel = glm::translate(cubeModel, cubePos);
-    cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
+//    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+//    float cubeRot = 12.0f;
+//    glm::mat4 cubeModel = glm::mat4(1.0f);
+//    cubeModel = glm::translate(cubeModel, cubePos);
+//    cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
     if (!shader.isErrored()) {
         shader.activate();
-        glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+//        glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
         glUniform4f(shader.getUniform("LightColour"), lightColour.r, lightColour.g, lightColour.b, lightColour.a);
         glUniform3f(shader.getUniform("LightPos"), lightPos.x, lightPos.y, lightPos.z);
     }
 
 
-    float prev_time = glfwGetTime();
+    float start_time = glfwGetTime();
+    float prev_time = start_time;
 
 
     while (!glfwWindowShouldClose(window)) {
 
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+        float cubeRot = (glfwGetTime() - start_time) * 8;
+        glm::mat4 cubeModel = glm::mat4(1.0f);
+        cubeModel = glm::translate(cubeModel, cubePos);
+        cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
         float new_time = glfwGetTime();
         float delta = new_time - prev_time;
@@ -212,6 +219,8 @@ int main() {
         if (!shader.isErrored()) {
             shader.activate();
             camera.applyMatrix(shader, "CameraMatrix");
+            glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+            glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
             vao.bind();
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
         }

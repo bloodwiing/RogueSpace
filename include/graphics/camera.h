@@ -9,6 +9,8 @@ class Camera {
 public:
     Camera(unsigned int width, unsigned int height, glm::vec3 position);
 
+    glm::vec3 getPosition() const;
+
     void updateMatrix(float fov_degrees, float near_plane, float far_plane);
     void applyMatrix(Shader& shader, const char* uniform);
 
