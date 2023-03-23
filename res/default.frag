@@ -11,10 +11,12 @@ uniform vec4 LightColour;
 uniform vec3 LightPos;
 
 void main() {
+    float ambient = 0.20;
+
     vec3 normal = normalize(v_normal);
     vec3 lightDirection = normalize(LightPos - v_currentPos);
 
     float diffuse = max(dot(normal, lightDirection), 0.0);
 
-    o_fragColor = texture(TextureSampler, v_texCoord) * LightColour * diffuse;
+    o_fragColor = texture(TextureSampler, v_texCoord) * LightColour * (diffuse + ambient);
 }
