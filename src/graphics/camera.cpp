@@ -41,9 +41,9 @@ void Camera::handleInputs(GLFWwindow *window, float delta) {
         position += speed * -up * delta;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         speed = 5.0f;
-    } else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE) {
+    } else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
         speed = 1.0f;
     }
 
@@ -58,8 +58,8 @@ void Camera::handleInputs(GLFWwindow *window, float delta) {
         double mouse_x, mouse_y;
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-        float rot_x = sensitivity * (float)(mouse_x - ((float)width / 2)) / (float)width * delta,
-              rot_y = sensitivity * (float)(mouse_y - ((float)height / 2)) / (float)height * delta;
+        float rot_x = sensitivity * (float)(mouse_x - ((float)width / 2)) / (float)width,
+              rot_y = sensitivity * (float)(mouse_y - ((float)height / 2)) / (float)height;
 
         glm::vec3 new_orientation = glm::rotate(orientation, glm::radians(-rot_y), glm::normalize(glm::cross(orientation, up)));
 

@@ -21,7 +21,7 @@ private:
                  height;
 
     float speed = 1.0f,
-          sensitivity = 100000.0f;
+          sensitivity = 100.0f;
 
     bool clicked = false;
 };
