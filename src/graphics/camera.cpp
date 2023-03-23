@@ -11,14 +11,18 @@ Camera::Camera(unsigned int width, unsigned int height, glm::vec3 position)
     , position(position)
 {  }
 
-void Camera::applyMVP(float fov_degrees, float near_plane, float far_plane, Shader &shader, const char *uniform) {
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 proj = glm::mat4(1.0f);
+void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
+    glm::mat4 view(1.0f);
+    glm::mat4 proj(1.0f);
 
     view = glm::lookAt(position, position + orientation, up);
     proj = glm::perspective(glm::radians(fov_degrees), (float)width / (float)height, near_plane, far_plane);
 
-    glUniformMatrix4fv(shader.getUniform(uniform), 1, GL_FALSE, glm::value_ptr(proj * view));
+    matrix = proj * view;
+}
+
+void Camera::applyMatrix(Shader& shader, const char* uniform) {
+    glUniformMatrix4fv(shader.getUniform(uniform), 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Camera::handleInputs(GLFWwindow *window, float delta) {

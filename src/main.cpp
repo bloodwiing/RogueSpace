@@ -3,8 +3,6 @@
 #include <glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "graphics/shader.h"
 #include "graphics/vbo.h"
@@ -134,7 +132,8 @@ int main() {
             shader.activate();
 
             camera.handleInputs(window, delta);
-            camera.applyMVP(45.0f, 0.1f, 100.0f, shader, "mvp");
+            camera.updateMatrix(45.0f, 0.1f, 100.0f);
+            camera.applyMatrix(shader, "mvp");
         }
         vao.bind();
 
