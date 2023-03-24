@@ -6,7 +6,8 @@ in vec3 v_currentPos;
 
 out vec4 o_fragColor;
 
-uniform sampler2D TextureSampler;
+uniform sampler2D Texture0;
+uniform sampler2D Texture1;
 uniform vec4 LightColour;
 uniform vec3 LightPos;
 uniform vec3 CameraPos;
@@ -24,5 +25,5 @@ void main() {
     float specularAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0), 8.0);
     float specular = specularLight * specularAmount;
 
-    o_fragColor = texture(TextureSampler, v_texCoord) * LightColour * (diffuse + ambient + specular);
+    o_fragColor = texture(Texture0, v_texCoord) * LightColour * (diffuse + ambient) + texture(Texture1, v_texCoord).r * specular;
 }

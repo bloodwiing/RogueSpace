@@ -13,8 +13,8 @@
 #include "graphics/texture.h"
 #include "graphics/camera.h"
 
-const int width = 500,
-          height = 500;
+const int width = 1920,
+          height = 1080;
 
 int main() {
     glfwInit();
@@ -35,63 +35,19 @@ int main() {
 
     glViewport(0, 0, width, height);
 
-    float vertices[] = {
-            // front
-            -0.5f, -0.5f, -0.5f,        0.0f, 0.0f,         0.0f,  0.0f, -1.0f,
-            -0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -0.5f,        0.5f, 0.5f,         0.0f,  0.0f, -1.0f,
-            0.5f, -0.5f, -0.5f,        0.5f, 0.0f,         0.0f,  0.0f, -1.0f,
-            // back
-            0.5f, -0.5f,  0.5f,        0.0f, 0.0f,         0.0f,  0.0f,  1.0f,
-            0.5f,  0.5f,  0.5f,        0.0f, 0.5f,         0.0f,  0.0f,  1.0f,
-            -0.5f,  0.5f,  0.5f,        0.5f, 0.5f,         0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f,  0.5f,        0.5f, 0.0f,         0.0f,  0.0f,  1.0f,
-            // top
-            -0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         0.0f,  1.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f,        0.0f, 1.0f,         0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,        0.5f, 1.0f,         0.0f,  1.0f,  0.0f,
-            0.5f,  0.5f, -0.5f,        0.5f, 0.5f,         0.0f,  1.0f,  0.0f,
-            // bottom
-            -0.5f, -0.5f,  0.5f,        0.5f, 0.5f,         0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,        0.5f, 1.0f,         0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f, -0.5f,        1.0f, 1.0f,         0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,        1.0f, 0.5f,         0.0f, -1.0f,  0.0f,
-            // right
-            0.5f, -0.5f, -0.5f,        0.0f, 0.0f,         1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f, -0.5f,        0.0f, 0.5f,         1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f,  0.5f,        0.5f, 0.5f,         1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f,  0.5f,        0.5f, 0.0f,         1.0f,  0.0f,  0.0f,
-            // left
-            -0.5f, -0.5f,  0.5f,        0.0f, 0.0f,       -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  0.5f,        0.0f, 0.5f,       -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f, -0.5f,        0.5f, 0.5f,       -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -0.5f,        0.5f, 0.0f,       -1.0f,  0.0f,  0.0f,
+    // Vertices coordinates
+    GLfloat vertices[] =
+    {
+            -1.0f, 0.0f,  1.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+            -1.0f, 0.0f, -1.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+            1.0f, 0.0f, -1.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+            1.0f, 0.0f,  1.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
     };
 
-    unsigned int indices[] = {
-            //front
-            0,1,2,
-            2,3,0,
-
-            //back
-            4,5,6,
-            6,7,4,
-
-            //top
-            8,9,10,
-            10,11,8,
-
-            //bottom
-            12,13,14,
-            14,15,12,
-
-            //right
-            16,17,18,
-            18,19,16,
-
-            //left
-            20,21,22,
-            22,23,20
+    GLuint indices[] =
+    {
+            0, 2, 1,
+            0, 3, 2
     };
 
     GLfloat lightVertices[] =
@@ -160,8 +116,10 @@ int main() {
     glFrontFace(GL_CCW);
 
 
-    Texture grassPNG("./res/grass.png");
-    grassPNG.assign(shader, "TextureSampler", 0);
+    Texture texDiffuse("./res/planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
+    texDiffuse.assign(shader, "Texture0", 0);
+    Texture texSpecular("./res/planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
+    texSpecular.assign(shader, "Texture1", 1);
 
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
@@ -180,15 +138,15 @@ int main() {
     }
 
 
-//    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
-//    float cubeRot = 12.0f;
-//    glm::mat4 cubeModel = glm::mat4(1.0f);
-//    cubeModel = glm::translate(cubeModel, cubePos);
-//    cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+    float cubeRot = 12.0f;
+    glm::mat4 cubeModel = glm::mat4(1.0f);
+    cubeModel = glm::translate(cubeModel, cubePos);
+    cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
 
     if (!shader.isErrored()) {
         shader.activate();
-//        glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
+        glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
         glUniform4f(shader.getUniform("LightColour"), lightColour.r, lightColour.g, lightColour.b, lightColour.a);
         glUniform3f(shader.getUniform("LightPos"), lightPos.x, lightPos.y, lightPos.z);
     }
@@ -203,12 +161,6 @@ int main() {
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
-        float cubeRot = (glfwGetTime() - start_time) * 8;
-        glm::mat4 cubeModel = glm::mat4(1.0f);
-        cubeModel = glm::translate(cubeModel, cubePos);
-        cubeModel = glm::rotate(cubeModel, glm::radians(cubeRot), glm::vec3(0.0f, 1.0f, 0.0f));
-
         float new_time = glfwGetTime();
         float delta = new_time - prev_time;
         prev_time = new_time;
@@ -219,8 +171,9 @@ int main() {
         if (!shader.isErrored()) {
             shader.activate();
             camera.applyMatrix(shader, "CameraMatrix");
-            glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(cubeModel));
             glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+            texDiffuse.bind();
+            texSpecular.bind();
             vao.bind();
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, nullptr);
         }
@@ -241,7 +194,13 @@ int main() {
     vbo.destroy();
     ebo.destroy();
     shader.destroy();
-    grassPNG.destroy();
+//    texDiffuse.destroy();
+//    texSpecular.destroy();
+
+    lightVAO.destroy();
+    lightVBO.destroy();
+    lightEBO.destroy();
+    lightShader.destroy();
 
     glfwDestroyWindow(window);
     glfwTerminate();
