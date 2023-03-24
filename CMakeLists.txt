@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.24)
 project(RogueSpace)
+
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 link_directories(RogueSpace ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
@@ -8,11 +10,6 @@ add_library(glfw STATIC IMPORTED)
 set_target_properties(glfw PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3.a"
         INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/")
-
-add_library(soil2 STATIC IMPORTED)
-set_target_properties(soil2 PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libsoil2.a"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/SOIL2/")
 
 find_package(OpenGL REQUIRED)
 
