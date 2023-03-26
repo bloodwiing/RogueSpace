@@ -22,7 +22,6 @@ private:
     GLuint ID;
     bool error;
 
-    static std::string readFileContents(const std::string& file_name);
     static GLuint loadShaderFile(const std::string &file_name, GLenum type);
 
     bool checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file);

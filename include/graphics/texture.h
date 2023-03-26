@@ -10,7 +10,9 @@ enum TextureType {
 
 class Texture {
 public:
-    explicit Texture(const char* filename, TextureType type, GLuint slot, GLenum format, GLenum pixel_type);
+    Texture() = default;
+    explicit Texture(const char* filename, TextureType type, GLuint slot);
+    Texture(const Texture& original) = default;
 
     void assign(Shader& shader, const char* uniform, GLint unit);
     void bind();

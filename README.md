@@ -12,3 +12,5 @@ OpenGL Window and Input tools
     Single-file header for image-related tasks
 * **[GLM](https://github.com/g-truc/glm)** `0.9.9.8`<br>
   Mathematics library for OpenGL applications
+* **[m_json](https://github.com/nlohmann/m_json)** `3.11.2` <br>
+  JSON for Modern C++

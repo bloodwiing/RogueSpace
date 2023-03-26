@@ -1,7 +1,8 @@
 #include "graphics/texture.h"
 #include <stb/stb_image.h>
+#include <stdexcept>
 
-Texture::Texture(const char* filename, TextureType type, GLuint slot, GLenum format, GLenum pixel_type)
+Texture::Texture(const char* filename, TextureType type, GLuint slot)
     : slot(slot)
     , type(type)
     , ID()
@@ -20,7 +21,22 @@ Texture::Texture(const char* filename, TextureType type, GLuint slot, GLenum for
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, format, pixel_type, bytes);
+    switch (channels) {
+        case 4:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+            break;
+        case 3:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+            break;
+        case 2:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RG, GL_UNSIGNED_BYTE, bytes);
+            break;
+        case 1:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, bytes);
+            break;
+        default:
+            throw std::invalid_argument("Failed to recognise texture channel count");
+    }
     glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(bytes);

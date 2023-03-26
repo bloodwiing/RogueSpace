@@ -74,5 +74,5 @@ vec4 spotLight() {
 }
 
 void main() {
-    o_fragColor = directLight() + pointLight() + spotLight();
+    o_fragColor = texture(Diffuse0, v_texCoord);
 }
