@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.24)
 project(RogueSpace)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+if(WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "-static")
+endif()
 
 link_directories(RogueSpace ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
@@ -27,7 +29,7 @@ if(NOT WIN32)
 endif()
 
 target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Build soil2 glfw)
+target_link_libraries(Build glfw)
 
 if(WIN32)
     target_link_libraries(Build opengl32)

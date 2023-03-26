@@ -6,19 +6,19 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vec
     : vertices(vertices)
     , indices(indices)
     , textures(textures)
-    , VAO()
+    , m_VAO()
 {
-    VAO.bind();
+    m_VAO.bind();
 
     VBO VBO(vertices);
     EBO EBO(indices);
 
-    VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void *)0);
-    VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void *)(3 * sizeof(float)));
-    VAO.linkAttribute(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void *)(6 * sizeof(float)));
-    VAO.linkAttribute(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void *)(9 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void *)0);
+    m_VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void *)(3 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void *)(6 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void *)(9 * sizeof(float)));
 
-    VAO.unbind();
+    m_VAO.unbind();
     VBO.unbind();
     EBO.unbind();
 }
@@ -35,7 +35,7 @@ void Mesh::draw(
         return;
 
     shader.activate();
-    VAO.bind();
+    m_VAO.bind();
 
     uint16_t diffuse_counter = 0,
              specular_counter = 0;

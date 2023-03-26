@@ -28,7 +28,7 @@ private:
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
 
-    VAO VAO;
+    VAO m_VAO;
 };
 
 #endif //MESH_CLASS_H
