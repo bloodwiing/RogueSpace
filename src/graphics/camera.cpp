@@ -55,14 +55,17 @@ void Camera::handleInputs(GLFWwindow *window, float delta) {
         m_speed = 1.0f;
     }
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !m_clicked) {
+        m_clicked = true;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetCursorPos(window, (float)m_width / 2, (float)m_height / 2);
+    }
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        m_clicked = false;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
 
-        if (!m_clicked) {
-            glfwSetCursorPos(window, (float)m_width / 2, (float)m_height / 2);
-            m_clicked = true;
-        }
-
+    if (m_clicked) {
         double mouse_x, mouse_y;
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
@@ -78,8 +81,5 @@ void Camera::handleInputs(GLFWwindow *window, float delta) {
         m_orientation = glm::rotate(m_orientation, glm::radians(-rot_x), m_up);
 
         glfwSetCursorPos(window, (double)m_width / 2, (double)m_height / 2);
-    } else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        m_clicked = false;
     }
 }
