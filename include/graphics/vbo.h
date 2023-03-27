@@ -14,16 +14,16 @@ struct Vertex {
 
 class VBO {
 public:
-    VBO(std::vector<Vertex>& vertices);
+    explicit VBO(std::vector<Vertex>& vertices);
 
-    void bind();
-    void unbind();
-    void destroy();
+    void bind() const;
+    void unbind() const;
+    void destroy() const;
 
-    GLuint getID() const;
+    [[nodiscard]] GLuint getID() const;
 
 private:
-    GLuint ID;
+    GLuint m_ID;
 };
 
 #endif //VBO_CLASS_H

@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 class Model {
 public:
-    Model(const char* filename);
+    explicit Model(const char* filename);
 
     void draw(Shader& shader, Camera& camera);
 
@@ -19,13 +19,13 @@ private:
     std::vector<uint8_t> m_data;
     json m_json;
 
-    std::vector<Mesh> meshes;
-    std::vector<glm::vec3> meshTranslations;
-    std::vector<glm::quat> meshRotations;
-    std::vector<glm::vec3> meshScales;
-    std::vector<glm::mat4> meshMatrices;
+    std::vector<Mesh> m_meshes;
+    std::vector<glm::vec3> m_meshTranslations;
+    std::vector<glm::quat> m_meshRotations;
+    std::vector<glm::vec3> m_meshScales;
+    std::vector<glm::mat4> m_meshMatrices;
 
-    std::unordered_map<std::string, Texture> loadedTexNames;
+    std::unordered_map<std::string, Texture> m_loadedTexNames;
 
     void loadMesh(uint32_t meshIndex);
 

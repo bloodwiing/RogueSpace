@@ -5,34 +5,34 @@
 #include <stdexcept>
 
 Texture::Texture(const char* filename, TextureType type, GLuint slot)
-    : slot(slot)
-    , type(type)
-    , ID()
-    , width()
-    , height()
-    , channels()
+    : m_slot(slot)
+    , m_type(type)
+    , m_ID()
+    , m_width()
+    , m_height()
+    , m_channels()
 {
-    uint8_t* bytes = stbi_load(filename, &width, &height, &channels, 0);
+    uint8_t* bytes = stbi_load(filename, &m_width, &m_height, &m_channels, 0);
 
-    glGenTextures(1, &ID);
+    glGenTextures(1, &m_ID);
 
     bind();
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    switch (channels) {
+    switch (m_channels) {
         case 4:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bytes);
             break;
         case 3:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, bytes);
             break;
         case 2:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RG, GL_UNSIGNED_BYTE, bytes);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RG, GL_UNSIGNED_BYTE, bytes);
             break;
         case 1:
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, bytes);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RED, GL_UNSIGNED_BYTE, bytes);
             break;
         default:
             throw std::invalid_argument("Failed to recognise texture channel count");
@@ -44,25 +44,25 @@ Texture::Texture(const char* filename, TextureType type, GLuint slot)
     unbind();
 }
 
-void Texture::bind() {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, ID);
+void Texture::bind() const {
+    glActiveTexture(GL_TEXTURE0 + m_slot);
+    glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void Texture::unbind() {
+void Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::destroy() {
-    glDeleteTextures(1, &ID);
+void Texture::destroy() const {
+    glDeleteTextures(1, &m_ID);
 }
 
-GLuint Texture::getID() {
-    return ID;
+GLuint Texture::getID() const {
+    return m_ID;
 }
 
-TextureType Texture::getTextureType() {
-    return type;
+TextureType Texture::getTextureType() const {
+    return m_type;
 }
 
 void Texture::assign(Shader &shader, const char *uniform, GLint unit) {

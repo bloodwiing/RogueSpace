@@ -16,7 +16,7 @@ GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {
 }
 
 Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
-    : error(false)
+    : m_error(false)
 {
     GLuint vertID = loadShaderFile(vertex_file, GL_VERTEX_SHADER);
     if (checkShaderErrors(vertID, "Vertex", vertex_file))
@@ -26,10 +26,10 @@ Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
     if (checkShaderErrors(fragID, "Fragment", fragment_file))
         return;
 
-    ID = glCreateProgram();
-    glAttachShader(ID, vertID);
-    glAttachShader(ID, fragID);
-    glLinkProgram(ID);
+    m_ID = glCreateProgram();
+    glAttachShader(m_ID, vertID);
+    glAttachShader(m_ID, fragID);
+    glLinkProgram(m_ID);
 
     glDeleteShader(vertID);
     glDeleteShader(fragID);
@@ -42,11 +42,11 @@ Shader::~Shader() {
 }
 
 void Shader::activate() {
-    glUseProgram(ID);
+    glUseProgram(m_ID);
 }
 
 void Shader::destroy() {
-    glDeleteProgram(ID);
+    glDeleteProgram(m_ID);
 }
 
 #define ERROR_MESSAGE_LEN 1024
@@ -56,7 +56,7 @@ bool Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const s
     GLchar infoLog[ERROR_MESSAGE_LEN];
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
     if (!status) {
-        error = true;
+        m_error = true;
         glGetShaderInfoLog(shaderID, ERROR_MESSAGE_LEN, nullptr, infoLog);
         std::cout << "Error compiling OpenGL " << type << " shader:\n" <<
                 file << " - " << infoLog << std::endl;
@@ -68,10 +68,10 @@ bool Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const s
 bool Shader::checkProgramErrors() {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
-    glGetProgramiv(ID, GL_LINK_STATUS, &status);
+    glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
     if (!status) {
-        error = true;
-        glGetProgramInfoLog(ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
+        m_error = true;
+        glGetProgramInfoLog(m_ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
         std::cout << "Error linking OpenGL program:\n" << infoLog << std::endl;
         return true;
     }
@@ -79,13 +79,13 @@ bool Shader::checkProgramErrors() {
 }
 
 bool Shader::isErrored() const {
-    return error;
+    return m_error;
 }
 
 GLuint Shader::getID() const {
-    return ID;
+    return m_ID;
 }
 
 GLint Shader::getUniform(const char *uniform) {
-    return glGetUniformLocation(ID, uniform);
+    return glGetUniformLocation(m_ID, uniform);
 }

@@ -12,15 +12,15 @@ public:
     void activate();
     void destroy();
 
-    GLint getUniform(const char* uniform);
+    [[nodiscard]] GLint getUniform(const char* uniform);
 
-    bool isErrored() const;
+    [[nodiscard]] bool isErrored() const;
 
-    GLuint getID() const;
+    [[nodiscard]] GLuint getID() const;
 
 private:
-    GLuint ID;
-    bool error;
+    GLuint m_ID;
+    bool m_error;
 
     static GLuint loadShaderFile(const std::string &file_name, GLenum type);
 

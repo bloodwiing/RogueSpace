@@ -15,20 +15,20 @@ public:
     Texture(const Texture& original) = default;
 
     void assign(Shader& shader, const char* uniform, GLint unit);
-    void bind();
-    void unbind();
-    void destroy();
+    void bind() const;
+    void unbind() const;
+    void destroy() const;
 
-    GLuint getID();
-    TextureType getTextureType();
+    [[nodiscard]] GLuint getID() const;
+    [[nodiscard]] TextureType getTextureType() const;
 
 private:
-    GLuint ID;
-    GLuint slot;
+    GLuint m_ID;
+    GLuint m_slot;
 
-    TextureType type;
+    TextureType m_type;
 
-    int width, height, channels;
+    int m_width, m_height, m_channels;
 };
 
 #endif //TEXTURE_CLASS_H

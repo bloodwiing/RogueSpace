@@ -15,8 +15,8 @@ Model::Model(const char *filename)
 }
 
 void Model::draw(Shader &shader, Camera &camera) {
-    for (size_t i = 0; i < meshes.size(); ++i) {
-        meshes[i].draw(shader, camera, meshMatrices[i]);
+    for (size_t i = 0; i < m_meshes.size(); ++i) {
+        m_meshes[i].draw(shader, camera, m_meshMatrices[i]);
     }
 }
 
@@ -39,7 +39,7 @@ void Model::loadMesh(uint32_t meshIndex) {
     auto indices = getIndices(m_json["accessors"][accIndicesIndex]);
     auto textures = getTextures();
 
-    meshes.emplace_back(vertices, indices, textures);
+    m_meshes.emplace_back(vertices, indices, textures);
 }
 
 void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
@@ -84,10 +84,10 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     glm::mat4 inheritedMatrix = matrix * mat * trans * rot * sca;
 
     if (node.find("mesh") != node.end()) {
-        meshTranslations.push_back(translation);
-        meshRotations.push_back(rotation);
-        meshScales.push_back(scale);
-        meshMatrices.push_back(inheritedMatrix);
+        m_meshTranslations.push_back(translation);
+        m_meshRotations.push_back(rotation);
+        m_meshScales.push_back(scale);
+        m_meshMatrices.push_back(inheritedMatrix);
 
         loadMesh(node["mesh"]);
     }
@@ -198,19 +198,19 @@ std::vector<Texture> Model::getTextures() {
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
 
-        if (loadedTexNames.find(texturePath) != loadedTexNames.end()) {
-            textures.push_back(loadedTexNames[texturePath]);
+        if (m_loadedTexNames.find(texturePath) != m_loadedTexNames.end()) {
+            textures.push_back(m_loadedTexNames[texturePath]);
             continue;
         }
 
         Texture texture{};
         if (texturePath.find("baseColor") != std::string::npos) {
-            texture = Texture((directory + texturePath).c_str(), TEX_DIFFUSE, loadedTexNames.size());
+            texture = Texture((directory + texturePath).c_str(), TEX_DIFFUSE, m_loadedTexNames.size());
         } else if (texturePath.find("metallicRoughness") != std::string::npos) {
-            texture = Texture((directory + texturePath).c_str(), TEX_SPECULAR, loadedTexNames.size());
+            texture = Texture((directory + texturePath).c_str(), TEX_SPECULAR, m_loadedTexNames.size());
         }
         textures.push_back(texture);
-        loadedTexNames[texturePath] = texture;
+        m_loadedTexNames[texturePath] = texture;
     }
 
     return textures;

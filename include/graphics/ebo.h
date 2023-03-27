@@ -6,16 +6,16 @@
 
 class EBO {
 public:
-    EBO(std::vector<GLuint> indices);
+    explicit EBO(std::vector<GLuint> indices);
 
-    void bind();
-    void unbind();
-    void destroy();
+    void bind() const;
+    void unbind() const;
+    void destroy() const;
 
-    GLuint getID() const;
+    [[nodiscard]] GLuint getID() const;
 
 private:
-    GLuint ID;
+    GLuint m_ID;
 };
 
 #endif //EBO_CLASS_H

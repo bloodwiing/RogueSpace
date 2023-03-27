@@ -8,15 +8,16 @@ class VAO {
 public:
     VAO();
 
-    void linkAttribute(VBO& vbo, GLuint layout, GLint size, GLenum type, GLsizei stride, const GLvoid *offset);
-    void bind();
-    void unbind();
-    void destroy();
+    void linkAttribute(VBO& vbo, GLuint layout, GLint size, GLenum type, GLsizei stride, const GLvoid *offset) const;
 
-    GLuint getID() const;
+    void bind() const;
+    void unbind() const;
+    void destroy() const;
+
+    [[nodiscard]] GLuint getID() const;
 
 private:
-    GLuint ID;
+    GLuint m_ID;
 };
 
 #endif //VAO_CLASS_H
