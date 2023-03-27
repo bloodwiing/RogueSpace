@@ -5,9 +5,10 @@
 #include <glm/gtx/transform.hpp>
 
 #include "graphics/model.h"
+#include "engine/physicsactor.h"
 
-const int width = 1920,
-          height = 1080;
+const int width = 1366,
+          height = 700;
 
 int main() {
     glfwInit();
@@ -42,6 +43,12 @@ int main() {
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 
+    Model cube("./res/cube/Cube.gltf");
+    PhysicsActor actor{};
+    actor.setWeight(0.5f);
+    actor.setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+
+
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
     glm::vec3 lightPos(0.0f, 5.0f, 0.0f);
     if (!shader.isErrored()) {
@@ -51,8 +58,8 @@ int main() {
     }
 
 
-    float start_time = glfwGetTime();
-    float prev_time = start_time;
+    double start_time = glfwGetTime();
+    double prev_time = start_time;
 
 
     while (!glfwWindowShouldClose(window)) {
@@ -60,12 +67,14 @@ int main() {
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float new_time = glfwGetTime();
-        float delta = new_time - prev_time;
+        double new_time = glfwGetTime();
+        double delta = new_time - prev_time;
         prev_time = new_time;
 
-        camera.handleInputs(window, delta);
+        camera.handleInputs(window, (float)delta);
         camera.updateMatrix(45.0f, 0.001f, 100.0f);
+
+        actor.update(window, delta);
 
         if (!shader.isErrored()) {
             shader.activate();
@@ -73,6 +82,9 @@ int main() {
         }
 
         model.draw(shader, camera);
+        for (size_t i = 0; i < cube.m_meshes.size(); ++i) {
+            cube.m_meshes[i].draw(shader, camera, cube.m_meshMatrices[i], actor.getPosition());
+        }
 
         glfwSwapBuffers(window);
 

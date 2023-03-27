@@ -19,6 +19,7 @@ private:
     std::vector<uint8_t> m_data;
     json m_json;
 
+public:
     std::vector<Mesh> m_meshes;
     std::vector<glm::vec3> m_meshTranslations;
     std::vector<glm::quat> m_meshRotations;
