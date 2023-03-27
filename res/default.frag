@@ -73,6 +73,10 @@ vec4 spotLight() {
     return (texture(Diffuse0, v_texCoord) * (diffuse * intensity + ambient) + texture(Specular0, v_texCoord).r * specular * intensity) * LightColour;
 }
 
+vec4 unlit() {
+    return texture(Diffuse0, v_texCoord);
+}
+
 void main() {
-    o_fragColor = texture(Diffuse0, v_texCoord);
+    o_fragColor = unlit();
 }

@@ -20,7 +20,7 @@ void main() {
     v_currentPos = vec3(Model * Translation * Rotation * Scale * vec4(pos, 1.0));
 
     gl_Position = CameraMatrix * vec4(v_currentPos, 1.0);
-    v_texCoord = mat2(1.0, 0.0, 0.0, -1.0) * texCoord;
+    v_texCoord = texCoord;
 
     v_normal = vec3(normalize(Model * vec4(normal, 1.0)));
 }

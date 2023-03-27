@@ -43,9 +43,12 @@ int main() {
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glm::vec3 lightPos(5.0f, 5.0f, 5.0f);
-    glUniform4f(shader.getUniform("LightColour"), lightColor.r, lightColor.g, lightColor.b, lightColor.a);
-    glUniform3f(shader.getUniform("LightPos"), lightPos.x, lightPos.y, lightPos.z);
+    glm::vec3 lightPos(0.0f, 5.0f, 0.0f);
+    if (!shader.isErrored()) {
+        shader.activate();
+        glUniform4f(shader.getUniform("LightColour"), lightColor.r, lightColor.g, lightColor.b, lightColor.a);
+        glUniform3f(shader.getUniform("LightPos"), lightPos.x, lightPos.y, lightPos.z);
+    }
 
 
     float start_time = glfwGetTime();
@@ -63,6 +66,11 @@ int main() {
 
         camera.handleInputs(window, delta);
         camera.updateMatrix(45.0f, 0.001f, 100.0f);
+
+        if (!shader.isErrored()) {
+            shader.activate();
+            glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+        }
 
         model.draw(shader, camera);
 

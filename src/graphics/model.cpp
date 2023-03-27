@@ -54,13 +54,10 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 
     glm::quat rotation(1.0f, 0.0f, 0.0f, 0.0f);
-    if (node.find("translation") != node.end()) {
-        float data[4] = {
-                node["rotation"][3],
-                node["rotation"][0],
-                node["rotation"][1],
-                node["rotation"][2],
-        };
+    if (node.find("rotation") != node.end()) {
+        float data[4];
+        for (size_t i = 0; i < node["rotation"].size(); ++i)
+            data[i] = node["rotation"][i];
         rotation = glm::make_quat(data);
     }
 
@@ -134,8 +131,8 @@ std::vector<float> Model::getFloats(json accessor) {
 
     uint64_t startIndex = byteOffset + accessorByteOffset;
     uint64_t endIndex = startIndex + count * 4 * floatsPerVertex;
-    for (uint64_t i = startIndex; i < endIndex;) {
-        uint8_t bytes[] = { m_data[i++], m_data[i++], m_data[i++], m_data[i++] };
+    for (uint64_t i = startIndex; i < endIndex; i += 4) {
+        uint8_t bytes[] = { m_data[i], m_data[i+1], m_data[i+2], m_data[i+3] };
         float value;
         std::memcpy(&value, bytes, 4);
         result.push_back(value);
@@ -160,8 +157,8 @@ std::vector<GLuint> Model::getIndices(json accessor) {
     switch (componentType) {
         case 5125:  // unsigned int
             endIndex = startIndex + count * 4;
-            for (uint64_t i = startIndex; i < endIndex;) {
-                uint8_t bytes[] = { m_data[i++], m_data[i++], m_data[i++], m_data[i++] };
+            for (uint64_t i = startIndex; i < endIndex; i += 4) {
+                uint8_t bytes[] = { m_data[i], m_data[i+1], m_data[i+2], m_data[i+3] };
                 uint32_t value;
                 std::memcpy(&value, bytes, 4);
                 result.push_back((GLuint)value);
@@ -169,8 +166,8 @@ std::vector<GLuint> Model::getIndices(json accessor) {
             break;
         case 5123:  // unsigned short
             endIndex = startIndex + count * 2;
-            for (uint64_t i = startIndex; i < endIndex;) {
-                uint8_t bytes[] = { m_data[i++], m_data[i++] };
+            for (uint64_t i = startIndex; i < endIndex; i += 2) {
+                uint8_t bytes[] = { m_data[i], m_data[i+1] };
                 uint16_t value;
                 std::memcpy(&value, bytes, 2);
                 result.push_back((GLuint)value);
@@ -178,8 +175,8 @@ std::vector<GLuint> Model::getIndices(json accessor) {
             break;
         case 5122:  // signed short
             endIndex = startIndex + count * 2;
-            for (uint64_t i = startIndex; i < endIndex;) {
-                uint8_t bytes[] = { m_data[i++], m_data[i++] };
+            for (uint64_t i = startIndex; i < endIndex; i += 2) {
+                uint8_t bytes[] = { m_data[i], m_data[i+1] };
                 int16_t value;
                 std::memcpy(&value, bytes, 2);
                 result.push_back((GLuint)value);
@@ -198,7 +195,7 @@ std::vector<Texture> Model::getTextures() {
     std::string file_str = std::string(m_filename);
     std::string directory = file_str.substr(0, file_str.find_last_of('/') + 1);
 
-    for (uint8_t i = 0; i < m_json["images"].size(); ++i) {
+    for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
 
         if (loadedTexNames.find(texturePath) != loadedTexNames.end()) {
@@ -249,13 +246,16 @@ std::vector<TVec> Model::groupFloatsVec(std::vector<float> floats) {
 }
 
 void Model::setVector(std::vector<float>::iterator& iterator, glm::vec2& vector) {
-    vector = { *(iterator++), *(iterator++) };
+    vector = { iterator[0], iterator[1] };
+    iterator += 2;
 }
 
 void Model::setVector(std::vector<float>::iterator& iterator, glm::vec3& vector) {
-    vector = { *(iterator++), *(iterator++), *(iterator++) };
+    vector = { iterator[0], iterator[1], iterator[2] };
+    iterator += 3;
 }
 
 void Model::setVector(std::vector<float>::iterator& iterator, glm::vec4& vector) {
-    vector = { *(iterator++), *(iterator++), *(iterator++), *(iterator++) };
+    vector = { iterator[0], iterator[1], iterator[2], iterator[3] };
+    iterator += 4;
 }

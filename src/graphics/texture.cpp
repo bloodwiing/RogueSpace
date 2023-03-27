@@ -12,8 +12,6 @@ Texture::Texture(const char* filename, TextureType type, GLuint slot)
     , height()
     , channels()
 {
-    stbi_set_flip_vertically_on_load(true);
-
     uint8_t* bytes = stbi_load(filename, &width, &height, &channels, 0);
 
     glGenTextures(1, &ID);
