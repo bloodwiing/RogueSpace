@@ -12,7 +12,9 @@ Model::Model(Scene *scene, ActorBase *parent, const char *filename)
 
     m_data = getData();
 
-    traverseNode(0);
+    uint8_t modelMainScene = m_json.value("scene", 0);
+    for (uint16_t node : m_json["scenes"][modelMainScene]["nodes"])
+        traverseNode(node);
 }
 
 void Model::draw(Shader &shader) {
@@ -67,7 +69,7 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
         float data[3];
         for (size_t i = 0; i < node["scale"].size(); ++i)
             data[i] = node["scale"][i];
-        translation = glm::make_vec3(data);
+        scale = glm::make_vec3(data);
     }
 
     glm::mat4 mat(1.0f);
