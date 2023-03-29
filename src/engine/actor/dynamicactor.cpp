@@ -1,5 +1,9 @@
 #include "engine/actor/dynamicactor.h"
 
+DynamicActor::DynamicActor(Scene* scene, ActorBase* parent)
+    : Actor(scene, parent)
+{ }
+
 glm::vec3 DynamicActor::getTranslation() const {
     return m_translation;
 }

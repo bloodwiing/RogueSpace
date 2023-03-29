@@ -7,6 +7,8 @@
 
 class PhysicsActor : public DynamicActor {
 public:
+    PhysicsActor(Scene* scene, ActorBase* parent);
+
     void update(GLFWwindow *window, double delta) override;
 
     [[nodiscard]] float getWeight() const;

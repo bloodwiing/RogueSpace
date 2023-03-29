@@ -5,6 +5,8 @@
 
 class DynamicActor : public Actor {
 public:
+    DynamicActor(Scene* scene, ActorBase* parent);
+
     [[nodiscard]] glm::vec3 getTranslation() const override;
     [[nodiscard]] glm::quat getRotation() const override;
     [[nodiscard]] glm::vec3 getScale() const override;

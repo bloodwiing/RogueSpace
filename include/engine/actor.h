@@ -11,12 +11,13 @@
 #include "graphics/shader.h"
 #include "graphics/camera.h"
 #include "./script.h"
-#include "./hierarchycontainer.h"
 #include "./scene.h"
 
-class Actor : public HierarchyContainer<Scene, Actor> {
+class ActorBase;
+
+class Actor : public ActorBase {
 public:
-    Actor(Scene* scene, Actor* parent);
+    Actor(Scene* scene, ActorBase* parent);
 
     template<class T>
     T *addChild();
@@ -38,5 +39,7 @@ protected:
 
     Scene* m_scene;
 };
+
+#include "actor_impl.tpp"
 
 #endif //ACTOR_CLASS_H

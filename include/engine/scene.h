@@ -3,15 +3,17 @@
 
 #include <vector>
 
-#include "hierarchycontainer.h"
+#include "actorbase.h"
 #include "actor.h"
 
-class Scene : public HierarchyContainer<Scene, Actor> {
+class Scene : public ActorBase {
 public:
     Scene();
 
     template<class T>
     T *addChild();
 };
+
+#include "scene_impl.tpp"
 
 #endif //SCENE_CLASS_H

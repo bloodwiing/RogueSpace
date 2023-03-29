@@ -1,14 +1,9 @@
 #include "engine/actor.h"
 
-Actor::Actor(Scene *scene, Actor *parent)
-    : HierarchyContainer<Scene, Actor>(parent)
+Actor::Actor(Scene *scene, ActorBase *parent)
+    : ActorBase(parent)
     , m_scene(scene)
 { }
-
-template<class T>
-T *Actor::addChild() {
-    HierarchyContainer::addChild<T>(m_scene, this);
-}
 
 std::string Actor::getName() const {
     return m_name;

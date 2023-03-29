@@ -1,5 +1,9 @@
 #include "engine/actor/physicsactor.h"
 
+PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent)
+    : DynamicActor(scene, parent)
+{ }
+
 void PhysicsActor::update(GLFWwindow *window, double delta) {
     if (m_velocity.x == 0.0f and m_velocity.y == 0.0f and m_velocity.z == 0.0f)
         return;

@@ -5,6 +5,8 @@
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+const Camera* Camera::m_active = nullptr;
+
 Camera::Camera(unsigned int width, unsigned int height, glm::vec3 position)
     : m_width(width)
     , m_height(height)

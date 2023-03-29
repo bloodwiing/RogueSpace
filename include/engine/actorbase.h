@@ -1,0 +1,26 @@
+#ifndef ACTOR_BASE_CLASS_H
+#define ACTOR_BASE_CLASS_H
+
+#include <vector>
+
+class Scene;
+
+class ActorBase {
+public:
+    explicit ActorBase(ActorBase* parent);
+    ~ActorBase();
+
+    [[nodiscard]] std::vector<ActorBase*> getChildren() const;
+    template<class T>
+    T* addChild(Scene* scene, ActorBase* parent);
+
+    [[nodiscard]] ActorBase* getParent() const;
+
+protected:
+    std::vector<ActorBase*> m_children;
+    ActorBase* m_parent;
+};
+
+#include "actorbase_impl.tpp"
+
+#endif //ACTOR_BASE_CLASS_H
