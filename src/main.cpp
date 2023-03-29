@@ -54,7 +54,7 @@ int main() {
     auto ground_model = ground->addChild<Model>("./res/map/scene.gltf");
 
     auto cube = scene.addChild<PhysicsActor>();
-    auto cube_model = cube->addChild<Model>("./res/cube/Cube.gltf");
+    auto cube_model = cube->addChild<Model>("./res/suzanne/suzanne.gltf");
     cube->setWeight(0.5f);
     cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
