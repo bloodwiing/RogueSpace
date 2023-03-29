@@ -7,7 +7,7 @@
 
 class PhysicsActor : public DynamicActor {
 public:
-    PhysicsActor(Scene* scene, ActorBase* parent);
+    PhysicsActor(Scene* scene, ActorBase* parent, float weight);
 
     void update(GLFWwindow *window, double delta) override;
 

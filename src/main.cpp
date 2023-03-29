@@ -59,7 +59,7 @@ int main() {
     auto ground = scene.addChild<Actor>();
     auto ground_model = ground->addChild<Model>("./res/map/scene.gltf");
 
-    auto cube = scene.addChild<PhysicsActor>();
+    auto cube = scene.addChild<PhysicsActor>(1.0f);
     cube->scale(glm::vec3(0.50f));
     auto cube_model = cube->addChild<Model>("./res/suzanne/suzanne.gltf");
     cube->setWeight(0.5f);
@@ -98,6 +98,7 @@ int main() {
 
         scene.update(window, delta);
         camera->updateMatrix(45.0f, 0.001f, 100.0f);
+        auto test = camera->getWorldMatrix();
         scene.draw(shader);
 
         glfwSwapBuffers(window);

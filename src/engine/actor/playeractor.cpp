@@ -6,10 +6,8 @@
 #include "graphics/camera.h"
 
 PlayerActor::PlayerActor(Scene *scene, ActorBase *parent)
-        : PhysicsActor(scene, parent)
-{
-    setWeight(0.5f);
-}
+    : PhysicsActor(scene, parent, 0.5f)
+{ }
 
 void PlayerActor::update(GLFWwindow *window, double delta) {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {

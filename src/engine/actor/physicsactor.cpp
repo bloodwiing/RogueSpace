@@ -1,7 +1,9 @@
 #include "engine/actor/physicsactor.h"
 
-PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent)
+PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, float weight)
     : DynamicActor(scene, parent)
+    , m_weight(weight)
+    , m_velocity(0.0f)
 { }
 
 void PhysicsActor::update(GLFWwindow *window, double delta) {
