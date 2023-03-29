@@ -3,11 +3,15 @@
 
 #include <vector>
 
+#include "hierarchycontainer.h"
 #include "actor.h"
 
-class Scene {
-private:
-    std::vector<Actor> m_actors;
+class Scene : public HierarchyContainer<Scene, Actor> {
+public:
+    Scene();
+
+    template<class T>
+    T *addChild();
 };
 
 #endif //SCENE_CLASS_H

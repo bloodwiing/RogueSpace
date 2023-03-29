@@ -8,6 +8,7 @@
 class Camera {
 public:
     Camera(unsigned int width, unsigned int height, glm::vec3 position);
+    ~Camera();
 
     [[nodiscard]] glm::vec3 getPosition() const;
 
@@ -15,6 +16,9 @@ public:
     void applyMatrix(Shader& shader, const char* uniform);
 
     void handleInputs(GLFWwindow* window, float delta);
+
+    static const Camera* getActiveCamera();
+    void setActive() const;
 
 private:
     glm::vec3 m_position,
@@ -30,6 +34,8 @@ private:
           m_sensitivity = 100.0f;
 
     bool m_clicked = false;
+
+    static const Camera* m_active;
 };
 
 #endif //CAMERA_CLASS_H

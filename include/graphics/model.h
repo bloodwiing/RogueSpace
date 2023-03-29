@@ -12,14 +12,13 @@ class Model {
 public:
     explicit Model(const char* filename);
 
-    void draw(Shader& shader, Camera& camera);
+    void draw(Shader& shader, Camera& camera, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
 
 private:
     const char* m_filename;
     std::vector<uint8_t> m_data;
     json m_json;
 
-public:
     std::vector<Mesh> m_meshes;
     std::vector<glm::vec3> m_meshTranslations;
     std::vector<glm::quat> m_meshRotations;

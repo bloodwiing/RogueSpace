@@ -1,7 +1,7 @@
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
 
-class Component {
+class Script {
 public:
     virtual void onSpawn() {};
     virtual void onUpdate() {};

@@ -3,14 +3,17 @@
 
 #include <glm/glm.hpp>
 
-#include "actor.h"
+#include "./dynamicactor.h"
 
-class PhysicsActor : public Actor {
+class PhysicsActor : public DynamicActor {
 public:
     void update(GLFWwindow *window, double delta) override;
 
+    [[nodiscard]] float getWeight() const;
+    [[nodiscard]] glm::vec3 getVelocity() const;
+
     void setWeight(float weight);
-    void setVelocity(glm::vec3 velocity);
+    void setVelocity(const glm::vec3& velocity);
 
 protected:
     float m_weight;

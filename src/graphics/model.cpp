@@ -14,9 +14,9 @@ Model::Model(const char *filename)
     traverseNode(0);
 }
 
-void Model::draw(Shader &shader, Camera &camera) {
+void Model::draw(Shader &shader, Camera &camera, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
     for (size_t i = 0; i < m_meshes.size(); ++i) {
-        m_meshes[i].draw(shader, camera, m_meshMatrices[i]);
+        m_meshes[i].draw(shader, camera, m_meshMatrices[i], translation, rotation, scale);
     }
 }
 

@@ -5,7 +5,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "graphics/model.h"
-#include "engine/physicsactor.h"
+#include "engine/actor/physicsactor.h"
 
 const int width = 1366,
           height = 700;
@@ -44,9 +44,14 @@ int main() {
 
 
     Model cube("./res/cube/Cube.gltf");
-    PhysicsActor actor{};
-    actor.setWeight(0.5f);
-    actor.setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+
+
+    Scene scene;
+    auto actor = scene.addChild<PhysicsActor>();
+
+
+    actor->setWeight(0.5f);
+    actor->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -74,17 +79,15 @@ int main() {
         camera.handleInputs(window, (float)delta);
         camera.updateMatrix(45.0f, 0.001f, 100.0f);
 
-        actor.update(window, delta);
+        actor->update(window, delta);
 
         if (!shader.isErrored()) {
             shader.activate();
             glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
         }
 
-        model.draw(shader, camera);
-        for (size_t i = 0; i < cube.m_meshes.size(); ++i) {
-            cube.m_meshes[i].draw(shader, camera, cube.m_meshMatrices[i], actor.getPosition());
-        }
+        model.draw(shader, camera, glm::vec3(0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
+//        cube.draw(shader, camera, actor->getTranslation(), actor->getRotation(), actor->getScale());
 
         glfwSwapBuffers(window);
 

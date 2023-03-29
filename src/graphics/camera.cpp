@@ -11,6 +11,11 @@ Camera::Camera(unsigned int width, unsigned int height, glm::vec3 position)
     , m_position(position)
 {  }
 
+Camera::~Camera() {
+    if (m_active == this)
+        m_active = nullptr;
+}
+
 void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
     glm::mat4 view(1.0f);
     glm::mat4 proj(1.0f);
@@ -82,4 +87,12 @@ void Camera::handleInputs(GLFWwindow *window, float delta) {
 
         glfwSetCursorPos(window, (double)m_width / 2, (double)m_height / 2);
     }
+}
+
+const Camera* Camera::getActiveCamera() {
+    return m_active;
+}
+
+void Camera::setActive() const {
+    m_active = this;
 }
