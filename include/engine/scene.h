@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include "actorbase.h"
-#include "actor.h"
+#include "engine/actor/actorbase.h"
+#include "engine/actor/actor.h"
 
 class Scene : public ActorBase {
 public:

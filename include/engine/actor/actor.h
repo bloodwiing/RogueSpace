@@ -3,11 +3,11 @@
 
 #include <vector>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
 
-#include "./script.h"
-#include "./scene.h"
+#include "engine/script.h"
+#include "engine/scene.h"
 
 class ActorBase;
 

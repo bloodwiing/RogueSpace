@@ -1,7 +1,7 @@
-#include "engine/actor.h"
+#include "engine/actor/actor.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 Actor::Actor(Scene *scene, ActorBase *parent)
     : ActorBase(parent)

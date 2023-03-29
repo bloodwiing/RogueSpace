@@ -1,4 +1,4 @@
-#include "engine/actorbase.h"
+#include "engine/actor/actorbase.h"
 
 ActorBase::ActorBase(ActorBase *parent)
     : m_parent(parent)
