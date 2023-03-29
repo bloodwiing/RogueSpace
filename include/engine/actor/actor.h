@@ -28,7 +28,11 @@ public:
     [[nodiscard]] virtual glm::quat getRotation() const;
     [[nodiscard]] virtual glm::vec3 getScale() const;
 
-    void draw(Shader &shader, glm::mat4 transform) override;
+    virtual void setTranslation(const glm::vec3& tra) {};
+    virtual void setRotation(const glm::quat& rot) {};
+    virtual void setScale(const glm::vec3& sca) {};
+
+    void draw(Shader &shader) override;
 
 protected:
     std::string m_name;

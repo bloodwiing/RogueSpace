@@ -14,7 +14,7 @@ class Model : public DynamicActor {
 public:
     explicit Model(Scene *scene, ActorBase *parent, const char* filename);
 
-    void draw(Shader& shader, glm::mat4 transform) override;
+    void draw(Shader& shader) override;
 
 private:
     const char* m_filename;

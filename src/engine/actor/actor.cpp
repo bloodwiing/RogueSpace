@@ -28,15 +28,9 @@ glm::vec3 Actor::getScale() const {
     return glm::vec3(1.0f);
 }
 
-void Actor::draw(Shader& shader, glm::mat4 transform) {
-    auto trans = glm::translate(glm::mat4(1.0f), getTranslation());
-    auto rot = glm::mat4_cast(getRotation());
-    auto sca = glm::scale(glm::mat4(1.0f), getScale());
-
-    transform = transform * trans * rot * sca;
-
+void Actor::draw(Shader& shader) {
     for (auto* child : m_children) {
         if (child != nullptr)
-            child->draw(shader, transform);
+            child->draw(shader);
     }
 }

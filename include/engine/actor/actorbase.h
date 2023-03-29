@@ -25,8 +25,10 @@ public:
 
     [[nodiscard]] ActorBase* getParent() const;
 
-    virtual void update(GLFWwindow* window, double delta) {};
-    virtual void draw(Shader& shader, glm::mat4 transform);
+    [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
+
+    virtual void update(GLFWwindow* window, double delta);
+    virtual void draw(Shader& shader);
 
 protected:
     std::vector<ActorBase*> m_children;

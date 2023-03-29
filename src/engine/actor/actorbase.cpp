@@ -18,9 +18,20 @@ ActorBase* ActorBase::getParent() const {
     return m_parent;
 }
 
-void ActorBase::draw(Shader& shader, glm::mat4 transform) {
+glm::mat4 ActorBase::getWorldMatrix() const {
+    return glm::mat4(1.0f);
+}
+
+void ActorBase::update(GLFWwindow* window, double delta) {
     for (auto* child : m_children) {
         if (child != nullptr)
-            child->draw(shader, transform);
+            child->update(window, delta);
+    }
+}
+
+void ActorBase::draw(Shader& shader) {
+    for (auto* child : m_children) {
+        if (child != nullptr)
+            child->draw(shader);
     }
 }

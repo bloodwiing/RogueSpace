@@ -5,7 +5,9 @@
 #include <glm/gtx/transform.hpp>
 
 #include "graphics/model.h"
+#include "graphics/screen.h"
 #include "engine/actor/physicsactor.h"
+#include "engine/actor/playeractor.h"
 
 const int width = 1366,
           height = 700;
@@ -36,6 +38,10 @@ int main() {
     glFrontFace(GL_CCW);
 
 
+    Screen::getInstance()->width = width;
+    Screen::getInstance()->height = height;
+
+
     Shader shader("./res/default.vert", "./res/default.frag");
 
 
@@ -46,7 +52,7 @@ int main() {
 
     Scene scene;
 
-    auto player = scene.addChild<PhysicsActor>();
+    auto player = scene.addChild<PlayerActor>();
     auto camera = player->addChild<Camera>(width, height);
     camera->setActive();
 
@@ -82,17 +88,17 @@ int main() {
         double delta = new_time - prev_time;
         prev_time = new_time;
 
-        camera->handleInputs(window, (float)delta);
-        camera->updateMatrix(45.0f, 0.001f, 100.0f);
-
-        cube->update(window, delta);
+//        camera->handleInputs(window, (float)delta);
+//        cube->update(window, delta);
 
         if (!shader.isErrored()) {
             shader.activate();
             glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
         }
 
-        scene.draw(shader, glm::mat4(1.0f));
+        scene.update(window, delta);
+        camera->updateMatrix(45.0f, 0.001f, 100.0f);
+        scene.draw(shader);
 
         glfwSwapBuffers(window);
 

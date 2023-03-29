@@ -12,6 +12,8 @@ void PhysicsActor::update(GLFWwindow *window, double delta) {
     m_velocity -= m_velocity * ((float)delta * m_weight);
     if (glm::length(m_velocity) <= 0.001f)
         m_velocity = glm::vec3(0.0f);
+
+    DynamicActor::update(window, delta);
 }
 
 float PhysicsActor::getWeight() const {
