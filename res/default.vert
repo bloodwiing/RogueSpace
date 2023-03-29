@@ -11,13 +11,11 @@ out vec2 v_texCoord;
 
 uniform mat4 CameraMatrix;
 
+uniform mat4 Relative;
 uniform mat4 Model;
-uniform mat4 Translation;
-uniform mat4 Rotation;
-uniform mat4 Scale;
 
 void main() {
-    v_currentPos = vec3(Model * Translation * Rotation * Scale * vec4(pos, 1.0));
+    v_currentPos = vec3(Model * Relative * vec4(pos, 1.0));
 
     gl_Position = CameraMatrix * vec4(v_currentPos, 1.0);
     v_texCoord = texCoord;

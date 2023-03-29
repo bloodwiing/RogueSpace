@@ -17,9 +17,9 @@ Model::Model(Scene *scene, ActorBase *parent, const char *filename)
         traverseNode(node);
 }
 
-void Model::draw(Shader &shader) {
+void Model::draw(Shader& shader, glm::mat4 transform) {
     for (size_t i = 0; i < m_meshes.size(); ++i) {
-        m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], m_translation, m_rotation, m_scale);
+        m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], transform);
     }
 }
 

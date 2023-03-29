@@ -26,10 +26,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vec
 void Mesh::draw(
         Shader& shader,
         Camera* camera,
-        glm::mat4 matrix /* = glm::mat4(1.0f) */,
-        glm::vec3 translation /* = glm::vec3(0.0f) */,
-        glm::quat rotation /* = glm::quat(1.0f, 0.0f, 0.0f, 0.0f) */,
-        glm::vec3 scale /* = glm::vec3(1.0f) */)
+        glm::mat4 relative /* = glm::mat4(1.0f) */,
+        glm::mat4 model /* = glm::mat4(1.0f) */)
 {
     if (shader.isErrored())
         return;
@@ -48,7 +46,7 @@ void Mesh::draw(
                 uniform_name = std::string("Diffuse") + std::to_string(diffuse_counter++);
                 break;
             case TextureType::TEX_SPECULAR:
-                uniform_name = std::string("Specular") + std::to_string(diffuse_counter++);
+                uniform_name = std::string("Specular") + std::to_string(specular_counter++);
                 break;
             default:
                 break;
@@ -61,14 +59,8 @@ void Mesh::draw(
     camera->applyMatrix(shader, "CameraMatrix");
     glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
 
-    auto trans = glm::translate(glm::mat4(1.0f), translation);
-    auto rot = glm::mat4_cast(rotation);
-    auto sca = glm::scale(glm::mat4(1.0f), scale);
-
-    glUniformMatrix4fv(shader.getUniform("Translation"), 1, GL_FALSE, glm::value_ptr(trans));
-    glUniformMatrix4fv(shader.getUniform("Rotation"), 1, GL_FALSE, glm::value_ptr(rot));
-    glUniformMatrix4fv(shader.getUniform("Scale"), 1, GL_FALSE, glm::value_ptr(sca));
-    glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniformMatrix4fv(shader.getUniform("Relative"), 1, GL_FALSE, glm::value_ptr(relative));
+    glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(model));
 
     glDrawElements(GL_TRIANGLES, (GLint)indices.size(), GL_UNSIGNED_INT, nullptr);
 }

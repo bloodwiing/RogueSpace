@@ -54,6 +54,7 @@ int main() {
     auto ground_model = ground->addChild<Model>("./res/map/scene.gltf");
 
     auto cube = scene.addChild<PhysicsActor>();
+    cube->scale(glm::vec3(0.50f));
     auto cube_model = cube->addChild<Model>("./res/suzanne/suzanne.gltf");
     cube->setWeight(0.5f);
     cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
@@ -91,9 +92,7 @@ int main() {
             glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
         }
 
-        scene.draw(shader);
-//        model.draw(shader, camera, glm::vec3(0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
-//        cube.draw(shader, camera, actor->getTranslation(), actor->getRotation(), actor->getScale());
+        scene.draw(shader, glm::mat4(1.0f));
 
         glfwSwapBuffers(window);
 

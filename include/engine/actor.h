@@ -28,6 +28,8 @@ public:
     [[nodiscard]] virtual glm::quat getRotation() const;
     [[nodiscard]] virtual glm::vec3 getScale() const;
 
+    void draw(Shader &shader, glm::mat4 transform) override;
+
 protected:
     std::string m_name;
     std::vector<Script> m_scripts;

@@ -18,9 +18,9 @@ ActorBase* ActorBase::getParent() const {
     return m_parent;
 }
 
-void ActorBase::draw(Shader& shader) {
+void ActorBase::draw(Shader& shader, glm::mat4 transform) {
     for (auto* child : m_children) {
         if (child != nullptr)
-            child->draw(shader);
+            child->draw(shader, transform);
     }
 }

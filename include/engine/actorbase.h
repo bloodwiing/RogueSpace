@@ -6,6 +6,8 @@
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
 
+#include <glm/glm.hpp>
+
 #include "graphics/shader.h"
 
 class Scene;
@@ -24,7 +26,7 @@ public:
     [[nodiscard]] ActorBase* getParent() const;
 
     virtual void update(GLFWwindow* window, double delta) {};
-    virtual void draw(Shader& shader);
+    virtual void draw(Shader& shader, glm::mat4 transform);
 
 protected:
     std::vector<ActorBase*> m_children;
