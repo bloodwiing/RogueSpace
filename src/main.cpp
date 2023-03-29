@@ -19,7 +19,7 @@ int main() {
 
     GLFWwindow *window = glfwCreateWindow(width, height, "Testing", nullptr, nullptr);
     if (window == nullptr) {
-        std::cout << "Failed to create window" << std::endl;
+        std::cerr << "Failed to create window" << std::endl;
         glfwTerminate();
         return -1;
     }
@@ -36,22 +36,27 @@ int main() {
     glFrontFace(GL_CCW);
 
 
-    Model model("./res/map/scene.gltf");
     Shader shader("./res/default.vert", "./res/default.frag");
 
 
-    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
-
-
-    Model cube("./res/cube/Cube.gltf");
+//    Model model("./res/map/scene.gltf");
+//    Model cube("./res/cube/Cube.gltf");
+//    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 
     Scene scene;
-    auto actor = scene.addChild<PhysicsActor>();
 
+    auto player = scene.addChild<PhysicsActor>();
+    auto camera = player->addChild<Camera>(width, height);
+    camera->setActive();
 
-    actor->setWeight(0.5f);
-    actor->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+    auto ground = scene.addChild<Actor>();
+    auto ground_model = ground->addChild<Model>("./res/map/scene.gltf");
+
+    auto cube = scene.addChild<PhysicsActor>();
+    auto cube_model = cube->addChild<Model>("./res/cube/Cube.gltf");
+    cube->setWeight(0.5f);
+    cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -76,17 +81,18 @@ int main() {
         double delta = new_time - prev_time;
         prev_time = new_time;
 
-        camera.handleInputs(window, (float)delta);
-        camera.updateMatrix(45.0f, 0.001f, 100.0f);
+        camera->handleInputs(window, (float)delta);
+        camera->updateMatrix(45.0f, 0.001f, 100.0f);
 
-        actor->update(window, delta);
+        cube->update(window, delta);
 
         if (!shader.isErrored()) {
             shader.activate();
-            glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+            glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
         }
 
-        model.draw(shader, camera, glm::vec3(0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
+        scene.draw(shader);
+//        model.draw(shader, camera, glm::vec3(0.0f), glm::quat(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(1.0f));
 //        cube.draw(shader, camera, actor->getTranslation(), actor->getRotation(), actor->getScale());
 
         glfwSwapBuffers(window);

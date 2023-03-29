@@ -3,8 +3,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.h"
 
-Model::Model(const char *filename)
-    : m_filename(filename)
+Model::Model(Scene *scene, ActorBase *parent, const char *filename)
+    : DynamicActor(scene, parent)
+    , m_filename(filename)
 {
     std::string content = readFileContents(filename);
     m_json = json::parse(content);
@@ -14,9 +15,9 @@ Model::Model(const char *filename)
     traverseNode(0);
 }
 
-void Model::draw(Shader &shader, Camera &camera, glm::vec3 translation, glm::quat rotation, glm::vec3 scale) {
+void Model::draw(Shader &shader) {
     for (size_t i = 0; i < m_meshes.size(); ++i) {
-        m_meshes[i].draw(shader, camera, m_meshMatrices[i], translation, rotation, scale);
+        m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], m_translation, m_rotation, m_scale);
     }
 }
 

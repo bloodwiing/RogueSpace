@@ -3,6 +3,11 @@
 
 #include <vector>
 
+#define GLFW_INCLUDE_NONE
+#include <glfw3.h>
+
+#include "graphics/shader.h"
+
 class Scene;
 
 class ActorBase {
@@ -13,8 +18,13 @@ public:
     [[nodiscard]] std::vector<ActorBase*> getChildren() const;
     template<class T>
     T* addChild(Scene* scene, ActorBase* parent);
+    template<class T, class... Args>
+    T* addChild(Scene* scene, ActorBase* parent, Args&&... args);
 
     [[nodiscard]] ActorBase* getParent() const;
+
+    virtual void update(GLFWwindow* window, double delta) {};
+    virtual void draw(Shader& shader);
 
 protected:
     std::vector<ActorBase*> m_children;

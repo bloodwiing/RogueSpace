@@ -6,13 +6,15 @@
 
 #include "mesh.h"
 
+#include "engine/actor/dynamicactor.h"
+
 using json = nlohmann::json;
 
-class Model {
+class Model : public DynamicActor {
 public:
-    explicit Model(const char* filename);
+    explicit Model(Scene *scene, ActorBase *parent, const char* filename);
 
-    void draw(Shader& shader, Camera& camera, glm::vec3 translation, glm::quat rotation, glm::vec3 scale);
+    void draw(Shader& shader);
 
 private:
     const char* m_filename;

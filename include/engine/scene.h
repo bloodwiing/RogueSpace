@@ -11,7 +11,9 @@ public:
     Scene();
 
     template<class T>
-    T *addChild();
+    T* addChild();
+    template<class T, class... Args>
+    T* addChild(Args&&... args);
 };
 
 #include "scene_impl.tpp"

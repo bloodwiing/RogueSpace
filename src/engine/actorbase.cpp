@@ -17,3 +17,10 @@ std::vector<ActorBase*> ActorBase::getChildren() const {
 ActorBase* ActorBase::getParent() const {
     return m_parent;
 }
+
+void ActorBase::draw(Shader& shader) {
+    for (auto* child : m_children) {
+        if (child != nullptr)
+            child->draw(shader);
+    }
+}

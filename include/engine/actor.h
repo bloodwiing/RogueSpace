@@ -5,11 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
-#define GLFW_INCLUDE_NONE
-#include <glfw3.h>
 
-#include "graphics/shader.h"
-#include "graphics/camera.h"
 #include "./script.h"
 #include "./scene.h"
 
@@ -20,10 +16,9 @@ public:
     Actor(Scene* scene, ActorBase* parent);
 
     template<class T>
-    T *addChild();
-
-    virtual void update(GLFWwindow* window, double delta) {};
-    virtual void draw(Shader& shader, Camera& camera) {};
+    T* addChild();
+    template<class T, class... Args>
+    T* addChild(Args&&... args);
 
     [[nodiscard]] std::string getName() const;
 

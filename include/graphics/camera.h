@@ -5,24 +5,23 @@
 #include <glfw3.h>
 #include <glm/glm.hpp>
 
-class Camera {
-public:
-    Camera(unsigned int width, unsigned int height, glm::vec3 position);
-    ~Camera();
+#include "engine/actor/dynamicactor.h"
 
-    [[nodiscard]] glm::vec3 getPosition() const;
+class Camera : public DynamicActor {
+public:
+    Camera(Scene *scene, ActorBase *parent, int width, int height);
+    ~Camera();
 
     void updateMatrix(float fov_degrees, float near_plane, float far_plane);
     void applyMatrix(Shader& shader, const char* uniform);
 
     void handleInputs(GLFWwindow* window, float delta);
 
-    static const Camera* getActiveCamera();
+    static Camera* getActiveCamera();
     void setActive() const;
 
 private:
-    glm::vec3 m_position,
-              m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
+    glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
               m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
     glm::mat4 m_matrix = glm::mat4(1.0f);
@@ -35,7 +34,7 @@ private:
 
     bool m_clicked = false;
 
-    static const Camera* m_active;
+    static Camera* m_active;
 };
 
 #endif //CAMERA_CLASS_H

@@ -24,8 +24,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vec
 }
 
 void Mesh::draw(
-        Shader &shader,
-        Camera &camera,
+        Shader& shader,
+        Camera* camera,
         glm::mat4 matrix /* = glm::mat4(1.0f) */,
         glm::vec3 translation /* = glm::vec3(0.0f) */,
         glm::quat rotation /* = glm::quat(1.0f, 0.0f, 0.0f, 0.0f) */,
@@ -58,8 +58,8 @@ void Mesh::draw(
         textures[i].bind();
     }
 
-    camera.applyMatrix(shader, "CameraMatrix");
-    glUniform3f(shader.getUniform("CameraPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+    camera->applyMatrix(shader, "CameraMatrix");
+    glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
 
     auto trans = glm::translate(glm::mat4(1.0f), translation);
     auto rot = glm::mat4_cast(rotation);
