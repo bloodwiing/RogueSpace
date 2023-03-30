@@ -22,9 +22,6 @@ private:
     json m_json;
 
     std::vector<Mesh> m_meshes;
-    std::vector<glm::vec3> m_meshTranslations;
-    std::vector<glm::quat> m_meshRotations;
-    std::vector<glm::vec3> m_meshScales;
     std::vector<glm::mat4> m_meshMatrices;
 
     std::unordered_map<std::string, Texture> m_loadedTexNames;

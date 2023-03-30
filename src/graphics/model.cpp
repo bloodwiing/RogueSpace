@@ -87,9 +87,6 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     glm::mat4 inheritedMatrix = matrix * mat * trans * rot * sca;
 
     if (node.find("mesh") != node.end()) {
-        m_meshTranslations.push_back(translation);
-        m_meshRotations.push_back(rotation);
-        m_meshScales.push_back(scale);
         m_meshMatrices.push_back(inheritedMatrix);
 
         loadMesh(node["mesh"]);
