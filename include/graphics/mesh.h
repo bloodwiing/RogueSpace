@@ -22,9 +22,9 @@ public:
         glm::mat4 model = glm::mat4(1.0f));
 
 private:
-    std::vector<Vertex> vertices;
-    std::vector<GLuint> indices;
-    std::vector<Texture> textures;
+    std::vector<Vertex> m_vertices;
+    std::vector<GLuint> m_indices;
+    std::vector<Texture> m_textures;
 
     VAO m_VAO;
 };

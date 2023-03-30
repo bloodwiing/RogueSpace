@@ -3,9 +3,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures)
-    : vertices(vertices)
-    , indices(indices)
-    , textures(textures)
+    : m_vertices(vertices)
+    , m_indices(indices)
+    , m_textures(textures)
     , m_VAO()
 {
     m_VAO.bind();
@@ -38,10 +38,10 @@ void Mesh::draw(
     uint16_t diffuse_counter = 0,
              specular_counter = 0;
 
-    for (uint64_t i = 0; i < textures.size(); ++i) {
+    for (uint64_t i = 0; i < m_textures.size(); ++i) {
         std::string uniform_name;
 
-        switch (textures[i].getTextureType()) {
+        switch (m_textures[i].getTextureType()) {
             case TextureType::TEX_DIFFUSE:
                 uniform_name = std::string("Diffuse") + std::to_string(diffuse_counter++);
                 break;
@@ -52,8 +52,8 @@ void Mesh::draw(
                 break;
         }
 
-        textures[i].assign(shader, uniform_name.c_str(), i);
-        textures[i].bind();
+        m_textures[i].assign(shader, uniform_name.c_str(), i);
+        m_textures[i].bind();
     }
 
     camera->applyMatrix(shader, "CameraMatrix");
@@ -62,5 +62,5 @@ void Mesh::draw(
     glUniformMatrix4fv(shader.getUniform("Relative"), 1, GL_FALSE, glm::value_ptr(relative));
     glUniformMatrix4fv(shader.getUniform("Model"), 1, GL_FALSE, glm::value_ptr(model));
 
-    glDrawElements(GL_TRIANGLES, (GLint)indices.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, (GLint)m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
