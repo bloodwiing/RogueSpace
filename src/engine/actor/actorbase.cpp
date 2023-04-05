@@ -22,10 +22,10 @@ glm::mat4 ActorBase::getWorldMatrix() const {
     return glm::mat4(1.0f);
 }
 
-void ActorBase::update(GLFWwindow* window, double delta) {
+void ActorBase::update() {
     for (auto* child : m_children) {
         if (child != nullptr)
-            child->update(window, delta);
+            child->update();
     }
 }
 

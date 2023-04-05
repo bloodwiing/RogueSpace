@@ -3,3 +3,5 @@
 Scene::Scene()
     : ActorBase(nullptr)
 { }
+
+// Todo: bullets

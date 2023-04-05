@@ -4,7 +4,7 @@ DynamicActor::DynamicActor(Scene* scene, ActorBase* parent)
     : Actor(scene, parent)
 { }
 
-void DynamicActor::update(GLFWwindow *window, double delta) {
+void DynamicActor::update() {
     if (m_needsMatrixUpdate) {
         auto trans = glm::translate(glm::mat4(1.0f), getTranslation());
         auto rot = glm::mat4_cast(getRotation());
@@ -20,7 +20,7 @@ void DynamicActor::update(GLFWwindow *window, double delta) {
                 dynamicChild->flagForMatrixUpdate();
         }
     }
-    ActorBase::update(window, delta);
+    ActorBase::update();
 }
 
 glm::vec3 DynamicActor::getTranslation() const {

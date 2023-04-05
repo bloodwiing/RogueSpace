@@ -1,21 +1,23 @@
 #include "engine/actor/physicsactor.h"
 
+#include "engine/time.h"
+
 PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, float weight)
     : DynamicActor(scene, parent)
     , m_weight(weight)
     , m_velocity(0.0f)
 { }
 
-void PhysicsActor::update(GLFWwindow *window, double delta) {
+void PhysicsActor::update() {
     if (m_velocity.x == 0.0f and m_velocity.y == 0.0f and m_velocity.z == 0.0f)
         return;
 
-    translate(m_velocity * (float)delta);
-    m_velocity -= m_velocity * ((float)delta * m_weight);
+    translate(m_velocity * Time::getDeltaFloat());
+    m_velocity -= m_velocity * (Time::getDeltaFloat() * m_weight);
     if (glm::length(m_velocity) <= 0.001f)
         m_velocity = glm::vec3(0.0f);
 
-    DynamicActor::update(window, delta);
+    DynamicActor::update();
 }
 
 float PhysicsActor::getWeight() const {

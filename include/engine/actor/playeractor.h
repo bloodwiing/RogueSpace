@@ -7,7 +7,7 @@ class PlayerActor : public PhysicsActor {
 public:
     PlayerActor(Scene *scene, ActorBase *parent);
 
-    void update(GLFWwindow *window, double delta) override;
+    void update() override;
 
 private:
     glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),

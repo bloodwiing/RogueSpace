@@ -6,6 +6,8 @@
 #include "engine/actor/actorbase.h"
 #include "engine/actor/actor.h"
 
+#include "quicklist.h"
+
 class Scene : public ActorBase {
 public:
     Scene();

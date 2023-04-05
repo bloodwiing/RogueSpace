@@ -27,7 +27,7 @@ public:
 
     [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
 
-    virtual void update(GLFWwindow* window, double delta);
+    virtual void update();
     virtual void draw(Shader& shader);
 
 protected:

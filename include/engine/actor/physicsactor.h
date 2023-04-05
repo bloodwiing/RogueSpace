@@ -9,7 +9,7 @@ class PhysicsActor : public DynamicActor {
 public:
     PhysicsActor(Scene* scene, ActorBase* parent, float weight);
 
-    void update(GLFWwindow *window, double delta) override;
+    void update() override;
 
     [[nodiscard]] float getWeight() const;
     [[nodiscard]] glm::vec3 getVelocity() const;

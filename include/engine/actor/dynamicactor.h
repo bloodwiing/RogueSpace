@@ -7,7 +7,7 @@ class DynamicActor : public Actor {
 public:
     DynamicActor(Scene* scene, ActorBase* parent);
 
-    void update(GLFWwindow* window, double delta) override;
+    void update() override;
 
     [[nodiscard]] glm::vec3 getTranslation() const override;
     [[nodiscard]] glm::quat getRotation() const override;
