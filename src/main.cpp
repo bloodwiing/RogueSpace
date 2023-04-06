@@ -48,7 +48,13 @@ int main() {
     cube->setWeight(0.5f);
     cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
-
+    scene.addChild<Actor>("Bullet");
+    scene.addChild<Actor>("Bullet");
+    scene.addChild<Actor>("Bullet (3)");
+    scene.addChild<Actor>("Bullet");
+    scene.addChild<Actor>("Bullet");
+    scene.addChild<Actor>("Bullet (3)");
+    scene.addChild<Actor>("Bullet");
     std::cout << scene.toHierarchyString();
 
 
