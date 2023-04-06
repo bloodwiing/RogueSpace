@@ -7,7 +7,7 @@
 
 class PhysicsActor : public DynamicActor {
 public:
-    PhysicsActor(Scene* scene, ActorBase* parent, float weight);
+    PhysicsActor(Scene* scene, ActorBase* parent, std::string name, float weight);
 
     void update() override;
 

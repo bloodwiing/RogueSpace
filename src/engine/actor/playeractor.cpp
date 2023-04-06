@@ -6,8 +6,8 @@
 #include "graphics/screen.h"
 #include "graphics/camera.h"
 
-PlayerActor::PlayerActor(Scene *scene, ActorBase *parent)
-    : PhysicsActor(scene, parent, 0.5f)
+PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
+    : PhysicsActor(scene, parent, name, 0.5f)
 { }
 
 void PlayerActor::update() {

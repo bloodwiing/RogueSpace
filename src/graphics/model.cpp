@@ -3,8 +3,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.h"
 
-Model::Model(Scene *scene, ActorBase *parent, const char *filename)
-    : DynamicActor(scene, parent)
+Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *filename)
+    : DynamicActor(scene, parent, name)
     , m_filename(filename)
 {
     std::string content = readFileContents(filename);

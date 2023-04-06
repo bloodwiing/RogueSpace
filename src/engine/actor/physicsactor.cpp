@@ -2,8 +2,8 @@
 
 #include "engine/time.h"
 
-PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, float weight)
-    : DynamicActor(scene, parent)
+PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, std::string name, float weight)
+    : DynamicActor(scene, parent, name)
     , m_weight(weight)
     , m_velocity(0.0f)
 { }

@@ -1,7 +1,7 @@
 #include "engine/actor/dynamicactor.h"
 
-DynamicActor::DynamicActor(Scene* scene, ActorBase* parent)
-    : Actor(scene, parent)
+DynamicActor::DynamicActor(Scene* scene, ActorBase* parent, std::string name)
+    : Actor(scene, parent, name)
 { }
 
 void DynamicActor::update() {
@@ -14,8 +14,8 @@ void DynamicActor::update() {
         m_worldMatrix = parentMatrix * trans * rot * sca;
         m_needsMatrixUpdate = false;
 
-        for (auto* child : m_children) {
-            auto dynamicChild = dynamic_cast<DynamicActor*>(child);
+        for (auto& [name, child] : m_children) {
+            auto dynamicChild = dynamic_cast<DynamicActor*>(child.value);
             if (dynamicChild != nullptr)
                 dynamicChild->flagForMatrixUpdate();
         }

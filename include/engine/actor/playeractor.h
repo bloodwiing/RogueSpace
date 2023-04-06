@@ -5,7 +5,7 @@
 
 class PlayerActor : public PhysicsActor {
 public:
-    PlayerActor(Scene *scene, ActorBase *parent);
+    PlayerActor(Scene *scene, ActorBase *parent, std::string name);
 
     void update() override;
 

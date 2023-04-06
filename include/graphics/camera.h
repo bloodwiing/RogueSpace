@@ -9,7 +9,7 @@
 
 class Camera : public DynamicActor {
 public:
-    Camera(Scene *scene, ActorBase *parent, int width, int height);
+    Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height);
     ~Camera();
 
     void setOrientation(const glm::vec3& orientation, const glm::vec3& up);

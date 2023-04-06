@@ -1,9 +1,9 @@
 template<class T>
-T *Scene::addChild() {
-    return ActorBase::addChild<T>(this, nullptr);
+T *Scene::addChild(std::string name) {
+    return ActorBase::addChild<T>(this, nullptr, name);
 }
 
 template<class T, class... Args>
-T *Scene::addChild(Args&&... args) {
-    return ActorBase::addChild<T>(this, nullptr, std::forward<Args>(args)...);
+T *Scene::addChild(std::string name, Args&&... args) {
+    return ActorBase::addChild<T>(this, nullptr, name, std::forward<Args>(args)...);
 }

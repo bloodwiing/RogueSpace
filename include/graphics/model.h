@@ -12,7 +12,7 @@ using json = nlohmann::json;
 
 class Model : public DynamicActor {
 public:
-    explicit Model(Scene *scene, ActorBase *parent, const char* filename);
+    explicit Model(Scene *scene, ActorBase *parent, std::string name, const char* filename);
 
     void draw(Shader& shader) override;
 

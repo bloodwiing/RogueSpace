@@ -8,8 +8,8 @@
 
 Camera* Camera::m_active = nullptr;
 
-Camera::Camera(Scene *scene, ActorBase *parent, int width, int height)
-    : DynamicActor(scene, parent)
+Camera::Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height)
+    : DynamicActor(scene, parent, name)
     , m_width(width)
     , m_height(height)
 {  }

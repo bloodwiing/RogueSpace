@@ -1,7 +1,7 @@
 #ifndef ACTOR_BASE_CLASS_H
 #define ACTOR_BASE_CLASS_H
 
-#include <vector>
+#include <map>
 
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
@@ -13,17 +13,27 @@
 class Scene;
 
 class ActorBase {
+protected:
+    struct ChildEntry {
+        ActorBase* value;
+        uint16_t nameRepeat;
+    };
+
 public:
-    explicit ActorBase(ActorBase* parent);
+    ActorBase(Scene* scene, ActorBase* parent, std::string& name);
     ~ActorBase();
 
-    [[nodiscard]] std::vector<ActorBase*> getChildren() const;
+    [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
+    [[nodiscard]] ActorBase* getChild(const std::string& name) const;
+
     template<class T>
-    T* addChild(Scene* scene, ActorBase* parent);
+    T* addChild(Scene* scene, ActorBase* parent, std::string& name);
     template<class T, class... Args>
-    T* addChild(Scene* scene, ActorBase* parent, Args&&... args);
+    T* addChild(Scene* scene, ActorBase* parent, std::string& name, Args&&... args);
 
     [[nodiscard]] ActorBase* getParent() const;
+
+    [[nodiscard]] std::string getName() const;
 
     [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
 
@@ -31,8 +41,13 @@ public:
     virtual void draw(Shader& shader);
 
 protected:
-    std::vector<ActorBase*> m_children;
+    std::string m_name;
+    std::map<std::string, ChildEntry> m_children;
     ActorBase* m_parent;
+
+private:
+    template<class T>
+    void internalRegisterChild(T* child);
 };
 
 #include "actorbase_impl.tpp"

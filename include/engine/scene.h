@@ -13,9 +13,12 @@ public:
     Scene();
 
     template<class T>
-    T* addChild();
+    T* addChild(std::string name);
     template<class T, class... Args>
-    T* addChild(Args&&... args);
+    T* addChild(std::string name, Args&&... args);
+
+private:
+    static std::string m_sceneName;
 };
 
 #include "scene_impl.tpp"

@@ -35,16 +35,16 @@ int main() {
 
     Scene scene;
 
-    auto player = scene.addChild<PlayerActor>();
-    auto camera = player->addChild<Camera>(width, height);
+    auto player = scene.addChild<PlayerActor>("Player");
+    auto camera = player->addChild<Camera>("Camera", width, height);
     camera->setActive();
 
-    auto ground = scene.addChild<Actor>();
-    auto ground_model = ground->addChild<Model>("./res/map/scene.gltf");
+    auto ground = scene.addChild<Actor>("Ground");
+    auto ground_model = ground->addChild<Model>("model", "./res/map/scene.gltf");
 
-    auto cube = scene.addChild<PhysicsActor>(1.0f);
+    auto cube = scene.addChild<PhysicsActor>("Cube", 1.0f);
     cube->scale(glm::vec3(0.50f));
-    auto cube_model = cube->addChild<Model>("./res/suzanne/suzanne.gltf");
+    auto cube_model = cube->addChild<Model>("model", "./res/suzanne/suzanne.gltf");
     cube->setWeight(0.5f);
     cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 

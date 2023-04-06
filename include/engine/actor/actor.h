@@ -13,14 +13,12 @@ class ActorBase;
 
 class Actor : public ActorBase {
 public:
-    Actor(Scene* scene, ActorBase* parent);
+    Actor(Scene* scene, ActorBase* parent, std::string name);
 
     template<class T>
-    T* addChild();
+    T* addChild(std::string name);
     template<class T, class... Args>
-    T* addChild(Args&&... args);
-
-    [[nodiscard]] std::string getName() const;
+    T* addChild(std::string name, Args&&... args);
 
     [[nodiscard]] Scene* getScene() const;
 
@@ -35,7 +33,6 @@ public:
     void draw(Shader &shader) override;
 
 protected:
-    std::string m_name;
     std::vector<Script> m_scripts;
 
     Scene* m_scene;

@@ -5,7 +5,7 @@
 
 class DynamicActor : public Actor {
 public:
-    DynamicActor(Scene* scene, ActorBase* parent);
+    DynamicActor(Scene* scene, ActorBase* parent, std::string name);
 
     void update() override;
 

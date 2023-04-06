@@ -3,14 +3,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-Actor::Actor(Scene *scene, ActorBase *parent)
-    : ActorBase(parent)
+Actor::Actor(Scene *scene, ActorBase *parent, std::string name)
+    : ActorBase(scene, parent, name)
     , m_scene(scene)
 { }
-
-std::string Actor::getName() const {
-    return m_name;
-}
 
 Scene *Actor::getScene() const {
     return m_scene;
@@ -29,8 +25,8 @@ glm::vec3 Actor::getScale() const {
 }
 
 void Actor::draw(Shader& shader) {
-    for (auto* child : m_children) {
-        if (child != nullptr)
-            child->draw(shader);
+    for (auto& [name, child] : m_children) {
+        if (child.value != nullptr)
+            child.value->draw(shader);
     }
 }
