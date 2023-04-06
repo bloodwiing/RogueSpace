@@ -25,6 +25,9 @@ public:
 
     void flagForMatrixUpdate();
 
+protected:
+    [[nodiscard]] std::string getTypeName() const override;
+
 private:
     glm::vec3 m_translation = glm::vec3(0.0f);
     glm::quat m_rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);

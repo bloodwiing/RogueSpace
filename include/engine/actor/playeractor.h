@@ -9,6 +9,9 @@ public:
 
     void update() override;
 
+protected:
+    [[nodiscard]] std::string getTypeName() const override;
+
 private:
     glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
               m_up = glm::vec3(0.0f, 1.0f, 0.0f);

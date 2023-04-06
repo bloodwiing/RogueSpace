@@ -18,6 +18,8 @@ public:
     void setVelocity(const glm::vec3& velocity);
 
 protected:
+    [[nodiscard]] std::string getTypeName() const override;
+
     float m_weight;
     glm::vec3 m_velocity;
 };

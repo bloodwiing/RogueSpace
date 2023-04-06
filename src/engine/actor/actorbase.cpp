@@ -1,5 +1,9 @@
 #include "engine/actor/actorbase.h"
 
+std::string ActorBase::getTypeName() const {
+    return "RAW_ActorBase";
+}
+
 ActorBase::ActorBase(Scene* scene, ActorBase *parent, std::string& name)
     : m_parent(parent)
     , m_name(name)
@@ -45,4 +49,13 @@ void ActorBase::draw(Shader& shader) {
         if (child.value != nullptr)
             child.value->draw(shader);
     }
+}
+
+std::string ActorBase::toHierarchyString(uint16_t indent /* = 0 */) const {
+    std::string result = m_name + ": " + getTypeName() + "\n";
+    for (const auto& iter : m_children) {
+        result += std::string(" | ", indent * 3) + " > ";
+        result += iter.second.value->toHierarchyString(indent + 1);
+    }
+    return result;
 }

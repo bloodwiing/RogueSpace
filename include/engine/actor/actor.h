@@ -33,9 +33,11 @@ public:
     void draw(Shader &shader) override;
 
 protected:
-    std::vector<Script> m_scripts;
+    [[nodiscard]] std::string getTypeName() const override;
 
     Scene* m_scene;
+
+    std::vector<Script> m_scripts;
 };
 
 #include "actor_impl.tpp"

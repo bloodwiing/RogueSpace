@@ -3,6 +3,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
+std::string Actor::getTypeName() const {
+    return "Actor";
+}
+
 Actor::Actor(Scene *scene, ActorBase *parent, std::string name)
     : ActorBase(scene, parent, name)
     , m_scene(scene)

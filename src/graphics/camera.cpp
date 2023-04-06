@@ -8,6 +8,10 @@
 
 Camera* Camera::m_active = nullptr;
 
+std::string Camera::getTypeName() const {
+    return "Camera";
+}
+
 Camera::Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height)
     : DynamicActor(scene, parent, name)
     , m_width(width)

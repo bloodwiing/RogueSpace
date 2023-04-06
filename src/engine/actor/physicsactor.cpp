@@ -2,6 +2,10 @@
 
 #include "engine/time.h"
 
+std::string PhysicsActor::getTypeName() const {
+    return "PhysicsActor";
+}
+
 PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, std::string name, float weight)
     : DynamicActor(scene, parent, name)
     , m_weight(weight)

@@ -1,5 +1,9 @@
 #include "engine/actor/dynamicactor.h"
 
+std::string DynamicActor::getTypeName() const {
+    return "DynamicActor";
+}
+
 DynamicActor::DynamicActor(Scene* scene, ActorBase* parent, std::string name)
     : Actor(scene, parent, name)
 { }

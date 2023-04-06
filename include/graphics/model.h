@@ -16,6 +16,9 @@ public:
 
     void draw(Shader& shader) override;
 
+protected:
+    [[nodiscard]] std::string getTypeName() const override;
+
 private:
     const char* m_filename;
     std::vector<uint8_t> m_data;

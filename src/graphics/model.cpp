@@ -3,6 +3,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.h"
 
+std::string Model::getTypeName() const {
+    return "Model";
+}
+
 Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *filename)
     : DynamicActor(scene, parent, name)
     , m_filename(filename)

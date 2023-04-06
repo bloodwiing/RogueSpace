@@ -40,7 +40,11 @@ public:
     virtual void update();
     virtual void draw(Shader& shader);
 
+    [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
+
 protected:
+    [[nodiscard]] virtual std::string getTypeName() const;
+
     std::string m_name;
     std::map<std::string, ChildEntry> m_children;
     ActorBase* m_parent;

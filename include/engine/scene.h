@@ -17,6 +17,9 @@ public:
     template<class T, class... Args>
     T* addChild(std::string name, Args&&... args);
 
+protected:
+    [[nodiscard]] std::string getTypeName() const override;
+
 private:
     static std::string m_sceneName;
 };

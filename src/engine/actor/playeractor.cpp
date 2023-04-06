@@ -6,6 +6,10 @@
 #include "graphics/screen.h"
 #include "graphics/camera.h"
 
+std::string PlayerActor::getTypeName() const {
+    return "PlayerActor";
+}
+
 PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
     : PhysicsActor(scene, parent, name, 0.5f)
 { }
