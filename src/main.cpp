@@ -22,6 +22,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     Super::init(width, height);
+    Time::setMaxFramerate(144);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -90,6 +91,8 @@ int main() {
         Screen::getActive()->swapBuffers();
 
         glfwPollEvents();
+
+        Time::waitForNextFrame();
     }
 
     glfwTerminate();
