@@ -13,13 +13,12 @@ PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, std::string name, fl
 { }
 
 void PhysicsActor::update() {
-    if (m_velocity.x == 0.0f and m_velocity.y == 0.0f and m_velocity.z == 0.0f)
-        return;
-
-    translate(m_velocity * Time::getDeltaFloat());
-    m_velocity -= m_velocity * (Time::getDeltaFloat() * m_weight);
-    if (glm::length(m_velocity) <= 0.001f)
-        m_velocity = glm::vec3(0.0f);
+    if (!(m_velocity.x == 0.0f and m_velocity.y == 0.0f and m_velocity.z == 0.0f)) {
+        translate(m_velocity * Time::getDeltaFloat());
+        m_velocity -= m_velocity * (Time::getDeltaFloat() * m_weight);
+        if (glm::length(m_velocity) <= 0.001f)
+            m_velocity = glm::vec3(0.0f);
+    }
 
     DynamicActor::update();
 }
