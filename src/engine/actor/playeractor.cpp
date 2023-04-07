@@ -57,8 +57,11 @@ void PlayerActor::update() {
         rot_x *= m_sensitivity;
         rot_y *= m_sensitivity;
 
-        m_orientation = glm::rotate(m_orientation, glm::radians(-(float)rot_y), glm::normalize(glm::cross(m_orientation, m_up)));
-        m_orientation = glm::rotate(m_orientation, glm::radians(-(float)rot_x), m_up);
+        rotate(glm::rotate(glm::radians((float)rot_y), glm::normalize(glm::cross(m_orientation, m_up))));
+        rotate(glm::rotate(glm::radians((float)rot_x), m_up));
+
+        m_up = glm::vec3(0.0f, 1.0f, 0.0f) * DynamicActor::getRotation();
+        m_orientation = glm::vec3(0.0f, 0.0f, -1.0f) * DynamicActor::getRotation();
 
         RESET_MOUSE();
 
