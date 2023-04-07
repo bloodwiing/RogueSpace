@@ -3,6 +3,7 @@
 in vec3 v_currentPos;
 in vec3 v_normal;
 in vec2 v_texCoord;
+in float v_depth;
 
 out vec4 o_fragColor;
 
@@ -77,18 +78,34 @@ vec4 unlit() {
     return texture(Diffuse0, v_texCoord);
 }
 
-float near = 0.1f;
-float far = 100.0f;
+float zNear = 0.1;
+float zFar = 100.0;
 
-float linearizeDepth(float depth) {
-    return (2.0 * near * far) / (far + near - (depth * 2.0 - 1.0) * (far - near));
+float normalizedLinearDepth() {
+    return (v_depth - zNear)/(zFar - zNear);
 }
 
-float logisticDepth(float depth, float steepness, float offset) {
-    float z = linearizeDepth(depth);
-    return (1 / (1 + exp(-steepness * (z - offset))));
+//const float[] ditherFilter = float[](
+//    0.0, 5.0, 2.0, 5.0,
+//    7.0, 4.0, 8.0, 4.0,
+//    3.0, 6.0, 1.0, 6.0,
+//    7.0, 4.0, 8.0, 4.0
+//);
+const float[] ditherFilter = float[](
+    0.2, 0.6, 0.4, 0.6,
+    0.8, 0.6, 1.0, 0.6,
+    0.4, 0.6, 0.2, 0.6,
+    1.0, 0.6, 0.8, 0.6
+);
+
+bool isDitherVisible() {
+    int index = int(gl_FragCoord.x) % 4 + int(gl_FragCoord.y) % 4 * 4;
+    float depth = normalizedLinearDepth();
+    return depth * 500 > ditherFilter[index] && (10.0 - depth * 10) > ditherFilter[index];
 }
 
 void main() {
+    if (!isDitherVisible())
+        discard;
     o_fragColor = unlit();
 }

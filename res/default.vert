@@ -8,6 +8,7 @@ layout (location = 3) in vec2 texCoord;
 out vec3 v_currentPos;
 out vec3 v_normal;
 out vec2 v_texCoord;
+out float v_depth;
 
 uniform mat4 CameraMatrix;
 
@@ -21,4 +22,6 @@ void main() {
     v_texCoord = texCoord;
 
     v_normal = vec3(normalize(Model * vec4(normal, 1.0)));
+
+    v_depth = gl_Position.z;
 }
