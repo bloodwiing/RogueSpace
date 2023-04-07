@@ -12,12 +12,13 @@ public:
     Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height);
     ~Camera();
 
-    void setOrientation(const glm::vec3& orientation, const glm::vec3& up);
     void updateMatrix(float fov_degrees, float near_plane, float far_plane);
     void applyMatrix(Shader& shader, const char* uniform);
 
     static Camera* getActiveCamera();
     void setActive() const;
+
+    void update() override;
 
 protected:
     [[nodiscard]] std::string getTypeName() const override;

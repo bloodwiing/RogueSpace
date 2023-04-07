@@ -21,22 +21,10 @@ void PlayerActor::update() {
     if (IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
         m_velocity += m_speed * -m_orientation * Time::getDeltaFloat();
     }
-//    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-//        m_translation += m_speed * -glm::normalize(glm::cross(m_orientation, m_up)) * delta;
-//    }
-//    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-//        m_translation += m_speed * glm::normalize(glm::cross(m_orientation, m_up)) * delta;
-//    }
-//    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-//        m_translation += m_speed * m_up * delta;
-//    }
-//    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-//        m_translation += m_speed * -m_up * delta;
-//    }
 
-    if (IS_KEY(GLFW_KEY_SPACE, GLFW_PRESS)) {
+    if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_PRESS)) {
         m_speed = 10.0f;
-    } else if (IS_KEY(GLFW_KEY_SPACE, GLFW_RELEASE)) {
+    } else if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_RELEASE)) {
         m_speed = 3.0f;
     }
 
@@ -64,8 +52,6 @@ void PlayerActor::update() {
         m_orientation = glm::vec3(0.0f, 0.0f, -1.0f) * DynamicActor::getRotation();
 
         RESET_MOUSE();
-
-        Camera::getActiveCamera()->setOrientation(m_orientation, m_up);
     }
 
     PhysicsActor::update();

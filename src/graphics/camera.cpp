@@ -24,11 +24,6 @@ Camera::~Camera() {
         m_active = nullptr;
 }
 
-void Camera::setOrientation(const glm::vec3& orientation, const glm::vec3& up) {
-    m_orientation = orientation;
-    m_up = up;
-}
-
 void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
     glm::mat4 view(1.0f);
     glm::mat4 proj(1.0f);
@@ -51,4 +46,11 @@ Camera* Camera::getActiveCamera() {
 
 void Camera::setActive() const {
     m_active = (Camera*)this;
+}
+
+void Camera::update() {
+    DynamicActor::update();
+
+    m_up = glm::normalize(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
+    m_orientation = glm::normalize(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f) * DynamicActor::getWorldMatrix());
 }
