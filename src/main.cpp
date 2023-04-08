@@ -43,11 +43,11 @@ int main() {
     auto ground = scene.addChild<Actor>("Ground");
     auto ground_model = ground->addChild<Model>("model", "./res/map/scene.gltf");
 
-    auto cube = scene.addChild<PhysicsActor>("Cube", 1.0f);
+    auto cube = scene.addChild<PhysicsActor>("Cube", 1.0f, 1.0f);
     cube->scale(glm::vec3(0.50f));
     auto cube_model = cube->addChild<Model>("model", "./res/suzanne/suzanne.gltf");
     cube->setWeight(0.5f);
-    cube->setVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+    cube->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
     scene.addChild<Actor>("Bullet");
     scene.addChild<Actor>("Bullet");

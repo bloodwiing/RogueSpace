@@ -6,26 +6,36 @@
 #include "graphics/screen.h"
 #include "graphics/camera.h"
 
+const float PlayerActor::mass = 0.5f;
+const float PlayerActor::drag = 1.5f;
+
 std::string PlayerActor::getTypeName() const {
     return "PlayerActor";
 }
 
 PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
-    : PhysicsActor(scene, parent, name, 0.5f)
+    : PhysicsActor(scene, parent, name, mass, drag)
 { }
 
 void PlayerActor::update() {
     if (IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
-        m_velocity += m_speed * m_orientation * Time::getDeltaFloat();
+        addForce(m_linearSpeed * m_orientation * Time::getDeltaFloat());
     }
     if (IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
-        m_velocity += m_speed * -m_orientation * Time::getDeltaFloat();
+        addForce(m_linearSpeed * -m_orientation * Time::getDeltaFloat());
+    }
+
+    if (IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
+        addTorque(m_angularSpeed * m_orientation * Time::getDeltaFloat());
+    }
+    if (IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
+        addTorque(m_angularSpeed * -m_orientation * Time::getDeltaFloat());
     }
 
     if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_PRESS)) {
-        m_speed = 10.0f;
+        m_linearSpeed = 10.0f;
     } else if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_RELEASE)) {
-        m_speed = 3.0f;
+        m_linearSpeed = 3.0f;
     }
 
     if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {

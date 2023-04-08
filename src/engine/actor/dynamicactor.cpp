@@ -64,7 +64,7 @@ void DynamicActor::translate(const glm::vec3 &tra) {
 }
 
 void DynamicActor::rotate(const glm::quat &rot) {
-    m_rotation *= rot;
+    m_rotation = glm::normalize(m_rotation * rot);
     flagForMatrixUpdate();
 }
 
