@@ -45,7 +45,7 @@ int main() {
 
     auto cube = scene.addChild<PhysicsActor>("Cube", 1.0f, 1.0f);
     cube->scale(glm::vec3(0.50f));
-    auto cube_model = cube->addChild<Model>("model", "./res/suzanne/suzanne.gltf");
+    auto cube_model = cube->addChild<Model>("model", "./res/starship/Starship01.gltf");
     cube->setWeight(0.5f);
     cube->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
