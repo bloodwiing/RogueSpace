@@ -211,7 +211,7 @@ std::vector<Texture> Model::getTextures() {
             continue;
         }
 
-        Texture texture((directory + texturePath).c_str(), m_loadedTexNames.size());
+        Texture texture((directory + texturePath).c_str());
         textures.push_back(texture);
         m_loadedTexNames[texturePath] = texture;
     }

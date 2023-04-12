@@ -4,9 +4,8 @@
 #include <stb/stb_image.h>
 #include <stdexcept>
 
-Texture::Texture(const char* filename, GLuint slot)
-    : m_slot(slot)
-    , m_ID()
+Texture::Texture(const char* filename)
+    : m_ID()
     , m_width()
     , m_height()
     , m_channels()
@@ -15,7 +14,7 @@ Texture::Texture(const char* filename, GLuint slot)
 
     glGenTextures(1, &m_ID);
 
-    bind();
+    bind(0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -43,8 +42,8 @@ Texture::Texture(const char* filename, GLuint slot)
     unbind();
 }
 
-void Texture::bind() const {
-    glActiveTexture(GL_TEXTURE0 + m_slot);
+void Texture::bind(GLint unit) const {
+    glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 

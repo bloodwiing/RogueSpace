@@ -6,11 +6,11 @@
 class Texture {
 public:
     Texture() = default;
-    explicit Texture(const char* filename, GLuint slot);
+    explicit Texture(const char* filename);
     Texture(const Texture& original) = default;
 
     void assign(Shader& shader, const char* uniform, GLint unit) const;
-    void bind() const;
+    void bind(GLint slot) const;
     void unbind() const;
     void destroy() const;
 
@@ -18,7 +18,6 @@ public:
 
 private:
     GLuint m_ID;
-    GLuint m_slot;
 
     int m_width, m_height, m_channels;
 };

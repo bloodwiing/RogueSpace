@@ -33,7 +33,7 @@ void Material::apply(Shader &shader) const {
 
     if (m_diffuse0.enabled) {
         m_diffuse0.texture.assign(shader, "Diffuse0", 0);
-        m_diffuse0.texture.bind();
+        m_diffuse0.texture.bind(0);
     }
 
     glUniform4f(
@@ -42,7 +42,7 @@ void Material::apply(Shader &shader) const {
 
     if (m_specular0.enabled) {
         m_specular0.texture.assign(shader, "Specular0", 1);
-        m_specular0.texture.bind();
+        m_specular0.texture.bind(1);
     }
 
     glUniform1f(shader.getUniform("MetallicFactor"), m_metallicFactor);
