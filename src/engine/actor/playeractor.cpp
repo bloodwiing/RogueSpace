@@ -3,7 +3,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "engine/time.h"
-#include "graphics/screen.h"
+#include "graphics/window.h"
 #include "graphics/camera.h"
 
 const float PlayerActor::mass = 0.5f;
@@ -40,12 +40,12 @@ void PlayerActor::update() {
 
     if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {
         m_clicked = true;
-        glfwSetInputMode(Screen::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         RESET_MOUSE();
     }
     if (IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
         m_clicked = false;
-        glfwSetInputMode(Screen::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     if (m_clicked) {

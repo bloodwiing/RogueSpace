@@ -1,22 +1,22 @@
-#ifndef SCREEN_CLASS_H
-#define SCREEN_CLASS_H
+#ifndef WINDOW_CLASS_H
+#define WINDOW_CLASS_H
 
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
 
-#define IS_KEY(key, state) Screen::getActive()->isKey(key, state)
-#define IS_MOUSE(button, state) Screen::getActive()->isMouse(button, state)
-#define RESET_MOUSE() Screen::getActive()->resetMouse()
-#define GET_RELATIVE_MOUSE(x, y) Screen::getActive()->getRelativeMouse(x, y)
-#define GET_ABSOLUTE_MOUSE(x, y) Screen::getActive()->getAbsoluteMouse(x, y)
+#define IS_KEY(key, state) Window::getActive()->isKey(key, state)
+#define IS_MOUSE(button, state) Window::getActive()->isMouse(button, state)
+#define RESET_MOUSE() Window::getActive()->resetMouse()
+#define GET_RELATIVE_MOUSE(x, y) Window::getActive()->getRelativeMouse(x, y)
+#define GET_ABSOLUTE_MOUSE(x, y) Window::getActive()->getAbsoluteMouse(x, y)
 
-class Screen {
+class Window {
 public:
-    Screen(int width, int height);
-    ~Screen();
+    Window(int width, int height);
+    ~Window();
 
     void activate();
-    static Screen* getActive();
+    static Window* getActive();
 
     void updateSize(int width, int height);
 
@@ -38,14 +38,14 @@ public:
     void getRelativeMouse(double& x, double& y) const;
 
 private:
-    GLFWwindow* m_window;
+    GLFWwindow* m_glWindow;
 
     int m_width,
         m_height;
 
-    static Screen* m_active;
+    static Window* m_active;
 
     static bool m_wasGLLoaded;
 };
 
-#endif //SCREEN_CLASS_H
+#endif //WINDOW_CLASS_H

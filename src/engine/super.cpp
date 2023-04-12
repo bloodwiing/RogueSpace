@@ -1,13 +1,13 @@
 #include "engine/super.h"
 
-Screen* Super::m_screen = nullptr;
+Window* Super::m_window = nullptr;
 
 void Super::init(int width, int height) {
-    m_screen = new Screen(width, height);
-    if (m_screen != nullptr)
-        m_screen->activate();
+    m_window = new Window(width, height);
+    if (m_window != nullptr)
+        m_window->activate();
 }
 
-Screen* Super::getScreen() {
-    return m_screen;
+Window* Super::getWindow() {
+    return m_window;
 }

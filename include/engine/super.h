@@ -4,16 +4,16 @@
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
 
-#include "graphics/screen.h"
+#include "graphics/window.h"
 
 class Super {
 public:
     static void init(int width, int height);
 
-    static Screen* getScreen();
+    static Window* getWindow();
 
 private:
-    static Screen* m_screen;
+    static Window* m_window;
 };
 
 #endif //SUPER_CLASS_H
