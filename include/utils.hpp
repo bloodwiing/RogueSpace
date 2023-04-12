@@ -5,6 +5,8 @@
 #include <streambuf>
 #include <ios>
 
+void initializeOpenGL();
+
 std::string readFileContents(const std::string &filename, std::ios::openmode mode = std::ios::in);
 
 #endif //UTILS_FILE_H

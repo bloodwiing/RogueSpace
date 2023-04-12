@@ -6,6 +6,7 @@
 
 class Shader {
 public:
+    Shader();
     Shader(const std::string& vertex_file, const std::string& fragment_file);
     ~Shader();
 
@@ -24,8 +25,8 @@ private:
 
     static GLuint loadShaderFile(const std::string &file_name, GLenum type);
 
-    bool checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file);
-    bool checkProgramErrors();
+    void checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file);
+    void checkProgramErrors();
 };
 
 #endif //SHADER_CLASS_H

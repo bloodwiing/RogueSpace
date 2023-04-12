@@ -11,15 +11,13 @@
 #include "engine/super.hpp"
 #include "engine/time.hpp"
 
+#include "utils.hpp"
+
 const int width = 1366,
           height = 700;
 
 int main() {
-    glfwInit();
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    initializeOpenGL();
 
     Super::init(width, height);
     Time::setMaxFramerate(144);
@@ -31,7 +29,13 @@ int main() {
     glFrontFace(GL_CCW);
 
 
-    Shader shader("./res/default.vert", "./res/default.frag");
+    Shader shader;
+    try {
+        shader = Shader("./res/default.vert", "./res/default.frag");
+    } catch (std::exception& e) {
+        std::cerr << e.what();
+        return -1;
+    }
 
 
     Scene scene;

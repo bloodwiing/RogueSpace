@@ -15,16 +15,19 @@ GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {
     return id;
 }
 
+Shader::Shader()
+    : m_ID(0)
+    , m_error(true)
+{ }
+
 Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
     : m_error(false)
 {
     GLuint vertID = loadShaderFile(vertex_file, GL_VERTEX_SHADER);
-    if (checkShaderErrors(vertID, "Vertex", vertex_file))
-        return;
+    checkShaderErrors(vertID, "Vertex", vertex_file);
 
     GLuint fragID = loadShaderFile(fragment_file, GL_FRAGMENT_SHADER);
-    if (checkShaderErrors(fragID, "Fragment", fragment_file))
-        return;
+    checkShaderErrors(fragID, "Fragment", fragment_file);
 
     m_ID = glCreateProgram();
     glAttachShader(m_ID, vertID);
@@ -38,7 +41,8 @@ Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
 }
 
 Shader::~Shader() {
-    destroy();
+    if (!m_error)
+        destroy();
 }
 
 void Shader::activate() {
@@ -51,31 +55,27 @@ void Shader::destroy() {
 
 #define ERROR_MESSAGE_LEN 1024
 
-bool Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file) {
+void Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file) {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
     if (!status) {
         m_error = true;
         glGetShaderInfoLog(shaderID, ERROR_MESSAGE_LEN, nullptr, infoLog);
-        std::cout << "Error compiling OpenGL " << type << " shader:\n" <<
-                file << " - " << infoLog << std::endl;
-        return true;
+        throw std::runtime_error(std::string("Error compiling OpenGL ") + type + " shader:\n" + file + " - " + infoLog);
     }
-    return false;
 }
 
-bool Shader::checkProgramErrors() {
+void Shader::checkProgramErrors() {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
     glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
     if (!status) {
         m_error = true;
         glGetProgramInfoLog(m_ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
-        std::cout << "Error linking OpenGL program:\n" << infoLog << std::endl;
-        return true;
+        destroy();
+        throw std::runtime_error(std::string("Error linking OpenGL program:\n") + infoLog);
     }
-    return false;
 }
 
 bool Shader::isErrored() const {
