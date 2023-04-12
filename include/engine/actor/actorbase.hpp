@@ -36,6 +36,7 @@ public:
     [[nodiscard]] std::string getName() const;
 
     [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
+    [[nodiscard]] virtual bool isDead() const;
 
     virtual void update();
     virtual void draw(Shader& shader);

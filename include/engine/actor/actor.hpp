@@ -25,10 +25,12 @@ public:
     [[nodiscard]] virtual glm::vec3 getTranslation() const;
     [[nodiscard]] virtual glm::quat getRotation() const;
     [[nodiscard]] virtual glm::vec3 getScale() const;
+    [[nodiscard]] bool isDead() const override;
 
     virtual void setTranslation(const glm::vec3& tra) {};
     virtual void setRotation(const glm::quat& rot) {};
     virtual void setScale(const glm::vec3& sca) {};
+    virtual void markDead();
 
     void draw(Shader &shader) override;
 
@@ -36,6 +38,8 @@ protected:
     [[nodiscard]] std::string getTypeName() const override;
 
     Scene* m_scene;
+
+    bool m_dead;
 
     std::vector<Script> m_scripts;
 };

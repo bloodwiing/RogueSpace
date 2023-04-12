@@ -37,6 +37,10 @@ glm::mat4 ActorBase::getWorldMatrix() const {
     return glm::mat4(1.0f);
 }
 
+bool ActorBase::isDead() const {
+    return false;
+}
+
 void ActorBase::update() {
     for (auto& [name, child] : m_children) {
         if (child.value != nullptr)

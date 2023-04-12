@@ -16,6 +16,10 @@ Scene *Actor::getScene() const {
     return m_scene;
 }
 
+bool Actor::isDead() const {
+    return m_dead;
+}
+
 glm::vec3 Actor::getTranslation() const {
     return glm::vec3(0.0f);
 }
@@ -26,6 +30,10 @@ glm::quat Actor::getRotation() const {
 
 glm::vec3 Actor::getScale() const {
     return glm::vec3(1.0f);
+}
+
+void Actor::markDead() {
+    m_dead = true;
 }
 
 void Actor::draw(Shader& shader) {
