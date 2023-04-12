@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
 
-#include "utils.h"
+#include "utils.hpp"
 
 using namespace testing;
 

@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "graphics/shader.hpp"
-#include "utils.h"
+#include "utils.hpp"
 
 GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {
     GLuint id = glCreateShader(type);

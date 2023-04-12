@@ -1,7 +1,7 @@
 #include "graphics/model.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
-#include "utils.h"
+#include "utils.hpp"
 
 std::string Model::getTypeName() const {
     return "Model";

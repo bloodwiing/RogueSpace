@@ -6,7 +6,7 @@
 #include "engine/actor/actorbase.hpp"
 #include "engine/actor/actor.hpp"
 
-#include "quicklist.h"
+#include "quicklist.hpp"
 
 class Camera;
 
