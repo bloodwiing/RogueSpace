@@ -29,6 +29,7 @@ protected:
 private:
     static std::string m_hierarchyDisplayName;
 
+    QuickList<ActorBase*> m_volatileActors;
 
     // ----- Free Fly toggle -----
 
