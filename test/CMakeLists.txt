@@ -41,7 +41,11 @@ endif()
 
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-add_executable(Google_Tests_run utils_test.cpp)
+file(GLOB_RECURSE TEST_FILES CONFIGURE_DEPENDS
+        ${CMAKE_CURRENT_SOURCE_DIR}/*_test.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/**/*_test.cpp)
+
+add_executable(Google_Tests_run ${TEST_FILES})
 target_link_libraries(Google_Tests_run gtest gtest_main gmock)
 
 add_custom_target(

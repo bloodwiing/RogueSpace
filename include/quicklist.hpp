@@ -91,6 +91,9 @@ typedef size_t index_t;
 template<class T>
 class QuickList {
 public:
+    /// Value Type
+    typedef T value_type;
+
     /// QuickList constructor.<br>
     /// Automatically manages the list entries
     /// \param chunkSize The size of a chunk of elements. The List expands by this increment
@@ -142,6 +145,12 @@ public:
     /// \param index The reserved index of the element
     /// \return The element stored in the QuickList
     [[nodiscard]] T& get(index_t index) {
+        if (index >= entries.capacity())
+            throw std::invalid_argument("Index is out of bounds");
+
+        if (!entries[index].busy)
+            throw std::runtime_error("Index does not contain an element");
+
         return entries[index].value;
     }
 
@@ -151,16 +160,32 @@ public:
     /// <i>If you want to iterate over elements and remove them during an iteration, use the safeRemove() function of the iterator</i>
     /// \param index The reserved index of the element
     void remove(index_t index) {
+        if (index >= entries.capacity())
+            throw std::invalid_argument("Index is out of bounds");
+
         Entry& targetElem = entries[index];
         Entry& nextFreeElem = entries[nextFree];
 
         if (!targetElem.busy)
             throw std::invalid_argument("Index does not contain an element");
 
-        // insert a free slot in the chain
-        entries[nextFreeElem.prev].next = index;
-        index_t newPrev = nextFreeElem.prev;
-        nextFreeElem.prev = index;
+        // if it's the last element, we can keep the current chain, but just start from the beginning of it
+        if (targetElem.prev == -1 and size == 1) {
+            targetElem.busy = false;
+            --size;
+            nextFree = index;
+            return;
+        }
+
+        // insert a free slot in the chain (if it isn't already)
+        index_t newPrev;
+        if (nextFreeElem.prev != index) {
+            entries[nextFreeElem.prev].next = index;
+            newPrev = nextFreeElem.prev;
+            nextFreeElem.prev = index;
+        } else {
+            newPrev = targetElem.prev;
+        }
 
         // move the busy slot ouf of the chain
         if (targetElem.prev != -1)
@@ -170,6 +195,7 @@ public:
         targetElem.prev = newPrev;
         targetElem.next = nextFree;
 
+        targetElem.busy = false;
         --size;
 
         nextFree = index;
@@ -214,6 +240,12 @@ public:
             , toSafeRemove(-1)
         { }
 
+        iterator(const iterator &it)
+            : cur(it.cur)
+            , list(it.list)
+            , toSafeRemove(it.toSafeRemove)
+        { }
+
         iterator& operator++() {
             cur = list->entries[cur].prev;
             // After the element to removed has been passed, remove it as now it won't affect the element chain
@@ -238,7 +270,7 @@ public:
             return !(*this == other);
         }
 
-        T operator*() const {
+        T& operator*() const {
             return list->entries[cur].value;
         }
 
