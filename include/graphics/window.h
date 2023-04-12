@@ -22,6 +22,7 @@ public:
 
     [[nodiscard]] int getWidth() const;
     [[nodiscard]] int getHeight() const;
+    [[nodiscard]] float getAspectRatio() const;
 
     [[nodiscard]] GLFWwindow* getWindow() const;
 

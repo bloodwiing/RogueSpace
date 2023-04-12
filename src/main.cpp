@@ -37,7 +37,7 @@ int main() {
     Scene scene;
 
     auto player = scene.addChild<PlayerActor>("Player");
-    auto camera = player->addChild<Camera>("Camera", width, height);
+    auto camera = player->addChild<Camera>("Camera");
     camera->setActive();
 
     auto ground = scene.addChild<Actor>("Ground");

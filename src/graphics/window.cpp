@@ -50,6 +50,10 @@ int Window::getHeight() const {
     return m_height;
 }
 
+float Window::getAspectRatio() const {
+    return (float)m_width / (float)m_height;
+}
+
 GLFWwindow *Window::getWindow() const {
     return m_glWindow;
 }

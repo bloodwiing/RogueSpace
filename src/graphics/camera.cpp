@@ -6,16 +6,16 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/matrix_access.hpp>
 
+#include "graphics/window.h"
+
 Camera* Camera::m_active = nullptr;
 
 std::string Camera::getTypeName() const {
     return "Camera";
 }
 
-Camera::Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height)
+Camera::Camera(Scene *scene, ActorBase *parent, std::string name)
     : DynamicActor(scene, parent, name)
-    , m_width(width)
-    , m_height(height)
 {  }
 
 Camera::~Camera() {
@@ -31,7 +31,7 @@ void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) 
     glm::vec3 point = glm::column(DynamicActor::getWorldMatrix(), 3);
 
     view = glm::lookAt(point, point + m_orientation, m_up);
-    proj = glm::perspective(glm::radians(fov_degrees), (float)m_width / (float)m_height, near_plane, far_plane);
+    proj = glm::perspective(glm::radians(fov_degrees), Window::getActive()->getAspectRatio(), near_plane, far_plane);
 
     m_matrix = proj * view;
 }

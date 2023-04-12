@@ -9,7 +9,7 @@
 
 class Camera : public DynamicActor {
 public:
-    Camera(Scene *scene, ActorBase *parent, std::string name, int width, int height);
+    Camera(Scene *scene, ActorBase *parent, std::string name);
     ~Camera();
 
     void updateMatrix(float fov_degrees, float near_plane, float far_plane);
@@ -28,9 +28,6 @@ private:
               m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
     glm::mat4 m_matrix = glm::mat4(1.0f);
-
-    unsigned int m_width,
-                 m_height;
 
     static Camera* m_active;
 };
