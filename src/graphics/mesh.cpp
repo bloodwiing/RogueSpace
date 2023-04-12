@@ -2,10 +2,10 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures)
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material)
     : m_vertices(vertices)
     , m_indices(indices)
-    , m_textures(textures)
+    , m_material(material)
     , m_VAO()
 {
     m_VAO.bind();
@@ -35,26 +35,7 @@ void Mesh::draw(
     shader.activate();
     m_VAO.bind();
 
-    uint16_t diffuse_counter = 0,
-             specular_counter = 0;
-
-    for (uint64_t i = 0; i < m_textures.size(); ++i) {
-        std::string uniform_name;
-
-        switch (m_textures[i].getTextureType()) {
-            case TextureType::TEX_DIFFUSE:
-                uniform_name = std::string("Diffuse") + std::to_string(diffuse_counter++);
-                break;
-            case TextureType::TEX_SPECULAR:
-                uniform_name = std::string("Specular") + std::to_string(specular_counter++);
-                break;
-            default:
-                break;
-        }
-
-        m_textures[i].assign(shader, uniform_name.c_str(), i);
-        m_textures[i].bind();
-    }
+    m_material.apply(shader);
 
     camera->applyMatrix(shader, "CameraMatrix");
     glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);

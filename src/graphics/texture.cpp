@@ -4,9 +4,8 @@
 #include <stb/stb_image.h>
 #include <stdexcept>
 
-Texture::Texture(const char* filename, TextureType type, GLuint slot)
+Texture::Texture(const char* filename, GLuint slot)
     : m_slot(slot)
-    , m_type(type)
     , m_ID()
     , m_width()
     , m_height()
@@ -61,11 +60,7 @@ GLuint Texture::getID() const {
     return m_ID;
 }
 
-TextureType Texture::getTextureType() const {
-    return m_type;
-}
-
-void Texture::assign(Shader &shader, const char *uniform, GLint unit) {
+void Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
     if (!shader.isErrored()) {
         GLint uniformID = shader.getUniform(uniform);
         shader.activate();

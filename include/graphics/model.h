@@ -5,6 +5,7 @@
 #include <json/json.h>
 
 #include "mesh.h"
+#include "material.h"
 
 #include "engine/actor/dynamicactor.h"
 
@@ -27,6 +28,7 @@ private:
     std::vector<Mesh> m_meshes;
     std::vector<glm::mat4> m_meshMatrices;
 
+    std::vector<Material> m_materials;
     std::unordered_map<std::string, Texture> m_loadedTexNames;
 
     void loadMesh(uint32_t meshIndex);
@@ -37,6 +39,7 @@ private:
     std::vector<float> getFloats(json accessor);
     std::vector<GLuint> getIndices(json accessor);
     std::vector<Texture> getTextures();
+    Material getMaterial(json data, std::vector<Texture>& textures);
 
     std::vector<Vertex> assembleVertices(
             std::vector<glm::vec3> positions,

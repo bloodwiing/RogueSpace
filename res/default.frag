@@ -8,7 +8,11 @@ in float v_depth;
 out vec4 o_fragColor;
 
 uniform sampler2D Diffuse0;
+uniform vec4 DiffuseFactor;
+
 uniform sampler2D Specular0;
+uniform float MetallicFactor;
+uniform float RoughnessFactor;
 
 uniform vec4 LightColour;
 uniform vec3 LightPos;

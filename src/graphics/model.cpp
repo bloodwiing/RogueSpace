@@ -33,6 +33,8 @@ void Model::loadMesh(uint32_t meshIndex) {
     uint8_t accTexCoordIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["TEXCOORD_0"];
     uint8_t accIndicesIndex = m_json["meshes"][meshIndex]["primitives"][0]["indices"];
 
+    uint8_t materialIndex = m_json["meshes"][meshIndex]["primitives"][0]["material"];
+
     auto positionFloats = getFloats(m_json["accessors"][accPositionIndex]);
     auto positions = groupFloatsVec<glm::vec3>(positionFloats);
 
@@ -44,9 +46,11 @@ void Model::loadMesh(uint32_t meshIndex) {
 
     auto vertices = assembleVertices(positions, normals, texCoords);
     auto indices = getIndices(m_json["accessors"][accIndicesIndex]);
-    auto textures = getTextures();
 
-    m_meshes.emplace_back(vertices, indices, textures);
+    auto textures = getTextures();
+    auto material = getMaterial(m_json["materials"][materialIndex], textures);
+
+    m_meshes.emplace_back(vertices, indices, material);
 }
 
 void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
@@ -207,17 +211,39 @@ std::vector<Texture> Model::getTextures() {
             continue;
         }
 
-        Texture texture{};
-        if (texturePath.find("baseColor") != std::string::npos) {
-            texture = Texture((directory + texturePath).c_str(), TEX_DIFFUSE, m_loadedTexNames.size());
-        } else if (texturePath.find("metallicRoughness") != std::string::npos) {
-            texture = Texture((directory + texturePath).c_str(), TEX_SPECULAR, m_loadedTexNames.size());
-        }
+        Texture texture((directory + texturePath).c_str(), m_loadedTexNames.size());
         textures.push_back(texture);
         m_loadedTexNames[texturePath] = texture;
     }
 
     return textures;
+}
+
+Material Model::getMaterial(json data, std::vector<Texture>& textures) {
+    std::string name = data["name"];
+    Material result(name);
+
+    if (data.find("pbrMetallicRoughness") == data.end())
+        return result;
+
+    json pbr = data["pbrMetallicRoughness"];
+
+    // base color / diffuse
+    glm::vec4 baseColorFactor(1.0);
+    if (pbr.find("baseColorFactor") != pbr.end()) {
+        std::vector<float> factor = pbr["baseColorFactor"];
+        auto iter = factor.begin();
+        setVector(iter, baseColorFactor);
+    }
+    result.setDiffuseFactor(baseColorFactor);
+
+    if (pbr.find("baseColorTexture") != pbr.end()) {
+        result.setDiffuse0(
+                textures[pbr["baseColorTexture"]["index"]],
+                pbr["baseColorTexture"]["texCoord"]);
+    }
+
+    return result;
 }
 
 std::vector<Vertex> Model::assembleVertices(

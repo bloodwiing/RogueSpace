@@ -10,10 +10,11 @@
 #include "ebo.h"
 #include "camera.h"
 #include "texture.h"
+#include "material.h"
 
 class Mesh {
 public:
-    Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture>& textures);
+    Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material);
 
     void draw(
         Shader& shader,
@@ -24,7 +25,7 @@ public:
 private:
     std::vector<Vertex> m_vertices;
     std::vector<GLuint> m_indices;
-    std::vector<Texture> m_textures;
+    Material m_material;
 
     VAO m_VAO;
 };
