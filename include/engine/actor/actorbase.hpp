@@ -8,7 +8,7 @@
 
 #include "glm/glm.hpp"
 
-#include "graphics/shader.h"
+#include "graphics/shader.hpp"
 
 class Scene;
 

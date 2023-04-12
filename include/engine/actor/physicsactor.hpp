@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "./dynamicactor.h"
+#include "./dynamicactor.hpp"
 
 class PhysicsActor : public DynamicActor {
 public:

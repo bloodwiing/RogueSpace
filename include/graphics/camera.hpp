@@ -1,11 +1,11 @@
 #ifndef CAMERA_CLASS_H
 #define CAMERA_CLASS_H
 
-#include "shader.h"
+#include "shader.hpp"
 #include <glfw3.h>
 #include <glm/glm.hpp>
 
-#include "engine/actor/dynamicactor.h"
+#include "engine/actor/dynamicactor.hpp"
 
 class Camera : public DynamicActor {
 public:

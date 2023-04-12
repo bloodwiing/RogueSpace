@@ -1,4 +1,4 @@
-#include "graphics/vao.h"
+#include "graphics/vao.hpp"
 
 VAO::VAO()
     : m_ID(0)

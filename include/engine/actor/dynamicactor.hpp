@@ -1,7 +1,7 @@
 #ifndef DYNAMIC_ACTOR_CLASS_H
 #define DYNAMIC_ACTOR_CLASS_H
 
-#include "actor.h"
+#include "actor.hpp"
 
 class DynamicActor : public Actor {
 public:

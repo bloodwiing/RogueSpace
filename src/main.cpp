@@ -4,12 +4,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "graphics/model.h"
-#include "engine/actor/physicsactor.h"
-#include "engine/actor/playeractor.h"
+#include "graphics/model.hpp"
+#include "engine/actor/physicsactor.hpp"
+#include "engine/actor/playeractor.hpp"
 
-#include "engine/super.h"
-#include "engine/time.h"
+#include "engine/super.hpp"
+#include "engine/time.hpp"
 
 const int width = 1366,
           height = 700;

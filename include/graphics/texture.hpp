@@ -1,7 +1,7 @@
 #ifndef TEXTURE_CLASS_H
 #define TEXTURE_CLASS_H
 
-#include "shader.h"
+#include "shader.hpp"
 
 class Texture {
 public:

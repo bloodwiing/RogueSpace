@@ -1,4 +1,4 @@
-#include "engine/actor/actorbase.h"
+#include "engine/actor/actorbase.hpp"
 
 std::string ActorBase::getTypeName() const {
     return "RAW_ActorBase";

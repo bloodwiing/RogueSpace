@@ -1,4 +1,4 @@
-#include "graphics/ebo.h"
+#include "graphics/ebo.hpp"
 
 EBO::EBO(std::vector<GLuint> indices)
     : m_ID(0)

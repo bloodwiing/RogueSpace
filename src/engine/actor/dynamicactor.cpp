@@ -1,4 +1,4 @@
-#include "engine/actor/dynamicactor.h"
+#include "engine/actor/dynamicactor.hpp"
 
 #include <glm/gtx/matrix_decompose.hpp>
 

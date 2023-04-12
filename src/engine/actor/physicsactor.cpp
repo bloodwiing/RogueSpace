@@ -1,6 +1,6 @@
-#include "engine/actor/physicsactor.h"
+#include "engine/actor/physicsactor.hpp"
 
-#include "engine/time.h"
+#include "engine/time.hpp"
 
 std::string PhysicsActor::getTypeName() const {
     return "PhysicsActor";

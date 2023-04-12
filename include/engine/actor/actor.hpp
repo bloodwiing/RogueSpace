@@ -6,8 +6,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-#include "engine/script.h"
-#include "engine/scene.h"
+#include "engine/script.hpp"
+#include "engine/scene.hpp"
 
 class ActorBase;
 

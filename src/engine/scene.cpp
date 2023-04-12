@@ -1,7 +1,7 @@
-#include "engine/scene.h"
+#include "engine/scene.hpp"
 
-#include "graphics/camera.h"
-#include "graphics/window.h"
+#include "graphics/camera.hpp"
+#include "graphics/window.hpp"
 
 std::string Scene::m_hierarchyDisplayName = "root";
 

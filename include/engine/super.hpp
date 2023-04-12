@@ -4,7 +4,7 @@
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
 
-#include "graphics/window.h"
+#include "graphics/window.hpp"
 
 class Super {
 public:

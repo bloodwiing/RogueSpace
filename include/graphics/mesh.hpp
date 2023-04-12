@@ -6,11 +6,11 @@
 
 #include <glm/detail/type_quat.hpp>
 
-#include "vao.h"
-#include "ebo.h"
-#include "camera.h"
-#include "texture.h"
-#include "material.h"
+#include "vao.hpp"
+#include "ebo.hpp"
+#include "camera.hpp"
+#include "texture.hpp"
+#include "material.hpp"
 
 class Mesh {
 public:

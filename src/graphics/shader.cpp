@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "graphics/shader.h"
+#include "graphics/shader.hpp"
 #include "utils.h"
 
 GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {

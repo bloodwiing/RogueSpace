@@ -4,10 +4,10 @@
 #include <vector>
 #include <json/json.h>
 
-#include "mesh.h"
-#include "material.h"
+#include "mesh.hpp"
+#include "material.hpp"
 
-#include "engine/actor/dynamicactor.h"
+#include "engine/actor/dynamicactor.hpp"
 
 using json = nlohmann::json;
 

@@ -1,5 +1,5 @@
 #include <vector>
-#include "graphics/vbo.h"
+#include "graphics/vbo.hpp"
 
 VBO::VBO(std::vector<Vertex>& vertices)
     : m_ID(0)

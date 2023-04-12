@@ -5,7 +5,7 @@
 #include <cinttypes>
 #include <glm/glm.hpp>
 
-#include "texture.h"
+#include "texture.hpp"
 
 class Material {
 public:

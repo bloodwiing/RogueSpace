@@ -1,10 +1,10 @@
-#include "engine/actor/playeractor.h"
+#include "engine/actor/playeractor.hpp"
 
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "engine/time.h"
-#include "graphics/window.h"
-#include "graphics/camera.h"
+#include "engine/time.hpp"
+#include "graphics/window.hpp"
+#include "graphics/camera.hpp"
 
 const float PlayerActor::mass = 0.5f;
 const float PlayerActor::drag = 1.5f;

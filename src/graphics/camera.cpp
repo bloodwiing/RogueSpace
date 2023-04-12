@@ -1,4 +1,4 @@
-#include "graphics/camera.h"
+#include "graphics/camera.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -6,9 +6,9 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtc/matrix_access.hpp>
 
-#include "engine/time.h"
+#include "engine/time.hpp"
 
-#include "graphics/window.h"
+#include "graphics/window.hpp"
 
 Camera* Camera::m_active = nullptr;
 

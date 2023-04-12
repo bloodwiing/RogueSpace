@@ -1,7 +1,7 @@
 #ifndef PLAYER_ACTOR_CLASS_H
 #define PLAYER_ACTOR_CLASS_H
 
-#include "physicsactor.h"
+#include "physicsactor.hpp"
 
 class PlayerActor : public PhysicsActor {
 public:

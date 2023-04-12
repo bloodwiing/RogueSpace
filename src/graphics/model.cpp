@@ -1,4 +1,4 @@
-#include "graphics/model.h"
+#include "graphics/model.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.h"
