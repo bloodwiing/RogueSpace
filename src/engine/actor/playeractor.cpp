@@ -18,6 +18,11 @@ PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
 { }
 
 void PlayerActor::update() {
+    if (m_scene->isInFreeFlight()) {
+        PhysicsActor::update();
+        return;
+    }
+
     if (IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
         addForce(m_linearSpeed * m_orientation * Time::getDeltaFloat());
     }

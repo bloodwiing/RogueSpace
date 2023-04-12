@@ -18,6 +18,7 @@ public:
     void setTranslation(const glm::vec3& tra) override;
     void setRotation(const glm::quat& rot) override;
     void setScale(const glm::vec3& sca) override;
+    void setMatrix(const glm::mat4& mat);
 
     void translate(const glm::vec3& tra);
     void rotate(const glm::quat& rot);

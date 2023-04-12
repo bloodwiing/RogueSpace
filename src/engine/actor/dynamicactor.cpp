@@ -1,5 +1,7 @@
 #include "engine/actor/dynamicactor.h"
 
+#include <glm/gtx/matrix_decompose.hpp>
+
 std::string DynamicActor::getTypeName() const {
     return "DynamicActor";
 }
@@ -55,6 +57,14 @@ void DynamicActor::setRotation(const glm::quat &rot) {
 
 void DynamicActor::setScale(const glm::vec3 &sca) {
     m_scale = sca;
+    flagForMatrixUpdate();
+}
+
+void DynamicActor::setMatrix(const glm::mat4 &mat) {
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    glm::decompose(mat, m_scale, m_rotation, m_translation, skew,perspective);
+    m_rotation = glm::conjugate(m_rotation);
     flagForMatrixUpdate();
 }
 

@@ -20,6 +20,9 @@ public:
 
     void update() override;
 
+    void copyOrientation(Camera* camera, bool copyUpVector = true);
+    void freeFlyUpdate();
+
 protected:
     [[nodiscard]] std::string getTypeName() const override;
 
@@ -30,6 +33,10 @@ private:
     glm::mat4 m_matrix = glm::mat4(1.0f);
 
     static Camera* m_active;
+
+    float m_flySpeed = 1.0f;
+    float m_flySensitivity = 100.0f;
+    bool m_flyClicked = false;
 };
 
 #endif //CAMERA_CLASS_H

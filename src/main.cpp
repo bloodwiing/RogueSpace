@@ -71,7 +71,7 @@ int main() {
     Time::init();
 
 
-    while (!Screen::getActive()->isClosing()) {
+    while (!Window::getActive()->isClosing()) {
 
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -84,11 +84,11 @@ int main() {
         }
 
         scene.update();
-        camera->updateMatrix(45.0f, 0.001f, 100.0f);
+        Camera::getActiveCamera()->updateMatrix(45.0f, 0.001f, 1000.0f);
         auto test = camera->getWorldMatrix();
         scene.draw(shader);
 
-        Screen::getActive()->swapBuffers();
+        Window::getActive()->swapBuffers();
 
         glfwPollEvents();
 
