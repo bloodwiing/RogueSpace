@@ -1,0 +1,5 @@
+FILE CONTENT TEST 1
+The contents of this file should be read into a C++ string
+This test is being asserted - it cannot fail
+
+If the test does fail, this would lead to a complete asset loading breakdown

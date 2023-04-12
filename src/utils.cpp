@@ -11,7 +11,7 @@ std::string readFileContents(const std::string &filename, std::ios_base::openmod
     stream.seekg(0, std::ios::beg);
     stream.clear();
 
-    std::string result(size + 1, '\0');
+    std::string result(size, '\0');
     stream.read(&result[0], size);
 
     return result;
