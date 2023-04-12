@@ -68,11 +68,15 @@
 			},
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.27383092045783997,
-					0.27383092045783997,
-					0.27383092045783997,
+					1,
+					1,
+					1,
 					1
 				],
+				"baseColorTexture":{
+				    "index":0,
+				    "texCoord":0
+				},
 				"metallicFactor":0.75
 			}
 		},
@@ -96,11 +100,15 @@
 			},
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.2810092568397522,
-					0.2810092568397522,
-					0.2810092568397522,
+					1,
+					1,
+					1,
 					1
 				],
+				"baseColorTexture":{
+				    "index":1,
+				    "texCoord":0
+				},
 				"metallicFactor":0.75
 			}
 		},
@@ -124,11 +132,15 @@
 			},
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.27383092045783997,
-					0.27383092045783997,
-					0.27383092045783997,
+					1,
+					1,
+					1,
 					1
 				],
+				"baseColorTexture":{
+				    "index":2,
+				    "texCoord":0
+				},
 				"metallicFactor":0.75
 			}
 		},
@@ -152,11 +164,15 @@
 			},
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					0.2461942732334137,
-					0.2461942732334137,
-					0.2461942732334137,
+					1,
+					1,
+					1,
 					1
 				],
+				"baseColorTexture":{
+				    "index":3,
+				    "texCoord":0
+				},
 				"metallicFactor":0.75
 			}
 		}
