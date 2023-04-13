@@ -10,6 +10,7 @@ std::string Actor::getTypeName() const {
 Actor::Actor(Scene *scene, ActorBase *parent, std::string name)
     : ActorBase(scene, parent, name)
     , m_scene(scene)
+    , m_dead(false)
 { }
 
 Scene *Actor::getScene() const {
