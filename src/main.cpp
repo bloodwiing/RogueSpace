@@ -44,7 +44,7 @@ int main() {
     auto camera = player->addChild<Camera>("Camera");
     camera->setActive();
 
-    auto cube = scene.addChild<PhysicsActor>("Cube", 1.0f, 1.0f);
+    auto cube = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     cube->scale(glm::vec3(0.50f));
     auto cube_model = cube->addChild<Model>("model", "./res/starship/Starship01.gltf");
     cube->setWeight(0.5f);
