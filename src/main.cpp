@@ -96,6 +96,7 @@ int main() {
         Time::waitForNextFrame();
     }
 
+    shader.destroy();
     glfwTerminate();
     return 0;
 }

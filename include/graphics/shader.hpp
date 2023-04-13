@@ -8,7 +8,6 @@ class Shader {
 public:
     Shader();
     Shader(const std::string& vertex_file, const std::string& fragment_file);
-    ~Shader();
 
     void activate();
     void destroy();
