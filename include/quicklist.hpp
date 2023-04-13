@@ -221,19 +221,19 @@ protected:
 public:
     /// QuickList iterator.<br>
     /// Returns elements in the order they were added, first being newest, last - oldest
-    class iterator : public std::iterator<
-            std::forward_iterator_tag,   // iterator_category
-            T,                         // value_type
-            index_t,                   // difference_type
-            T*,                        // pointer
-            T                          // reference
-    >{
+    class iterator {
     private:
         index_t cur;
         QuickList* list;
         index_t toSafeRemove;
 
     public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = index_t;
+        using pointer = T*;
+        using reference = T;
+
         explicit iterator(index_t cur, QuickList* list)
             : cur(cur)
             , list(list)
