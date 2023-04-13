@@ -240,7 +240,7 @@ Material Model::getMaterial(json data, std::vector<Texture>& textures) {
     if (pbr.find("baseColorTexture") != pbr.end()) {
         result.setDiffuse0(
                 textures[pbr["baseColorTexture"]["index"]],
-                pbr["baseColorTexture"]["texCoord"]);
+                pbr["baseColorTexture"].value("texCoord", 0));
     }
 
     return result;
