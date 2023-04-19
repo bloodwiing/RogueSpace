@@ -64,7 +64,7 @@ add_custom_target(
         COMMENT "Copying Resources to build directory"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
                 ${CMAKE_CURRENT_SOURCE_DIR}/res
-                ${CMAKE_CURRENT_SOURCE_DIR}/res
+                ${CMAKE_CURRENT_BINARY_DIR}/res
 )
 
 add_dependencies(Build Copy_Resources)

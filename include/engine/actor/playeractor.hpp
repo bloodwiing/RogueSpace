@@ -24,6 +24,8 @@ private:
     static const float drag;
 
     bool m_clicked = false;
+
+    float m_fireCoolDown = 0.0f;
 };
 
 #endif //PLAYER_ACTOR_CLASS_H

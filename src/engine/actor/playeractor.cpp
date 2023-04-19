@@ -5,6 +5,7 @@
 #include "engine/time.hpp"
 #include "graphics/window.hpp"
 #include "graphics/camera.hpp"
+#include "graphics/model.hpp"
 
 const float PlayerActor::mass = 0.5f;
 const float PlayerActor::drag = 1.5f;
@@ -65,6 +66,19 @@ void PlayerActor::update() {
 
         m_up = glm::vec3(0.0f, 1.0f, 0.0f) * DynamicActor::getRotation();
         m_orientation = glm::vec3(0.0f, 0.0f, -1.0f) * DynamicActor::getRotation();
+
+        if (m_fireCoolDown > 0.0f)
+            m_fireCoolDown -= Time::getDeltaFloat();
+
+        if (m_fireCoolDown <= 0.0f and IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
+            auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet", 0.0f, 0.0f);
+            bullet->addChild<Model>("model", "./res/bullet/BulletTemp.gltf");
+            bullet->setTranslation(DynamicActor::getTranslation());
+            bullet->setRotation(glm::quatLookAt(m_orientation, m_up));
+            bullet->addForce(m_orientation * 1.0f);
+            bullet->markDead(10.0f);
+            m_fireCoolDown = 0.2f;
+        }
 
         RESET_MOUSE();
     }
