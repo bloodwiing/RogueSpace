@@ -3,6 +3,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
+#include "engine/time.hpp"
+
 std::string Actor::getTypeName() const {
     return "Actor";
 }
@@ -33,8 +35,22 @@ glm::vec3 Actor::getScale() const {
     return glm::vec3(1.0f);
 }
 
-void Actor::markDead() {
-    m_dead = true;
+void Actor::markDead(float wait /* = -1.0f */) {
+    if (wait <= 0.0f)
+        m_dead = true;
+    else
+        m_deathTimer = wait;
+}
+
+void Actor::update() {
+    if (m_deathTimer >= 0.0f) {
+        m_deathTimer -= Time::getDeltaFloat();
+        if (m_deathTimer <= 0.0f) {
+            m_dead = true;
+            m_deathTimer = -1.0f;
+        }
+    }
+    ActorBase::update();
 }
 
 void Actor::draw(Shader& shader) {

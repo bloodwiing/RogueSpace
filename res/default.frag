@@ -83,7 +83,7 @@ vec4 unlit() {
 }
 
 float zNear = 0.1;
-float zFar = 100.0;
+float zFar = 10000.0;
 
 float normalizedLinearDepth() {
     return (v_depth - zNear)/(zFar - zNear);
@@ -105,7 +105,7 @@ const float[] ditherFilter = float[](
 bool isDitherVisible() {
     int index = int(gl_FragCoord.x) % 4 + int(gl_FragCoord.y) % 4 * 4;
     float depth = normalizedLinearDepth();
-    return depth * 500 > ditherFilter[index] && (10.0 - depth * 10) > ditherFilter[index];
+    return depth * 10000 > ditherFilter[index] && (10.0 - depth * 10) > ditherFilter[index];
 }
 
 void main() {

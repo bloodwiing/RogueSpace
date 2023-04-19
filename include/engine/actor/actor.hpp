@@ -30,8 +30,9 @@ public:
     virtual void setTranslation(const glm::vec3& tra) {};
     virtual void setRotation(const glm::quat& rot) {};
     virtual void setScale(const glm::vec3& sca) {};
-    virtual void markDead();
+    void markDead(float wait = -1.0f);
 
+    void update() override;
     void draw(Shader &shader) override;
 
 protected:
@@ -39,7 +40,8 @@ protected:
 
     Scene* m_scene;
 
-    bool m_dead;
+    float m_deathTimer = -1.0f;
+    bool m_dead = false;
 
     std::vector<Script> m_scripts;
 };

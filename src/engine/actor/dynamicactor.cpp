@@ -26,7 +26,7 @@ void DynamicActor::update() {
                 dynamicChild->flagForMatrixUpdate();
         }
     }
-    ActorBase::update();
+    Actor::update();
 }
 
 glm::vec3 DynamicActor::getTranslation() const {

@@ -42,9 +42,18 @@ bool ActorBase::isDead() const {
 }
 
 void ActorBase::update() {
-    for (auto& [name, child] : m_children) {
-        if (child.value != nullptr)
-            child.value->update();
+    for (auto child = m_children.begin(); child != m_children.end();) {
+        if (child->second.value != nullptr) {
+            child->second.value->update();
+            if (child->second.value->isDead()) {
+                delete child->second.value;
+                m_children.erase(child++);
+            } else
+                ++child;
+        } else {
+            delete child->second.value;
+            m_children.erase(child++);
+        }
     }
 }
 

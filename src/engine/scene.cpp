@@ -40,6 +40,20 @@ void Scene::update() {
     }
 
     ActorBase::update();
+
+    for (auto child = m_volatileActors.begin(); child != m_volatileActors.end();) {
+        if (*child != nullptr) {
+            (*child)->update();
+            if ((*child)->isDead()) {
+                delete *child;
+                child.safeRemove();
+            }
+        } else {
+            delete *child;
+            child.safeRemove();
+        }
+        ++child;
+    }
 }
 
 bool Scene::isInFreeFlight() const {
