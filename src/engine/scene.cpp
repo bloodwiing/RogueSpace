@@ -56,10 +56,15 @@ void Scene::update() {
     }
 }
 
+void Scene::draw(Shader &shader) {
+    ActorBase::draw(shader);
+
+    for (auto* child : m_volatileActors) {
+        if (child != nullptr)
+            child->draw(shader);
+    }
+}
+
 bool Scene::isInFreeFlight() const {
     return m_freeFly;
 }
-
-
-
-// Todo: bullets

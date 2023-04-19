@@ -19,7 +19,13 @@ public:
     template<class T, class... Args>
     T* addChild(std::string name, Args&&... args);
 
+    template<class T>
+    T* addVolatileChild(std::string name);
+    template<class T, class... Args>
+    T* addVolatileChild(std::string name, Args&&... args);
+
     void update() override;
+    void draw(Shader &shader) override;
 
     [[nodiscard]] bool isInFreeFlight() const;
 
