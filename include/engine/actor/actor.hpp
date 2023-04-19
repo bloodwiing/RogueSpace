@@ -11,25 +11,59 @@
 
 class ActorBase;
 
+/// \brief          Main world object type.
+/// \details        This Actor can exist in the world but is static in Transformation and is able to die
 class Actor : public ActorBase {
 public:
+    /// \note           Should not be used raw, please use addChild
+    /// \param scene    Containing Scene of the Actor node
+    /// \param parent   Parent of the Actor node
+    /// \param name     Name of the Actor node
+    /// \see            Scene#addChild
+    /// \see            Actor#addChild
     Actor(Scene* scene, ActorBase* parent, std::string name);
 
+    /// \brief          Creates a new Child under this Parent Actor
+    /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
+    /// \param name     Name of the Actor node
+    /// \return         A pointer to the newly created Actor
     template<class T>
     T* addChild(std::string name);
+    /// \brief          Creates a new Child under this Parent Actor
+    /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
+    /// \param name     Name of the Actor node
+    /// \param args     The list of extra arguments to pass when creating the Actor
+    /// \return         A pointer to the newly created Actor
     template<class T, class... Args>
     T* addChild(std::string name, Args&&... args);
 
+    /// \returns        The containing Scene
     [[nodiscard]] Scene* getScene() const;
 
+    /// \return         The relative Translation
     [[nodiscard]] virtual glm::vec3 getTranslation() const;
+    /// \return         The relative Rotation
     [[nodiscard]] virtual glm::quat getRotation() const;
+    /// \return         The relative Scale
     [[nodiscard]] virtual glm::vec3 getScale() const;
     [[nodiscard]] bool isDead() const override;
 
+    /// \brief          Sets the relative Translation of the object
+    /// \note           Only implemented in <b>DynamicActor</b>
+    /// \param tra      New Translation
     virtual void setTranslation(const glm::vec3& tra) {};
+    /// \brief          Sets the relative Rotation of the object
+    /// \note           Only implemented in <b>DynamicActor</b>
+    /// \param rot      New Rotation
     virtual void setRotation(const glm::quat& rot) {};
+    /// \brief          Sets the relative Scale of the object
+    /// \note           Only implemented in <b>DynamicActor</b>
+    /// \param sca      New Scale
     virtual void setScale(const glm::vec3& sca) {};
+    /// \brief          Marks the Actor as Dead
+    /// \details        A Dead Actor is marked for removal during the soonest possible update event of a parent Actor
+    /// \param wait     An optional parameter to delay the removal of the Actor.
+    ///                 A value of -1.0 will mark the Actor instantly without delay
     void markDead(float wait = -1.0f);
 
     void update() override;
@@ -38,11 +72,16 @@ public:
 protected:
     [[nodiscard]] std::string getTypeName() const override;
 
+    /// The containing Scene
     Scene* m_scene;
 
+    /// A timer that tracks how much longer does the Actor have to live until it gets marked as Dead
     float m_deathTimer = -1.0f;
+    /// A death flag
+    /// \see        Actor#markDead
     bool m_dead = false;
 
+    /// A list of attachable Scripts (WIP)
     std::vector<Script> m_scripts;
 };
 
