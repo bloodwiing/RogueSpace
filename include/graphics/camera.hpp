@@ -29,27 +29,42 @@ public:
     /// \param uniform  The name of the uniform to update
     void applyMatrix(Shader& shader, const char* uniform);
 
+    /// \returns        The currently active camera
     static Camera* getActiveCamera();
+
+    /// \brief          Makes the Camera statically accessible and used as the main camera for rendering
     void setActive() const;
 
     void update() override;
 
+    /// \brief              Helper function to copy camera Transformations from one Camera to another
+    /// \param camera       The origin Camera to copy from
+    /// \param copyUpVector An option to also copy the UP vector
     void copyOrientation(Camera* camera, bool copyUpVector = true);
+    /// \brief          PlayerActor inspired Keyboard and Mouse controllable update event
+    /// \details        Used for Free Fly controls
     void freeFlyUpdate();
 
 protected:
     [[nodiscard]] std::string getTypeName() const override;
 
 private:
+    /// The orientation vector where the Camera is currently looking at
     glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
+    /// The vector pointing upwards from the Actor's perspective
               m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
+    /// The calculated Camera matrix, result of the View and Projection matrices
     glm::mat4 m_matrix = glm::mat4(1.0f);
 
+    /// The currently active Camera pointer
     static Camera* m_active;
 
+    /// The speed multiplier for translational flying
     float m_flySpeed = 1.0f;
+    /// The speed multiplier for rotating the Actor around based on mouse delta
     float m_flySensitivity = 100.0f;
+    /// A flag for if the mouse is being captured and hidden
     bool m_flyClicked = false;
 };
 

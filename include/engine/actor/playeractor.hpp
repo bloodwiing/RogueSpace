@@ -22,7 +22,7 @@ protected:
     [[nodiscard]] std::string getTypeName() const override;
 
 private:
-    /// The orientation vector where the Player Actor is currently looking at
+    /// The orientation vector where the PlayerActor is currently looking at
     glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
     /// The vector pointing upwards from the Actor's perspective
               m_up = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -31,7 +31,7 @@ private:
     float m_linearSpeed = 3.0f,
     /// The speed multiplier for applying rotational Torque
           m_angularSpeed = 0.05f,
-    /// The speed multiplier for moving the Actor around based on mouse delta
+    /// The speed multiplier for rotating the Actor around based on mouse delta
           m_sensitivity = 100.0f;
 
     /// A pre-set value for the Mass of the PhysicsActor for PlayerActor
