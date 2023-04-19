@@ -50,13 +50,6 @@ int main() {
     cube->setWeight(0.5f);
     cube->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
-    scene.addChild<Actor>("Bullet");
-    scene.addChild<Actor>("Bullet");
-    scene.addChild<Actor>("Bullet (3)");
-    scene.addChild<Actor>("Bullet");
-    scene.addChild<Actor>("Bullet");
-    scene.addChild<Actor>("Bullet (3)");
-    scene.addChild<Actor>("Bullet");
     std::cout << scene.toHierarchyString();
 
 
@@ -85,7 +78,7 @@ int main() {
         }
 
         scene.update();
-        Camera::getActiveCamera()->updateMatrix(45.0f, 0.001f, 1000.0f);
+        Camera::getActiveCamera()->updateMatrix(45.0f, 0.001f, 10000.0f);
         auto test = camera->getWorldMatrix();
         scene.draw(shader);
 
