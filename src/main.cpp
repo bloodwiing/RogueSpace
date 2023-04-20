@@ -44,11 +44,15 @@ int main() {
     auto camera = player->addChild<Camera>("Camera");
     camera->setActive();
 
-    auto cube = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
-    cube->scale(glm::vec3(0.50f));
-    auto cube_model = cube->addChild<Model>("model", "./res/starship/Starship01.gltf");
-    cube->setWeight(0.5f);
-    cube->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+    auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
+    starship->scale(glm::vec3(0.50f));
+    try {
+        auto starship_model = starship->addChild<Model>("model", "./res/starship/Starship01.gltf");
+    } catch (std::exception& e) {
+        std::cerr << e.what();
+    }
+    starship->setWeight(0.5f);
+    starship->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
     std::cout << scene.toHierarchyString();
 

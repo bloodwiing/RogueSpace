@@ -1,5 +1,7 @@
 #include "engine/actor/actorbase.hpp"
 
+#include <iostream>
+
 std::string ActorBase::getTypeName() const {
     return "RAW_ActorBase";
 }
@@ -44,7 +46,14 @@ bool ActorBase::isDead() const {
 void ActorBase::update() {
     for (auto child = m_children.begin(); child != m_children.end();) {
         if (child->second.value != nullptr) {
-            child->second.value->update();
+            try {
+                child->second.value->update();
+            } catch (std::exception& e) {
+                std::cerr << e.what();
+                delete child->second.value;
+                m_children.erase(child++);
+                continue;
+            }
             if (child->second.value->isDead()) {
                 delete child->second.value;
                 m_children.erase(child++);

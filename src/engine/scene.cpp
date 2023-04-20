@@ -1,5 +1,7 @@
 #include "engine/scene.hpp"
 
+#include <iostream>
+
 #include "graphics/camera.hpp"
 #include "graphics/window.hpp"
 
@@ -43,7 +45,14 @@ void Scene::update() {
 
     for (auto child = m_volatileActors.begin(); child != m_volatileActors.end();) {
         if (*child != nullptr) {
-            (*child)->update();
+            try {
+                (*child)->update();
+            } catch (std::exception& e) {
+                std::cerr << e.what();
+                delete *child;
+                child.safeRemove();
+                continue;
+            }
             if ((*child)->isDead()) {
                 delete *child;
                 child.safeRemove();
