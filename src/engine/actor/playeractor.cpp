@@ -75,9 +75,9 @@ void PlayerActor::update() {
             bullet->addChild<Model>("model", "./res/bullet/BulletTemp.gltf");
             bullet->setTranslation(DynamicActor::getTranslation());
             bullet->setRotation(glm::quatLookAt(m_orientation, m_up));
-            bullet->addForce(m_orientation * 1.0f);
+            bullet->addForce(m_orientation * 40.0f);
             bullet->markDead(10.0f);
-            m_fireCoolDown = 0.2f;
+            m_fireCoolDown = 0.1f;
         }
 
         RESET_MOUSE();
