@@ -81,3 +81,8 @@ std::string ActorBase::toHierarchyString(uint16_t indent /* = 0 */) const {
     }
     return result;
 }
+
+std::ostream& operator<<(std::ostream& stream, ActorBase *actor) {
+    stream << actor->toHierarchyString();
+    return stream;
+}

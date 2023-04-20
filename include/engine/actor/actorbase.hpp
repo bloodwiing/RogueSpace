@@ -120,6 +120,8 @@ private:
     void internalRegisterChild(T* child);
 };
 
+std::ostream& operator<<(std::ostream& stream, ActorBase* actor);
+
 #include "actorbase_impl.tpp"
 
 #endif //ACTOR_BASE_CLASS_H
