@@ -21,7 +21,7 @@ void DynamicActor::update() {
         m_needsMatrixUpdate = false;
 
         for (auto& [name, child] : m_children) {
-            auto dynamicChild = dynamic_cast<DynamicActor*>(child.value);
+            auto dynamicChild = dynamic_cast<DynamicActor*>(child.value.get());
             if (dynamicChild != nullptr)
                 dynamicChild->flagForMatrixUpdate();
         }

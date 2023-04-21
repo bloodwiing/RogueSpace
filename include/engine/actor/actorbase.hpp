@@ -2,6 +2,7 @@
 #define ACTOR_BASE_CLASS_H
 
 #include <map>
+#include <memory>
 
 #define GLFW_INCLUDE_NONE
 #include <glfw3.h>
@@ -22,7 +23,7 @@ class ActorBase {
 protected:
     /// \brief          A container that remembers how many times a name has been reused for a child
     struct ChildEntry {
-        ActorBase* value;
+        std::shared_ptr<ActorBase> value;
         uint16_t nameRepeat;
     };
 
@@ -34,14 +35,12 @@ protected:
     /// \see            Actor#addChild
     ActorBase(Scene* scene, ActorBase* parent, std::string& name);
 public:
-    ~ActorBase();
-
     /// \brief          Returns the map of Actor name and Actor entry pairs
     [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
     /// \brief          Returns a pointer to a child Actor of the current Hierarchy element
     /// \param name     The name of the child to search for
     /// \returns        Possible values:
-    ///                 - #ActorBase
+    ///                 - #ActorBase*
     ///                 - nullptr
     [[nodiscard]] ActorBase* getChild(const std::string& name) const;
 
@@ -117,7 +116,7 @@ private:
     /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
     /// \return         A pointer to the newly created Actor
     template<class T>
-    void internalRegisterChild(T* child);
+    void internalRegisterChild(std::shared_ptr<T> child);
 };
 
 std::ostream& operator<<(std::ostream& stream, ActorBase* actor);

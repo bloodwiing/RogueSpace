@@ -43,33 +43,34 @@ void Scene::update() {
 
     ActorBase::update();
 
-    for (auto child = m_volatileActors.begin(); child != m_volatileActors.end();) {
-        if (*child != nullptr) {
+    for (auto iter = m_volatileActors.begin(); iter != m_volatileActors.end();) {
+        auto& child = *iter;
+        if (child) {
             try {
-                (*child)->update();
+                child->update();
             } catch (std::exception& e) {
                 std::cerr << e.what();
-                delete *child;
-                child.safeRemove();
+                child.reset();
+                iter.safeRemove();
                 continue;
             }
-            if ((*child)->isDead()) {
-                delete *child;
-                child.safeRemove();
+            if (child->isDead()) {
+                child.reset();
+                iter.safeRemove();
             }
         } else {
-            delete *child;
-            child.safeRemove();
+            child.reset();
+            iter.safeRemove();
         }
-        ++child;
+        ++iter;
     }
 }
 
 void Scene::draw(Shader &shader) {
     ActorBase::draw(shader);
 
-    for (auto* child : m_volatileActors) {
-        if (child != nullptr)
+    for (const auto& child : m_volatileActors) {
+        if (child)
             child->draw(shader);
     }
 }

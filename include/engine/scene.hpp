@@ -53,7 +53,7 @@ private:
     static std::string m_hierarchyDisplayName;
 
     /// QuickList of Volatile Actors
-    QuickList<ActorBase*> m_volatileActors;
+    QuickList<std::shared_ptr<ActorBase>> m_volatileActors;
 
     // ----- Free Fly toggle -----
 
