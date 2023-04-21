@@ -7,6 +7,7 @@
 #include "graphics/model.hpp"
 #include "engine/actor/physicsactor.hpp"
 #include "engine/actor/playeractor.hpp"
+#include "engine/assetstream.h"
 
 #include "engine/super.hpp"
 #include "engine/time.hpp"
@@ -55,6 +56,13 @@ int main() {
     starship->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
 
     std::cout << &scene;
+
+
+    bool done = false;
+    AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](auto data){ std::cout << "Done!" << std::endl; done = true; });
+    while (!done) {
+        std::cout << "Waiting..." << std::endl;
+    }
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);

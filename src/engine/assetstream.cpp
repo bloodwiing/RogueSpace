@@ -8,7 +8,9 @@ using std::ios;
 
 AssetStream* AssetStream::m_singleton = nullptr;
 
-AssetStream::AssetStream() = default;
+AssetStream::AssetStream()
+    : m_thread(asyncLoop)
+{ }
 
 AssetStream &AssetStream::getInstance() {
     if (m_singleton == nullptr)
@@ -46,10 +48,6 @@ void AssetStream::shutdown() {
     getInstance().m_active = false;
 }
 
-void readChunk() {
-
-}
-
 void AssetStream::asyncLoop() {
     while (getInstance().m_active) {
         if (getInstance().m_assetQueue.empty()) {
@@ -60,21 +58,28 @@ void AssetStream::asyncLoop() {
         AssetQueueEntry entry = getInstance().m_assetQueue.front();
         getInstance().m_assetQueue.pop();
         entry.callback(asyncReadFileContents(entry.filePath, entry.mode));
-
-        std::this_thread::yield();
     }
 }
 
 std::string AssetStream::asyncReadFileContents(const std::string &filePath, ios::openmode mode) {
     std::ifstream stream(filePath, mode);
 
-    stream.ignore(std::numeric_limits<std::streamsize>::max());
-    auto size = stream.gcount();
-    stream.seekg(0, ios::beg);
-    stream.clear();
+    const size_t chunkSize = 1024;
+    size_t reservedSpace = chunkSize * 8;
+    size_t index = 0;
 
-    std::string result(size, '\0');
-    stream.read(&result[0], size);
+    std::string result(reservedSpace, '\0');
+
+    while (!stream.eof() and getInstance().m_active) {
+        if (index >= reservedSpace) {
+            reservedSpace <<= 1;
+            result.resize(reservedSpace);
+        }
+        stream.read(&result[index], chunkSize);
+        index += stream.gcount();
+    }
+
+    result.resize(stream.gcount());
 
     return result;
 }

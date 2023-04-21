@@ -6,6 +6,7 @@
 #include <queue>
 #include <functional>
 #include <ios>
+#include <thread>
 
 class AssetStream {
 public:
@@ -21,6 +22,8 @@ public:
 
 private:
     AssetStream();
+
+    std::thread m_thread;
 
     struct AssetQueueEntry {
         const std::string filePath;
