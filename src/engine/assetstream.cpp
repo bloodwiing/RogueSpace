@@ -77,6 +77,7 @@ std::string AssetStream::asyncReadFileContents(const std::string &filePath, ios:
         }
         stream.read(&result[index], chunkSize);
         index += stream.gcount();
+        std::this_thread::yield();
     }
 
     result.resize(stream.gcount());

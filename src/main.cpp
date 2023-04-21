@@ -62,6 +62,7 @@ int main() {
     AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](auto data){ std::cout << "Done!" << std::endl; done = true; });
     while (!done) {
         std::cout << "Waiting..." << std::endl;
+        std::this_thread::yield();
     }
 
 
