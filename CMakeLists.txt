@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.20)
 project(RogueSpace)
+
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 # -----
 
@@ -10,14 +12,57 @@ endif()
 
 # -----
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# -----
+
+add_subdirectory(test)
+
+# -----
+
 link_directories(RogueSpace ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_library(glfw STATIC IMPORTED)
-set_target_properties(glfw PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3.a"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/")
+set(SHARED_LIBRARIES)
+
+find_package(GLFW3 REQUIRED)
+if(GLFW3_FOUND)
+    message(STATUS "Glfw3 found")
+    include_directories(${GLFW3_INCLUDE_DIR})
+    link_libraries(${GLFW3_IMPORT_LIBRARY})
+    set(SHARED_LIBRARIES ${SHARED_LIBRARIES} ${GLFW3_SHARED_LIBRARIES})
+endif(GLFW3_FOUND)
+
+find_package(GLM REQUIRED)
+if(GLM_FOUND)
+    message(STATUS "glm found")
+    include_directories(${GLM_INCLUDE_DIR})
+endif()
 
 find_package(OpenGL REQUIRED)
+
+if(WIN32)
+    set(LIBS opengl32 gdi32)
+elseif(UNIX AND NOT APPLE)
+    set(LIBS dl X11 GL)
+endif()
+
+add_library(GLAD "src/glad/glad.c")
+set(LIBS ${LIBS} GLAD)
+
+# -----
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+link_libraries(${LIBS})
+
+# -----
+
+if(UNIX AND NOT APPLE)
+    SET(CMAKE_SKIP_BUILD_RPATH FALSE)
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    SET(CMAKE_INSTALL_RPATH $ORIGIN)
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
 
 # -----
 
@@ -29,33 +74,8 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 
 # -----
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/glm)
-add_subdirectory(test)
-
-# -----
-
 add_executable(Build ${SRC_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 target_sources(Google_Tests_run PRIVATE ${SRC_FILES})
-
-# -----
-
-if(NOT WIN32)
-    target_link_libraries(Build dl X11)
-    target_link_libraries(Google_Tests_run dl X11)
-endif()
-
-target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(Google_Tests_run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Build glfw)
-target_link_libraries(Google_Tests_run glfw)
-
-if(WIN32)
-    target_link_libraries(Build opengl32)
-    target_link_libraries(Google_Tests_run opengl32)
-else()
-    target_link_libraries(Build GL)
-    target_link_libraries(Google_Tests_run GL)
-endif()
 
 # -----
 
@@ -67,5 +87,12 @@ add_custom_target(
                 ${CMAKE_CURRENT_BINARY_DIR}/res
 )
 
-add_dependencies(Build Copy_Resources)
-add_dependencies(Google_Tests_run Copy_Resources)
+add_custom_target(
+        Copy_Shared_Libraries ALL
+        COMMENT "Copying Shared Libraries to build directory"
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${SHARED_LIBRARIES}
+                $<TARGET_FILE_DIR:Build>)
+
+add_dependencies(Build Copy_Resources Copy_Shared_Libraries)
+add_dependencies(Google_Tests_run Copy_Resources Copy_Shared_Libraries)
