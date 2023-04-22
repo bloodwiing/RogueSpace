@@ -48,7 +48,7 @@ int main() {
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-        auto starship_model = starship->addChild<Model>("model", "./res/starship/Starship01.gltf");
+//        auto starship_model = starship->addChild<Model>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
@@ -59,11 +59,7 @@ int main() {
 
 
     bool done = false;
-    AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](auto data){ std::cout << "Done!" << std::endl; done = true; });
-    while (!done) {
-        std::cout << "Waiting..." << std::endl;
-        std::this_thread::yield();
-    }
+    AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -100,7 +96,10 @@ int main() {
         glfwPollEvents();
 
         Time::waitForNextFrame();
+        std::this_thread::yield();
     }
+
+    AssetStream::shutdown();
 
     shader.destroy();
     glfwTerminate();

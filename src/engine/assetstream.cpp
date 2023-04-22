@@ -39,7 +39,7 @@ void AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream:
 
     getInstance().m_assetQueue.emplace((AssetQueueEntry){
         .filePath = filePath,
-        .callback = [&callback](const std::string& data) { callback((uint8_t*)data.c_str()); },
+        .callback = [callback](const std::string& data) { callback((const uint8_t*)data.c_str()); },
         .mode = ios::in | ios::binary
     });
 }
