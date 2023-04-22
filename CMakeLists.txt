@@ -10,12 +10,21 @@ endif()
 
 # -----
 
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# -----
+
+add_subdirectory(test)
+
+# -----
+
 link_directories(RogueSpace ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_library(glfw STATIC IMPORTED)
-set_target_properties(glfw PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3.a"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/")
+find_package(GLM REQUIRED)
+if(GLM_FOUND)
+    message(STATUS "glm found")
+    include_directories(${GLM_INCLUDE_DIR})
+endif()
 
 find_package(OpenGL REQUIRED)
 
@@ -26,11 +35,6 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/*.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/glad/*.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/*.cpp)
-
-# -----
-
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/glm)
-add_subdirectory(test)
 
 # -----
 
