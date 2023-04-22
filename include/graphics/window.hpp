@@ -2,7 +2,7 @@
 #define WINDOW_CLASS_H
 
 #define GLFW_INCLUDE_NONE
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 
 #define IS_KEY(key, state) Window::getActive()->isKey(key, state)
 #define IS_MOUSE(button, state) Window::getActive()->isMouse(button, state)

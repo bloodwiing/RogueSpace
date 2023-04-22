@@ -2,7 +2,7 @@
 #define CAMERA_CLASS_H
 
 #include "shader.hpp"
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 #include "engine/actor/dynamicactor.hpp"
