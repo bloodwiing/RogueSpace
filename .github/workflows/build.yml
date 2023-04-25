@@ -11,7 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/cache@v3
+      - name: Enabling caching of previously compiled objects
+        uses: actions/cache@v3
+        with:
+          key: build-cache
+          path: |
+            bin/CMakeFiles
+            bin/lib
+            bin/test/CMakeFiles
+            bin/test/googlemock
+            bin/test/googletest
+            bin/.ninja_deps
+            bin/.ninja_log
+            bin/build.ninja
+            bin/CMakeCache.txt
 
       # Install latest CMake and Ninja.
       - uses: lukka/get-cmake@latest
