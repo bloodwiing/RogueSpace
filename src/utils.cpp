@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <limits>
+#include <algorithm>
 
 void initializeOpenGL() {
 #ifndef OPENGL_INITIALIZED
@@ -17,7 +18,15 @@ void initializeOpenGL() {
 #endif
 }
 
-std::string readFileContents(const std::string &filename, std::ios_base::openmode mode /* = std::ios_base::in */) {
+std::string readFileContents(std::string filename, std::ios_base::openmode mode /* = std::ios_base::in */) {
+#if _WIN32
+    if (filename.find(':') == std::string::npos)
+        filename = getProcessDirectory() + filename;
+#elif __unix__
+    if (filename[0] != '/')
+        filename = getProcessDirectory() + filename;
+#endif
+
     std::ifstream stream(filename, mode);
 
     stream.ignore(std::numeric_limits<std::streamsize>::max());
@@ -30,3 +39,24 @@ std::string readFileContents(const std::string &filename, std::ios_base::openmod
 
     return result;
 }
+
+#define MAX_PATH 2048
+
+#if _WIN32
+#include <windows.h>
+std::string getProcessDirectory() {
+    char path[MAX_PATH];
+    std::string res(path, GetModuleFileName(nullptr, path, MAX_PATH));
+    std::replace(res.begin(), res.end(), '\\', '/');
+    return res.substr(0, res.find_last_of('/') + 1);
+}
+#elif __unix__
+#include <climits>
+#include <unistd.h>
+std::string getProcessDirectory() {
+    char path[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
+    std::string res(path, (count > 0) ? count : 0);
+    return res.substr(0, res.find_last_of('/') + 1);
+}
+#endif
