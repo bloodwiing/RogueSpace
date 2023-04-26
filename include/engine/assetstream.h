@@ -8,37 +8,40 @@
 #include <ios>
 #include <thread>
 
-class AssetStream {
-public:
-    typedef std::function<void(const std::string& data)> textCallback;
-    typedef std::function<void(const uint8_t* data)> binaryCallback;
+namespace Engine {
 
-    static AssetStream& getInstance();
-    static void getTextAsset(const std::string& filePath, const textCallback& callback);
-    static void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
+    class AssetStream {
+    public:
+        typedef std::function<void(const std::string& data)> textCallback;
+        typedef std::function<void(const uint8_t* data)> binaryCallback;
 
-    static void shutdown();
-    static void asyncLoop();
+        static AssetStream& getInstance();
+        static void getTextAsset(const std::string& filePath, const textCallback& callback);
+        static void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
 
-private:
-    AssetStream();
+        static void shutdown();
+        static void asyncLoop();
 
-    std::thread m_thread;
+    private:
+        AssetStream();
 
-    struct AssetQueueEntry {
-        const std::string filePath;
-        const textCallback callback;
-        std::ios::openmode mode;
+        std::thread m_thread;
+
+        struct AssetQueueEntry {
+            const std::string filePath;
+            const textCallback callback;
+            std::ios::openmode mode;
+        };
+
+        bool m_active = true;
+
+        static AssetStream* m_singleton;
+
+        std::queue<AssetQueueEntry> m_assetQueue;
+        std::map<const std::string, const std::string> m_cachedAssets;
+
+        static std::string asyncReadFileContents(const std::string &filePath, std::ios::openmode mode = std::ios::in);
     };
-
-    bool m_active = true;
-
-    static AssetStream* m_singleton;
-
-    std::queue<AssetQueueEntry> m_assetQueue;
-    std::map<const std::string, const std::string> m_cachedAssets;
-
-    static std::string asyncReadFileContents(const std::string &filePath, std::ios::openmode mode = std::ios::in);
-};
+}
 
 #endif //ASSET_STREAM_CLASS_H

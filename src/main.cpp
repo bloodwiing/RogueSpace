@@ -63,7 +63,7 @@ int main() {
 
 
     bool done = false;
-    AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
+    Engine::AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -103,7 +103,7 @@ int main() {
         std::this_thread::yield();
     }
 
-    AssetStream::shutdown();
+    Engine::AssetStream::shutdown();
 
     shader.destroy();
     glfwTerminate();

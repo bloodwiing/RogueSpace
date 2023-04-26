@@ -6,19 +6,19 @@
 
 using std::ios;
 
-AssetStream* AssetStream::m_singleton = nullptr;
+Engine::AssetStream* Engine::AssetStream::m_singleton = nullptr;
 
-AssetStream::AssetStream()
+Engine::AssetStream::AssetStream()
     : m_thread(asyncLoop)
 { }
 
-AssetStream &AssetStream::getInstance() {
+Engine::AssetStream &Engine::AssetStream::getInstance() {
     if (m_singleton == nullptr)
         m_singleton = new AssetStream();
     return *m_singleton;
 }
 
-void AssetStream::getTextAsset(const std::string& filePath, const AssetStream::textCallback& callback) {
+void Engine::AssetStream::getTextAsset(const std::string& filePath, const AssetStream::textCallback& callback) {
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         callback(getInstance().m_cachedAssets.at(filePath));
         return;
@@ -31,7 +31,7 @@ void AssetStream::getTextAsset(const std::string& filePath, const AssetStream::t
     });
 }
 
-void AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream::binaryCallback& callback) {
+void Engine::AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream::binaryCallback& callback) {
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         callback((uint8_t*)getInstance().m_cachedAssets.at(filePath).c_str());
         return;
@@ -44,11 +44,11 @@ void AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream:
     });
 }
 
-void AssetStream::shutdown() {
+void Engine::AssetStream::shutdown() {
     getInstance().m_active = false;
 }
 
-void AssetStream::asyncLoop() {
+void Engine::AssetStream::asyncLoop() {
     while (getInstance().m_active) {
         if (getInstance().m_assetQueue.empty()) {
             std::this_thread::yield();
@@ -61,7 +61,7 @@ void AssetStream::asyncLoop() {
     }
 }
 
-std::string AssetStream::asyncReadFileContents(const std::string &filePath, ios::openmode mode) {
+std::string Engine::AssetStream::asyncReadFileContents(const std::string &filePath, ios::openmode mode) {
     std::ifstream stream(filePath, mode);
 
     const size_t chunkSize = 1024;
