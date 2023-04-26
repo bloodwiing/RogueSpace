@@ -6,16 +6,21 @@
 #include <fstream>
 #include <limits>
 #include <algorithm>
+#include <iostream>
+
+void glfwErrorCallback(int error, const char* description) {
+    fprintf(stderr, "Error: %s\n", description);
+};
 
 void initializeOpenGL() {
-#ifndef OPENGL_INITIALIZED
-#define OPENGL_INITIALIZED
-    glfwInit();
+    glfwSetErrorCallback(glfwErrorCallback);
+    if (glfwInit() == GLFW_FALSE) {
+        return;
+    }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#endif
 }
 
 std::string readFileContents(std::string filename, std::ios_base::openmode mode /* = std::ios_base::in */) {
