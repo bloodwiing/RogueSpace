@@ -4,11 +4,11 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#define IS_KEY(key, state) Window::getActive()->isKey(key, state)
-#define IS_MOUSE(button, state) Window::getActive()->isMouse(button, state)
-#define RESET_MOUSE() Window::getActive()->resetMouse()
-#define GET_RELATIVE_MOUSE(x, y) Window::getActive()->getRelativeMouse(x, y)
-#define GET_ABSOLUTE_MOUSE(x, y) Window::getActive()->getAbsoluteMouse(x, y)
+#define IS_KEY(key, state) (Window::getActive() != nullptr and Window::getActive()->isKey(key, state))
+#define IS_MOUSE(button, state) (Window::getActive() != nullptr and Window::getActive()->isMouse(button, state))
+#define RESET_MOUSE() (Window::getActive() != nullptr ? Window::getActive()->resetMouse() : void())
+#define GET_RELATIVE_MOUSE(x, y) (Window::getActive() != nullptr ? Window::getActive()->getRelativeMouse(x, y) : void())
+#define GET_ABSOLUTE_MOUSE(x, y) (Window::getActive() != nullptr ? Window::getActive()->getAbsoluteMouse(x, y) : void())
 
 /// \brief      A game window, can support multiple, but preferred to be only 1
 /// \details    Manages a glfwWindow

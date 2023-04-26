@@ -52,11 +52,34 @@ public:
     /// \param torque   The Euler angle to spin the object in
     void addTorque(glm::vec3 torque);
 
-    /// \brief          Helpful function to check if a vector has been zeroed out
-    /// \param vector   The vector to check
-    /// \return         - true, if vector is zero
-    ///                 - false, if vector is not zero
-    [[nodiscard]] static inline bool isVectorZero(const glm::vec3& vector);
+    /// \brief              Applies linear velocity to a Dynamic Actor for the Delta frame
+    /// \details            Can be applied to any DynamicActor, but it is recommended to use PhysicsActor as it
+    ///                     automatically handles velocity and stores it.
+    /// \param target[in]   The target Actor to apply the change to
+    /// \param linear[in]   The Translational or Linear velocity
+    /// \return             - true, if change was applied
+    ///                     - false, if no change happened
+    static bool applyLinearVelocity(DynamicActor* target, const glm::vec3& linear);
+    /// \brief              Applies angular velocity to a Dynamic Actor for the Delta frame
+    /// \details            Can be applied to any DynamicActor, but it is recommended to use PhysicsActor as it
+    ///                     automatically handles velocity and stores it.
+    /// \param target[in]   The target Actor to apply the change to
+    /// \param angular[in]  The Rotational or Angular velocity
+    /// \return             - true, if change was applied
+    ///                     - false, if no change happened
+    static bool applyAngularVelocity(DynamicActor* target, const glm::vec3& angular);
+
+    /// \brief                  Shrinks the velocity vector for the current Delta frame
+    /// \param vector[in,out]   The vector reference to shrink
+    /// \param influence        The speed that the vector diminishes at
+    /// \param deadZone         The minimum size requirement for the vector, otherwise sets it to zero
+    static void diminishVelocity(glm::vec3& vector, float influence, float deadZone);
+
+    /// \brief              Helpful function to check if a vector has been zeroed out
+    /// \param vector[in]   The vector to check
+    /// \return             - true, if vector is zero
+    ///                     - false, if vector is not zero
+    [[nodiscard]] static bool isVectorZero(const glm::vec3& vector);
 
 protected:
     [[nodiscard]] std::string getTypeName() const override;
