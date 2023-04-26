@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 project(RogueSpace)
 
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
+set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/pdb)
 include(CTest)
 
 # -----
@@ -18,15 +20,8 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # -----
 
-set(LINK_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-
-find_package(GLFW3 REQUIRED)
-if(GLFW3_FOUND)
-    message(STATUS "Glfw3 found")
-    set(INCLUDE_DIRS ${INCLUDE_DIRS} ${GLFW3_INCLUDE_DIR})
-    set(LIBS ${LIBS} ${GLFW3_IMPORT_LIBRARY})
-    set(SHARED_LIBRARIES ${SHARED_LIBRARIES} ${GLFW3_SHARED_LIBRARIES})
-endif(GLFW3_FOUND)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
+link_libraries(glfw)
 
 find_package(GLM REQUIRED)
 if(GLM_FOUND)
@@ -54,7 +49,7 @@ include_directories(${INCLUDE_DIRS})
 if(UNIX AND NOT APPLE)
     SET(CMAKE_SKIP_BUILD_RPATH FALSE)
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-    SET(CMAKE_INSTALL_RPATH $ORIGIN)
+    SET(CMAKE_INSTALL_RPATH "$ORIGIN;$ORIGIN/lib")
     SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif()
 
@@ -86,15 +81,9 @@ add_custom_target(
         COMMENT "Copying Resources to build directory"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/res
-        ${CMAKE_CURRENT_BINARY_DIR}/res
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
 
-add_custom_target(
-        CopySharedLibraries ALL
-        COMMENT "Copying Shared Libraries to build directory"
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${SHARED_LIBRARIES}
-        $<TARGET_FILE_DIR:Build>)
 
-add_dependencies(Build CopyResources CopySharedLibraries)
+add_dependencies(Build CopyResources)
 add_dependencies(BuildTest Build)

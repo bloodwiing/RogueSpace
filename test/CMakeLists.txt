@@ -53,7 +53,7 @@ add_custom_target(
         COMMENT "Copying Testing Resources to Testing directory"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/testres
-        ${CMAKE_BINARY_DIR}/testres
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testres
 )
 add_dependencies(BuildTest CopyTestingResources)
 

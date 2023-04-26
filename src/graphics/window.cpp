@@ -7,15 +7,10 @@
 Window* Window::m_active = nullptr;
 bool Window::m_wasGLLoaded = false;
 
-void errorCallback(int error, const char* description) {
-    fprintf(stderr, "Error: %s\n", description);
-}
-
 Window::Window(int width, int height)
     : m_width(width)
     , m_height(height)
 {
-    glfwSetErrorCallback(errorCallback);
     m_glWindow = glfwCreateWindow(width, height, "Testing", nullptr, nullptr);
     if (m_glWindow == nullptr)
         throw std::runtime_error("Failed to create window");
