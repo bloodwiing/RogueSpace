@@ -17,7 +17,7 @@ Scene::Scene()
     , m_freeFlyCamera(new Camera(this, nullptr, "root_freeFlyCamera"))
 { }
 
-QuickList<ActorBase *> Scene::getVolatileChildren() const {
+QuickList<std::shared_ptr<ActorBase>> Scene::getVolatileChildren() const {
     return m_volatileActors;
 }
 
