@@ -42,6 +42,9 @@ std::string readFileContents(std::string filename, std::ios_base::openmode mode 
     std::string result(size, '\0');
     stream.read(&result[0], size);
 
+    if (!(mode & std::ios::binary))
+        unixifyLineEndings(result);
+
     return result;
 }
 
@@ -65,3 +68,9 @@ std::string getProcessDirectory() {
     return res.substr(0, res.find_last_of('/') + 1);
 }
 #endif
+
+void unixifyLineEndings(std::string &text) {
+    std::string::size_type pos = 0;
+    while ((pos = text.find("\r\n", pos)) != std::string::npos )
+        text.erase(pos, 1);
+}
