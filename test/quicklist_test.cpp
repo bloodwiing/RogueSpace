@@ -8,6 +8,8 @@
 using namespace testing;
 
 TEST(QuickList, AddingElements) {
+    using Utility::QuickList;
+
     QuickList<int> list(16);
 
     ASSERT_EQ(list.getSize(), 0);
@@ -24,6 +26,8 @@ TEST(QuickList, AddingElements) {
 }
 
 TEST(QuickList, AccessingElements) {
+    using Utility::QuickList;
+
     QuickList<int> list;
 
     auto index_15 = list.add(15);
@@ -38,6 +42,8 @@ TEST(QuickList, AccessingElements) {
 }
 
 TEST(QuickList, RemovingElements) {
+    using Utility::QuickList;
+
     QuickList<char> list;
 
     auto index_a = list.add('a');
@@ -76,6 +82,8 @@ TEST(QuickList, RemovingElements) {
 }
 
 TEST(QuickList, ExpandingCapacity) {
+    using Utility::QuickList;
+
     QuickList<char> list(5);
 
     ASSERT_EQ(list.getCapacity(), 5);
@@ -97,6 +105,8 @@ TEST(QuickList, ExpandingCapacity) {
 }
 
 TEST(QuickList, ToString) {
+    using Utility::QuickList;
+
     QuickList<std::string> list;
 
     list.add("Apple");
@@ -116,6 +126,8 @@ TEST(QuickList, ToString) {
 }
 
 TEST(QuickList, Iterator) {
+    using Utility::QuickList;
+
     QuickList<int> list;
 
     list.add(1000);
@@ -130,6 +142,8 @@ TEST(QuickList, Iterator) {
 }
 
 TEST(QuickList, IteratorAlgorithms) {
+    using Utility::QuickList;
+
     QuickList<int> list;
 
     list.add(111);
@@ -157,6 +171,8 @@ TEST(QuickList, IteratorAlgorithms) {
 }
 
 TEST(QuickList, SafeRemove) {
+    using Utility::QuickList;
+
     QuickList<int> list;
 
     list.add(321);

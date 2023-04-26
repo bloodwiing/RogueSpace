@@ -5,44 +5,46 @@
 
 #include "engine/time.hpp"
 
-std::string Actor::getTypeName() const {
+namespace Actors = Engine::Actors;
+
+std::string Actors::Actor::getTypeName() const {
     return "Actor";
 }
 
-Actor::Actor(Scene *scene, ActorBase *parent, std::string name)
+Actors::Actor::Actor(Engine::Scene *scene, ActorBase *parent, std::string name)
     : ActorBase(scene, parent, name)
     , m_scene(scene)
     , m_dead(false)
 { }
 
-Scene *Actor::getScene() const {
+Engine::Scene *Actors::Actor::getScene() const {
     return m_scene;
 }
 
-bool Actor::isDead() const {
+bool Actors::Actor::isDead() const {
     return m_dead;
 }
 
-glm::vec3 Actor::getTranslation() const {
+glm::vec3 Actors::Actor::getTranslation() const {
     return glm::vec3(0.0f);
 }
 
-glm::quat Actor::getRotation() const {
+glm::quat Actors::Actor::getRotation() const {
     return {1.0f, 0.0f, 0.0f, 0.0f};
 }
 
-glm::vec3 Actor::getScale() const {
+glm::vec3 Actors::Actor::getScale() const {
     return glm::vec3(1.0f);
 }
 
-void Actor::markDead(float wait /* = -1.0f */) {
+void Actors::Actor::markDead(float wait /* = -1.0f */) {
     if (wait <= 0.0f)
         m_dead = true;
     else
         m_deathTimer = wait;
 }
 
-void Actor::update() {
+void Actors::Actor::update() {
     if (m_deathTimer >= 0.0f) {
         m_deathTimer -= Time::getDeltaFloat();
         if (m_deathTimer <= 0.0f) {
@@ -53,7 +55,7 @@ void Actor::update() {
     ActorBase::update();
 }
 
-void Actor::draw(Shader& shader) {
+void Actors::Actor::draw(Graphics::Shader& shader) {
     for (auto& [name, child] : m_children) {
         if (child.value != nullptr)
             child.value->draw(shader);

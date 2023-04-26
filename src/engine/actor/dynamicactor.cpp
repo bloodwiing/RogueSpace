@@ -2,15 +2,17 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 
-std::string DynamicActor::getTypeName() const {
+namespace Actors = Engine::Actors;
+
+std::string Actors::DynamicActor::getTypeName() const {
     return "DynamicActor";
 }
 
-DynamicActor::DynamicActor(Scene* scene, ActorBase* parent, std::string name)
+Actors::DynamicActor::DynamicActor(Scene* scene, ActorBase* parent, std::string name)
     : Actor(scene, parent, name)
 { }
 
-void DynamicActor::update() {
+void Actors::DynamicActor::update() {
     if (m_needsMatrixUpdate) {
         auto trans = glm::translate(glm::mat4(1.0f), getTranslation());
         auto rot = glm::mat4_cast(getRotation());
@@ -29,38 +31,38 @@ void DynamicActor::update() {
     Actor::update();
 }
 
-glm::vec3 DynamicActor::getTranslation() const {
+glm::vec3 Actors::DynamicActor::getTranslation() const {
     return m_translation;
 }
 
-glm::quat DynamicActor::getRotation() const {
+glm::quat Actors::DynamicActor::getRotation() const {
     return m_rotation;
 }
 
-glm::vec3 DynamicActor::getScale() const {
+glm::vec3 Actors::DynamicActor::getScale() const {
     return m_scale;
 }
 
-glm::mat4 DynamicActor::getWorldMatrix() const {
+glm::mat4 Actors::DynamicActor::getWorldMatrix() const {
     return m_worldMatrix;
 }
 
-void DynamicActor::setTranslation(const glm::vec3 &tra) {
+void Actors::DynamicActor::setTranslation(const glm::vec3 &tra) {
     m_translation = tra;
     flagForMatrixUpdate();
 }
 
-void DynamicActor::setRotation(const glm::quat &rot) {
+void Actors::DynamicActor::setRotation(const glm::quat &rot) {
     m_rotation = rot;
     flagForMatrixUpdate();
 }
 
-void DynamicActor::setScale(const glm::vec3 &sca) {
+void Actors::DynamicActor::setScale(const glm::vec3 &sca) {
     m_scale = sca;
     flagForMatrixUpdate();
 }
 
-void DynamicActor::setMatrix(const glm::mat4 &mat) {
+void Actors::DynamicActor::setMatrix(const glm::mat4 &mat) {
     glm::vec3 skew;
     glm::vec4 perspective;
     glm::decompose(mat, m_scale, m_rotation, m_translation, skew,perspective);
@@ -68,21 +70,21 @@ void DynamicActor::setMatrix(const glm::mat4 &mat) {
     flagForMatrixUpdate();
 }
 
-void DynamicActor::translate(const glm::vec3 &tra) {
+void Actors::DynamicActor::translate(const glm::vec3 &tra) {
     m_translation += tra;
     flagForMatrixUpdate();
 }
 
-void DynamicActor::rotate(const glm::quat &rot) {
+void Actors::DynamicActor::rotate(const glm::quat &rot) {
     m_rotation = glm::normalize(m_rotation * rot);
     flagForMatrixUpdate();
 }
 
-void DynamicActor::scale(const glm::vec3 &sca) {
+void Actors::DynamicActor::scale(const glm::vec3 &sca) {
     m_scale *= sca;
     flagForMatrixUpdate();
 }
 
-void DynamicActor::flagForMatrixUpdate() {
+void Actors::DynamicActor::flagForMatrixUpdate() {
     m_needsMatrixUpdate = true;
 }

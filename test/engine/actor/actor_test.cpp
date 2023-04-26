@@ -10,6 +10,8 @@
 using namespace testing;
 
 TEST(Actor, childNaming) {
+    using Engine::Actors::Actor;
+
     auto* actor = new Actor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<Actor>("Child1");
@@ -33,6 +35,9 @@ TEST(Actor, childNaming) {
 }
 
 TEST(Actor, childLifeCycle) {
+    using Engine::Actors::Actor;
+    using Engine::Time;
+
     auto* actor = new Actor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<Actor>("Child1");
@@ -72,9 +77,9 @@ TEST(Actor, childLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public Actor {
+class RecursionTest : public Engine::Actors::Actor {
 public:
-    RecursionTest(Scene* scene, ActorBase* actor, std::string name)
+    RecursionTest(Engine::Scene* scene, ActorBase* actor, std::string name)
         : Actor(scene, actor, std::move(name))
     { }
 
@@ -82,17 +87,19 @@ public:
         throw RecursionTestSuccess();
     }
 
-    void draw(Shader &shader) override {
+    void draw(Graphics::Shader &shader) override {
         throw RecursionTestSuccess();
     }
 };
 
 TEST(Actor, recursion) {
+    using Engine::Actors::Actor;
+
     auto* actor = new Actor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<RecursionTest>("Child1");
 
-    Shader shader;
+    Graphics::Shader shader;
 
     ASSERT_THROW(actor->update(), RecursionTestSuccess);
     ASSERT_THROW(actor->draw(shader), RecursionTestSuccess);

@@ -3,70 +3,72 @@
 
 #include "actor.hpp"
 
-/// \brief          A Transformable subclass of Actor.
-/// \details        This Actor is able to be Translated, Rotated and Scaled.
-///                 Any transformation will mark itself and its children for a Matrix update
-class DynamicActor : public Actor {
-public:
-    /// \note           Should not be used raw, please use addChild
-    /// \param scene    Containing Scene of the Actor node
-    /// \param parent   Parent of the Actor node
-    /// \param name     Name of the Actor node
-    /// \see            Scene#addChild
-    /// \see            Actor#addChild
-    DynamicActor(Scene* scene, ActorBase* parent, std::string name);
+namespace Engine::Actors {
+    /// \brief          A Transformable subclass of Actor.
+    /// \details        This Actor is able to be Translated, Rotated and Scaled.
+    ///                 Any transformation will mark itself and its children for a Matrix update
+    class DynamicActor : public Actor {
+    public:
+        /// \note           Should not be used raw, please use addChild
+        /// \param scene    Containing Scene of the Actor node
+        /// \param parent   Parent of the Actor node
+        /// \param name     Name of the Actor node
+        /// \see            Scene#addChild
+        /// \see            Actor#addChild
+        DynamicActor(Scene* scene, ActorBase* parent, std::string name);
 
-    void update() override;
+        void update() override;
 
-    [[nodiscard]] glm::vec3 getTranslation() const override;
-    [[nodiscard]] glm::quat getRotation() const override;
-    [[nodiscard]] glm::vec3 getScale() const override;
+        [[nodiscard]] glm::vec3 getTranslation() const override;
+        [[nodiscard]] glm::quat getRotation() const override;
+        [[nodiscard]] glm::vec3 getScale() const override;
 
-    [[nodiscard]] glm::mat4 getWorldMatrix() const override;
+        [[nodiscard]] glm::mat4 getWorldMatrix() const override;
 
-    void setTranslation(const glm::vec3& tra) override;
-    void setRotation(const glm::quat& rot) override;
-    void setScale(const glm::vec3& sca) override;
-    /// \brief          A function to disassemble a <u>relative</u> Transformation matrix and
-    ///                 apply its individual components.
-    /// \param mat      The Relative Transformation Matrix to process
-    void setMatrix(const glm::mat4& mat);
+        void setTranslation(const glm::vec3& tra) override;
+        void setRotation(const glm::quat& rot) override;
+        void setScale(const glm::vec3& sca) override;
+        /// \brief          A function to disassemble a <u>relative</u> Transformation matrix and
+        ///                 apply its individual components.
+        /// \param mat      The Relative Transformation Matrix to process
+        void setMatrix(const glm::mat4& mat);
 
-    /// \brief          A helper function to offset the current Translation with the given vector.
-    /// \details        The provided value is added onto the current Translation of the Actor
-    ///                 and then it is marked for a Matrix update.
-    /// \param tra      The Translation change
-    void translate(const glm::vec3& tra);
-    /// \brief          A helper function to offset the current Rotation with the given vector.
-    /// \details        The provided value is multiplied with the current Rotation of the Actor
-    ///                 and then it is marked for a Matrix update.
-    /// \param rot      The Rotation change
-    void rotate(const glm::quat& rot);
-    /// \brief          A helper function to offset the current Scale with the given vector.
-    /// \details        The provided value is multiplied with the current Scale of the Actor
-    ///                 and then it is marked for a Matrix update.
-    /// \param sca      The Scale change
-    void scale(const glm::vec3& sca);
+        /// \brief          A helper function to offset the current Translation with the given vector.
+        /// \details        The provided value is added onto the current Translation of the Actor
+        ///                 and then it is marked for a Matrix update.
+        /// \param tra      The Translation change
+        void translate(const glm::vec3& tra);
+        /// \brief          A helper function to offset the current Rotation with the given vector.
+        /// \details        The provided value is multiplied with the current Rotation of the Actor
+        ///                 and then it is marked for a Matrix update.
+        /// \param rot      The Rotation change
+        void rotate(const glm::quat& rot);
+        /// \brief          A helper function to offset the current Scale with the given vector.
+        /// \details        The provided value is multiplied with the current Scale of the Actor
+        ///                 and then it is marked for a Matrix update.
+        /// \param sca      The Scale change
+        void scale(const glm::vec3& sca);
 
-    /// \brief          Marks the element as pending for a Matrix recalculation.
-    void flagForMatrixUpdate();
+        /// \brief          Marks the element as pending for a Matrix recalculation.
+        void flagForMatrixUpdate();
 
-protected:
-    [[nodiscard]] std::string getTypeName() const override;
+    protected:
+        [[nodiscard]] std::string getTypeName() const override;
 
-private:
-    /// The relative Translation of the Actor
-    glm::vec3 m_translation = glm::vec3(0.0f);
-    /// The relative Rotation of the Actor
-    glm::quat m_rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    /// The relative Scale of the Actor
-    glm::vec3 m_scale = glm::vec3(1.0f);
+    private:
+        /// The relative Translation of the Actor
+        glm::vec3 m_translation = glm::vec3(0.0f);
+        /// The relative Rotation of the Actor
+        glm::quat m_rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+        /// The relative Scale of the Actor
+        glm::vec3 m_scale = glm::vec3(1.0f);
 
-    /// The calculated and cached Matrix after being applied from Parent and relative Transformations
-    glm::mat4 m_worldMatrix = glm::mat4(1.0f);
+        /// The calculated and cached Matrix after being applied from Parent and relative Transformations
+        glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 
-    /// Marks that m_worldMatrix needs a recalculation during the next ActorBase#update
-    bool m_needsMatrixUpdate = false;
-};
+        /// Marks that m_worldMatrix needs a recalculation during the next ActorBase#update
+        bool m_needsMatrixUpdate = false;
+    };
+}
 
 #endif //DYNAMIC_ACTOR_CLASS_H

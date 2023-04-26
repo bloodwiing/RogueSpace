@@ -10,12 +10,15 @@
 using namespace testing;
 
 TEST(PhysicsActor, applyLinearVelocity) {
+    using Engine::Time;
+    using Engine::Actors::PhysicsActor;
+
     Time::init();
 
-    DynamicActor actor(nullptr, nullptr, "");
+    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
-    Time::setDelta(TDoubleSec(0.5));
+    Time::setDelta(Time::TDoubleSec(0.5));
 
     glm::vec3 linearVelocity(10.0, -8.0, 4.0);
 
@@ -32,12 +35,15 @@ TEST(PhysicsActor, applyLinearVelocity) {
 }
 
 TEST(PhysicsActor, applyAngularVelocity) {
+    using Engine::Time;
+    using Engine::Actors::PhysicsActor;
+
     Time::init();
 
-    DynamicActor actor(nullptr, nullptr, "");
+    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
-    Time::setDelta(TDoubleSec(0.5));
+    Time::setDelta(Time::TDoubleSec(0.5));
 
     glm::vec3 angularVelocity(glm::pi<float>(), 0.0, -glm::pi<float>());
 
@@ -53,12 +59,15 @@ TEST(PhysicsActor, applyAngularVelocity) {
 }
 
 TEST(PhysicsActor, diminishVelocity) {
+    using Engine::Time;
+    using Engine::Actors::PhysicsActor;
+
     Time::init();
 
-    DynamicActor actor(nullptr, nullptr, "");
+    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
-    Time::setDelta(TDoubleSec(0.5));
+    Time::setDelta(Time::TDoubleSec(0.5));
 
     glm::vec3 linearVelocity(10.0, -8.0, 4.0);
 
@@ -76,6 +85,8 @@ TEST(PhysicsActor, diminishVelocity) {
 }
 
 TEST(PhysicsActor, isVectorZero) {
+    using Engine::Actors::PhysicsActor;
+
     ASSERT_TRUE(PhysicsActor::isVectorZero(glm::vec3(0.0, 0.0, 0.0)));
 
     ASSERT_FALSE(PhysicsActor::isVectorZero(glm::vec3(1.0, 0.0, 0.0)));

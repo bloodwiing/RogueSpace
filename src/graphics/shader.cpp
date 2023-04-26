@@ -3,10 +3,10 @@
 #include "graphics/shader.hpp"
 #include "utils.hpp"
 
-GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {
+GLuint Graphics::Shader::loadShaderFile(const std::string &file_name, GLenum type) {
     GLuint id = glCreateShader(type);
 
-    const std::string vertex_source = readFileContents(file_name);
+    const std::string vertex_source = Utility::readFileContents(file_name);
     const char* vertex_code = vertex_source.c_str();
 
     glShaderSource(id, 1, &vertex_code, nullptr);
@@ -15,12 +15,12 @@ GLuint Shader::loadShaderFile(const std::string &file_name, GLenum type) {
     return id;
 }
 
-Shader::Shader()
+Graphics::Shader::Shader()
     : m_ID(0)
     , m_error(true)
 { }
 
-Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
+Graphics::Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
     : m_error(false)
 {
     GLuint vertID = loadShaderFile(vertex_file, GL_VERTEX_SHADER);
@@ -40,17 +40,17 @@ Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
     checkProgramErrors();
 }
 
-void Shader::activate() {
+void Graphics::Shader::activate() {
     glUseProgram(m_ID);
 }
 
-void Shader::destroy() {
+void Graphics::Shader::destroy() {
     glDeleteProgram(m_ID);
 }
 
 #define ERROR_MESSAGE_LEN 1024
 
-void Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file) {
+void Graphics::Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file) {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
     glGetShaderiv(shaderID, GL_COMPILE_STATUS, &status);
@@ -61,7 +61,7 @@ void Shader::checkShaderErrors(GLuint shaderID, const std::string &type, const s
     }
 }
 
-void Shader::checkProgramErrors() {
+void Graphics::Shader::checkProgramErrors() {
     GLint status;
     GLchar infoLog[ERROR_MESSAGE_LEN];
     glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
@@ -73,14 +73,14 @@ void Shader::checkProgramErrors() {
     }
 }
 
-bool Shader::isErrored() const {
+bool Graphics::Shader::isErrored() const {
     return m_error;
 }
 
-GLuint Shader::getID() const {
+GLuint Graphics::Shader::getID() const {
     return m_ID;
 }
 
-GLint Shader::getUniform(const char *uniform) {
+GLint Graphics::Shader::getUniform(const char *uniform) {
     return glGetUniformLocation(m_ID, uniform);
 }

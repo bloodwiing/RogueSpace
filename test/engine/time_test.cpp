@@ -9,6 +9,8 @@
 using namespace testing;
 
 TEST(Time, update) {
+    using Engine::Time;
+
     Time::init();
     Time::update();
 
@@ -27,6 +29,8 @@ TEST(Time, update) {
 }
 
 TEST(Time, setMaxFramerate) {
+    using Engine::Time;
+
     Time::init();
     Time::update();
 
@@ -47,6 +51,8 @@ TEST(Time, setMaxFramerate) {
 }
 
 TEST(Time, waitForNextFrame) {
+    using Engine::Time;
+
     Time::init();
 
     Time::setMaxFramerate(0);

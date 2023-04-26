@@ -8,68 +8,73 @@
 
 #include "quicklist.hpp"
 
-class Camera;
+namespace Graphics {
+    class Camera;
+}
 
-/// \brief          The main container for every Actor node
-/// \details        This is the main or "root" node of every Hierarchy
-class Scene : public ActorBase {
-public:
-    Scene();
+namespace Engine {
 
-    template<class T>
-    T* addChild(std::string name);
-    template<class T, class... Args>
-    T* addChild(std::string name, Args&&... args);
+    /// \brief          The main container for every Actor node
+    /// \details        This is the main or "root" node of every Hierarchy
+    class Scene : public Actors::ActorBase {
+    public:
+        Scene();
 
-    /// \brief          Returns the QuickList of Volatile Actors
-    [[nodiscard]] QuickList<std::shared_ptr<ActorBase>> getVolatileChildren() const;
+        template<class T>
+        T* addChild(std::string name);
+        template<class T, class... Args>
+        T* addChild(std::string name, Args&&... args);
 
-    /// \brief          Creates a new Volatile Child under this Parent Actor
-    /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
-    ///                 needs to be spawned and destroyed frequently.
-    /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-    /// \param name     Name of the Actor node
-    /// \return         A pointer to the newly created Actor
-    template<class T>
-    T* addVolatileChild(std::string name);
-    /// \brief          Creates a new Volatile Child under this Parent Actor
-    /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
-    ///                 needs to be spawned and destroyed frequently.
-    /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-    /// \param name     Name of the Actor node
-    /// \param args     The list of extra arguments to pass when creating the Actor
-    /// \return         A pointer to the newly created Actor
-    template<class T, class... Args>
-    T* addVolatileChild(std::string name, Args&&... args);
+        /// \brief          Returns the QuickList of Volatile Actors
+        [[nodiscard]] Utility::QuickList<std::shared_ptr<ActorBase>> getVolatileChildren() const;
 
-    void update() override;
-    void draw(Shader &shader) override;
+        /// \brief          Creates a new Volatile Child under this Parent Actor
+        /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
+        ///                 needs to be spawned and destroyed frequently.
+        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
+        /// \param name     Name of the Actor node
+        /// \return         A pointer to the newly created Actor
+        template<class T>
+        T* addVolatileChild(std::string name);
+        /// \brief          Creates a new Volatile Child under this Parent Actor
+        /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
+        ///                 needs to be spawned and destroyed frequently.
+        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
+        /// \param name     Name of the Actor node
+        /// \param args     The list of extra arguments to pass when creating the Actor
+        /// \return         A pointer to the newly created Actor
+        template<class T, class... Args>
+        T* addVolatileChild(std::string name, Args&&... args);
 
-    /// \return         The flag if Debug Free Flight is enabled
-    [[nodiscard]] bool isInFreeFlight() const;
+        void update() override;
+        void draw(Graphics::Shader &shader) override;
 
-protected:
-    [[nodiscard]] std::string getTypeName() const override;
+        /// \return         The flag if Debug Free Flight is enabled
+        [[nodiscard]] bool isInFreeFlight() const;
 
-private:
-    /// Pre-set name of Scene's Hierarchy name
-    static std::string m_hierarchyDisplayName;
+    protected:
+        [[nodiscard]] std::string getTypeName() const override;
 
-    /// QuickList of Volatile Actors
-    QuickList<std::shared_ptr<ActorBase>> m_volatileActors;
+    private:
+        /// Pre-set name of Scene's Hierarchy name
+        static std::string m_hierarchyDisplayName;
 
-    // ----- Free Fly toggle -----
+        /// QuickList of Volatile Actors
+        Utility::QuickList<std::shared_ptr<ActorBase>> m_volatileActors;
 
-    /// A flag that check if Free Fly is enabled
-    bool m_freeFly;
-    /// The Free Fly Camera
-    Camera* m_freeFlyCamera;
+        // ----- Free Fly toggle -----
 
-    /// Check that stops F2 from calling code more than once during a state change
-    bool m_f2Held = false;
-    /// The previous Camera that was just unassigned when switched to Free Fly
-    Camera* m_prevCamera = nullptr;
-};
+        /// A flag that check if Free Fly is enabled
+        bool m_freeFly;
+        /// The Free Fly Camera
+        Graphics::Camera* m_freeFlyCamera;
+
+        /// Check that stops F2 from calling code more than once during a state change
+        bool m_f2Held = false;
+        /// The previous Camera that was just unassigned when switched to Free Fly
+        Graphics::Camera* m_prevCamera = nullptr;
+    };
+}
 
 #include "scene_impl.tpp"
 

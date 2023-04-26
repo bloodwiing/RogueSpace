@@ -2,7 +2,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material)
+Graphics::Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material)
     : m_vertices(vertices)
     , m_indices(indices)
     , m_material(material)
@@ -23,7 +23,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material
     EBO.unbind();
 }
 
-void Mesh::draw(
+void Graphics::Mesh::draw(
         Shader& shader,
         Camera* camera,
         glm::mat4 relative /* = glm::mat4(1.0f) */,

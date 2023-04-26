@@ -4,10 +4,10 @@
 
 #include <glad/glad.h>
 
-Window* Window::m_active = nullptr;
-bool Window::m_wasGLLoaded = false;
+Graphics::Window* Graphics::Window::m_active = nullptr;
+bool Graphics::Window::m_wasGLLoaded = false;
 
-Window::Window(int width, int height)
+Graphics::Window::Window(int width, int height)
     : m_width(width)
     , m_height(height)
 {
@@ -16,11 +16,11 @@ Window::Window(int width, int height)
         throw std::runtime_error("Failed to create window");
 }
 
-Window::~Window() {
+Graphics::Window::~Window() {
     glfwDestroyWindow(m_glWindow);
 }
 
-void Window::activate() {
+void Graphics::Window::activate() {
     m_active = this;
     glfwMakeContextCurrent(m_glWindow);
     if (!m_wasGLLoaded) {
@@ -30,11 +30,11 @@ void Window::activate() {
     glViewport(0, 0, m_width, m_height);
 }
 
-Window* Window::getActive() {
+Graphics::Window* Graphics::Window::getActive() {
     return m_active;
 }
 
-void Window::updateSize(int width, int height) {
+void Graphics::Window::updateSize(int width, int height) {
     glfwSetWindowSize(m_glWindow, width, height);
     if (m_active == this)
         glViewport(0, 0, width, height);
@@ -42,59 +42,59 @@ void Window::updateSize(int width, int height) {
     m_height = height;
 }
 
-int Window::getWidth() const {
+int Graphics::Window::getWidth() const {
     return m_width;
 }
 
-int Window::getHeight() const {
+int Graphics::Window::getHeight() const {
     return m_height;
 }
 
-float Window::getAspectRatio() const {
+float Graphics::Window::getAspectRatio() const {
     return (float)m_width / (float)m_height;
 }
 
-GLFWwindow *Window::getWindow() const {
+GLFWwindow *Graphics::Window::getWindow() const {
     return m_glWindow;
 }
 
-void Window::swapBuffers() const {
+void Graphics::Window::swapBuffers() const {
     if (m_glWindow == nullptr)
         return;
     glfwSwapBuffers(m_glWindow);
 }
 
-void Window::close() {
+void Graphics::Window::close() {
     if (m_glWindow == nullptr)
         return;
     glfwSetWindowShouldClose(m_glWindow, true);
 }
 
-bool Window::isClosing() const {
+bool Graphics::Window::isClosing() const {
     if (m_glWindow == nullptr)
         return false;
     return glfwWindowShouldClose(m_glWindow);
 }
 
-bool Window::isKey(int key, int state) const {
+bool Graphics::Window::isKey(int key, int state) const {
     if (m_glWindow == nullptr)
         return false;
     return glfwGetKey(m_glWindow, key) == state;
 }
 
-bool Window::isMouse(int button, int state) const {
+bool Graphics::Window::isMouse(int button, int state) const {
     if (m_glWindow == nullptr)
         return false;
     return glfwGetMouseButton(m_glWindow, button) == state;
 }
 
-void Window::resetMouse() const {
+void Graphics::Window::resetMouse() const {
     if (m_glWindow == nullptr)
         return;
     glfwSetCursorPos(m_glWindow, (float)m_width / 2, (float)m_height / 2);
 }
 
-void Window::getAbsoluteMouse(int &x, int &y) const {
+void Graphics::Window::getAbsoluteMouse(int &x, int &y) const {
     if (m_glWindow == nullptr)
         return;
     double mouseX, mouseY;
@@ -103,7 +103,7 @@ void Window::getAbsoluteMouse(int &x, int &y) const {
     y = (int)mouseY;
 }
 
-void Window::getRelativeMouse(double &x, double &y) const {
+void Graphics::Window::getRelativeMouse(double &x, double &y) const {
     if (m_glWindow == nullptr)
         return;
     glfwGetCursorPos(m_glWindow, &x, &y);

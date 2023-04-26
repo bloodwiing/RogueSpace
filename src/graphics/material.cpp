@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Material::Material(std::string& name)
+Graphics::Material::Material(std::string& name)
     : m_name(std::move(name))
     , m_diffuseFactor(1.0)
     , m_metallicFactor(1.0)
@@ -11,11 +11,11 @@ Material::Material(std::string& name)
 
 }
 
-std::string Material::getName() const {
+std::string Graphics::Material::getName() const {
     return m_name;
 }
 
-void Material::setDiffuse0(Texture texture, uint8_t texCoord) {
+void Graphics::Material::setDiffuse0(Texture texture, uint8_t texCoord) {
     m_diffuse0 = (TextureRef){
         .enabled = true,
         .texture = texture,
@@ -23,11 +23,11 @@ void Material::setDiffuse0(Texture texture, uint8_t texCoord) {
     };
 }
 
-void Material::setDiffuseFactor(glm::vec4 factor) {
+void Graphics::Material::setDiffuseFactor(glm::vec4 factor) {
     m_diffuseFactor = factor;
 }
 
-void Material::apply(Shader &shader) const {
+void Graphics::Material::apply(Shader &shader) const {
     if (shader.isErrored())
         return;
 

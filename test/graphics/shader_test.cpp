@@ -9,7 +9,9 @@
 TEST(Shader, LoadCompilable) {
     return;  // Disable test due to missing Headless X11 support
 
-    ASSERT_NO_THROW(initializeOpenGL());
+    ASSERT_NO_THROW(Utility::initializeOpenGL());
+
+    using namespace Graphics;
 
     Window window(100, 100);
     window.activate();
@@ -20,7 +22,9 @@ TEST(Shader, LoadCompilable) {
 TEST(Shader, LoadNotCompilable) {
     return;  // Disable test due to missing Headless X11 support
 
-    ASSERT_NO_THROW(initializeOpenGL());
+    ASSERT_NO_THROW(Utility::initializeOpenGL());
+
+    using namespace Graphics;
 
     Window window(100, 100);
     window.activate();

@@ -12,7 +12,7 @@ void glfwErrorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
 };
 
-void initializeOpenGL() {
+void Utility::initializeOpenGL() {
     glfwSetErrorCallback(glfwErrorCallback);
     if (glfwInit() == GLFW_FALSE) {
         return;
@@ -23,7 +23,7 @@ void initializeOpenGL() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-std::string readFileContents(std::string filename, std::ios_base::openmode mode /* = std::ios_base::in */) {
+std::string Utility::readFileContents(std::string filename, std::ios_base::openmode mode /* = std::ios_base::in */) {
 #if _WIN32
     if (filename.find(':') == std::string::npos)
         filename = getProcessDirectory() + filename;
@@ -52,7 +52,7 @@ std::string readFileContents(std::string filename, std::ios_base::openmode mode 
 
 #if _WIN32
 #include <windows.h>
-std::string getProcessDirectory() {
+std::string Utility::getProcessDirectory() {
     char path[MAX_PATH];
     std::string res(path, GetModuleFileName(nullptr, path, MAX_PATH));
     std::replace(res.begin(), res.end(), '\\', '/');
@@ -61,7 +61,7 @@ std::string getProcessDirectory() {
 #elif __unix__
 #include <climits>
 #include <unistd.h>
-std::string getProcessDirectory() {
+std::string Utility::getProcessDirectory() {
     char path[PATH_MAX];
     ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
     std::string res(path, (count > 0) ? count : 0);
@@ -69,7 +69,7 @@ std::string getProcessDirectory() {
 }
 #endif
 
-void unixifyLineEndings(std::string &text) {
+void Utility::unixifyLineEndings(std::string &text) {
     std::string::size_type pos = 0;
     while ((pos = text.find("\r\n", pos)) != std::string::npos )
         text.erase(pos, 1);

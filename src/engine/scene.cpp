@@ -5,28 +5,28 @@
 #include "graphics/camera.hpp"
 #include "graphics/window.hpp"
 
-std::string Scene::m_hierarchyDisplayName = "root";
+std::string Engine::Scene::m_hierarchyDisplayName = "root";
 
-std::string Scene::getTypeName() const {
+std::string Engine::Scene::getTypeName() const {
     return "Scene";
 }
 
-Scene::Scene()
+Engine::Scene::Scene()
     : ActorBase(nullptr, nullptr, m_hierarchyDisplayName)
     , m_freeFly(false)
-    , m_freeFlyCamera(new Camera(this, nullptr, "root_freeFlyCamera"))
+    , m_freeFlyCamera(new Graphics::Camera(this, nullptr, "root_freeFlyCamera"))
 { }
 
-QuickList<std::shared_ptr<ActorBase>> Scene::getVolatileChildren() const {
+Utility::QuickList<std::shared_ptr<Engine::Actors::ActorBase>> Engine::Scene::getVolatileChildren() const {
     return m_volatileActors;
 }
 
-void Scene::update() {
+void Engine::Scene::update() {
     if (!m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;
 
         if (!m_freeFly) {
-            m_prevCamera = Camera::getActiveCamera();
+            m_prevCamera = Graphics::Camera::getActiveCamera();
             m_freeFlyCamera->copyOrientation(m_prevCamera, false);
             m_freeFlyCamera->setMatrix(m_prevCamera->getWorldMatrix());
             m_freeFlyCamera->setActive();
@@ -70,7 +70,7 @@ void Scene::update() {
     }
 }
 
-void Scene::draw(Shader &shader) {
+void Engine::Scene::draw(Graphics::Shader &shader) {
     ActorBase::draw(shader);
 
     for (const auto& child : m_volatileActors) {
@@ -79,6 +79,6 @@ void Scene::draw(Shader &shader) {
     }
 }
 
-bool Scene::isInFreeFlight() const {
+bool Engine::Scene::isInFreeFlight() const {
     return m_freeFly;
 }
