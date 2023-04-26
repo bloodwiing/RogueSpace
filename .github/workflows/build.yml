@@ -9,8 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
+      - uses: actions/checkout@v2
+
       - name: Enabling caching of previously compiled objects
         uses: actions/cache@v3
         with:
@@ -30,6 +32,10 @@ jobs:
       - uses: lukka/get-cmake@latest
       # Or pin to a specific CMake version:
       # lukka/get-cmake@v3.21.2
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
 
       - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
         uses: lukka/run-cmake@v10
