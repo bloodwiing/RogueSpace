@@ -1,0 +1,53 @@
+name: CMake Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Enable Cache
+        uses: actions/cache@v3
+        with:
+          key: build-cache
+          path: |
+            bin/CMakeFiles
+            bin/lib
+            bin/test/CMakeFiles
+            bin/test/googlemock
+            bin/test/googletest
+            bin/.ninja_deps
+            bin/.ninja_log
+            bin/build.ninja
+            bin/CMakeCache.txt
+
+      - name: Download APT packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: \
+            libx11-dev \
+            libxcursor-dev \
+            libxrandr2 \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxi-dev \
+            mesa-utils \
+            mesa-common-dev
+          version: 1.0
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Build and Test CMake executable
+        uses: lukka/run-cmake@v10
+        with:
+          workflowPreset: 'buildAndTest'
+

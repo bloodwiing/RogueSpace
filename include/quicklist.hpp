@@ -84,243 +84,246 @@
 #include <stdexcept>
 #include <algorithm>
 
-typedef size_t index_t;
+namespace Utility {
 
-/// A non-sorted quick write and deletion array.
-/// \tparam T The type of objects to store
-template<class T>
-class QuickList {
-public:
-    /// Value Type
-    typedef T value_type;
+    /// A non-sorted quick write and deletion array.
+    /// \tparam T The type of objects to store
+    template<class T>
+    class QuickList {
+    public:
 
-    /// QuickList constructor.<br>
-    /// Automatically manages the list entries
-    /// \param chunkSize The size of a chunk of elements. The List expands by this increment
-    explicit QuickList(size_t chunkSize = 8)
-        : chunkSize(chunkSize)
-        , capacity(chunkSize)
-        , size(0)
-        , entries(chunkSize)
-        , nextFree(0)
-    { }
-    /// QuickList Copy constructor.<br>
-    /// Creates a copy of the already existing list
-    /// \param ref A reference to the constructor to copy
-    QuickList(const QuickList<T>& ref)
-        : chunkSize(ref.chunkSize)
-        , capacity(ref.capacity)
-        , size(ref.size)
-        , entries(ref.entries)
-        , nextFree(ref.nextFree)
-    { }
+        typedef size_t index_t;
+        /// Value Type
+        typedef T value_type;
 
-    /// Insert an element into the QuickList.<br>
-    /// To access this element in the list, please use the returned index, which is picked vacant
-    /// and cannot be chosen manually
-    /// \param value The value of the element to insert
-    /// \return The reserved index of the value
-    index_t add(const T& value) {
-        expandIfNeeded();
+        /// QuickList constructor.<br>
+        /// Automatically manages the list entries
+        /// \param chunkSize The size of a chunk of elements. The List expands by this increment
+        explicit QuickList(size_t chunkSize = 8)
+                : chunkSize(chunkSize)
+                , capacity(chunkSize)
+                , size(0)
+                , entries(chunkSize)
+                , nextFree(0)
+        { }
+        /// QuickList Copy constructor.<br>
+        /// Creates a copy of the already existing list
+        /// \param ref A reference to the constructor to copy
+        QuickList(const QuickList<T>& ref)
+                : chunkSize(ref.chunkSize)
+                , capacity(ref.capacity)
+                , size(ref.size)
+                , entries(ref.entries)
+                , nextFree(ref.nextFree)
+        { }
 
-        Entry& targetElem = entries[nextFree];
-        index_t targetIndex = nextFree;
+        /// Insert an element into the QuickList.<br>
+        /// To access this element in the list, please use the returned index, which is picked vacant
+        /// and cannot be chosen manually
+        /// \param value The value of the element to insert
+        /// \return The reserved index of the value
+        index_t add(const T& value) {
+            expandIfNeeded();
 
-        // next free slot has been untouched (has all zero values)
-        if (targetElem.next == -1) {
-            targetElem.next = nextFree + 1;
-            entries[targetElem.next].prev = nextFree;
+            Entry& targetElem = entries[nextFree];
+            index_t targetIndex = nextFree;
+
+            // next free slot has been untouched (has all zero values)
+            if (targetElem.next == -1) {
+                targetElem.next = nextFree + 1;
+                entries[targetElem.next].prev = nextFree;
+            }
+
+            targetElem.value = value;
+            targetElem.busy = true;
+            ++size;
+            nextFree = targetElem.next;
+
+            return targetIndex;
         }
 
-        targetElem.value = value;
-        targetElem.busy = true;
-        ++size;
-        nextFree = targetElem.next;
+        /// Read an element from the QuickList.<br>
+        /// Needs a reserved index that is returned when inserting an element
+        /// \param index The reserved index of the element
+        /// \return The element stored in the QuickList
+        [[nodiscard]] T& get(index_t index) {
+            if (index >= entries.capacity())
+                throw std::invalid_argument("Index is out of bounds");
 
-        return targetIndex;
-    }
+            if (!entries[index].busy)
+                throw std::runtime_error("Index does not contain an element");
 
-    /// Read an element from the QuickList.<br>
-    /// Needs a reserved index that is returned when inserting an element
-    /// \param index The reserved index of the element
-    /// \return The element stored in the QuickList
-    [[nodiscard]] T& get(index_t index) {
-        if (index >= entries.capacity())
-            throw std::invalid_argument("Index is out of bounds");
+            return entries[index].value;
+        }
 
-        if (!entries[index].busy)
-            throw std::runtime_error("Index does not contain an element");
+        /// Removes an element from the QuickList.<br>
+        /// Needs a reserved index that is returned when inserting an element<br>
+        /// <i>Do not use in the middle of a loop or iterator as it will overwrite the order of the elements</i><br>
+        /// <i>If you want to iterate over elements and remove them during an iteration, use the safeRemove() function of the iterator</i>
+        /// \param index The reserved index of the element
+        void remove(index_t index) {
+            if (index >= entries.capacity())
+                throw std::invalid_argument("Index is out of bounds");
 
-        return entries[index].value;
-    }
+            Entry& targetElem = entries[index];
+            Entry& nextFreeElem = entries[nextFree];
 
-    /// Removes an element from the QuickList.<br>
-    /// Needs a reserved index that is returned when inserting an element<br>
-    /// <i>Do not use in the middle of a loop or iterator as it will overwrite the order of the elements</i><br>
-    /// <i>If you want to iterate over elements and remove them during an iteration, use the safeRemove() function of the iterator</i>
-    /// \param index The reserved index of the element
-    void remove(index_t index) {
-        if (index >= entries.capacity())
-            throw std::invalid_argument("Index is out of bounds");
+            if (!targetElem.busy)
+                throw std::invalid_argument("Index does not contain an element");
 
-        Entry& targetElem = entries[index];
-        Entry& nextFreeElem = entries[nextFree];
+            // if it's the last element, we can keep the current chain, but just start from the beginning of it
+            if (targetElem.prev == -1 and size == 1) {
+                targetElem.busy = false;
+                --size;
+                nextFree = index;
+                return;
+            }
 
-        if (!targetElem.busy)
-            throw std::invalid_argument("Index does not contain an element");
+            // insert a free slot in the chain (if it isn't already)
+            index_t newPrev;
+            if (nextFreeElem.prev != index) {
+                entries[nextFreeElem.prev].next = index;
+                newPrev = nextFreeElem.prev;
+                nextFreeElem.prev = index;
+            } else {
+                newPrev = targetElem.prev;
+            }
 
-        // if it's the last element, we can keep the current chain, but just start from the beginning of it
-        if (targetElem.prev == -1 and size == 1) {
+            // move the busy slot ouf of the chain
+            if (targetElem.prev != -1)
+                entries[targetElem.prev].next = targetElem.next;
+            if (targetElem.next != -1)
+                entries[targetElem.next].prev = targetElem.prev;
+            targetElem.prev = newPrev;
+            targetElem.next = nextFree;
+
             targetElem.busy = false;
             --size;
+
             nextFree = index;
-            return;
         }
 
-        // insert a free slot in the chain (if it isn't already)
-        index_t newPrev;
-        if (nextFreeElem.prev != index) {
-            entries[nextFreeElem.prev].next = index;
-            newPrev = nextFreeElem.prev;
-            nextFreeElem.prev = index;
-        } else {
-            newPrev = targetElem.prev;
+        /// Current reserved capacity of the QuickList.<br>
+        /// A multiple of the chunkSize
+        [[nodiscard]] index_t getCapacity() const {
+            return capacity;
+        }
+        /// Count of elements stored in the QuickList.
+        [[nodiscard]] index_t getSize() const {
+            return size;
         }
 
-        // move the busy slot ouf of the chain
-        if (targetElem.prev != -1)
-            entries[targetElem.prev].next = targetElem.next;
-        if (targetElem.next != -1)
-            entries[targetElem.next].prev = targetElem.prev;
-        targetElem.prev = newPrev;
-        targetElem.next = nextFree;
-
-        targetElem.busy = false;
-        --size;
-
-        nextFree = index;
-    }
-
-    /// Current reserved capacity of the QuickList.<br>
-    /// A multiple of the chunkSize
-    [[nodiscard]] index_t getCapacity() const {
-        return capacity;
-    }
-    /// Count of elements stored in the QuickList.
-    [[nodiscard]] index_t getSize() const {
-        return size;
-    }
-
-protected:
-    struct Entry {
-        T value;
-        bool busy = false;
-        index_t next = -1, prev = -1;
-    };
-
-public:
-    /// QuickList iterator.<br>
-    /// Returns elements in the order they were added, first being newest, last - oldest
-    class iterator {
-    private:
-        index_t cur;
-        QuickList* list;
-        index_t toSafeRemove;
+    protected:
+        struct Entry {
+            T value;
+            bool busy = false;
+            index_t next = -1, prev = -1;
+        };
 
     public:
-        using iterator_category = std::forward_iterator_tag;
-        using value_type = T;
-        using difference_type = index_t;
-        using pointer = T*;
-        using reference = T;
+        /// QuickList iterator.<br>
+        /// Returns elements in the order they were added, first being newest, last - oldest
+        class iterator {
+        private:
+            index_t cur;
+            QuickList* list;
+            index_t toSafeRemove;
 
-        explicit iterator(index_t cur, QuickList* list)
-            : cur(cur)
-            , list(list)
-            , toSafeRemove(-1)
-        { }
+        public:
+            using iterator_category = std::forward_iterator_tag;
+            using value_type = T;
+            using difference_type = index_t;
+            using pointer = T*;
+            using reference = T;
 
-        iterator(const iterator &it)
-            : cur(it.cur)
-            , list(it.list)
-            , toSafeRemove(it.toSafeRemove)
-        { }
+            explicit iterator(index_t cur, QuickList* list)
+                    : cur(cur)
+                    , list(list)
+                    , toSafeRemove(-1)
+            { }
 
-        iterator& operator++() {
-            cur = list->entries[cur].prev;
-            // After the element to removed has been passed, remove it as now it won't affect the element chain
-            if (toSafeRemove != -1) {
-                list->remove(toSafeRemove);
-                toSafeRemove = -1;
+            iterator(const iterator &it)
+                    : cur(it.cur)
+                    , list(it.list)
+                    , toSafeRemove(it.toSafeRemove)
+            { }
+
+            iterator& operator++() {
+                cur = list->entries[cur].prev;
+                // After the element to removed has been passed, remove it as now it won't affect the element chain
+                if (toSafeRemove != -1) {
+                    list->remove(toSafeRemove);
+                    toSafeRemove = -1;
+                }
+                return *this;
             }
-            return *this;
+
+            iterator operator++(int) {
+                iterator retval = *this;
+                ++(*this);
+                return retval;
+            }
+
+            bool operator==(iterator other) const {
+                return cur == other.cur;
+            }
+
+            bool operator!=(iterator other) const {
+                return !(*this == other);
+            }
+
+            T& operator*() const {
+                return list->entries[cur].value;
+            }
+
+            /// Built-in safe removal of an element after it was processed
+            void safeRemove() {
+                toSafeRemove = cur;
+            }
+        };
+
+        /// The start of the QuickList (latest element)
+        iterator begin() {
+            return iterator(entries[nextFree].prev, this);
         }
 
-        iterator operator++(int) {
-            iterator retval = *this;
-            ++(*this);
-            return retval;
+        /// The end of the QuickList (oldest element)
+        iterator end() {
+            return iterator(-1, this);
         }
 
-        bool operator==(iterator other) const {
-            return cur == other.cur;
+        /// QuickList converter to a C++ String
+        [[nodiscard]] std::string toString() {
+            std::stringstream ss;
+            ss << "<QuickList { ";
+            std::for_each(begin(), end(), [&ss](T item) { ss << item << ", "; });
+            ss << "}>";
+            return ss.str();
         }
 
-        bool operator!=(iterator other) const {
-            return !(*this == other);
+    private:
+        std::vector<Entry> entries;  // Pointer to the memory reserved
+        size_t capacity;  // The current maximum capacity
+        size_t size;  // The
+
+        index_t nextFree;  // Next entry of the QuickList that is vacant
+
+        /// Helper function to increase the capacity if the QuickList is about to hit it
+        void expandIfNeeded() {
+            if (size + 1 >= capacity) {
+                capacity += chunkSize;
+                entries.resize(capacity, {});
+            }
         }
 
-        T& operator*() const {
-            return list->entries[cur].value;
-        }
-
-        /// Built-in safe removal of an element after it was processed
-        void safeRemove() {
-            toSafeRemove = cur;
-        }
+        const size_t chunkSize;
     };
 
-    /// The start of the QuickList (latest element)
-    iterator begin() {
-        return iterator(entries[nextFree].prev, this);
+    template<class T>
+    std::ostream& operator<<(std::ostream& stream, QuickList<T>& list) {
+        stream << list.toString();
+        return stream;
     }
-
-    /// The end of the QuickList (oldest element)
-    iterator end() {
-        return iterator(-1, this);
-    }
-
-    /// QuickList converter to a C++ String
-    [[nodiscard]] std::string toString() {
-        std::stringstream ss;
-        ss << "<QuickList { ";
-        std::for_each(begin(), end(), [&ss](T item) { ss << item << ", "; });
-        ss << "}>";
-        return ss.str();
-    }
-
-private:
-    std::vector<Entry> entries;  // Pointer to the memory reserved
-    size_t capacity;  // The current maximum capacity
-    size_t size;  // The
-
-    index_t nextFree;  // Next entry of the QuickList that is vacant
-
-    /// Helper function to increase the capacity if the QuickList is about to hit it
-    void expandIfNeeded() {
-        if (size + 1 >= capacity) {
-            capacity += chunkSize;
-            entries.resize(capacity, {});
-        }
-    }
-
-    const size_t chunkSize;
-};
-
-template<class T>
-std::ostream& operator<<(std::ostream& stream, QuickList<T>& list) {
-    stream << list.toString();
-    return stream;
 }
 
 #endif //QUICK_LIST_CLASS_H

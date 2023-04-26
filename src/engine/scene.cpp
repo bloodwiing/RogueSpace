@@ -5,24 +5,28 @@
 #include "graphics/camera.hpp"
 #include "graphics/window.hpp"
 
-std::string Scene::m_hierarchyDisplayName = "root";
+std::string Engine::Scene::m_hierarchyDisplayName = "root";
 
-std::string Scene::getTypeName() const {
+std::string Engine::Scene::getTypeName() const {
     return "Scene";
 }
 
-Scene::Scene()
+Engine::Scene::Scene()
     : ActorBase(nullptr, nullptr, m_hierarchyDisplayName)
     , m_freeFly(false)
-    , m_freeFlyCamera(new Camera(this, nullptr, "root_freeFlyCamera"))
+    , m_freeFlyCamera(new Graphics::Camera(this, nullptr, "root_freeFlyCamera"))
 { }
 
-void Scene::update() {
+Utility::QuickList<std::shared_ptr<Engine::Actors::ActorBase>> Engine::Scene::getVolatileChildren() const {
+    return m_volatileActors;
+}
+
+void Engine::Scene::update() {
     if (!m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;
 
         if (!m_freeFly) {
-            m_prevCamera = Camera::getActiveCamera();
+            m_prevCamera = Graphics::Camera::getActiveCamera();
             m_freeFlyCamera->copyOrientation(m_prevCamera, false);
             m_freeFlyCamera->setMatrix(m_prevCamera->getWorldMatrix());
             m_freeFlyCamera->setActive();
@@ -43,37 +47,38 @@ void Scene::update() {
 
     ActorBase::update();
 
-    for (auto child = m_volatileActors.begin(); child != m_volatileActors.end();) {
-        if (*child != nullptr) {
+    for (auto iter = m_volatileActors.begin(); iter != m_volatileActors.end();) {
+        auto& child = *iter;
+        if (child) {
             try {
-                (*child)->update();
+                child->update();
             } catch (std::exception& e) {
                 std::cerr << e.what();
-                delete *child;
-                child.safeRemove();
+                child.reset();
+                iter.safeRemove();
                 continue;
             }
-            if ((*child)->isDead()) {
-                delete *child;
-                child.safeRemove();
+            if (child->isDead()) {
+                child.reset();
+                iter.safeRemove();
             }
         } else {
-            delete *child;
-            child.safeRemove();
+            child.reset();
+            iter.safeRemove();
         }
-        ++child;
+        ++iter;
     }
 }
 
-void Scene::draw(Shader &shader) {
+void Engine::Scene::draw(Graphics::Shader &shader) {
     ActorBase::draw(shader);
 
-    for (auto* child : m_volatileActors) {
-        if (child != nullptr)
+    for (const auto& child : m_volatileActors) {
+        if (child)
             child->draw(shader);
     }
 }
 
-bool Scene::isInFreeFlight() const {
+bool Engine::Scene::isInFreeFlight() const {
     return m_freeFly;
 }

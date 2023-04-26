@@ -3,15 +3,15 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.hpp"
 
-std::string Model::getTypeName() const {
+std::string Graphics::Model::getTypeName() const {
     return "Model";
 }
 
-Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *filename)
+Graphics::Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *filename)
     : DynamicActor(scene, parent, name)
     , m_filename(filename)
 {
-    std::string content = readFileContents(filename);
+    std::string content = Utility::readFileContents(filename);
     m_json = json::parse(content);
 
     m_data = getData();
@@ -21,13 +21,13 @@ Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *file
         traverseNode(node);
 }
 
-void Model::draw(Shader& shader) {
+void Graphics::Model::draw(Shader& shader) {
     for (size_t i = 0; i < m_meshes.size(); ++i) {
         m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], getWorldMatrix());
     }
 }
 
-void Model::loadMesh(uint32_t meshIndex) {
+void Graphics::Model::loadMesh(uint32_t meshIndex) {
     uint8_t accPositionIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["POSITION"];
     uint8_t accNormalIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["NORMAL"];
     uint8_t accTexCoordIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["TEXCOORD_0"];
@@ -53,7 +53,7 @@ void Model::loadMesh(uint32_t meshIndex) {
     m_meshes.emplace_back(vertices, indices, material);
 }
 
-void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
+void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     json node = m_json["nodes"][nodeIndex];
 
     glm::vec3 translation(0.0f);
@@ -107,19 +107,19 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 }
 
-std::vector<uint8_t> Model::getData() {
+std::vector<uint8_t> Graphics::Model::getData() {
     std::string bytes_text;
     std::string uri = m_json["buffers"][0]["uri"];
 
     std::string file_str = std::string(m_filename);
     std::string directory = file_str.substr(0, file_str.find_last_of('/') + 1);
-    bytes_text = readFileContents(directory + uri, std::ios::in | std::ios::binary);
+    bytes_text = Utility::readFileContents(directory + uri, std::ios::in | std::ios::binary);
 
     std::vector<uint8_t> bin_data(bytes_text.begin(), bytes_text.end());
     return bin_data;
 }
 
-std::vector<float> Model::getFloats(json accessor) {
+std::vector<float> Graphics::Model::getFloats(json accessor) {
     std::vector<float> result;
 
     uint32_t bufferViewIndex = accessor.value("bufferView", 1);
@@ -149,7 +149,7 @@ std::vector<float> Model::getFloats(json accessor) {
     return result;
 }
 
-std::vector<GLuint> Model::getIndices(json accessor) {
+std::vector<GLuint> Graphics::Model::getIndices(json accessor) {
     std::vector<GLuint> result;
 
     uint32_t bufferViewIndex = accessor.value("bufferView", 1);
@@ -197,7 +197,7 @@ std::vector<GLuint> Model::getIndices(json accessor) {
     return result;
 }
 
-std::vector<Texture> Model::getTextures() {
+std::vector<Graphics::Texture> Graphics::Model::getTextures() {
     std::vector<Texture> textures;
 
     std::string file_str = std::string(m_filename);
@@ -219,7 +219,7 @@ std::vector<Texture> Model::getTextures() {
     return textures;
 }
 
-Material Model::getMaterial(json data, std::vector<Texture>& textures) {
+Graphics::Material Graphics::Model::getMaterial(json data, std::vector<Texture>& textures) {
     std::string name = data["name"];
     Material result(name);
 
@@ -246,7 +246,7 @@ Material Model::getMaterial(json data, std::vector<Texture>& textures) {
     return result;
 }
 
-std::vector<Vertex> Model::assembleVertices(
+std::vector<Graphics::Vertex> Graphics::Model::assembleVertices(
         std::vector<glm::vec3> positions,
         std::vector<glm::vec3> normals,
         std::vector<glm::vec2> texCoords)
@@ -265,7 +265,7 @@ std::vector<Vertex> Model::assembleVertices(
 }
 
 template<class TVec>
-std::vector<TVec> Model::groupFloatsVec(std::vector<float> floats) {
+std::vector<TVec> Graphics::Model::groupFloatsVec(std::vector<float> floats) {
     std::vector<TVec> vectors;
     for (auto i = floats.begin(); i < floats.end();) {
         TVec vec;
@@ -275,17 +275,17 @@ std::vector<TVec> Model::groupFloatsVec(std::vector<float> floats) {
     return vectors;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec2& vector) {
+void Graphics::Model::setVector(std::vector<float>::iterator& iterator, glm::vec2& vector) {
     vector = { iterator[0], iterator[1] };
     iterator += 2;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec3& vector) {
+void Graphics::Model::setVector(std::vector<float>::iterator& iterator, glm::vec3& vector) {
     vector = { iterator[0], iterator[1], iterator[2] };
     iterator += 3;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec4& vector) {
+void Graphics::Model::setVector(std::vector<float>::iterator& iterator, glm::vec4& vector) {
     vector = { iterator[0], iterator[1], iterator[2], iterator[3] };
     iterator += 4;
 }

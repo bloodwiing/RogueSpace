@@ -18,9 +18,11 @@ const int width = 1366,
           height = 700;
 
 int main() {
-    initializeOpenGL();
+    using Time = Engine::Time;
 
-    Super::init(width, height);
+    Utility::initializeOpenGL();
+
+    Engine::Super::init(width, height);
     Time::setMaxFramerate(144);
 
     glEnable(GL_DEPTH_TEST);
@@ -30,25 +32,27 @@ int main() {
     glFrontFace(GL_CCW);
 
 
-    Shader shader;
+    Graphics::Shader shader;
     try {
-        shader = Shader("./res/default.vert", "./res/default.frag");
+        shader = Graphics::Shader("./res/default.vert", "./res/default.frag");
     } catch (std::exception& e) {
         std::cerr << e.what();
         return -1;
     }
 
 
-    Scene scene;
+    using namespace Engine::Actors;
+
+    Engine::Scene scene;
 
     auto player = scene.addChild<PlayerActor>("Player");
-    auto camera = player->addChild<Camera>("Camera");
+    auto camera = player->addChild<Graphics::Camera>("Camera");
     camera->setActive();
 
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-//        auto starship_model = starship->addChild<Model>("model", "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<Graphics::Model>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
@@ -74,7 +78,7 @@ int main() {
     Time::init();
 
 
-    while (!Window::getActive()->isClosing()) {
+    while (!Graphics::Window::getActive()->isClosing()) {
 
         glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -87,11 +91,11 @@ int main() {
         }
 
         scene.update();
-        Camera::getActiveCamera()->updateMatrix(45.0f, 0.001f, 10000.0f);
+        Graphics::Camera::getActiveCamera()->updateMatrix(45.0f, 0.001f, 10000.0f);
         auto test = camera->getWorldMatrix();
         scene.draw(shader);
 
-        Window::getActive()->swapBuffers();
+        Graphics::Window::getActive()->swapBuffers();
 
         glfwPollEvents();
 

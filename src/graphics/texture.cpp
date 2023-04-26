@@ -4,7 +4,7 @@
 #include <stb/stb_image.h>
 #include <stdexcept>
 
-Texture::Texture(const char* filename)
+Graphics::Texture::Texture(const char* filename)
     : m_ID()
     , m_width()
     , m_height()
@@ -42,24 +42,24 @@ Texture::Texture(const char* filename)
     unbind();
 }
 
-void Texture::bind(GLint unit) const {
+void Graphics::Texture::bind(GLint unit) const {
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void Texture::unbind() const {
+void Graphics::Texture::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::destroy() const {
+void Graphics::Texture::destroy() const {
     glDeleteTextures(1, &m_ID);
 }
 
-GLuint Texture::getID() const {
+GLuint Graphics::Texture::getID() const {
     return m_ID;
 }
 
-void Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
+void Graphics::Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
     if (!shader.isErrored()) {
         GLint uniformID = shader.getUniform(uniform);
         shader.activate();

@@ -10,23 +10,23 @@
 
 #include "graphics/window.hpp"
 
-Camera* Camera::m_active = nullptr;
+Graphics::Camera* Graphics::Camera::m_active = nullptr;
 
-std::string Camera::getTypeName() const {
+std::string Graphics::Camera::getTypeName() const {
     return "Camera";
 }
 
-Camera::Camera(Scene *scene, ActorBase *parent, std::string name)
+Graphics::Camera::Camera(Engine::Scene *scene, ActorBase *parent, std::string name)
     : DynamicActor(scene, parent, name)
 {  }
 
-Camera::~Camera() {
+Graphics::Camera::~Camera() {
     DynamicActor::~DynamicActor();
     if (m_active == this)
         m_active = nullptr;
 }
 
-void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
+void Graphics::Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
     glm::mat4 view(1.0f);
     glm::mat4 proj(1.0f);
 
@@ -38,32 +38,34 @@ void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) 
     m_matrix = proj * view;
 }
 
-void Camera::applyMatrix(Shader& shader, const char* uniform) {
+void Graphics::Camera::applyMatrix(Shader& shader, const char* uniform) {
     glUniformMatrix4fv(shader.getUniform(uniform), 1, GL_FALSE, glm::value_ptr(m_matrix));
 }
 
-Camera* Camera::getActiveCamera() {
+Graphics::Camera* Graphics::Camera::getActiveCamera() {
     return m_active;
 }
 
-void Camera::setActive() const {
+void Graphics::Camera::setActive() const {
     m_active = (Camera*)this;
 }
 
-void Camera::update() {
+void Graphics::Camera::update() {
     DynamicActor::update();
 
     m_up = glm::normalize(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
     m_orientation = glm::normalize(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f) * DynamicActor::getWorldMatrix());
 }
 
-void Camera::copyOrientation(Camera *camera, bool copyUpVector /* = true */) {
+void Graphics::Camera::copyOrientation(Camera *camera, bool copyUpVector /* = true */) {
     m_orientation = glm::normalize(camera->m_orientation);
     if (copyUpVector)
         m_up = glm::normalize(camera->m_up);
 }
 
-void Camera::freeFlyUpdate() {
+void Graphics::Camera::freeFlyUpdate() {
+    using Time = Engine::Time;
+
     if (IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
         translate(m_flySpeed * m_orientation * Time::getDeltaFloat());
     }

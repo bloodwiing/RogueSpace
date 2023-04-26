@@ -45,14 +45,17 @@ file(GLOB_RECURSE TEST_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/*_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/**/*_test.cpp)
 
-add_executable(Google_Tests_run ${TEST_FILES})
-target_link_libraries(Google_Tests_run gtest gtest_main gmock)
+add_executable(BuildTest ${TEST_FILES})
+target_link_libraries(BuildTest gtest gtest_main gmock)
 
 add_custom_target(
-        Copy_Testing_Resources ALL
+        CopyTestingResources ALL
         COMMENT "Copying Testing Resources to Testing directory"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/testres
-        ${CMAKE_CURRENT_BINARY_DIR}/testres
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/testres
 )
-add_dependencies(Google_Tests_run Copy_Testing_Resources)
+add_dependencies(BuildTest CopyTestingResources)
+
+include(GoogleTest)
+gtest_discover_tests(BuildTest)

@@ -1,7 +1,7 @@
 #include <vector>
 #include "graphics/vbo.hpp"
 
-VBO::VBO(std::vector<Vertex>& vertices)
+Graphics::VBO::VBO(std::vector<Vertex>& vertices)
     : m_ID(0)
 {
     glGenBuffers(1, &m_ID);
@@ -9,18 +9,18 @@ VBO::VBO(std::vector<Vertex>& vertices)
     glBufferData(GL_ARRAY_BUFFER, (GLint)(vertices.size() * sizeof(Vertex)), vertices.data(), GL_STATIC_DRAW);
 }
 
-void VBO::bind() const {
+void Graphics::VBO::bind() const {
     glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 }
 
-void VBO::unbind() const {
+void Graphics::VBO::unbind() const {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VBO::destroy() const {
+void Graphics::VBO::destroy() const {
     glDeleteBuffers(1, &m_ID);
 }
 
-GLuint VBO::getID() const {
+GLuint Graphics::VBO::getID() const {
     return m_ID;
 }

@@ -8,18 +8,20 @@
 #include "graphics/camera.hpp"
 #include "graphics/model.hpp"
 
-const float PlayerActor::mass = 0.5f;
-const float PlayerActor::drag = 1.5f;
+namespace Actors = Engine::Actors;
 
-std::string PlayerActor::getTypeName() const {
+const float Actors::PlayerActor::mass = 0.5f;
+const float Actors::PlayerActor::drag = 1.5f;
+
+std::string Actors::PlayerActor::getTypeName() const {
     return "PlayerActor";
 }
 
-PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
-    : PhysicsActor(scene, parent, name, mass, drag)
+Actors::PlayerActor::PlayerActor(Scene *scene, ActorBase *parent, std::string name)
+    : PhysicsActor(scene, parent, std::move(name), mass, drag)
 { }
 
-void PlayerActor::update() {
+void Actors::PlayerActor::update() {
     if (m_scene->isInFreeFlight()) {
         PhysicsActor::update();
         return;
@@ -47,12 +49,12 @@ void PlayerActor::update() {
 
     if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {
         m_clicked = true;
-        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(Graphics::Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         RESET_MOUSE();
     }
     if (IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
         m_clicked = false;
-        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(Graphics::Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     if (m_clicked) {
@@ -73,7 +75,7 @@ void PlayerActor::update() {
 
         if (m_fireCoolDown <= 0.0f and IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
             auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet", 0.0f, 0.0f);
-            bullet->addChild<Model>("model", "./res/bullet/BulletTemp.gltf");
+            bullet->addChild<Graphics::Model>("model", "./res/bullet/BulletTemp.gltf");
             bullet->setTranslation(DynamicActor::getTranslation());
             bullet->setRotation(glm::quatLookAt(m_orientation, m_up));
             bullet->addForce(m_orientation * 40.0f);

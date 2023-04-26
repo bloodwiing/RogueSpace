@@ -2,78 +2,72 @@
 
 #include <iostream>
 
-std::string ActorBase::getTypeName() const {
+namespace Actors = Engine::Actors;
+
+std::string Actors::ActorBase::getTypeName() const {
     return "RAW_ActorBase";
 }
 
-ActorBase::ActorBase(Scene* scene, ActorBase *parent, std::string& name)
+Actors::ActorBase::ActorBase(Engine::Scene* scene, ActorBase *parent, std::string& name)
     : m_parent(parent)
     , m_name(name)
 { }
 
-ActorBase::~ActorBase() {
-    for (auto& [name, child] : m_children) {
-        delete child.value;
-    }
-}
-
-std::map<std::string, ActorBase::ChildEntry> ActorBase::getChildren() const {
+std::map<std::string, Actors::ActorBase::ChildEntry> Actors::ActorBase::getChildren() const {
     return m_children;
 }
 
-ActorBase* ActorBase::getChild(const std::string &name) const {
+Actors::ActorBase* Actors::ActorBase::getChild(const std::string &name) const {
     if (m_children.find(name) == m_children.end())
         return nullptr;
-    return m_children.at(name).value;
+    return m_children.at(name).value.get();
 }
 
-ActorBase* ActorBase::getParent() const {
+Actors::ActorBase* Actors::ActorBase::getParent() const {
     return m_parent;
 }
 
-std::string ActorBase::getName() const {
+std::string Actors::ActorBase::getName() const {
     return m_name;
 }
 
-glm::mat4 ActorBase::getWorldMatrix() const {
+glm::mat4 Actors::ActorBase::getWorldMatrix() const {
     return glm::mat4(1.0f);
 }
 
-bool ActorBase::isDead() const {
+bool Actors::ActorBase::isDead() const {
     return false;
 }
 
-void ActorBase::update() {
-    for (auto child = m_children.begin(); child != m_children.end();) {
-        if (child->second.value != nullptr) {
+void Actors::ActorBase::update() {
+    for (auto iter = m_children.begin(); iter != m_children.end();) {
+        auto& child = iter->second.value;
+        if (child) {
             try {
-                child->second.value->update();
+                child->update();
             } catch (std::exception& e) {
                 std::cerr << e.what();
-                delete child->second.value;
-                m_children.erase(child++);
+                m_children.erase(iter++);
                 continue;
             }
-            if (child->second.value->isDead()) {
-                delete child->second.value;
-                m_children.erase(child++);
+            if (child->isDead()) {
+                m_children.erase(iter++);
             } else
-                ++child;
+                ++iter;
         } else {
-            delete child->second.value;
-            m_children.erase(child++);
+            m_children.erase(iter++);
         }
     }
 }
 
-void ActorBase::draw(Shader& shader) {
+void Actors::ActorBase::draw(Graphics::Shader& shader) {
     for (auto& [name, child] : m_children) {
-        if (child.value != nullptr)
+        if (child.value)
             child.value->draw(shader);
     }
 }
 
-std::string ActorBase::toHierarchyString(uint16_t indent /* = 0 */) const {
+std::string Actors::ActorBase::toHierarchyString(uint16_t indent /* = 0 */) const {
     std::string result = m_name + ": " + getTypeName() + "\n";
     for (const auto& iter : m_children) {
         result += std::string(" | ", indent * 3) + " > ";
@@ -82,7 +76,7 @@ std::string ActorBase::toHierarchyString(uint16_t indent /* = 0 */) const {
     return result;
 }
 
-std::ostream& operator<<(std::ostream& stream, ActorBase *actor) {
+std::ostream& operator<<(std::ostream& stream, Actors::ActorBase *actor) {
     stream << actor->toHierarchyString();
     return stream;
 }
