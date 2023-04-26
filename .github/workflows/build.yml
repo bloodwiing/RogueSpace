@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
 
@@ -29,9 +29,6 @@ jobs:
             bin/.ninja_log
             bin/build.ninja
             bin/CMakeCache.txt
-
-      - name: Update APT
-        run: sudo apt update
 
       - name: Download APT packages
         uses: awalsh128/cache-apt-pkgs-action@latest
