@@ -4,6 +4,8 @@
 #include <thread>
 #include <fstream>
 
+#include "utils.hpp"
+
 using std::ios;
 
 Engine::AssetStream* Engine::AssetStream::m_singleton = nullptr;
@@ -61,7 +63,15 @@ void Engine::AssetStream::asyncLoop() {
     }
 }
 
-std::string Engine::AssetStream::asyncReadFileContents(const std::string &filePath, ios::openmode mode) {
+std::string Engine::AssetStream::asyncReadFileContents(std::string filePath, ios::openmode mode) {
+#if _WIN32
+    if (filePath.find(':') != std::string::npos)
+        filePath = Utility::getProcessDirectory() + filePath;
+#elif __unix__
+    if (filePath[0] != '/')
+        filePath = Utility::getProcessDirectory() + filePath;
+#endif
+
     std::ifstream stream(filePath, mode);
 
     const size_t chunkSize = 1024;

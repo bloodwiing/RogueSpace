@@ -40,7 +40,7 @@ namespace Engine {
         std::queue<AssetQueueEntry> m_assetQueue;
         std::map<const std::string, const std::string> m_cachedAssets;
 
-        static std::string asyncReadFileContents(const std::string &filePath, std::ios::openmode mode = std::ios::in);
+        static std::string asyncReadFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
     };
 }
 
