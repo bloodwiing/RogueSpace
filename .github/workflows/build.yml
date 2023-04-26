@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Enabling caching of previously compiled objects
+      - name: Enable Cache
         uses: actions/cache@v3
         with:
           key: build-cache
@@ -28,16 +28,27 @@ jobs:
             bin/build.ninja
             bin/CMakeCache.txt
 
-      # Install latest CMake and Ninja.
+      - name: Update APT
+        run: sudo apt update
+
+      - name: Download APT packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: \
+            libx11-dev \
+            libxcursor-dev \
+            libxrandr2 \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxi-dev \
+            mesa-utils \
+            mesa-common-dev
+          version: 1.0
+
       - uses: lukka/get-cmake@latest
-      # Or pin to a specific CMake version:
-      # lukka/get-cmake@v3.21.2
 
-      - name: dir
-        run: find $RUNNER_WORKSPACE
-        shell: bash
-
-      - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
+      - name: Build and Test CMake executable
         uses: lukka/run-cmake@v10
         with:
           workflowPreset: 'buildAndTest'
+
