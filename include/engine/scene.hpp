@@ -22,7 +22,7 @@ public:
     T* addChild(std::string name, Args&&... args);
 
     /// \brief          Returns the QuickList of Volatile Actors
-    [[nodiscard]] QuickList<ActorBase*> getVolatileChildren() const;
+    [[nodiscard]] QuickList<std::shared_ptr<ActorBase>> getVolatileChildren() const;
 
     /// \brief          Creates a new Volatile Child under this Parent Actor
     /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
@@ -56,7 +56,7 @@ private:
     static std::string m_hierarchyDisplayName;
 
     /// QuickList of Volatile Actors
-    QuickList<ActorBase*> m_volatileActors;
+    QuickList<std::shared_ptr<ActorBase>> m_volatileActors;
 
     // ----- Free Fly toggle -----
 

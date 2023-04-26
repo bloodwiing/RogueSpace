@@ -1,5 +1,5 @@
 template<class T>
-void ActorBase::internalRegisterChild(T* child) {
+void ActorBase::internalRegisterChild(std::shared_ptr<T> child) {
     static_assert(std::is_base_of<ActorBase, T>::value, "Cannot register a non-Hierarchy child");
 
     // Prepare as if key is unique
@@ -25,15 +25,15 @@ void ActorBase::internalRegisterChild(T* child) {
 template<class T>
 T* ActorBase::addChild(Scene* scene, ActorBase* parent, std::string& name) {
     static_assert(std::is_base_of<ActorBase, T>::value, "Cannot add a non-Hierarchy child");
-    T* child = new T(scene, parent, name);
+    auto child = std::make_shared<T>(scene, parent, name);
     internalRegisterChild(child);
-    return child;
+    return child.get();
 }
 
 template<class T, class... Args>
 T* ActorBase::addChild(Scene* scene, ActorBase* parent, std::string& name, Args&&... args) {
     static_assert(std::is_base_of<ActorBase, T>::value, "Cannot add a non-Hierarchy child");
-    T* child = new T(scene, parent, name, std::forward<Args>(args)...);
+    auto child = std::make_shared<T>(scene, parent, name, std::forward<Args>(args)...);
     internalRegisterChild(child);
-    return child;
+    return child.get();
 }
