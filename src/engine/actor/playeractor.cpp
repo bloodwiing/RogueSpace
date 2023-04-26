@@ -1,5 +1,6 @@
 #include "engine/actor/playeractor.hpp"
 
+#include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "engine/time.hpp"

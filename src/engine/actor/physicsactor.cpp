@@ -15,19 +15,11 @@ PhysicsActor::PhysicsActor(Scene* scene, ActorBase* parent, std::string name, fl
 { }
 
 void PhysicsActor::update() {
-    if (!isVectorZero(m_linearVelocity)) {
-        translate(m_linearVelocity * Time::getDeltaFloat());
-        m_linearVelocity -= m_linearVelocity * (Time::getDeltaFloat() * m_weight);
-        if (glm::length(m_linearVelocity) <= 0.001f)
-            m_linearVelocity = glm::vec3(0.0f);
-    }
+    if (applyLinearVelocity(this, m_linearVelocity))
+        diminishVelocity(m_linearVelocity, m_weight, 0.001f);
 
-    if (!isVectorZero(m_angularVelocity)) {
-        rotate(glm::quat(m_angularVelocity) * Time::getDeltaFloat());
-        m_angularVelocity -= m_angularVelocity * (Time::getDeltaFloat() * m_drag);
-        if (glm::length(m_angularVelocity) <= 0.0001f)
-            m_angularVelocity = glm::vec3(0.0f);
-    }
+    if (applyAngularVelocity(this, m_angularVelocity))
+        diminishVelocity(m_angularVelocity, m_drag, 0.0001f);
 
     DynamicActor::update();
 }
@@ -70,6 +62,28 @@ void PhysicsActor::addForce(glm::vec3 force) {
 
 void PhysicsActor::addTorque(glm::vec3 torque) {
     m_angularVelocity += torque;
+}
+
+bool PhysicsActor::applyLinearVelocity(DynamicActor* target, const glm::vec3 &linear) {
+    if (!isVectorZero(linear)) {
+        target->translate(linear * Time::getDeltaFloat());
+        return true;
+    }
+    return false;
+}
+
+bool PhysicsActor::applyAngularVelocity(DynamicActor* target, const glm::vec3 &angular) {
+    if (!isVectorZero(angular)) {
+        target->rotate(glm::quat(angular) * Time::getDeltaFloat());
+        return true;
+    }
+    return false;
+}
+
+void PhysicsActor::diminishVelocity(glm::vec3 &vector, float influence, float deadZone) {
+    vector -= vector * (Time::getDeltaFloat() * influence);
+    if (glm::length(vector) <= deadZone)
+        vector = glm::vec3(0.0f);
 }
 
 bool PhysicsActor::isVectorZero(const glm::vec3 &vector) {

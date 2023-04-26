@@ -1,5 +1,11 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.20)
 project(RogueSpace)
+
+set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
+set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/pdb)
+include(CTest)
 
 # -----
 
@@ -10,62 +16,74 @@ endif()
 
 # -----
 
-link_directories(RogueSpace ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-add_library(glfw STATIC IMPORTED)
-set_target_properties(glfw PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/lib/libglfw3.a"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include/GLFW/")
+# -----
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
+link_libraries(glfw)
+
+find_package(GLM REQUIRED)
+if(GLM_FOUND)
+    message(STATUS "glm found")
+    set(INCLUDE_DIRS ${INCLUDE_DIRS} ${GLM_INCLUDE_DIR})
+endif()
 
 find_package(OpenGL REQUIRED)
+
+if(WIN32)
+    set(LIBS ${LIBS} opengl32 gdi32)
+elseif(UNIX AND NOT APPLE)
+    set(LIBS ${LIBS} dl X11 GL)
+endif()
+
+add_library(GLAD OBJECT "${CMAKE_CURRENT_SOURCE_DIR}/src/glad/glad.c")
+link_libraries($<TARGET_OBJECTS:GLAD>)
+
+# -----
+
+include_directories(${INCLUDE_DIRS})
+
+# -----
+
+if(UNIX AND NOT APPLE)
+    SET(CMAKE_SKIP_BUILD_RPATH FALSE)
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    SET(CMAKE_INSTALL_RPATH "$ORIGIN;$ORIGIN/lib")
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+endif()
 
 # -----
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/glad/*.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/*.cpp)
 
 # -----
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/include/glm)
+add_library(BuildFiles OBJECT ${SRC_FILES})
+link_libraries($<TARGET_OBJECTS:BuildFiles>)
+
+link_libraries(${LIBS})
+link_directories(${LINK_DIRS})
+
+add_executable(Build ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+
+# -----
+
 add_subdirectory(test)
 
 # -----
 
-add_executable(Build ${SRC_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-target_sources(Google_Tests_run PRIVATE ${SRC_FILES})
-
-# -----
-
-if(NOT WIN32)
-    target_link_libraries(Build dl X11)
-    target_link_libraries(Google_Tests_run dl X11)
-endif()
-
-target_include_directories(Build PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(Google_Tests_run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Build glfw)
-target_link_libraries(Google_Tests_run glfw)
-
-if(WIN32)
-    target_link_libraries(Build opengl32)
-    target_link_libraries(Google_Tests_run opengl32)
-else()
-    target_link_libraries(Build GL)
-    target_link_libraries(Google_Tests_run GL)
-endif()
-
-# -----
-
 add_custom_target(
-        Copy_Resources ALL
+        CopyResources ALL
         COMMENT "Copying Resources to build directory"
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-                ${CMAKE_CURRENT_SOURCE_DIR}/res
-                ${CMAKE_CURRENT_BINARY_DIR}/res
+        ${CMAKE_CURRENT_SOURCE_DIR}/res
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
 
-add_dependencies(Build Copy_Resources)
-add_dependencies(Google_Tests_run Copy_Resources)
+
+add_dependencies(Build CopyResources)
+add_dependencies(BuildTest Build)

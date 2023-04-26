@@ -2,7 +2,7 @@
 #define SUPER_CLASS_H
 
 #define GLFW_INCLUDE_NONE
-#include <glfw3.h>
+#include <GLFW/glfw3.h>
 
 #include "graphics/window.hpp"
 

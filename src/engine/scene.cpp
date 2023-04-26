@@ -17,6 +17,10 @@ Scene::Scene()
     , m_freeFlyCamera(new Camera(this, nullptr, "root_freeFlyCamera"))
 { }
 
+QuickList<ActorBase *> Scene::getVolatileChildren() const {
+    return m_volatileActors;
+}
+
 void Scene::update() {
     if (!m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;

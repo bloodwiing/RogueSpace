@@ -7,15 +7,10 @@
 Window* Window::m_active = nullptr;
 bool Window::m_wasGLLoaded = false;
 
-void errorCallback(int error, const char* description) {
-    fprintf(stderr, "Error: %s\n", description);
-}
-
 Window::Window(int width, int height)
     : m_width(width)
     , m_height(height)
 {
-    glfwSetErrorCallback(errorCallback);
     m_glWindow = glfwCreateWindow(width, height, "Testing", nullptr, nullptr);
     if (m_glWindow == nullptr)
         throw std::runtime_error("Failed to create window");
@@ -64,30 +59,44 @@ GLFWwindow *Window::getWindow() const {
 }
 
 void Window::swapBuffers() const {
+    if (m_glWindow == nullptr)
+        return;
     glfwSwapBuffers(m_glWindow);
 }
 
 void Window::close() {
+    if (m_glWindow == nullptr)
+        return;
     glfwSetWindowShouldClose(m_glWindow, true);
 }
 
 bool Window::isClosing() const {
+    if (m_glWindow == nullptr)
+        return false;
     return glfwWindowShouldClose(m_glWindow);
 }
 
 bool Window::isKey(int key, int state) const {
+    if (m_glWindow == nullptr)
+        return false;
     return glfwGetKey(m_glWindow, key) == state;
 }
 
 bool Window::isMouse(int button, int state) const {
+    if (m_glWindow == nullptr)
+        return false;
     return glfwGetMouseButton(m_glWindow, button) == state;
 }
 
 void Window::resetMouse() const {
+    if (m_glWindow == nullptr)
+        return;
     glfwSetCursorPos(m_glWindow, (float)m_width / 2, (float)m_height / 2);
 }
 
 void Window::getAbsoluteMouse(int &x, int &y) const {
+    if (m_glWindow == nullptr)
+        return;
     double mouseX, mouseY;
     glfwGetCursorPos(m_glWindow, &mouseX, &mouseY);
     x = (int)mouseX;
@@ -95,6 +104,8 @@ void Window::getAbsoluteMouse(int &x, int &y) const {
 }
 
 void Window::getRelativeMouse(double &x, double &y) const {
+    if (m_glWindow == nullptr)
+        return;
     glfwGetCursorPos(m_glWindow, &x, &y);
     x = (x - ((float)m_width / 2)) / (float)m_width;
     y = (y - ((float)m_height / 2)) / (float)m_height;

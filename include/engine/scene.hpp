@@ -21,6 +21,9 @@ public:
     template<class T, class... Args>
     T* addChild(std::string name, Args&&... args);
 
+    /// \brief          Returns the QuickList of Volatile Actors
+    [[nodiscard]] QuickList<ActorBase*> getVolatileChildren() const;
+
     /// \brief          Creates a new Volatile Child under this Parent Actor
     /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
     ///                 needs to be spawned and destroyed frequently.
