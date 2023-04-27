@@ -18,7 +18,9 @@ TEST(Time, update) {
     ASSERT_LT(Time::getDeltaDouble(), 0.00001);
 
     Time::update();
-    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    auto sleepTill = std::chrono::steady_clock::now() + std::chrono::milliseconds(150);
+    std::this_thread::sleep_until(sleepTill - std::chrono::milliseconds(10));
+    while(std::chrono::steady_clock::now() < sleepTill);
     Time::update();
 
     ASSERT_GT(Time::getDeltaFloat(), 0.15f);
