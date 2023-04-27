@@ -14,18 +14,18 @@ TEST(Time, update) {
     Time::init();
     Time::update();
 
-    ASSERT_LT(Time::getDeltaFloat(), 0.001f);
-    ASSERT_LT(Time::getDeltaDouble(), 0.001);
+    ASSERT_LT(Time::getDeltaFloat(), 0.00001f);
+    ASSERT_LT(Time::getDeltaDouble(), 0.00001);
 
     Time::update();
-    std::this_thread::sleep_for(std::chrono::milliseconds(550));
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
     Time::update();
 
-    ASSERT_GT(Time::getDeltaFloat(), 0.5f);
-    ASSERT_GT(Time::getDeltaDouble(), 0.5f);
+    ASSERT_GT(Time::getDeltaFloat(), 0.15f);
+    ASSERT_GT(Time::getDeltaDouble(), 0.15f);
 
-    ASSERT_LT(Time::getDeltaFloat(), 0.6f);
-    ASSERT_LT(Time::getDeltaDouble(), 0.6f);
+    ASSERT_LT(Time::getDeltaFloat(), 0.1501f);
+    ASSERT_LT(Time::getDeltaDouble(), 0.1501f);
 }
 
 TEST(Time, setMaxFramerate) {
@@ -59,28 +59,28 @@ TEST(Time, waitForNextFrame) {
     Time::update();
     Time::waitForNextFrame();
     Time::update();
-    ASSERT_LT(Time::getDeltaFloat(), 0.001f);
+    ASSERT_LT(Time::getDeltaFloat(), 0.0001f);
+
+    Time::setMaxFramerate(1000);
+    Time::update();
+    Time::waitForNextFrame();
+    Time::update();
+    ASSERT_LT(Time::getDeltaFloat(), 0.0011f);
+    ASSERT_GT(Time::getDeltaFloat(), 0.001f);
 
     Time::setMaxFramerate(144);
     Time::update();
     Time::waitForNextFrame();
     Time::update();
-    ASSERT_LT(Time::getDeltaFloat(), 0.0072f);
-    ASSERT_GT(Time::getDeltaFloat(), 0.0062f);
+    ASSERT_LT(Time::getDeltaFloat(), 0.0071f);
+    ASSERT_GT(Time::getDeltaFloat(), 0.0069f);
 
     Time::setMaxFramerate(60);
     Time::update();
     Time::waitForNextFrame();
     Time::update();
-    ASSERT_LT(Time::getDeltaFloat(), 0.02f);
-    ASSERT_GT(Time::getDeltaFloat(), 0.012f);
-
-    Time::setMaxFramerate(2);
-    Time::update();
-    Time::waitForNextFrame();
-    Time::update();
-    ASSERT_LT(Time::getDeltaFloat(), 0.55f);
-    ASSERT_GT(Time::getDeltaFloat(), 0.45f);
+    ASSERT_LT(Time::getDeltaFloat(), 0.0167f);
+    ASSERT_GT(Time::getDeltaFloat(), 0.0165f);
 
     Time::setMaxFramerate(0);
 }
