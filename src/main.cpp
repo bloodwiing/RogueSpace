@@ -62,8 +62,8 @@ int main() {
     std::cout << &scene;
 
 
-    bool done = false;
-    Engine::AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
+//    bool done = false;
+//    Engine::AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -100,7 +100,8 @@ int main() {
         glfwPollEvents();
 
         Time::waitForNextFrame();
-        std::this_thread::yield();
+        Graphics::Window::getActive()->close();
+//        std::this_thread::yield();
     }
 
     Engine::AssetStream::shutdown();
