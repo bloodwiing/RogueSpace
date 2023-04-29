@@ -197,8 +197,8 @@ std::vector<GLuint> Graphics::Model::getIndices(json accessor) {
     return result;
 }
 
-std::vector<Graphics::Texture> Graphics::Model::getTextures() {
-    std::vector<Texture> textures;
+std::vector<std::shared_ptr<Graphics::Texture> > Graphics::Model::getTextures() {
+    std::vector<std::shared_ptr<Texture> > textures;
 
     std::string file_str = std::string(m_filename);
     std::string directory = file_str.substr(0, file_str.find_last_of('/') + 1);
@@ -211,15 +211,16 @@ std::vector<Graphics::Texture> Graphics::Model::getTextures() {
             continue;
         }
 
-        Texture texture((directory + texturePath).c_str());
+        auto texture = Texture::create((directory + texturePath).c_str());
         textures.push_back(texture);
         m_loadedTexNames[texturePath] = texture;
+        texture->queue();
     }
 
     return textures;
 }
 
-Graphics::Material Graphics::Model::getMaterial(json data, std::vector<Texture>& textures) {
+Graphics::Material Graphics::Model::getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures) {
     std::string name = data["name"];
     Material result(name);
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <json/json.h>
+#include <memory>
 
 #include "mesh.hpp"
 #include "material.hpp"
@@ -49,7 +50,7 @@ namespace Graphics {
         std::vector<Material> m_materials;
         /// Optimised pre-loaded Texture Map, containing pairs of the Texture file path and the Texture created.
         /// In this case there is able to be multiple Textures that have a repeat path but are only loaded once
-        std::unordered_map<std::string, Texture> m_loadedTexNames;
+        std::unordered_map<std::string, std::shared_ptr<Texture> > m_loadedTexNames;
 
         /// \brief              Reads and saves a Mesh from the index
         /// \param meshIndex    The index of which Mesh to load
@@ -72,12 +73,12 @@ namespace Graphics {
         std::vector<GLuint> getIndices(json accessor);
         /// \return             The created list of Textures, optimised via m_loadedTexNames
         /// \see                Model#m_loadedTexNames
-        std::vector<Texture> getTextures();
+        std::vector<std::shared_ptr<Texture> > getTextures();
         /// \brief              Creates a Material from the Json data of the glTF Mesh entry and the full list of Textures
         /// \param data         glTF Material entry
         /// \param textures     The list of textures, made via getTextures()
         /// \return             A compiled Material
-        Material getMaterial(json data, std::vector<Texture>& textures);
+        Material getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures);
 
         /// \brief              Combines all 3 lists of vertex data into a single list of Vertex objects
         /// \param positions    The Vertex Position list

@@ -35,7 +35,8 @@ void Graphics::Mesh::draw(
     shader.activate();
     m_VAO.bind();
 
-    m_material.apply(shader);
+    if (!m_material.apply(shader))
+        return;
 
     camera->applyMatrix(shader, "CameraMatrix");
     glUniform3f(shader.getUniform("CameraPos"), camera->getTranslation().x, camera->getTranslation().y, camera->getTranslation().z);
