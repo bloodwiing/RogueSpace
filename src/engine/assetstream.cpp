@@ -75,7 +75,7 @@ std::shared_ptr<const std::string> Engine::AssetStream::asyncReadFileContents(st
 
     std::ifstream stream(filePath, mode);
 
-    const size_t chunkSize = 1024;
+    const size_t chunkSize = 1048576 << 8;
     size_t reservedSpace = chunkSize * 8;
     size_t index = 0;
 
@@ -91,7 +91,7 @@ std::shared_ptr<const std::string> Engine::AssetStream::asyncReadFileContents(st
         std::this_thread::yield();
     }
 
-    result.resize(stream.gcount());
+    result.resize(index);
 
     return std::make_shared<const std::string>(result.begin(), result.end());
 }
