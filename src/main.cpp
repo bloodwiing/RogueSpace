@@ -100,8 +100,6 @@ int main() {
         glfwPollEvents();
 
         Time::waitForNextFrame();
-        Graphics::Window::getActive()->close();
-//        std::this_thread::yield();
     }
 
     Engine::AssetStream::shutdown();

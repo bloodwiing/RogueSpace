@@ -35,13 +35,14 @@ void Engine::AssetStream::getTextAsset(const std::string& filePath, const AssetS
 
 void Engine::AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream::binaryCallback& callback) {
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
-        callback((uint8_t*)getInstance().m_cachedAssets.at(filePath).c_str());
+        auto asset = getInstance().m_cachedAssets.at(filePath);
+        callback((const uint8_t*)asset->c_str(), asset->length());
         return;
     }
 
     getInstance().m_assetQueue.emplace((AssetQueueEntry){
         .filePath = filePath,
-        .callback = [callback](const std::string& data) { callback((const uint8_t*)data.c_str()); },
+        .callback = [callback](const std::shared_ptr<const std::string>& data) { callback((const uint8_t*)data->c_str(), data->length()); },
         .mode = ios::in | ios::binary
     });
 }
@@ -63,7 +64,7 @@ void Engine::AssetStream::asyncLoop() {
     }
 }
 
-std::string Engine::AssetStream::asyncReadFileContents(std::string filePath, ios::openmode mode) {
+std::shared_ptr<const std::string> Engine::AssetStream::asyncReadFileContents(std::string filePath, ios::openmode mode) {
 #if _WIN32
     if (filePath.find(':') != std::string::npos)
         filePath = Utility::getProcessDirectory() + filePath;
@@ -92,5 +93,5 @@ std::string Engine::AssetStream::asyncReadFileContents(std::string filePath, ios
 
     result.resize(stream.gcount());
 
-    return result;
+    return std::make_shared<const std::string>(result.begin(), result.end());
 }
