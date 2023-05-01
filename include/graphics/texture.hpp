@@ -2,7 +2,7 @@
 #define TEXTURE_CLASS_H
 
 #include "shader.hpp"
-#include "engine/assetstream.h"
+#include "engine/assetstream.hpp"
 
 #include <memory>
 #include <thread>
@@ -28,7 +28,7 @@ namespace Graphics {
 
         void queue();
 
-        [[nodiscard]] bool isLoaded();
+        [[nodiscard]] bool isReady();
 
         /// \brief          Assigns a Texture slot to a Shader's sampler
         /// \param shader   The Shader program reference
@@ -46,7 +46,7 @@ namespace Graphics {
         [[nodiscard]] GLuint getID() const;
 
     private:
-        std::atomic<bool> m_loaded;
+        std::atomic<bool> m_ready;
 
         /// Texture OpenGL ID
         GLuint m_ID;

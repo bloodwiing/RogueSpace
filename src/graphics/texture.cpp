@@ -16,7 +16,7 @@ Graphics::Texture::Texture(std::string fileName)
     , m_width(m_metadata["width"].as<int>())
     , m_height(m_metadata["height"].as<int>())
     , m_channels(m_metadata["channels"].as<int>())
-    , m_loaded(false)
+    , m_ready(false)
 {
     glGenBuffers(1, &m_PBO);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
@@ -24,8 +24,6 @@ Graphics::Texture::Texture(std::string fileName)
     glBufferStorage(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
 
     m_buffer = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
-
-    auto error = glGetError();
 
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -44,23 +42,21 @@ std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& 
 }
 
 void Graphics::Texture::queue() {
-    Engine::AssetStream::getBinaryAsset(
+    Engine::AssetStream::getInstance().getBinaryAssetAsync(
             m_fileName,
             [self = shared_from_this()](const uint8_t* data, size_t size){
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
                 memcpy(self->m_buffer, finalData, width * height * channels);
                 stbi_image_free(finalData);
-                self->m_loaded = true;
+                self->m_ready = true;
             });
 }
 
-bool Graphics::Texture::isLoaded() {
-    if (m_loaded and m_buffer != nullptr) {
+bool Graphics::Texture::isReady() {
+    if (m_ready and m_buffer != nullptr) {
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
         glFlushMappedBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels);
-
-        auto error = glGetError();
 
         switch (m_channels) {
             case 4:
@@ -84,7 +80,7 @@ bool Graphics::Texture::isLoaded() {
 
         unbind();
     }
-    return m_loaded;
+    return m_ready;
 }
 
 void Graphics::Texture::bind(GLint unit) const {
