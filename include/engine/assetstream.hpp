@@ -17,8 +17,11 @@ namespace Engine {
         typedef std::function<void(const uint8_t* data, size_t size)> binaryCallback;
 
         static AssetStream& getInstance();
-        static void getTextAsset(const std::string& filePath, const textCallback& callback);
-        static void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
+        void getTextAssetAsync(const std::string& filePath, const textCallback& callback);
+        void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback);
+
+        void getTextAsset(const std::string& filePath, const textCallback& callback);
+        void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
 
         static void shutdown();
         static void asyncLoop();
@@ -36,7 +39,7 @@ namespace Engine {
 
         bool m_active = true;
 
-        static AssetStream* m_singleton;
+        static AssetStream* m_instance;
 
         std::queue<AssetQueueEntry> m_assetQueue;
         std::map<const std::string, std::shared_ptr<const std::string> > m_cachedAssets;

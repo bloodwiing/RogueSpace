@@ -1,4 +1,4 @@
-#include "engine/assetstream.h"
+#include "engine/assetstream.hpp"
 
 #include <stdexcept>
 #include <thread>
@@ -8,19 +8,19 @@
 
 using std::ios;
 
-Engine::AssetStream* Engine::AssetStream::m_singleton = nullptr;
+Engine::AssetStream* Engine::AssetStream::m_instance = nullptr;
 
 Engine::AssetStream::AssetStream()
     : m_thread(asyncLoop)
 { }
 
 Engine::AssetStream &Engine::AssetStream::getInstance() {
-    if (m_singleton == nullptr)
-        m_singleton = new AssetStream();
-    return *m_singleton;
+    if (m_instance == nullptr)
+        m_instance = new AssetStream();
+    return *m_instance;
 }
 
-void Engine::AssetStream::getTextAsset(const std::string& filePath, const AssetStream::textCallback& callback) {
+void Engine::AssetStream::getTextAssetAsync(const std::string& filePath, const AssetStream::textCallback& callback) {
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         callback(getInstance().m_cachedAssets.at(filePath));
         return;
@@ -33,7 +33,7 @@ void Engine::AssetStream::getTextAsset(const std::string& filePath, const AssetS
     });
 }
 
-void Engine::AssetStream::getBinaryAsset(const std::string& filePath, const AssetStream::binaryCallback& callback) {
+void Engine::AssetStream::getBinaryAssetAsync(const std::string& filePath, const AssetStream::binaryCallback& callback) {
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         auto asset = getInstance().m_cachedAssets.at(filePath);
         callback((const uint8_t*)asset->c_str(), asset->length());
@@ -45,6 +45,26 @@ void Engine::AssetStream::getBinaryAsset(const std::string& filePath, const Asse
         .callback = [callback](const std::shared_ptr<const std::string>& data) { callback((const uint8_t*)data->c_str(), data->length()); },
         .mode = ios::in | ios::binary
     });
+}
+
+void Engine::AssetStream::getTextAsset(const std::string &filePath, const Engine::AssetStream::textCallback &callback) {
+    if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
+        callback(getInstance().m_cachedAssets.at(filePath));
+        return;
+    }
+
+    callback(std::make_shared<const std::string>(Utility::readFileContents(filePath)));
+}
+
+void Engine::AssetStream::getBinaryAsset(const std::string &filePath, const Engine::AssetStream::binaryCallback &callback) {
+    if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
+        auto asset = getInstance().m_cachedAssets.at(filePath);
+        callback((const uint8_t*)asset->c_str(), asset->length());
+        return;
+    }
+
+    auto result = std::make_shared<const std::string>(Utility::readFileContents(filePath));
+    callback((const uint8_t*)result->c_str(), result->length());
 }
 
 void Engine::AssetStream::shutdown() {
