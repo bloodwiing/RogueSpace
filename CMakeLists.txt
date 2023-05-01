@@ -26,6 +26,10 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 link_libraries(glfw)
 
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/yaml)
+link_libraries(yaml-cpp)
+install(TARGETS yaml-cpp)
+
 find_package(GLM REQUIRED)
 if(GLM_FOUND)
     message(STATUS "glm found")
