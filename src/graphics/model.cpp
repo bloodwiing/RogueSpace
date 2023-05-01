@@ -1,29 +1,43 @@
 #include "graphics/model.hpp"
 
+#include <utility>
+
 #include <glm/gtc/type_ptr.hpp>
 #include "utils.hpp"
 
-std::string Graphics::Model::getTypeName() const {
-    return "Model";
-}
+#include "engine/assetmanager.hpp"
 
-Graphics::Model::Model(Scene *scene, ActorBase *parent, std::string name, const char *filename)
-    : DynamicActor(scene, parent, name)
-    , m_filename(filename)
+Graphics::Model::Model(std::string fileName)
+    : m_fileName(std::move(fileName))
+    , m_ready(false)
 {
-    std::string content = Utility::readFileContents(filename);
-    m_json = json::parse(content);
 
-    m_data = getData();
-
-    uint8_t modelMainScene = m_json.value("scene", 0);
-    for (uint16_t node : m_json["scenes"][modelMainScene]["nodes"])
-        traverseNode(node);
 }
 
-void Graphics::Model::draw(Shader& shader) {
+std::shared_ptr<Graphics::Model> Graphics::Model::create(std::string fileName) {
+    return std::make_shared<Model>(std::move(fileName));
+}
+
+void Graphics::Model::queue() {
+    Engine::AssetStream::getInstance().getTextAsset(
+            m_fileName,
+            [self = shared_from_this()](const std::shared_ptr<const std::string>& content){
+                self->m_json = json::parse(*content);
+
+                self->getTextures();
+                self->getData();
+            });
+}
+
+bool Graphics::Model::isReady() const {
+    return m_ready;
+}
+
+void Graphics::Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) {
+    if (!isReady())
+        return;
     for (size_t i = 0; i < m_meshes.size(); ++i) {
-        m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], getWorldMatrix());
+        m_meshes[i].draw(shader, Camera::getActiveCamera(), m_meshMatrices[i], worldMatrix);
     }
 }
 
@@ -47,8 +61,7 @@ void Graphics::Model::loadMesh(uint32_t meshIndex) {
     auto vertices = assembleVertices(positions, normals, texCoords);
     auto indices = getIndices(m_json["accessors"][accIndicesIndex]);
 
-    auto textures = getTextures();
-    auto material = getMaterial(m_json["materials"][materialIndex], textures);
+    auto material = getMaterial(m_json["materials"][materialIndex], m_textures);
 
     m_meshes.emplace_back(vertices, indices, material);
 }
@@ -107,16 +120,23 @@ void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 }
 
-std::vector<uint8_t> Graphics::Model::getData() {
+void Graphics::Model::getData() {
     std::string bytes_text;
     std::string uri = m_json["buffers"][0]["uri"];
 
-    std::string file_str = std::string(m_filename);
-    std::string directory = file_str.substr(0, file_str.find_last_of('/') + 1);
-    bytes_text = Utility::readFileContents(directory + uri, std::ios::in | std::ios::binary);
+    std::string directory = m_fileName.substr(0, m_fileName.find_last_of('/') + 1);
 
-    std::vector<uint8_t> bin_data(bytes_text.begin(), bytes_text.end());
-    return bin_data;
+    Engine::AssetStream::getInstance().getBinaryAssetAsync(
+            directory + uri,
+            [self = shared_from_this()](const uint8_t* data, size_t size){
+                self->m_data = std::vector<uint8_t>(data, data + size);
+
+                uint8_t modelMainScene = self->m_json.value("scene", 0);
+                for (uint16_t node : self->m_json["scenes"][modelMainScene]["nodes"])
+                    self->traverseNode(node);
+
+                self->m_ready = true;
+            });
 }
 
 std::vector<float> Graphics::Model::getFloats(json accessor) {
@@ -197,27 +217,15 @@ std::vector<GLuint> Graphics::Model::getIndices(json accessor) {
     return result;
 }
 
-std::vector<std::shared_ptr<Graphics::Texture> > Graphics::Model::getTextures() {
-    std::vector<std::shared_ptr<Texture> > textures;
+void Graphics::Model::getTextures() {
+    m_textures.clear();
 
-    std::string file_str = std::string(m_filename);
-    std::string directory = file_str.substr(0, file_str.find_last_of('/') + 1);
+    std::string directory = m_fileName.substr(0, m_fileName.find_last_of('/') + 1);
 
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
-
-        if (m_loadedTexNames.find(texturePath) != m_loadedTexNames.end()) {
-            textures.push_back(m_loadedTexNames[texturePath]);
-            continue;
-        }
-
-        auto texture = Texture::create((directory + texturePath).c_str());
-        textures.push_back(texture);
-        m_loadedTexNames[texturePath] = texture;
-        texture->queue();
+        m_textures.push_back(Engine::AssetManager::getInstance()->getTexture(directory + texturePath));
     }
-
-    return textures;
 }
 
 Graphics::Material Graphics::Model::getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures) {
