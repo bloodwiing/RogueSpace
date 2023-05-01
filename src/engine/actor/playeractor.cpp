@@ -68,7 +68,7 @@ void Actors::PlayerActor::update() {
         rotate(glm::rotate(glm::radians((float)rot_x), m_up));
 
         m_up = glm::vec3(0.0f, 1.0f, 0.0f) * DynamicActor::getRotation();
-        m_orientation = glm::vec3(0.0f, 0.0f, -1.0f) * DynamicActor::getRotation();
+        m_orientation = glm::vec3(1.0f, 0.0f, 0.0f) * DynamicActor::getRotation();
 
         if (m_fireCoolDown > 0.0f)
             m_fireCoolDown -= Time::getDeltaFloat();

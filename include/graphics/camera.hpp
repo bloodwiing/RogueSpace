@@ -54,7 +54,7 @@ namespace Graphics {
 
     private:
         /// The orientation vector where the Camera is currently looking at
-        glm::vec3 m_orientation = glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3 m_orientation = glm::vec3(1.0f, 0.0f, 0.0f),
         /// The vector pointing upwards from the Actor's perspective
         m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
