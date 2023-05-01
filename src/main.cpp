@@ -4,15 +4,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "graphics/model.hpp"
 #include "engine/actor/physicsactor.hpp"
 #include "engine/actor/playeractor.hpp"
-#include "engine/assetstream.h"
+#include "engine/actor/modelactor.hpp"
+#include "engine/assetstream.hpp"
 
 #include "engine/super.hpp"
 #include "engine/time.hpp"
 
 #include "utils.hpp"
+#include "engine/actor/modelactor.hpp"
 
 const int width = 1366,
           height = 700;
@@ -52,7 +53,7 @@ int main() {
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-        auto starship_model = starship->addChild<Graphics::Model>("model", "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
@@ -60,10 +61,6 @@ int main() {
     starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
 
     std::cout << &scene;
-
-
-//    bool done = false;
-//    Engine::AssetStream::getBinaryAsset("./res/starship/Normal.png", [&done](const uint8_t* data){ std::cout << "Done!" << std::endl; done = true; });
 
 
     glm::vec4 lightColor(1.0f, 1.0f, 1.0f, 1.0f);
