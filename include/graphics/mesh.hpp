@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <atomic>
 
 #include <glm/detail/type_quat.hpp>
 
@@ -24,6 +25,7 @@ namespace Graphics {
         /// \param material The Material used for rendering the Mesh
         /// \see            Vertex
         Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material);
+        Mesh(const Mesh& mesh);
 
         /// \brief          Draws the Mesh to the screen
         /// \param shader   The Shader program to use when rendering
@@ -45,6 +47,10 @@ namespace Graphics {
         std::vector<GLuint> m_indices;
         /// The Material used for rendering the Mesh
         Material m_material;
+
+        std::atomic<bool> m_initialised;
+
+        void initialise();
 
         /// The Vertex Array Object created from the Vertex and Index arrays
         VAO m_VAO;
