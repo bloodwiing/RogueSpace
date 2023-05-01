@@ -25,6 +25,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 link_libraries(glfw)
+install(TARGETS glfw)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/yaml)
 link_libraries(yaml-cpp)
@@ -90,7 +91,6 @@ add_custom_target(
         ${CMAKE_CURRENT_SOURCE_DIR}/res
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
-
 
 add_dependencies(Build CopyResources)
 add_dependencies(BuildTest Build)
