@@ -57,7 +57,7 @@ int main() {
         std::cerr << e.what();
     }
     starship->setWeight(0.5f);
-    starship->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
 
     std::cout << &scene;
 
