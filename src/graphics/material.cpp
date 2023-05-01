@@ -32,7 +32,6 @@ bool Graphics::Material::apply(Shader &shader) const {
         return false;
 
     if (m_diffuse0.enabled) {
-        m_diffuse0.texture->loadIfReady();
         if (!m_diffuse0.texture->isLoaded())
             return false;
         m_diffuse0.texture->assign(shader, "Diffuse0", 0);
@@ -44,7 +43,6 @@ bool Graphics::Material::apply(Shader &shader) const {
             m_diffuseFactor.x, m_diffuseFactor.y, m_diffuseFactor.z, m_diffuseFactor.w);
 
     if (m_specular0.enabled) {
-        m_specular0.texture->loadIfReady();
         if (!m_specular0.texture->isLoaded())
             return false;
         m_specular0.texture->assign(shader, "Specular0", 1);

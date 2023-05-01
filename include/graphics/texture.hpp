@@ -5,8 +5,12 @@
 #include "engine/assetstream.h"
 
 #include <memory>
+#include <thread>
+#include <atomic>
 
 #include <stb/stb_image.h>
+
+#include <yaml-cpp/yaml.h>
 
 namespace Graphics {
 
@@ -19,15 +23,12 @@ namespace Graphics {
         /// \brief          Creates and loads a Texture
         /// \details        Uses STB to load Images, so support is dependent on the library
         /// \param filename The path to the Image Texture
-        explicit Texture(const char* filename);
-        /// \brief          Default copy constructor
-        Texture(const Texture& original) = default;
-        static std::shared_ptr<Texture> create(const char* fileName);
+        explicit Texture(std::string filename);
+        static std::shared_ptr<Texture> create(const std::string& fileName);
 
         void queue();
-        void loadIfReady();
 
-        [[nodiscard]] bool isLoaded() const;
+        [[nodiscard]] bool isLoaded();
 
         /// \brief          Assigns a Texture slot to a Shader's sampler
         /// \param shader   The Shader program reference
@@ -44,24 +45,25 @@ namespace Graphics {
         /// \return         Texture OpenGL ID
         [[nodiscard]] GLuint getID() const;
 
-    protected:
-        void loadFromSTBBytes(stbi_uc* data);
-
     private:
-        bool m_loaded;
-        stbi_uc* m_data;
+        std::atomic<bool> m_loaded;
 
         /// Texture OpenGL ID
         GLuint m_ID;
+        GLuint m_PBO;
+
+        const YAML::Node m_metadata;
 
         /// Texture width in pixels
-        int m_width,
+        const int m_width,
         /// Texture height in pixels
-            m_height,
+                  m_height,
         /// Texture channel count
-            m_channels;
+                  m_channels;
 
-        std::string m_fileName;
+        void* m_buffer;
+
+        const std::string m_fileName;
     };
 }
 
