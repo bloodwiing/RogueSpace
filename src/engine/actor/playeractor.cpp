@@ -74,8 +74,9 @@ void Actors::PlayerActor::update() {
             m_fireCoolDown -= Time::getDeltaFloat();
 
         if (m_fireCoolDown <= 0.0f and IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-            auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet", 0.0f, 0.0f);
-            bullet->addChild<Actors::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
+            auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet(AsShipToTestLoadTimes)", 0.0f, 0.0f);
+            auto model = bullet->addChild<Actors::ModelActor>("model", "./res/starship/Starship01.gltf");
+            model->setScale(glm::vec3(0.2));
             bullet->setTranslation(DynamicActor::getTranslation());
             bullet->setRotation(glm::quatLookAt(m_orientation, m_up));
             bullet->addForce(m_orientation * 40.0f);
