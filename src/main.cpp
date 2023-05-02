@@ -49,6 +49,9 @@ int main() {
     auto sphere = scene.addChild<ModelActor>("sphere", "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
 
+    auto map = scene.addChild<ModelActor>("map", "./res/map/scene.gltf");
+    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
+
     auto player = scene.addChild<PlayerActor>("Player");
     auto camera = player->addChild<Graphics::Camera>("Camera");
     camera->setActive();
@@ -56,7 +59,7 @@ int main() {
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf", 10);
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
