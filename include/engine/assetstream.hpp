@@ -16,14 +16,14 @@ namespace Engine {
 
     class AssetStream {
     public:
-        typedef std::function<void(std::shared_ptr<const std::string> data)> textCallback;
-        typedef std::function<void(const uint8_t* data, size_t size)> binaryCallback;
+        typedef std::function<void(std::shared_ptr<std::string> data)> textCallback;
+        typedef std::function<void(uint8_t* data, size_t size)> binaryCallback;
 
         static AssetStream& getInstance();
 
         bool getCachedTextAsset(const std::string& filePath, const textCallback& callback);
         bool getCachedBinaryAsset(const std::string& filePath, const binaryCallback& callback);
-        void saveToCache(const std::string& filePath, const std::shared_ptr<const std::string>& data);
+        void saveToCache(const std::string& filePath, const std::shared_ptr<std::string>& data);
 
         void getTextAssetAsync(const std::string& filePath, const textCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
         void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
@@ -41,7 +41,7 @@ namespace Engine {
         ///                 the resulting std::string is better to be converted to a C string
         /// \return         The string representing the file contents
         /// \see            unixifyLineEndings
-        static std::shared_ptr<const std::string> readFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
+        static std::shared_ptr<std::string> readFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
         /// \brief          Finds and creates a string representing the current process' directory
         /// \details        Useful for looking up files relative to the executable and not working directory
         /// \return         The string path to the directory
@@ -71,10 +71,10 @@ namespace Engine {
 
         std::priority_queue<AssetQuery, std::vector<AssetQuery>, std::less<>> m_assetQueue;
         std::mutex m_assetQueueMutex;
-        std::map<const std::string, std::shared_ptr<const std::string> > m_cachedAssets;
+        std::map<const std::string, std::shared_ptr<std::string>> m_cachedAssets;
         std::mutex m_cachedAssetsMutex;
 
-        static std::shared_ptr<const std::string> asyncReadFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
+        static std::shared_ptr<std::string> asyncReadFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
 
         bool getNextQuery(AssetQuery& entry);
     };
