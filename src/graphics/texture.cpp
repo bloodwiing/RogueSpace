@@ -21,9 +21,9 @@ Graphics::Texture::Texture(std::string fileName)
     glGenBuffers(1, &m_PBO);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
     glBufferData(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_STREAM_DRAW);
-    glBufferStorage(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
+    glBufferStorage(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT);
 
-    m_buffer = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
+    m_buffer = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
 
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -57,8 +57,10 @@ void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
 
 bool Graphics::Texture::isReady() {
     if (m_ready and m_buffer != nullptr) {
+        bind(0);
+
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
-        glFlushMappedBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels);
+        glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
 
         switch (m_channels) {
             case 4:
