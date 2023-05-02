@@ -12,9 +12,9 @@ namespace Graphics {
     public:
         Shader();
         /// \brief                  Loads a new OpenGL program with the given Vertex and Fragment shader source files
-        /// \param vertex_file      Path to a Vertex shader
-        /// \param fragment_file    Path to a Fragment shader
-        Shader(const std::string& vertex_file, const std::string& fragment_file);
+        /// \param vertexFile      Path to a Vertex shader
+        /// \param fragmentFile    Path to a Fragment shader
+        Shader(const std::string& vertexFile, const std::string& fragmentFile);
 
         /// \brief          Makes the Shader Program active
         void activate();
@@ -40,10 +40,10 @@ namespace Graphics {
         bool m_error;
 
         /// \brief              Helper function to load either Shader into OpenGL
-        /// \param file_name    The Path to a shader file
+        /// \param filePath    The Path to a shader file
         /// \param type         The type of shader to load
         /// \return             The ID of the compiled shader
-        static GLuint loadShaderFile(const std::string &file_name, GLenum type);
+        static GLuint loadShaderFile(const std::string &filePath, GLenum type);
 
         /// \brief              Checks for shader compile errors
         /// \param shaderID     The ID of the shader to check
