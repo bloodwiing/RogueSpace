@@ -1,0 +1,21 @@
+file: "Normal.tga"
+hash: "f11b94ba0ae0f383743110298603ee1c"
+level: 0
+format: TGA
+height: 4096
+width: 4096
+channels: 4
+priority: -2
+lod:
+  - file: "Normal.LOD1.tga"
+    level: 1
+    height: 128
+    width: 128
+    channels: 4
+    priority: 0
+  - file: "Normal.LOD2.tga"
+    level: 2
+    height: 512
+    width: 512
+    channels: 4
+    priority: -1

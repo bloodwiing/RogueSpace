@@ -1,16 +1,19 @@
 #include <iostream>
 
 #include "graphics/shader.hpp"
-#include "utils.hpp"
+#include "engine/assetstream.hpp"
 
-GLuint Graphics::Shader::loadShaderFile(const std::string &file_name, GLenum type) {
+GLuint Graphics::Shader::loadShaderFile(const std::string &filePath, GLenum type) {
     GLuint id = glCreateShader(type);
 
-    const std::string vertex_source = Utility::readFileContents(file_name);
-    const char* vertex_code = vertex_source.c_str();
+    Engine::AssetStream::getInstance().getTextAsset(
+            filePath,
+            [id](const std::shared_ptr<const std::string>& data) {
+                const char* vertexCode = data->c_str();
 
-    glShaderSource(id, 1, &vertex_code, nullptr);
-    glCompileShader(id);
+                glShaderSource(id, 1, &vertexCode, nullptr);
+                glCompileShader(id);
+            });
 
     return id;
 }
@@ -20,14 +23,14 @@ Graphics::Shader::Shader()
     , m_error(true)
 { }
 
-Graphics::Shader::Shader(const std::string& vertex_file, const std::string& fragment_file)
+Graphics::Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
     : m_error(false)
 {
-    GLuint vertID = loadShaderFile(vertex_file, GL_VERTEX_SHADER);
-    checkShaderErrors(vertID, "Vertex", vertex_file);
+    GLuint vertID = loadShaderFile(vertexFile, GL_VERTEX_SHADER);
+    checkShaderErrors(vertID, "Vertex", vertexFile);
 
-    GLuint fragID = loadShaderFile(fragment_file, GL_FRAGMENT_SHADER);
-    checkShaderErrors(fragID, "Fragment", fragment_file);
+    GLuint fragID = loadShaderFile(fragmentFile, GL_FRAGMENT_SHADER);
+    checkShaderErrors(fragID, "Fragment", fragmentFile);
 
     m_ID = glCreateProgram();
     glAttachShader(m_ID, vertID);

@@ -4,14 +4,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "graphics/model.hpp"
 #include "engine/actor/physicsactor.hpp"
 #include "engine/actor/playeractor.hpp"
+#include "engine/actor/modelactor.hpp"
+#include "engine/assetstream.hpp"
 
 #include "engine/super.hpp"
 #include "engine/time.hpp"
 
 #include "utils.hpp"
+#include "engine/actor/modelactor.hpp"
 
 const int width = 1366,
           height = 700;
@@ -44,6 +46,12 @@ int main() {
 
     Engine::Scene scene;
 
+    auto sphere = scene.addChild<ModelActor>("sphere", "./res/sphere/sphere.gltf");
+    sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
+
+    auto map = scene.addChild<ModelActor>("map", "./res/map/scene.gltf");
+    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
+
     auto player = scene.addChild<PlayerActor>("Player");
     auto camera = player->addChild<Graphics::Camera>("Camera");
     camera->setActive();
@@ -51,12 +59,14 @@ int main() {
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-        auto starship_model = starship->addChild<Graphics::Model>("model", "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
     starship->setWeight(0.5f);
-    starship->setLinearVelocity(glm::vec3(5.0f, 1.0f, 0.0f));
+    starship->translate(glm::vec3(4.0f, 0.0f, 0.0f));
+    starship->rotate(glm::quat(glm::vec3(glm::pi<float>(), 0.0f, 0.0f)));
+//    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
 
     std::cout << &scene;
 
@@ -96,6 +106,8 @@ int main() {
 
         Time::waitForNextFrame();
     }
+
+    Engine::AssetStream::shutdown();
 
     shader.destroy();
     glfwTerminate();

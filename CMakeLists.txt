@@ -7,6 +7,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
 set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/pdb)
 include(CTest)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+
 # -----
 
 set(CMAKE_CXX_STANDARD 17)
@@ -22,6 +25,11 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
 link_libraries(glfw)
+install(TARGETS glfw)
+
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/yaml)
+link_libraries(yaml-cpp)
+install(TARGETS yaml-cpp)
 
 find_package(GLM REQUIRED)
 if(GLM_FOUND)
@@ -83,7 +91,6 @@ add_custom_target(
         ${CMAKE_CURRENT_SOURCE_DIR}/res
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
-
 
 add_dependencies(Build CopyResources)
 add_dependencies(BuildTest Build)

@@ -1,3 +1,6 @@
 [submodule "lib/glfw"]
 	path = lib/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "lib/yaml"]
+	path = lib/yaml
+	url = https://github.com/jbeder/yaml-cpp

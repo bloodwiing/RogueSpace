@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <json/json.h>
+#include <memory>
+#include <mutex>
 
 #include "mesh.hpp"
 #include "material.hpp"
@@ -14,31 +16,24 @@ namespace Graphics {
     using json = nlohmann::json;
     using namespace Engine;
 
-    /// \brief          A Graphical 3D Actor that can be drawn.
-    /// \details        Contains a 3D Mesh, created from the glTF 2.0 standard
-    class Model : public Actors::DynamicActor {
+    class Model : public std::enable_shared_from_this<Model> {
     public:
-        /// \note           Should not be used raw, please use addChild
-        /// \param scene    Containing Scene of the Actor node
-        /// \param parent   Parent of the Actor node
-        /// \param name     Name of the Actor node
-        /// \param filename The path fo the glTF model file
-        /// \see            Scene#addChild
-        /// \see            Actor#addChild
-        explicit Model(Scene *scene, ActorBase *parent, std::string name, const char* filename);
+        explicit Model(std::string fileName);
+        static std::shared_ptr<Model> create(std::string fileName);
 
-        void draw(Shader& shader) override;
+        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
+        [[nodiscard]] bool isReady() const;
 
-    protected:
-        [[nodiscard]] std::string getTypeName() const override;
+        void draw(Shader& shader, glm::mat4 worldMatrix = glm::mat4(1.0f));
 
     private:
         /// The path fo the glTF model file
-        const char* m_filename;
+        const std::string m_fileName;
         /// Raw binary data read from a binary buffer
         std::vector<uint8_t> m_data;
         /// Deserialized glTF file
         json m_json;
+        std::atomic<bool> m_ready;
 
         /// List of all Meshes detected while traversing glTF Nodes
         std::vector<Mesh> m_meshes;
@@ -47,9 +42,7 @@ namespace Graphics {
 
         /// List of Materials assigned to each of the Meshes
         std::vector<Material> m_materials;
-        /// Optimised pre-loaded Texture Map, containing pairs of the Texture file path and the Texture created.
-        /// In this case there is able to be multiple Textures that have a repeat path but are only loaded once
-        std::unordered_map<std::string, Texture> m_loadedTexNames;
+        std::vector<std::shared_ptr<Texture> > m_textures;
 
         /// \brief              Reads and saves a Mesh from the index
         /// \param meshIndex    The index of which Mesh to load
@@ -62,22 +55,19 @@ namespace Graphics {
         /// \param matrix       The Parent node inherited Transformation
         void traverseNode(uint16_t nodeIndex, glm::mat4 matrix = glm::mat4(1.0f));
 
-        /// \return             Binary data read from a buffer
-        std::vector<uint8_t> getData();
+        void getData(int priority = ASSET_STREAM_BASE_PRIORITY);
         /// \param accessor     The glTF accessor where Floats are to be read
         /// \return             The generated list of Floats from the Accessor's reference
         std::vector<float> getFloats(json accessor);
         /// \param accessor     The glTF accessor where Indices are to be read
         /// \return             The generated list of Indices from the Accessor's reference
         std::vector<GLuint> getIndices(json accessor);
-        /// \return             The created list of Textures, optimised via m_loadedTexNames
-        /// \see                Model#m_loadedTexNames
-        std::vector<Texture> getTextures();
+        void getTextures(int priority = ASSET_STREAM_BASE_PRIORITY);
         /// \brief              Creates a Material from the Json data of the glTF Mesh entry and the full list of Textures
         /// \param data         glTF Material entry
         /// \param textures     The list of textures, made via getTextures()
         /// \return             A compiled Material
-        Material getMaterial(json data, std::vector<Texture>& textures);
+        Material getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures);
 
         /// \brief              Combines all 3 lists of vertex data into a single list of Vertex objects
         /// \param positions    The Vertex Position list

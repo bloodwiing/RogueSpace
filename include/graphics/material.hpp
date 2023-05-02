@@ -16,7 +16,7 @@ namespace Graphics {
         /// \brief          A Texture with the corresponding UV coordinates reference
         struct TextureRef {
             bool enabled = false;
-            Texture texture;
+            std::shared_ptr<Texture> texture;
             uint8_t texCoord = 0;
         };
 
@@ -30,14 +30,14 @@ namespace Graphics {
         /// \brief          Sets a Diffuse texture under the 0th Diffuse sampler
         /// \param texture  The texture to use for Diffuse colour
         /// \param texCoord The UV coordinate reference index
-        void setDiffuse0(Texture texture, uint8_t texCoord);
+        void setDiffuse0(std::shared_ptr<Texture> texture, uint8_t texCoord);
         /// \brief          Sets a Diffuse colour multiplier
         /// \param factor   The factor or colour that multiplies after the Diffuse Texture
         void setDiffuseFactor(glm::vec4 factor);
 
         /// \brief          Updates Texture and Factor uniforms on the Shader
         /// \param shader   The Shader to update
-        void apply(Shader& shader) const;
+        bool apply(Shader& shader) const;
 
     private:
         /// The name of the Material

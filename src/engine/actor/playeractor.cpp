@@ -6,7 +6,7 @@
 #include "engine/time.hpp"
 #include "graphics/window.hpp"
 #include "graphics/camera.hpp"
-#include "graphics/model.hpp"
+#include "engine/actor/modelactor.hpp"
 
 namespace Actors = Engine::Actors;
 
@@ -58,7 +58,7 @@ void Actors::PlayerActor::update() {
     }
 
     if (m_clicked) {
-        double rot_x, rot_y;
+        double rot_x = 0.0, rot_y = 0.0;
         GET_RELATIVE_MOUSE(rot_x, rot_y);
 
         rot_x *= m_sensitivity;
@@ -68,14 +68,15 @@ void Actors::PlayerActor::update() {
         rotate(glm::rotate(glm::radians((float)rot_x), m_up));
 
         m_up = glm::vec3(0.0f, 1.0f, 0.0f) * DynamicActor::getRotation();
-        m_orientation = glm::vec3(0.0f, 0.0f, -1.0f) * DynamicActor::getRotation();
+        m_orientation = glm::vec3(1.0f, 0.0f, 0.0f) * DynamicActor::getRotation();
 
         if (m_fireCoolDown > 0.0f)
             m_fireCoolDown -= Time::getDeltaFloat();
 
         if (m_fireCoolDown <= 0.0f and IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-            auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet", 0.0f, 0.0f);
-            bullet->addChild<Graphics::Model>("model", "./res/bullet/BulletTemp.gltf");
+            auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet(AsShipToTestLoadTimes)", 0.0f, 0.0f);
+            auto model = bullet->addChild<Actors::ModelActor>("model", "./res/starship/Starship01.gltf");
+            model->setScale(glm::vec3(0.2));
             bullet->setTranslation(DynamicActor::getTranslation());
             bullet->setRotation(glm::quatLookAt(m_orientation, m_up));
             bullet->addForce(m_orientation * 40.0f);

@@ -54,7 +54,7 @@ void Graphics::Camera::update() {
     DynamicActor::update();
 
     m_up = glm::normalize(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
-    m_orientation = glm::normalize(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f) * DynamicActor::getWorldMatrix());
+    m_orientation = glm::normalize(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
 }
 
 void Graphics::Camera::copyOrientation(Camera *camera, bool copyUpVector /* = true */) {
