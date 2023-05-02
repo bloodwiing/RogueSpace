@@ -41,7 +41,9 @@ std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& 
     return std::make_shared<Texture>(fileName);
 }
 
-void Graphics::Texture::queue() {
+void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    if (m_ready)
+        return;
     Engine::AssetStream::getInstance().getBinaryAssetAsync(
             m_fileName,
             [self = shared_from_this()](const uint8_t* data, size_t size){
@@ -50,7 +52,7 @@ void Graphics::Texture::queue() {
                 memcpy(self->m_buffer, finalData, width * height * channels);
                 stbi_image_free(finalData);
                 self->m_ready = true;
-            });
+            }, priority);
 }
 
 bool Graphics::Texture::isReady() {

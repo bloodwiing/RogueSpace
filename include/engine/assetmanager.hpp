@@ -6,6 +6,8 @@
 #include <mutex>
 #include <memory>
 
+#include "engine/assetstream.hpp"
+
 #include "graphics/model.hpp"
 #include "graphics/texture.hpp"
 
@@ -15,8 +17,8 @@ namespace Engine {
     public:
         static AssetManager* getInstance();
 
-        std::shared_ptr<Graphics::Model> getModel(const std::string& fileName);
-        std::shared_ptr<Graphics::Texture> getTexture(const std::string& fileName);
+        std::shared_ptr<Graphics::Model> getModel(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Graphics::Texture> getTexture(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
 
     private:
         AssetManager();
@@ -29,8 +31,8 @@ namespace Engine {
         mutable std::mutex m_modelMutex,
                            m_textureMutex;
 
-        std::shared_ptr<Graphics::Model> loadModel(const std::string& fileName);
-        std::shared_ptr<Graphics::Texture> loadTexture(const std::string& fileName);
+        std::shared_ptr<Graphics::Model> loadModel(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Graphics::Texture> loadTexture(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
     };
 }
 

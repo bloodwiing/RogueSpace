@@ -26,7 +26,7 @@ namespace Graphics {
         explicit Texture(std::string filename);
         static std::shared_ptr<Texture> create(const std::string& fileName);
 
-        void queue();
+        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
 
         [[nodiscard]] bool isReady();
 

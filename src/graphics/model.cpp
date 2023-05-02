@@ -18,14 +18,16 @@ std::shared_ptr<Graphics::Model> Graphics::Model::create(std::string fileName) {
     return std::make_shared<Model>(std::move(fileName));
 }
 
-void Graphics::Model::queue() {
+void Graphics::Model::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    if (m_ready)
+        return;
     Engine::AssetStream::getInstance().getTextAsset(
             m_fileName,
-            [self = shared_from_this()](const std::shared_ptr<const std::string>& content){
+            [self = shared_from_this(), priority](const std::shared_ptr<const std::string>& content){
                 self->m_json = json::parse(*content);
 
-                self->getTextures();
-                self->getData();
+                self->getTextures(priority);
+                self->getData(priority);
             });
 }
 
@@ -120,7 +122,7 @@ void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 }
 
-void Graphics::Model::getData() {
+void Graphics::Model::getData(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     std::string bytes_text;
     std::string uri = m_json["buffers"][0]["uri"];
 
@@ -136,7 +138,7 @@ void Graphics::Model::getData() {
                     self->traverseNode(node);
 
                 self->m_ready = true;
-            });
+            }, priority);
 }
 
 std::vector<float> Graphics::Model::getFloats(json accessor) {
@@ -217,14 +219,14 @@ std::vector<GLuint> Graphics::Model::getIndices(json accessor) {
     return result;
 }
 
-void Graphics::Model::getTextures() {
+void Graphics::Model::getTextures(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     m_textures.clear();
 
     std::string directory = m_fileName.substr(0, m_fileName.find_last_of('/') + 1);
 
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
-        m_textures.push_back(Engine::AssetManager::getInstance()->getTexture(directory + texturePath));
+        m_textures.push_back(Engine::AssetManager::getInstance()->getTexture(directory + texturePath, priority));
     }
 }
 

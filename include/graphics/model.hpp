@@ -21,7 +21,7 @@ namespace Graphics {
         explicit Model(std::string fileName);
         static std::shared_ptr<Model> create(std::string fileName);
 
-        void queue();
+        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
         [[nodiscard]] bool isReady() const;
 
         void draw(Shader& shader, glm::mat4 worldMatrix = glm::mat4(1.0f));
@@ -55,14 +55,14 @@ namespace Graphics {
         /// \param matrix       The Parent node inherited Transformation
         void traverseNode(uint16_t nodeIndex, glm::mat4 matrix = glm::mat4(1.0f));
 
-        void getData();
+        void getData(int priority = ASSET_STREAM_BASE_PRIORITY);
         /// \param accessor     The glTF accessor where Floats are to be read
         /// \return             The generated list of Floats from the Accessor's reference
         std::vector<float> getFloats(json accessor);
         /// \param accessor     The glTF accessor where Indices are to be read
         /// \return             The generated list of Indices from the Accessor's reference
         std::vector<GLuint> getIndices(json accessor);
-        void getTextures();
+        void getTextures(int priority = ASSET_STREAM_BASE_PRIORITY);
         /// \brief              Creates a Material from the Json data of the glTF Mesh entry and the full list of Textures
         /// \param data         glTF Material entry
         /// \param textures     The list of textures, made via getTextures()

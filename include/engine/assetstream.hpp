@@ -10,6 +10,8 @@
 #include <memory>
 #include <mutex>
 
+#define ASSET_STREAM_BASE_PRIORITY 5
+
 namespace Engine {
 
     class AssetStream {
@@ -23,8 +25,8 @@ namespace Engine {
         bool getCachedBinaryAsset(const std::string& filePath, const binaryCallback& callback);
         void saveToCache(const std::string& filePath, const std::shared_ptr<const std::string>& data);
 
-        void getTextAssetAsync(const std::string& filePath, const textCallback& callback);
-        void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback);
+        void getTextAssetAsync(const std::string& filePath, const textCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
+        void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
 
         void getTextAsset(const std::string& filePath, const textCallback& callback);
         void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
@@ -53,24 +55,27 @@ namespace Engine {
 
         std::thread m_thread;
 
-        struct AssetQueueEntry {
+        struct AssetQuery {
             std::string filePath;
             textCallback callback;
             std::ios::openmode mode = std::ios::in;
+            int priority;
+
+            bool operator<(const AssetQuery& other) const;
         };
 
         bool m_active = true;
 
         static AssetStream* m_instance;
 
-        std::queue<AssetQueueEntry> m_assetQueue;
+        std::priority_queue<AssetQuery, std::vector<AssetQuery>, std::less<>> m_assetQueue;
         std::mutex m_assetQueueMutex;
         std::map<const std::string, std::shared_ptr<const std::string> > m_cachedAssets;
         std::mutex m_cachedAssetsMutex;
 
         static std::shared_ptr<const std::string> asyncReadFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
 
-        bool getNextQuery(AssetQueueEntry& entry);
+        bool getNextQuery(AssetQuery& entry);
     };
 }
 

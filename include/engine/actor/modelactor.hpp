@@ -3,13 +3,15 @@
 
 #include "dynamicactor.hpp"
 
+#include "engine/assetstream.hpp"
+
 #include "graphics/model.hpp"
 
 namespace Engine::Actors {
 
     class ModelActor : public DynamicActor {
     public:
-        ModelActor(Scene *scene, ActorBase *parent, std::string name, const char *fileName);
+        ModelActor(Scene *scene, ActorBase *parent, std::string name, const char *fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
 
         void draw(Graphics::Shader &shader) override;
 

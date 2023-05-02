@@ -4,3 +4,4 @@ format: TGA
 height: 4096
 width: 4096
 channels: 4
+priority: 5

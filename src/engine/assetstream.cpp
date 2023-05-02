@@ -42,27 +42,29 @@ void Engine::AssetStream::saveToCache(const std::string &filePath, const std::sh
     getInstance().m_cachedAssets[filePath] = data;
 }
 
-void Engine::AssetStream::getTextAssetAsync(const std::string& filePath, const AssetStream::textCallback& callback) {
+void Engine::AssetStream::getTextAssetAsync(const std::string& filePath, const AssetStream::textCallback& callback, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     if (getCachedTextAsset(filePath, callback))
         return;
 
     std::lock_guard<std::mutex> lock(m_assetQueueMutex);
-    getInstance().m_assetQueue.emplace((AssetQueueEntry){
+    getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
         .callback = callback,
-        .mode = ios::in
+        .mode = ios::in,
+        .priority = priority
     });
 }
 
-void Engine::AssetStream::getBinaryAssetAsync(const std::string& filePath, const AssetStream::binaryCallback& callback) {
+void Engine::AssetStream::getBinaryAssetAsync(const std::string& filePath, const AssetStream::binaryCallback& callback, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     if (getCachedBinaryAsset(filePath, callback))
         return;
 
     std::lock_guard<std::mutex> lock(m_assetQueueMutex);
-    getInstance().m_assetQueue.emplace((AssetQueueEntry){
+    getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
         .callback = [callback](const std::shared_ptr<const std::string>& data) { callback((const uint8_t*)data->c_str(), data->length()); },
-        .mode = ios::in | ios::binary
+        .mode = ios::in | ios::binary,
+        .priority = priority
     });
 }
 
@@ -90,7 +92,7 @@ void Engine::AssetStream::shutdown() {
 
 void Engine::AssetStream::asyncLoop() {
     while (getInstance().m_active) {
-        AssetQueueEntry entry;
+        AssetQuery entry;
         if (!getInstance().getNextQuery(entry)) {
             std::this_thread::yield();
             continue;
@@ -189,11 +191,15 @@ void Engine::AssetStream::unixifyLineEndings(std::string &text) {
         text.erase(pos, 1);
 }
 
-bool Engine::AssetStream::getNextQuery(Engine::AssetStream::AssetQueueEntry& entry) {
+bool Engine::AssetStream::getNextQuery(Engine::AssetStream::AssetQuery& entry) {
     std::lock_guard<std::mutex> lock(m_assetQueueMutex);
     if (m_assetQueue.empty())
         return false;
-    entry = m_assetQueue.front();
+    entry = m_assetQueue.top();
     m_assetQueue.pop();
     return true;
+}
+
+bool Engine::AssetStream::AssetQuery::operator<(const Engine::AssetStream::AssetQuery &other) const {
+    return priority < other.priority;
 }
