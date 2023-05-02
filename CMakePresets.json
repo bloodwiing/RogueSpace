@@ -16,6 +16,14 @@
         "dev": true
       },
       "cacheVariables": {
+        "YAML_CPP_BUILD_TOOLS": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "YAML_CPP_INSTALL": {
+          "type": "BOOL",
+          "value": "ON"
+        },
         "CMAKE_BUILD_TYPE": "Debug"
       }
     }
