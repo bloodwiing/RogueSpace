@@ -8,15 +8,116 @@
 #include <yaml-cpp/yaml.h>
 #include <GL/glext.h>
 
-Graphics::Texture::Texture(std::string fileName)
+Graphics::Texture::Texture(const std::string& filePath)
+    : m_metadata(YAML::LoadFile(filePath + ".meta"))
+    , m_activeLOD(-1)
+    , m_main(LOD::create(filePath, m_metadata, this))
+{
+    std::string directory = Engine::AssetStream::getFileDirectory(filePath);
+
+    YAML::Node LODs = m_metadata["lod"];
+    if (LODs.IsDefined() && LODs.IsSequence()) {
+        for (auto iter = LODs.begin(); iter != LODs.end(); ++iter) {
+            m_levels.push_back(LOD::create(directory + (*iter)["file"].as<std::string>(), *iter, this));
+        }
+    }
+}
+
+std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& fileName) {
+    return std::make_shared<Texture>(fileName);
+}
+
+void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    m_main->queue(priority);
+    for (auto& level : m_levels) {
+        level->queue(priority);
+    }
+}
+
+bool Graphics::Texture::isReady() {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return false;
+
+    return LOD->isReady();
+}
+
+void Graphics::Texture::bind(GLint unit) const {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return;
+
+    return LOD->bind(unit);
+}
+
+void Graphics::Texture::unbind() const {
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Graphics::Texture::destroy() const {
+    m_main->destroy();
+    for (auto& level : m_levels) {
+        level->destroy();
+    }
+}
+
+GLuint Graphics::Texture::getID() const {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return 0;
+
+    return LOD->getID();
+}
+
+void Graphics::Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
+    if (!shader.isErrored()) {
+        GLint uniformID = shader.getUniform(uniform);
+        shader.activate();
+        glUniform1i(uniformID, unit);
+    }
+}
+
+bool Graphics::Texture::getActiveLOD(std::shared_ptr<LOD> &LOD) const {
+    if (m_activeLOD == -1)
+        return false;
+
+    if (m_activeLOD == 0)
+        LOD = m_main;
+    else
+        LOD = m_levels[m_activeLOD - 1];
+
+    return true;
+}
+
+bool Graphics::Texture::setActiveLOD(int level) {
+    ++m_LODsLoaded;
+
+    if (m_LODsLoaded == m_levels.size() + 1) {
+        for (auto& lod : m_levels) {
+            lod->destroy();
+        }
+        m_levels.clear();
+    }
+
+    if (level == 0 or (level > m_activeLOD && m_activeLOD != 0)) {
+        m_activeLOD = level;
+        return true;
+    }
+
+    return false;
+}
+
+Graphics::Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* container)
     : m_ID()
     , m_PBO()
-    , m_metadata(YAML::LoadFile(fileName + ".meta"))
     , m_fileName(std::move(fileName))
-    , m_width(m_metadata["width"].as<int>())
-    , m_height(m_metadata["height"].as<int>())
-    , m_channels(m_metadata["channels"].as<int>())
+    , m_width(node["width"].as<int>())
+    , m_height(node["height"].as<int>())
+    , m_channels(node["channels"].as<int>())
+    , m_level(node["level"].as<int>())
+    , m_priority(node["priority"].as<int>())
     , m_ready(false)
+    , m_container(container)
 {
     glGenBuffers(1, &m_PBO);
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
@@ -37,11 +138,11 @@ Graphics::Texture::Texture(std::string fileName)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 }
 
-std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& fileName) {
-    return std::make_shared<Texture>(fileName);
+std::shared_ptr<Graphics::Texture::LOD> Graphics::Texture::LOD::create(const std::string &fileName, const YAML::Node &node, Texture* container) {
+    return std::make_shared<LOD>(fileName, node, container);
 }
 
-void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Graphics::Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     if (m_ready)
         return;
     Engine::AssetStream::getInstance().getBinaryAssetAsync(
@@ -52,15 +153,18 @@ void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
                 memcpy(self->m_buffer, finalData, width * height * channels);
                 stbi_image_free(finalData);
                 self->m_ready = true;
-            }, priority);
+
+                self->m_container->setActiveLOD(self->m_level);
+            }, priority + m_priority);
 }
 
-bool Graphics::Texture::isReady() {
+bool Graphics::Texture::LOD::isReady() {
     if (m_ready and m_buffer != nullptr) {
         bind(0);
 
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
         glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+        m_buffer = nullptr;
 
         switch (m_channels) {
             case 4:
@@ -80,34 +184,30 @@ bool Graphics::Texture::isReady() {
         }
 
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-        m_buffer = nullptr;
 
         unbind();
     }
     return m_ready;
 }
 
-void Graphics::Texture::bind(GLint unit) const {
+void Graphics::Texture::LOD::bind(GLint unit) const {
     glActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void Graphics::Texture::unbind() const {
+void Graphics::Texture::LOD::unbind() const {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Graphics::Texture::destroy() const {
-    glDeleteTextures(1, &m_ID);
+void Graphics::Texture::LOD::destroy() const {
+    glDeleteBuffers(1, &m_ID);
+    glDeleteBuffers(1, &m_PBO);
 }
 
-GLuint Graphics::Texture::getID() const {
+GLuint Graphics::Texture::LOD::getID() const {
     return m_ID;
 }
 
-void Graphics::Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
-    if (!shader.isErrored()) {
-        GLint uniformID = shader.getUniform(uniform);
-        shader.activate();
-        glUniform1i(uniformID, unit);
-    }
+int Graphics::Texture::LOD::getLevel() const {
+    return m_level;
 }

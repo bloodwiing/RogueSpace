@@ -200,6 +200,10 @@ bool Engine::AssetStream::getNextQuery(Engine::AssetStream::AssetQuery& entry) {
     return true;
 }
 
+std::string Engine::AssetStream::getFileDirectory(const std::string &filePath) {
+    return filePath.substr(0, filePath.find_last_of('/') + 1);
+}
+
 bool Engine::AssetStream::AssetQuery::operator<(const Engine::AssetStream::AssetQuery &other) const {
     return priority < other.priority;
 }

@@ -49,6 +49,7 @@ namespace Engine {
         static void makePathAbsolute(std::string& path);
         /// \brief          Converts Windows style \r\n line endings to UNIX style \n new line endings
         static void unixifyLineEndings(std::string& text);
+        static std::string getFileDirectory(const std::string& filePath);
 
     private:
         AssetStream();

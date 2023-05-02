@@ -126,7 +126,7 @@ void Graphics::Model::getData(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     std::string bytes_text;
     std::string uri = m_json["buffers"][0]["uri"];
 
-    std::string directory = m_fileName.substr(0, m_fileName.find_last_of('/') + 1);
+    std::string directory = Engine::AssetStream::getFileDirectory(m_fileName);
 
     Engine::AssetStream::getInstance().getBinaryAssetAsync(
             directory + uri,
@@ -222,7 +222,7 @@ std::vector<GLuint> Graphics::Model::getIndices(json accessor) {
 void Graphics::Model::getTextures(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     m_textures.clear();
 
-    std::string directory = m_fileName.substr(0, m_fileName.find_last_of('/') + 1);
+    std::string directory = Engine::AssetStream::getFileDirectory(m_fileName);
 
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];

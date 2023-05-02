@@ -18,12 +18,10 @@ namespace Graphics {
     /// \details    OpenGL Texture
     class Texture : public std::enable_shared_from_this<Texture> {
     public:
-        /// \brief          Default empty constructor
-        Texture() = default;
         /// \brief          Creates and loads a Texture
         /// \details        Uses STB to load Images, so support is dependent on the library
-        /// \param filename The path to the Image Texture
-        explicit Texture(std::string filename);
+        /// \param filePath The path to the Image Texture
+        explicit Texture(const std::string& filePath);
         static std::shared_ptr<Texture> create(const std::string& fileName);
 
         void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
@@ -36,7 +34,7 @@ namespace Graphics {
         /// \param unit     The Texture slot
         void assign(Shader& shader, const char* uniform, GLint unit) const;
         /// \brief          Makes the Image Texture active in the specified slot
-        void bind(GLint slot) const;
+        void bind(GLint unit) const;
         /// \brief          Makes no Image Texture active (inactive)
         void unbind() const;
         /// \brief          Deletes the Texture
@@ -45,25 +43,55 @@ namespace Graphics {
         /// \return         Texture OpenGL ID
         [[nodiscard]] GLuint getID() const;
 
+    protected:
+        class LOD : public std::enable_shared_from_this<LOD> {
+        public:
+            LOD(std::string fileName, const YAML::Node& node, Texture* container);
+            static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
+
+            void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
+
+            [[nodiscard]] bool isReady();
+
+            void bind(GLint unit) const;
+            void unbind() const;
+            void destroy() const;
+
+            Texture* m_container;
+
+            [[nodiscard]] GLuint getID() const;
+            [[nodiscard]] int getLevel() const;
+
+        private:
+            std::atomic<bool> m_ready;
+
+            GLuint m_ID;
+            GLuint m_PBO;
+
+            void* m_buffer;
+
+            const int m_width;
+            const int m_height;
+            const int m_channels;
+
+            const int m_level = 0;
+            const int m_priority;
+
+            const std::string m_fileName;
+        };
+
+        bool setActiveLOD(int level);
+
     private:
-        std::atomic<bool> m_ready;
-
-        /// Texture OpenGL ID
-        GLuint m_ID;
-        GLuint m_PBO;
-
         const YAML::Node m_metadata;
 
-        /// Texture width in pixels
-        const int m_width,
-        /// Texture height in pixels
-                  m_height,
-        /// Texture channel count
-                  m_channels;
+        std::shared_ptr<LOD> m_main;
+        std::vector<std::shared_ptr<LOD>> m_levels;
 
-        void* m_buffer;
+        std::atomic<int> m_activeLOD;
+        std::atomic<int> m_LODsLoaded = 0;
 
-        const std::string m_fileName;
+        [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
     };
 }
 

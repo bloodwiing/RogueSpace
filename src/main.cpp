@@ -59,12 +59,14 @@ int main() {
     auto starship = scene.addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
     starship->scale(glm::vec3(0.50f));
     try {
-        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf", 10);
+        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
     starship->setWeight(0.5f);
-    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
+    starship->translate(glm::vec3(4.0f, 0.0f, 0.0f));
+    starship->rotate(glm::quat(glm::vec3(glm::pi<float>(), 0.0f, 0.0f)));
+//    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
 
     std::cout << &scene;
 
