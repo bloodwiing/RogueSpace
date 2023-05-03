@@ -34,6 +34,8 @@ namespace Graphics {
         /// \return         Shader Program OpenGL ID
         [[nodiscard]] GLuint getID() const;
 
+        class ShaderError;
+
         class CompileError;
         class ProgramError;
 
@@ -58,14 +60,24 @@ namespace Graphics {
         void checkProgramErrors();
     };
 
-    class Shader::CompileError : public std::runtime_error {
+    class Shader::ShaderError : public std::runtime_error {
     public:
-        CompileError(const std::string& text);
+        ShaderError(const std::string& text, GLchar* infoLog);
     };
 
-    class Shader::ProgramError : public std::runtime_error {
+    class Shader::CompileError : Shader::ShaderError {
     public:
-        ProgramError(const std::string& text);
+        CompileError(const std::string& type, const std::string& file, GLchar* infoLog);
+
+        [[nodiscard]] std::string getFile() const;
+
+    private:
+        const std::string& m_file;
+    };
+
+    class Shader::ProgramError : Shader::ShaderError {
+    public:
+        ProgramError(GLchar* infoLog);
     };
 }
 

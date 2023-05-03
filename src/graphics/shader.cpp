@@ -60,7 +60,7 @@ void Graphics::Shader::checkShaderErrors(GLuint shaderID, const std::string &typ
     if (!status) {
         m_error = true;
         glGetShaderInfoLog(shaderID, ERROR_MESSAGE_LEN, nullptr, infoLog);
-        throw CompileError(std::string("Error compiling OpenGL ") + type + " shader:\n" + file + " - " + infoLog);
+        throw CompileError(type, file, infoLog);
     }
 }
 
@@ -72,7 +72,7 @@ void Graphics::Shader::checkProgramErrors() {
         m_error = true;
         glGetProgramInfoLog(m_ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
         destroy();
-        throw ProgramError(std::string("Error linking OpenGL program:\n") + infoLog);
+        throw ProgramError(infoLog);
     }
 }
 
@@ -88,10 +88,19 @@ GLint Graphics::Shader::getUniform(const char *uniform) {
     return glGetUniformLocation(m_ID, uniform);
 }
 
-Graphics::Shader::CompileError::CompileError(const std::string &text)
-    : runtime_error(text)
+Graphics::Shader::ShaderError::ShaderError(const std::string& text, GLchar* infoLog)
+    : runtime_error(text + ":\n" + infoLog)
 { }
 
-Graphics::Shader::ProgramError::ProgramError(const std::string &text)
-    : runtime_error(text)
+Graphics::Shader::CompileError::CompileError(const std::string &type, const std::string &file, GLchar *infoLog)
+    : Shader::ShaderError(std::string("Error compiling OpenGL ") + type + " shader (file " + file + ")", infoLog)
+    , m_file(file)
+{ }
+
+std::string Graphics::Shader::CompileError::getFile() const {
+    return m_file;
+}
+
+Graphics::Shader::ProgramError::ProgramError(GLchar *infoLog)
+    : Shader::ShaderError(std::string("Error linking OpenGL program"), infoLog)
 { }
