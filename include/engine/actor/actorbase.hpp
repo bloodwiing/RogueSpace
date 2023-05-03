@@ -121,6 +121,9 @@ namespace Engine::Actors {
         /// \return         A pointer to the newly created Actor
         template<class T>
         void internalRegisterChild(std::shared_ptr<T> child);
+
+        ActorBase(const ActorBase&);
+        ActorBase& operator=(const ActorBase&);
     };
 }
 
