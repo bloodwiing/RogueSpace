@@ -14,7 +14,10 @@ namespace Graphics {
     class Material {
     public:
         /// \brief          A Texture with the corresponding UV coordinates reference
-        struct TextureRef;
+        struct TextureRef {
+            std::shared_ptr<Texture> texture;
+            uint8_t texCoord = 0;
+        };
 
         /// \brief          Creates a new Material container
         /// \param name     The name of the material (used for identification purposes)
@@ -59,11 +62,6 @@ namespace Graphics {
         float m_roughnessFactor;
 
         static Material defaultMaterial;
-    };
-
-    struct Material::TextureRef {
-        std::shared_ptr<Texture> texture;
-        uint8_t texCoord = 0;
     };
 }
 
