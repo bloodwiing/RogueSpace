@@ -23,6 +23,11 @@ namespace Graphics {
         /// \param filePath The path to the Image Texture
         explicit Texture(const std::string& filePath);
         static std::shared_ptr<Texture> create(const std::string& fileName);
+        explicit Texture(GLubyte *bytes, int width, int height, int channels, GLint ID);
+        static std::shared_ptr<Texture> create(GLubyte *bytes, int width, int height, int channels, GLint ID);
+        static void createDefaultTexture(GLubyte *bytes, int width, int height, int channels, GLint ID);
+
+        [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
         void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
 
@@ -48,6 +53,8 @@ namespace Graphics {
         public:
             LOD(std::string fileName, const YAML::Node& node, Texture* container);
             static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
+            LOD(GLubyte* bytes, int width, int height, int channels, int level, int priority, GLint ID, Texture* container);
+            static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, GLint ID, Texture* container);
 
             void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
 
@@ -92,6 +99,8 @@ namespace Graphics {
         std::atomic<int> m_LODsLoaded = 0;
 
         [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
+
+        static std::shared_ptr<Texture> defaultTexture;
     };
 }
 

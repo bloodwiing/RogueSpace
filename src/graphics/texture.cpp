@@ -8,6 +8,8 @@
 #include <yaml-cpp/yaml.h>
 #include <GL/glext.h>
 
+std::shared_ptr<Graphics::Texture> Graphics::Texture::defaultTexture = std::shared_ptr<Graphics::Texture>();
+
 Graphics::Texture::Texture(const std::string& filePath)
     : m_metadata(YAML::LoadFile(filePath + ".meta"))
     , m_activeLOD(-1)
@@ -25,6 +27,26 @@ Graphics::Texture::Texture(const std::string& filePath)
 
 std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& fileName) {
     return std::make_shared<Texture>(fileName);
+}
+
+Graphics::Texture::Texture(GLubyte *bytes, int width, int height, int channels, GLint ID)
+    : m_metadata()
+    , m_activeLOD(0)
+    , m_main(LOD::create(bytes, width, height, channels, 0, 100, ID, this))
+{
+
+}
+
+std::shared_ptr<Graphics::Texture> Graphics::Texture::create(GLubyte *bytes, int width, int height, int channels, GLint ID) {
+    return std::make_shared<Texture>(bytes, width, height, channels, ID);
+}
+
+void Graphics::Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int channels, GLint ID) {
+    defaultTexture = create(bytes, width, height, channels, ID);
+}
+
+std::shared_ptr<Graphics::Texture> Graphics::Texture::getDefaultTexture() {
+    return defaultTexture;
 }
 
 void Graphics::Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
@@ -140,6 +162,37 @@ Graphics::Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Textur
 
 std::shared_ptr<Graphics::Texture::LOD> Graphics::Texture::LOD::create(const std::string &fileName, const YAML::Node &node, Texture* container) {
     return std::make_shared<LOD>(fileName, node, container);
+}
+
+Graphics::Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level, int priority, GLint ID, Graphics::Texture *container)
+    : m_ID(ID)
+    , m_PBO()
+    , m_width(width)
+    , m_height(height)
+    , m_channels(channels)
+    , m_buffer(bytes)
+    , m_level(level)
+    , m_container(container)
+    , m_priority(priority)
+    , m_fileName()
+    , m_ready(false)
+{
+    bind(0);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, m_channels, GL_UNSIGNED_BYTE, m_buffer);
+
+    unbind();
+}
+
+std::shared_ptr<Graphics::Texture::LOD>
+Graphics::Texture::LOD::create(GLubyte *bytes, int width, int height, int channels, int level, int priority, GLint ID, Graphics::Texture *container) {
+    return std::make_shared<LOD>(bytes, width, height, channels, level, priority, ID, container);
 }
 
 void Graphics::Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {

@@ -2,6 +2,8 @@
 
 #include <utility>
 
+std::shared_ptr<Graphics::Material> Graphics::Material::defaultMaterial = std::shared_ptr<Graphics::Material>();
+
 Graphics::Material::Material(std::string name)
     : m_name(std::move(name))
     , m_diffuseFactor(1.0)
