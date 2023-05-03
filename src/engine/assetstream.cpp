@@ -6,6 +6,12 @@
 #include <filesystem>
 
 using std::ios;
+using std::lock_guard;
+using std::mutex;
+using std::shared_ptr;
+using std::string;
+
+namespace filesystem = std::filesystem;
 
 Engine::AssetStream* Engine::AssetStream::m_instance = nullptr;
 
@@ -20,7 +26,7 @@ Engine::AssetStream &Engine::AssetStream::getInstance() {
 }
 
 bool Engine::AssetStream::getCachedTextAsset(const std::string &filePath, const AssetStream::textCallback &callback) {
-    std::lock_guard<std::mutex> lock(m_cachedAssetsMutex);
+    lock_guard<mutex> lock(m_cachedAssetsMutex);
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         callback(getInstance().m_cachedAssets.at(filePath));
         return true;
@@ -29,7 +35,7 @@ bool Engine::AssetStream::getCachedTextAsset(const std::string &filePath, const 
 }
 
 bool Engine::AssetStream::getCachedBinaryAsset(const std::string &filePath, const AssetStream::binaryCallback &callback) {
-    std::lock_guard<std::mutex> lock(m_cachedAssetsMutex);
+    lock_guard<mutex> lock(m_cachedAssetsMutex);
     if (getInstance().m_cachedAssets.find(filePath) != getInstance().m_cachedAssets.end()) {
         auto asset = getInstance().m_cachedAssets.at(filePath);
         callback((uint8_t*)asset->c_str(), asset->length());
@@ -39,7 +45,7 @@ bool Engine::AssetStream::getCachedBinaryAsset(const std::string &filePath, cons
 }
 
 void Engine::AssetStream::saveToCache(const std::string &filePath, const std::shared_ptr<std::string>& data) {
-    std::lock_guard<std::mutex> lock(m_cachedAssetsMutex);
+    lock_guard<mutex> lock(m_cachedAssetsMutex);
     getInstance().m_cachedAssets[filePath] = data;
 }
 
@@ -47,7 +53,7 @@ void Engine::AssetStream::getTextAssetAsync(const std::string& filePath, const A
     if (getCachedTextAsset(filePath, callback))
         return;
 
-    std::lock_guard<std::mutex> lock(m_assetQueueMutex);
+    lock_guard<mutex> lock(m_assetQueueMutex);
     getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
         .callback = callback,
@@ -60,10 +66,10 @@ void Engine::AssetStream::getBinaryAssetAsync(const std::string& filePath, const
     if (getCachedBinaryAsset(filePath, callback))
         return;
 
-    std::lock_guard<std::mutex> lock(m_assetQueueMutex);
+    lock_guard<mutex> lock(m_assetQueueMutex);
     getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
-        .callback = [callback](const std::shared_ptr<std::string>& data) { callback((uint8_t*)data->c_str(), data->length()); },
+        .callback = [callback](const shared_ptr<string>& data) { callback((uint8_t*)data->c_str(), data->length()); },
         .mode = ios::in | ios::binary,
         .priority = priority
     });
@@ -73,7 +79,7 @@ void Engine::AssetStream::getTextAsset(const std::string &filePath, const Engine
     if (getCachedTextAsset(filePath, callback))
         return;
 
-    std::shared_ptr<std::string> result = readFileContents(filePath);
+    shared_ptr<string> result = readFileContents(filePath);
     saveToCache(filePath, result);
     callback(result);
 }
@@ -82,7 +88,7 @@ void Engine::AssetStream::getBinaryAsset(const std::string &filePath, const Engi
     if (getCachedBinaryAsset(filePath, callback))
         return;
 
-    std::shared_ptr<std::string> result = readFileContents(filePath);
+    shared_ptr<string> result = readFileContents(filePath);
     saveToCache(filePath, result);
     callback((uint8_t*)result->c_str(), result->length());
 }
@@ -102,7 +108,7 @@ void Engine::AssetStream::asyncLoop() {
         if (getInstance().getCachedTextAsset(entry.filePath, entry.callback))
             continue;
 
-        std::shared_ptr<std::string> result = asyncReadFileContents(entry.filePath, entry.mode);
+        shared_ptr<string> result = asyncReadFileContents(entry.filePath, entry.mode);
         getInstance().saveToCache(entry.filePath, result);
         entry.callback(result);
     }
@@ -111,17 +117,17 @@ void Engine::AssetStream::asyncLoop() {
 std::shared_ptr<std::string> Engine::AssetStream::asyncReadFileContents(std::string filePath, ios::openmode mode) {
     makePathAbsolute(filePath);
 
-    std::filesystem::path p(filePath);
-    if (!std::filesystem::exists(p))
-        return std::make_shared<std::string>();
-    auto size = (long long)std::filesystem::file_size(p);
+    filesystem::path p(filePath);
+    if (!filesystem::exists(p))
+        return std::make_shared<string>();
+    auto size = (long long)filesystem::file_size(p);
 
     std::ifstream stream(filePath, mode | ios::binary);
 
     const long long chunkSize = 0xF000;
     long long index = 0;
 
-    std::shared_ptr<std::string> result = std::make_shared<std::string>();
+    shared_ptr<string> result = std::make_shared<string>();
     result->resize(size, '\0');
 
     while (!stream.eof() and getInstance().m_active) {
@@ -141,13 +147,13 @@ std::shared_ptr<std::string> Engine::AssetStream::asyncReadFileContents(std::str
 std::shared_ptr<std::string> Engine::AssetStream::readFileContents(std::string filePath, std::ios::openmode mode) {
     makePathAbsolute(filePath);
 
-    std::filesystem::path p(filePath);
-    if (!std::filesystem::exists(p))
+    filesystem::path p(filePath);
+    if (!filesystem::exists(p))
         return std::make_shared<std::string>();
-    auto size = (long long)std::filesystem::file_size(p);
+    auto size = (long long)filesystem::file_size(p);
     p.clear();
 
-    std::shared_ptr<std::string> result = std::make_shared<std::string>();
+    shared_ptr<string> result = std::make_shared<string>();
     result->resize(size, '\0');
 
     std::ifstream stream(filePath, mode | ios::binary);
@@ -166,7 +172,7 @@ std::shared_ptr<std::string> Engine::AssetStream::readFileContents(std::string f
 #include <windows.h>
 std::string Engine::AssetStream::getProcessDirectory() {
     char path[MAX_PATH];
-    std::string res(path, GetModuleFileName(nullptr, path, MAX_PATH));
+    string res(path, GetModuleFileName(nullptr, path, MAX_PATH));
     std::replace(res.begin(), res.end(), '\\', '/');
     return res.substr(0, res.find_last_of('/') + 1);
 }
@@ -183,7 +189,7 @@ std::string Engine::AssetStream::getProcessDirectory() {
 
 void Engine::AssetStream::makePathAbsolute(std::string &path) {
 #if _WIN32
-    if (path.find(':') == std::string::npos)
+    if (path.find(':') == string::npos)
         path = getProcessDirectory() + path;
 #elif __unix__
     if (path[0] != '/')
@@ -192,13 +198,13 @@ void Engine::AssetStream::makePathAbsolute(std::string &path) {
 }
 
 void Engine::AssetStream::unixifyLineEndings(std::string &text) {
-    std::string::size_type pos = 0;
-    while ((pos = text.find("\r\n", pos)) != std::string::npos )
+    string::size_type pos = 0;
+    while ((pos = text.find("\r\n", pos)) != string::npos )
         text.erase(pos, 1);
 }
 
 bool Engine::AssetStream::getNextQuery(Engine::AssetStream::AssetQuery& entry) {
-    std::lock_guard<std::mutex> lock(m_assetQueueMutex);
+    lock_guard<mutex> lock(m_assetQueueMutex);
     if (m_assetQueue.empty())
         return false;
     entry = m_assetQueue.top();

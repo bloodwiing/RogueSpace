@@ -47,14 +47,15 @@ void Actors::PlayerActor::update() {
         m_linearSpeed = 3.0f;
     }
 
+    using Window = Graphics::Window;
     if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {
         m_clicked = true;
-        glfwSetInputMode(Graphics::Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         RESET_MOUSE();
     }
     if (IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
         m_clicked = false;
-        glfwSetInputMode(Graphics::Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     if (m_clicked) {

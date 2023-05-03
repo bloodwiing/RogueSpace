@@ -1,5 +1,12 @@
 #include "engine/assetmanager.hpp"
 
+using Graphics::Model;
+using Graphics::Texture;
+
+using std::shared_ptr;
+using std::lock_guard;
+using std::mutex;
+
 Engine::AssetManager* Engine::AssetManager::m_instance = nullptr;
 
 Engine::AssetManager::AssetManager()
@@ -17,8 +24,8 @@ Engine::AssetManager *Engine::AssetManager::getInstance() {
     return m_instance;
 }
 
-std::shared_ptr<Graphics::Model> Engine::AssetManager::getModel(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    std::lock_guard<std::mutex> lock(m_modelMutex);
+shared_ptr<Model> Engine::AssetManager::getModel(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    lock_guard<mutex> lock(m_modelMutex);
     if (m_models.find(fileName) == m_models.end()) {
         auto model = loadModel(fileName, priority);
         m_models[fileName] = model;
@@ -26,8 +33,8 @@ std::shared_ptr<Graphics::Model> Engine::AssetManager::getModel(const std::strin
     return m_models.at(fileName);
 }
 
-std::shared_ptr<Graphics::Texture> Engine::AssetManager::getTexture(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    std::lock_guard<std::mutex> lock(m_textureMutex);
+shared_ptr<Texture> Engine::AssetManager::getTexture(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    lock_guard<mutex> lock(m_textureMutex);
     if (m_textures.find(fileName) == m_textures.end()) {
         auto texture = loadTexture(fileName, priority);
         m_textures[fileName] = texture;
@@ -35,14 +42,14 @@ std::shared_ptr<Graphics::Texture> Engine::AssetManager::getTexture(const std::s
     return m_textures.at(fileName);
 }
 
-std::shared_ptr<Graphics::Model> Engine::AssetManager::loadModel(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    auto model = Graphics::Model::create(fileName);
+shared_ptr<Model> Engine::AssetManager::loadModel(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    auto model = Model::create(fileName);
     model->queue(priority);
     return model;
 }
 
-std::shared_ptr<Graphics::Texture> Engine::AssetManager::loadTexture(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    auto texture = Graphics::Texture::create(fileName);
+shared_ptr<Texture> Engine::AssetManager::loadTexture(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    auto texture = Texture::create(fileName);
     texture->queue(priority);
     return texture;
 }

@@ -7,6 +7,8 @@
 
 namespace Actors = Engine::Actors;
 
+using glm::vec3;
+
 std::string Actors::Actor::getTypeName() const {
     return "Actor";
 }
@@ -26,7 +28,7 @@ bool Actors::Actor::isDead() const {
 }
 
 glm::vec3 Actors::Actor::getTranslation() const {
-    return glm::vec3(0.0f);
+    return vec3(0.0f);
 }
 
 glm::quat Actors::Actor::getRotation() const {
@@ -34,7 +36,7 @@ glm::quat Actors::Actor::getRotation() const {
 }
 
 glm::vec3 Actors::Actor::getScale() const {
-    return glm::vec3(1.0f);
+    return vec3(1.0f);
 }
 
 void Actors::Actor::markDead(float wait /* = -1.0f */) {

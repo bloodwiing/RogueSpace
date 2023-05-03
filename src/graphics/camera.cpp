@@ -10,6 +10,11 @@
 
 #include "graphics/window.hpp"
 
+using glm::mat4;
+using glm::vec3;
+using glm::vec4;
+using glm::normalize;
+
 Graphics::Camera* Graphics::Camera::m_active = nullptr;
 
 std::string Graphics::Camera::getTypeName() const {
@@ -27,10 +32,10 @@ Graphics::Camera::~Camera() {
 }
 
 void Graphics::Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
-    glm::mat4 view(1.0f);
-    glm::mat4 proj(1.0f);
+    mat4 view(1.0f);
+    mat4 proj(1.0f);
 
-    glm::vec3 point = glm::column(DynamicActor::getWorldMatrix(), 3);
+    vec3 point = glm::column(DynamicActor::getWorldMatrix(), 3);
 
     view = glm::lookAt(point, point + m_orientation, m_up);
     proj = glm::perspective(glm::radians(fov_degrees), Window::getActive()->getAspectRatio(), near_plane, far_plane);
@@ -53,14 +58,14 @@ void Graphics::Camera::setActive() const {
 void Graphics::Camera::update() {
     DynamicActor::update();
 
-    m_up = glm::normalize(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
-    m_orientation = glm::normalize(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
+    m_up = normalize(vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
+    m_orientation = normalize(vec4(1.0f, 0.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
 }
 
 void Graphics::Camera::copyOrientation(Camera *camera, bool copyUpVector /* = true */) {
-    m_orientation = glm::normalize(camera->m_orientation);
+    m_orientation = normalize(camera->m_orientation);
     if (copyUpVector)
-        m_up = glm::normalize(camera->m_up);
+        m_up = normalize(camera->m_up);
 }
 
 void Graphics::Camera::freeFlyUpdate() {
@@ -73,10 +78,10 @@ void Graphics::Camera::freeFlyUpdate() {
         translate(m_flySpeed * -m_orientation * Time::getDeltaFloat());
     }
     if (IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
-        translate(m_flySpeed * -glm::normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
+        translate(m_flySpeed * -normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
     }
     if (IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
-        translate(m_flySpeed * glm::normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
+        translate(m_flySpeed * normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
     }
     if (IS_KEY(GLFW_KEY_E, GLFW_PRESS)) {
         translate(m_flySpeed * m_up * Time::getDeltaFloat());
@@ -108,15 +113,19 @@ void Graphics::Camera::freeFlyUpdate() {
         rot_x *= m_flySensitivity;
         rot_y *= m_flySensitivity;
 
-        glm::vec3 new_orientation = glm::rotate(m_orientation, glm::radians(-(float)rot_y), glm::normalize(glm::cross(m_orientation, m_up)));
+        using glm::rotate;
+        using glm::angle;
+        using glm::radians;
+
+        glm::vec3 new_orientation = rotate(m_orientation, radians(-(float)rot_y), normalize(glm::cross(m_orientation, m_up)));
 
         if (not (
-                glm::angle(new_orientation, m_up) <= glm::radians(5.0f)
-                or glm::angle(new_orientation, -m_up) <= glm::radians(5.0f))) {
+                angle(new_orientation, m_up) <= radians(5.0f)
+                or angle(new_orientation, -m_up) <= radians(5.0f))) {
             m_orientation = new_orientation;
         }
 
-        m_orientation = glm::rotate(m_orientation, glm::radians(-(float)rot_x), m_up);
+        m_orientation = rotate(m_orientation, radians(-(float)rot_x), m_up);
 
         RESET_MOUSE();
     }

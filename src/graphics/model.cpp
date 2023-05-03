@@ -44,7 +44,7 @@ void Graphics::Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(
 }
 
 void Graphics::Model::loadMesh(uint32_t meshIndex) {
-    json primitive = m_json["meshes"][meshIndex]["primitives"][0];
+    json& primitive = m_json["meshes"][meshIndex]["primitives"][0];
 
     uint8_t accPositionIndex = primitive["attributes"]["POSITION"];
     uint8_t accNormalIndex = primitive["attributes"]["NORMAL"];
@@ -75,7 +75,7 @@ void Graphics::Model::loadMesh(uint32_t meshIndex) {
 }
 
 void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
-    json node = m_json["nodes"][nodeIndex];
+    json& node = m_json["nodes"][nodeIndex];
 
     glm::vec3 translation(0.0f);
     if (node.find("translation") != node.end()) {
@@ -129,10 +129,12 @@ void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
 }
 
 void Graphics::Model::getData(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    std::string bytes_text;
-    std::string uri = m_json["buffers"][0]["uri"];
+    using std::string;
 
-    std::string directory = Engine::AssetStream::getFileDirectory(m_fileName);
+    string bytes_text;
+    string uri = m_json["buffers"][0]["uri"];
+
+    string directory = Engine::AssetStream::getFileDirectory(m_fileName);
 
     Engine::AssetStream::getInstance().getBinaryAssetAsync(
             directory + uri,
