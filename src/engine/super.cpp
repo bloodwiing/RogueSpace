@@ -14,8 +14,6 @@ void Engine::Super::init(int width, int height) {
             0xFF, 0xFF, 0xFF, 0xFF
     };
     Graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4);
-
-    Graphics::Material::createDefaultMaterial("Default");
 }
 
 Graphics::Window* Engine::Super::getWindow() {

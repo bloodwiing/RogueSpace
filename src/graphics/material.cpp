@@ -2,7 +2,7 @@
 
 #include <utility>
 
-std::shared_ptr<Graphics::Material> Graphics::Material::defaultMaterial = std::shared_ptr<Graphics::Material>();
+Graphics::Material Graphics::Material::defaultMaterial("Default");
 
 Graphics::Material::Material(std::string name)
     : m_name(std::move(name))
@@ -13,16 +13,7 @@ Graphics::Material::Material(std::string name)
 
 }
 
-std::shared_ptr<Graphics::Material> Graphics::Material::create(std::string name) {
-    return std::make_shared<Material>(std::move(name));
-}
-
-std::shared_ptr<Graphics::Material> Graphics::Material::createDefaultMaterial(std::string name) {
-    defaultMaterial = create(std::move(name));
-    return defaultMaterial;
-}
-
-std::shared_ptr<Graphics::Material> Graphics::Material::getDefaultMaterial() {
+Graphics::Material& Graphics::Material::getDefaultMaterial() {
     return defaultMaterial;
 }
 

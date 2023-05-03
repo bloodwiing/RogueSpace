@@ -11,7 +11,7 @@ namespace Graphics {
 
     /// \brief      Texture and Multiplier value set
     /// \details    Can be applied onto a Shader to be immediately used
-    class Material : public std::enable_shared_from_this<Material> {
+    class Material {
     public:
         /// \brief          A Texture with the corresponding UV coordinates reference
         struct TextureRef {
@@ -22,12 +22,10 @@ namespace Graphics {
         /// \brief          Creates a new Material container
         /// \param name     The name of the material (used for identification purposes)
         explicit Material(std::string name);
-        static std::shared_ptr<Material> create(std::string name);
-        static std::shared_ptr<Material> createDefaultMaterial(std::string name);
 
         /// \return         The name of the Material
         [[nodiscard]] std::string getName() const;
-        [[nodiscard]] static std::shared_ptr<Material> getDefaultMaterial();
+        [[nodiscard]] static Material& getDefaultMaterial();
 
         /// \brief          Sets a Diffuse texture under the 0th Diffuse sampler
         /// \param texture  The texture to use for Diffuse colour
@@ -63,7 +61,7 @@ namespace Graphics {
         /// Roughness influence multiplier
         float m_roughnessFactor;
 
-        static std::shared_ptr<Material> defaultMaterial;
+        static Material defaultMaterial;
     };
 }
 
