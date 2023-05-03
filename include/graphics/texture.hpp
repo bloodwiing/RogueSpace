@@ -49,45 +49,7 @@ namespace Graphics {
         [[nodiscard]] GLuint getID() const;
 
     protected:
-        class LOD : public std::enable_shared_from_this<LOD> {
-        public:
-            LOD(std::string fileName, const YAML::Node& node, Texture* container);
-            static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
-            LOD(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
-            static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
-
-            void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
-
-            [[nodiscard]] bool isReady();
-
-            void bind(GLint unit) const;
-            void unbind() const;
-            void destroy() const;
-
-            static GLenum getChannelEnumFromCount(int channels);
-
-            Texture* m_container;
-
-            [[nodiscard]] GLuint getID() const;
-            [[nodiscard]] int getLevel() const;
-
-        private:
-            std::atomic<bool> m_ready;
-
-            GLuint m_ID;
-            GLuint m_PBO;
-
-            void* m_buffer;
-
-            const int m_width;
-            const int m_height;
-            const int m_channels;
-
-            const int m_level = 0;
-            const int m_priority;
-
-            const std::string m_fileName;
-        };
+        class LOD;
 
         bool setActiveLOD(int level);
 
@@ -103,6 +65,46 @@ namespace Graphics {
         [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
 
         static std::shared_ptr<Texture> defaultTexture;
+    };
+
+    class Texture::LOD : public std::enable_shared_from_this<LOD> {
+    public:
+        LOD(std::string fileName, const YAML::Node& node, Texture* container);
+        static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
+        LOD(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
+        static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
+
+        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
+
+        [[nodiscard]] bool isReady();
+
+        void bind(GLint unit) const;
+        void unbind() const;
+        void destroy() const;
+
+        static GLenum getChannelEnumFromCount(int channels);
+
+        Texture* m_container;
+
+        [[nodiscard]] GLuint getID() const;
+        [[nodiscard]] int getLevel() const;
+
+    private:
+        std::atomic<bool> m_ready;
+
+        GLuint m_ID;
+        GLuint m_PBO;
+
+        void* m_buffer;
+
+        const int m_width;
+        const int m_height;
+        const int m_channels;
+
+        const int m_level = 0;
+        const int m_priority;
+
+        const std::string m_fileName;
     };
 }
 

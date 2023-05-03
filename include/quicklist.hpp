@@ -223,64 +223,7 @@ namespace Utility {
     public:
         /// QuickList iterator.<br>
         /// Returns elements in the order they were added, first being newest, last - oldest
-        class iterator {
-        private:
-            index_t cur;
-            QuickList* list;
-            index_t toSafeRemove;
-
-        public:
-            using iterator_category = std::forward_iterator_tag;
-            using value_type = T;
-            using difference_type = index_t;
-            using pointer = T*;
-            using reference = T;
-
-            explicit iterator(index_t cur, QuickList* list)
-                    : cur(cur)
-                    , list(list)
-                    , toSafeRemove(-1)
-            { }
-
-            iterator(const iterator &it)
-                    : cur(it.cur)
-                    , list(it.list)
-                    , toSafeRemove(it.toSafeRemove)
-            { }
-
-            iterator& operator++() {
-                cur = list->entries[cur].prev;
-                // After the element to removed has been passed, remove it as now it won't affect the element chain
-                if (toSafeRemove != -1) {
-                    list->remove(toSafeRemove);
-                    toSafeRemove = -1;
-                }
-                return *this;
-            }
-
-            iterator operator++(int) {
-                iterator retval = *this;
-                ++(*this);
-                return retval;
-            }
-
-            bool operator==(iterator other) const {
-                return cur == other.cur;
-            }
-
-            bool operator!=(iterator other) const {
-                return !(*this == other);
-            }
-
-            T& operator*() const {
-                return list->entries[cur].value;
-            }
-
-            /// Built-in safe removal of an element after it was processed
-            void safeRemove() {
-                toSafeRemove = cur;
-            }
-        };
+        class iterator;
 
         /// The start of the QuickList (latest element)
         iterator begin() {
@@ -317,6 +260,66 @@ namespace Utility {
         }
 
         const size_t chunkSize;
+    };
+
+    template<class T>
+    class QuickList<T>::iterator {
+    private:
+        index_t cur;
+        QuickList* list;
+        index_t toSafeRemove;
+
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using difference_type = index_t;
+        using pointer = T*;
+        using reference = T;
+
+        explicit iterator(index_t cur, QuickList* list)
+                : cur(cur)
+                , list(list)
+                , toSafeRemove(-1)
+        { }
+
+        iterator(const iterator &it)
+                : cur(it.cur)
+                , list(it.list)
+                , toSafeRemove(it.toSafeRemove)
+        { }
+
+        iterator& operator++() {
+            cur = list->entries[cur].prev;
+            // After the element to removed has been passed, remove it as now it won't affect the element chain
+            if (toSafeRemove != -1) {
+                list->remove(toSafeRemove);
+                toSafeRemove = -1;
+            }
+            return *this;
+        }
+
+        iterator operator++(int) {
+            iterator retval = *this;
+            ++(*this);
+            return retval;
+        }
+
+        bool operator==(iterator other) const {
+            return cur == other.cur;
+        }
+
+        bool operator!=(iterator other) const {
+            return !(*this == other);
+        }
+
+        T& operator*() const {
+            return list->entries[cur].value;
+        }
+
+        /// Built-in safe removal of an element after it was processed
+        void safeRemove() {
+            toSafeRemove = cur;
+        }
     };
 
     template<class T>
