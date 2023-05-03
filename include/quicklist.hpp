@@ -148,7 +148,7 @@ namespace Utility {
         /// \return The element stored in the QuickList
         [[nodiscard]] T& get(index_t index) {
             if (index >= entries.capacity())
-                throw std::invalid_argument("Index is out of bounds");
+                throw std::out_of_range("Index is out of bounds");
 
             if (!entries[index].busy)
                 throw std::runtime_error("Index does not contain an element");
@@ -163,7 +163,7 @@ namespace Utility {
         /// \param index The reserved index of the element
         void remove(index_t index) {
             if (index >= entries.capacity())
-                throw std::invalid_argument("Index is out of bounds");
+                throw std::out_of_range("Index is out of bounds");
 
             Entry& targetElem = entries[index];
             Entry& nextFreeElem = entries[nextFree];

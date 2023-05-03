@@ -60,7 +60,7 @@ void Graphics::Shader::checkShaderErrors(GLuint shaderID, const std::string &typ
     if (!status) {
         m_error = true;
         glGetShaderInfoLog(shaderID, ERROR_MESSAGE_LEN, nullptr, infoLog);
-        throw std::runtime_error(std::string("Error compiling OpenGL ") + type + " shader:\n" + file + " - " + infoLog);
+        throw CompileError(std::string("Error compiling OpenGL ") + type + " shader:\n" + file + " - " + infoLog);
     }
 }
 
@@ -72,7 +72,7 @@ void Graphics::Shader::checkProgramErrors() {
         m_error = true;
         glGetProgramInfoLog(m_ID, ERROR_MESSAGE_LEN, nullptr, infoLog);
         destroy();
-        throw std::runtime_error(std::string("Error linking OpenGL program:\n") + infoLog);
+        throw ProgramError(std::string("Error linking OpenGL program:\n") + infoLog);
     }
 }
 
@@ -87,3 +87,11 @@ GLuint Graphics::Shader::getID() const {
 GLint Graphics::Shader::getUniform(const char *uniform) {
     return glGetUniformLocation(m_ID, uniform);
 }
+
+Graphics::Shader::CompileError::CompileError(const std::string &text)
+    : runtime_error(text)
+{ }
+
+Graphics::Shader::ProgramError::ProgramError(const std::string &text)
+    : runtime_error(text)
+{ }

@@ -3,6 +3,7 @@
 
 #include "glad/glad.h"
 #include <string>
+#include <stdexcept>
 
 namespace Graphics {
 
@@ -33,6 +34,9 @@ namespace Graphics {
         /// \return         Shader Program OpenGL ID
         [[nodiscard]] GLuint getID() const;
 
+        class CompileError;
+        class ProgramError;
+
     private:
         /// Shader Program OpenGL ID
         GLuint m_ID;
@@ -52,6 +56,16 @@ namespace Graphics {
         void checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file);
         /// \brief              Checks for program errors
         void checkProgramErrors();
+    };
+
+    class Shader::CompileError : public std::runtime_error {
+    public:
+        CompileError(const std::string& text);
+    };
+
+    class Shader::ProgramError : public std::runtime_error {
+    public:
+        ProgramError(const std::string& text);
     };
 }
 
