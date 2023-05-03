@@ -46,6 +46,16 @@ namespace Engine {
         template<class T, class... Args>
         T* addVolatileChild(std::string name, Args&&... args);
 
+
+
+        [[nodiscard]] glm::vec3 getTranslation() const override;
+        [[nodiscard]] glm::quat getRotation() const override;
+        [[nodiscard]] glm::vec3 getScale() const override;
+
+        void setTranslation(const glm::vec3 &tra) override {};
+        void setRotation(const glm::quat &rot) override {};
+        void setScale(const glm::vec3 &sca) override {};
+
         void update() override;
         void draw(Graphics::Shader &shader) override;
 

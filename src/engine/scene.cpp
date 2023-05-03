@@ -21,6 +21,18 @@ Utility::QuickList<std::shared_ptr<Engine::Actors::ActorBase>> Engine::Scene::ge
     return m_volatileActors;
 }
 
+glm::vec3 Engine::Scene::getTranslation() const {
+    return glm::vec3(0.0);
+}
+
+glm::quat Engine::Scene::getRotation() const {
+    return {1.0, 0.0, 0.0, 0.0};
+}
+
+glm::vec3 Engine::Scene::getScale() const {
+    return glm::vec3(1.0);
+}
+
 void Engine::Scene::update() {
     if (!m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;

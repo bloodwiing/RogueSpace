@@ -43,25 +43,25 @@ namespace Engine::Actors {
         [[nodiscard]] Engine::Scene* getScene() const;
 
         /// \return         The relative Translation
-        [[nodiscard]] virtual glm::vec3 getTranslation() const;
+        [[nodiscard]] glm::vec3 getTranslation() const override;
         /// \return         The relative Rotation
-        [[nodiscard]] virtual glm::quat getRotation() const;
+        [[nodiscard]] glm::quat getRotation() const override;
         /// \return         The relative Scale
-        [[nodiscard]] virtual glm::vec3 getScale() const;
+        [[nodiscard]] glm::vec3 getScale() const override;
         [[nodiscard]] bool isDead() const override;
 
         /// \brief          Sets the relative Translation of the object
         /// \note           Only implemented in <b>DynamicActor</b>
         /// \param tra      New Translation
-        virtual void setTranslation(const glm::vec3& tra) {};
+        void setTranslation(const glm::vec3& tra) override {};
         /// \brief          Sets the relative Rotation of the object
         /// \note           Only implemented in <b>DynamicActor</b>
         /// \param rot      New Rotation
-        virtual void setRotation(const glm::quat& rot) {};
+        void setRotation(const glm::quat& rot) override {};
         /// \brief          Sets the relative Scale of the object
         /// \note           Only implemented in <b>DynamicActor</b>
         /// \param sca      New Scale
-        virtual void setScale(const glm::vec3& sca) {};
+        void setScale(const glm::vec3& sca) override {};
         /// \brief          Marks the Actor as Dead
         /// \details        A Dead Actor is marked for removal during the soonest possible update event of a parent Actor
         /// \param wait     An optional parameter to delay the removal of the Actor.

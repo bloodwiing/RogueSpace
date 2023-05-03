@@ -84,8 +84,27 @@ namespace Engine::Actors {
         /// \return         The calculated Transformation matrix after applying all parent transformations
         [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
 
+        /// \return         The relative Translation
+        [[nodiscard]] virtual glm::vec3 getTranslation() const = 0;
+        /// \return         The relative Rotation
+        [[nodiscard]] virtual glm::quat getRotation() const = 0;
+        /// \return         The relative Scale
+        [[nodiscard]] virtual glm::vec3 getScale() const = 0;
         /// \return         A conditional check whether the Actor should be removed from the Hierarchy during the next update
         [[nodiscard]] virtual bool isDead() const;
+
+        /// \brief          Sets the relative Translation of the object
+        /// \note           Only implemented in <b>DynamicActor</b>
+        /// \param tra      New Translation
+        virtual void setTranslation(const glm::vec3& tra) = 0;
+        /// \brief          Sets the relative Rotation of the object
+        /// \note           Only implemented in <b>DynamicActor</b>
+        /// \param rot      New Rotation
+        virtual void setRotation(const glm::quat& rot) = 0;
+        /// \brief          Sets the relative Scale of the object
+        /// \note           Only implemented in <b>DynamicActor</b>
+        /// \param sca      New Scale
+        virtual void setScale(const glm::vec3& sca) = 0;
 
         /// \brief          Hierarchy element update event, runs every frame
         /// \note           Runs before every draw event
