@@ -18,7 +18,6 @@ namespace Engine::Actors {
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
-    private:
         std::shared_ptr<Graphics::Model> m_model;
     };
 }
