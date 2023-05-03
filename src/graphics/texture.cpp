@@ -29,20 +29,20 @@ std::shared_ptr<Graphics::Texture> Graphics::Texture::create(const std::string& 
     return std::make_shared<Texture>(fileName);
 }
 
-Graphics::Texture::Texture(GLubyte *bytes, int width, int height, int channels, GLint ID)
+Graphics::Texture::Texture(GLubyte *bytes, int width, int height, int channels)
     : m_metadata()
     , m_activeLOD(0)
-    , m_main(LOD::create(bytes, width, height, channels, 0, 100, ID, this))
+    , m_main(LOD::create(bytes, width, height, channels, 0, 100, this))
 {
 
 }
 
-std::shared_ptr<Graphics::Texture> Graphics::Texture::create(GLubyte *bytes, int width, int height, int channels, GLint ID) {
-    return std::make_shared<Texture>(bytes, width, height, channels, ID);
+std::shared_ptr<Graphics::Texture> Graphics::Texture::create(GLubyte *bytes, int width, int height, int channels) {
+    return std::make_shared<Texture>(bytes, width, height, channels);
 }
 
-void Graphics::Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int channels, GLint ID) {
-    defaultTexture = create(bytes, width, height, channels, ID);
+void Graphics::Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int channels) {
+    defaultTexture = create(bytes, width, height, channels);
 }
 
 std::shared_ptr<Graphics::Texture> Graphics::Texture::getDefaultTexture() {
@@ -164,19 +164,21 @@ std::shared_ptr<Graphics::Texture::LOD> Graphics::Texture::LOD::create(const std
     return std::make_shared<LOD>(fileName, node, container);
 }
 
-Graphics::Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level, int priority, GLint ID, Graphics::Texture *container)
-    : m_ID(ID)
+Graphics::Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level, int priority, Graphics::Texture *container)
+    : m_ID()
     , m_PBO()
     , m_width(width)
     , m_height(height)
     , m_channels(channels)
-    , m_buffer(bytes)
+    , m_buffer(nullptr)
     , m_level(level)
     , m_container(container)
     , m_priority(priority)
     , m_fileName()
-    , m_ready(false)
+    , m_ready(true)
 {
+    glGenTextures(1, &m_ID);
+
     bind(0);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -185,14 +187,14 @@ Graphics::Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, m_channels, GL_UNSIGNED_BYTE, m_buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, bytes);
 
     unbind();
 }
 
 std::shared_ptr<Graphics::Texture::LOD>
-Graphics::Texture::LOD::create(GLubyte *bytes, int width, int height, int channels, int level, int priority, GLint ID, Graphics::Texture *container) {
-    return std::make_shared<LOD>(bytes, width, height, channels, level, priority, ID, container);
+Graphics::Texture::LOD::create(GLubyte *bytes, int width, int height, int channels, int level, int priority, Graphics::Texture *container) {
+    return std::make_shared<LOD>(bytes, width, height, channels, level, priority, container);
 }
 
 void Graphics::Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
@@ -219,22 +221,7 @@ bool Graphics::Texture::LOD::isReady() {
         glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
         m_buffer = nullptr;
 
-        switch (m_channels) {
-            case 4:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-                break;
-            case 3:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-                break;
-            case 2:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RG, GL_UNSIGNED_BYTE, nullptr);
-                break;
-            case 1:
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RED, GL_UNSIGNED_BYTE, nullptr);
-                break;
-            default:
-                throw std::invalid_argument("Failed to recognise texture channel count");
-        }
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, nullptr);
 
         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
@@ -255,6 +242,21 @@ void Graphics::Texture::LOD::unbind() const {
 void Graphics::Texture::LOD::destroy() const {
     glDeleteBuffers(1, &m_ID);
     glDeleteBuffers(1, &m_PBO);
+}
+
+GLenum Graphics::Texture::LOD::getChannelEnumFromCount(int channels) {
+    switch (channels) {
+        case 4:
+            return GL_RGBA;
+        case 3:
+            return GL_RGB;
+        case 2:
+            return GL_RG;
+        case 1:
+            return GL_RED;
+        default:
+            throw std::invalid_argument("Failed to recognise texture channel count");
+    }
 }
 
 GLuint Graphics::Texture::LOD::getID() const {

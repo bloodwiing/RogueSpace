@@ -13,7 +13,7 @@ void Engine::Super::init(int width, int height) {
     GLubyte whiteTextureBytes[] = {
             0xFF, 0xFF, 0xFF, 0xFF
     };
-    Graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4, 0);
+    Graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4);
 
     Graphics::Material::createDefaultMaterial("Default");
 }
