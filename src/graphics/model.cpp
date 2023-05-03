@@ -44,12 +44,12 @@ void Graphics::Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(
 }
 
 void Graphics::Model::loadMesh(uint32_t meshIndex) {
-    uint8_t accPositionIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["POSITION"];
-    uint8_t accNormalIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["NORMAL"];
-    uint8_t accTexCoordIndex = m_json["meshes"][meshIndex]["primitives"][0]["attributes"]["TEXCOORD_0"];
-    uint8_t accIndicesIndex = m_json["meshes"][meshIndex]["primitives"][0]["indices"];
+    json primitive = m_json["meshes"][meshIndex]["primitives"][0];
 
-    uint8_t materialIndex = m_json["meshes"][meshIndex]["primitives"][0]["material"];
+    uint8_t accPositionIndex = primitive["attributes"]["POSITION"];
+    uint8_t accNormalIndex = primitive["attributes"]["NORMAL"];
+    uint8_t accTexCoordIndex = primitive["attributes"]["TEXCOORD_0"];
+    uint8_t accIndicesIndex = primitive["indices"];
 
     auto positionFloats = getFloats(m_json["accessors"][accPositionIndex]);
     auto positions = groupFloatsVec<glm::vec3>(positionFloats);
@@ -63,9 +63,15 @@ void Graphics::Model::loadMesh(uint32_t meshIndex) {
     auto vertices = assembleVertices(positions, normals, texCoords);
     auto indices = getIndices(m_json["accessors"][accIndicesIndex]);
 
-    auto material = getMaterial(m_json["materials"][materialIndex], m_textures);
-
-    m_meshes.emplace_back(vertices, indices, material);
+    bool hasMaterial = primitive.find("material") != primitive.end();
+    if (hasMaterial) {
+        uint8_t materialIndex = m_json["meshes"][meshIndex]["primitives"][0]["material"];
+        auto material = getMaterial(m_json["materials"][materialIndex], m_textures);
+        m_meshes.emplace_back(vertices, indices, material);
+    }
+    else {
+        m_meshes.emplace_back(vertices, indices, Graphics::Material::getDefaultMaterial());
+    }
 }
 
 void Graphics::Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
