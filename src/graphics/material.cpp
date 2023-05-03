@@ -2,13 +2,26 @@
 
 #include <utility>
 
-Graphics::Material::Material(std::string& name)
+Graphics::Material::Material(std::string name)
     : m_name(std::move(name))
     , m_diffuseFactor(1.0)
     , m_metallicFactor(1.0)
     , m_roughnessFactor(1.0)
 {
 
+}
+
+std::shared_ptr<Graphics::Material> Graphics::Material::create(std::string name) {
+    return std::make_shared<Material>(std::move(name));
+}
+
+std::shared_ptr<Graphics::Material> Graphics::Material::createDefaultMaterial(std::string name) {
+    defaultMaterial = create(std::move(name));
+    return defaultMaterial;
+}
+
+std::shared_ptr<Graphics::Material> Graphics::Material::getDefaultMaterial() {
+    return defaultMaterial;
 }
 
 std::string Graphics::Material::getName() const {
