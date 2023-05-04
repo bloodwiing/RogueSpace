@@ -24,7 +24,7 @@ void Engine::JAGEngine::init() {
     Utility::initializeOpenGL();
 
     Super::initialise(width, height);
-    Time::setMaxFramerate(144);
+    Time::setMaxFramerate(framerate);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

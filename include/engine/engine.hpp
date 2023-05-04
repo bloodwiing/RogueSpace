@@ -27,7 +27,8 @@ namespace Engine {
         std::unique_ptr<Scene> m_scene;
 
         const int width = 1366,
-                  height = 700;
+                  height = 700,
+                  framerate = 60;
     };
 }
 
