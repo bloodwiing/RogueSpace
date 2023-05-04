@@ -1,3 +1,5 @@
+#define GLFW_INCLUDE_NONE
+
 #include "engine/engine.hpp"
 
 int main() {

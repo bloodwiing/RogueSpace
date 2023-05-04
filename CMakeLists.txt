@@ -23,34 +23,8 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # -----
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw)
-link_libraries(glfw)
-install(TARGETS glfw)
-
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/yaml)
-link_libraries(yaml-cpp)
-install(TARGETS yaml-cpp)
-
-find_package(GLM REQUIRED)
-if(GLM_FOUND)
-    message(STATUS "glm found")
-    set(INCLUDE_DIRS ${INCLUDE_DIRS} ${GLM_INCLUDE_DIR})
-endif()
-
-find_package(OpenGL REQUIRED)
-
-if(WIN32)
-    set(LIBS ${LIBS} opengl32 gdi32)
-elseif(UNIX AND NOT APPLE)
-    set(LIBS ${LIBS} dl X11 GL)
-endif()
-
-add_library(GLAD OBJECT "${CMAKE_CURRENT_SOURCE_DIR}/src/glad/glad.c")
-link_libraries($<TARGET_OBJECTS:GLAD>)
-
-# -----
-
-include_directories(${INCLUDE_DIRS})
+add_subdirectory( lib )
+link_libraries( glfw glad glm json stb yaml-cpp )
 
 # -----
 
@@ -63,24 +37,16 @@ endif()
 
 # -----
 
-file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/engine/*.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/*.cpp)
+add_subdirectory( src )
+add_subdirectory( test )
 
 # -----
 
-add_library(BuildFiles OBJECT ${SRC_FILES})
-link_libraries($<TARGET_OBJECTS:BuildFiles>)
+include_directories( ${CMAKE_SOURCE_DIR}/include )
 
-link_libraries(${LIBS})
-link_directories(${LINK_DIRS})
+link_libraries( $<TARGET_OBJECTS:BuildFiles> )
 
-add_executable(Build ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-
-# -----
-
-add_subdirectory(test)
+add_executable( Build ${CMAKE_SOURCE_DIR}/src/main.cpp )
 
 # -----
 
