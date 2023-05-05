@@ -1,17 +1,16 @@
+#include "jage/actor/actor.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
-
-#include "engine/time.hpp"
-#include "engine/actor/actor.hpp"
-
 #include <thread>
 
+#include "jage/runtime/time.hpp"
+
+using jage::actor::Actor;
 using namespace testing;
 
 TEST(Actor, childNaming) {
-    using Engine::Actors::Actor;
-
     auto* actor = new Actor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<Actor>("Child1");
@@ -35,8 +34,7 @@ TEST(Actor, childNaming) {
 }
 
 TEST(Actor, childLifeCycle) {
-    using Engine::Actors::Actor;
-    using Engine::Time;
+    using jage::runtime::Time;
 
     auto* actor = new Actor(nullptr, nullptr, "");
 
@@ -77,9 +75,9 @@ TEST(Actor, childLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public Engine::Actors::Actor {
+class RecursionTest : public jage::actor::Actor {
 public:
-    RecursionTest(Engine::Scene* scene, ActorBase* actor, std::string name)
+    RecursionTest(jage::actor::Scene* scene, jage::actor::abc::ActorABC* actor, std::string name)
         : Actor(scene, actor, std::move(name))
     { }
 
@@ -87,19 +85,17 @@ public:
         throw RecursionTestSuccess();
     }
 
-    void draw(Graphics::Shader &shader) override {
+    void draw(jage::graphics::Shader &shader) override {
         throw RecursionTestSuccess();
     }
 };
 
 TEST(Actor, recursion) {
-    using Engine::Actors::Actor;
-
     auto* actor = new Actor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<RecursionTest>("Child1");
 
-    Graphics::Shader shader;
+    jage::graphics::Shader shader;
 
     ASSERT_THROW(actor->update(), RecursionTestSuccess);
     ASSERT_THROW(actor->draw(shader), RecursionTestSuccess);

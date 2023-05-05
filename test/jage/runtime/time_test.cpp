@@ -1,16 +1,14 @@
+#include "jage/runtime/time.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
-
-#include "engine/time.hpp"
-
 #include <thread>
 
+using jage::runtime::Time;
 using namespace testing;
 
 TEST(Time, update) {
-    using Engine::Time;
-
     Time::init();
     Time::update();
 
@@ -31,8 +29,6 @@ TEST(Time, update) {
 }
 
 TEST(Time, setMaxFramerate) {
-    using Engine::Time;
-
     Time::init();
     Time::update();
 
@@ -53,8 +49,6 @@ TEST(Time, setMaxFramerate) {
 }
 
 TEST(Time, waitForNextFrame) {
-    using Engine::Time;
-
     Time::init();
 
     Time::setMaxFramerate(0);

@@ -1,14 +1,13 @@
+#include "jage/runtime/assetstream.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
 
-#include "engine/assetstream.hpp"
-
+using jage::runtime::AssetStream;
 using namespace testing;
 
 TEST(AssetStream, readFileContents_TextFile) {
-    using Engine::AssetStream;
-
     // Should be the file contents in the C++ string
     ASSERT_EQ(*AssetStream::readFileContents("./testres/filecontents1.txt", std::ios::in), std::string(
             "FILE CONTENT TEST 1\n"
@@ -19,15 +18,11 @@ TEST(AssetStream, readFileContents_TextFile) {
 }
 
 TEST(AssetStream, readFileContents_InvalidFile) {
-    using Engine::AssetStream;
-
     // Should be an empty string
     ASSERT_EQ(*AssetStream::readFileContents("./testres/invalid.file", std::ios::in), std::string(""));
 }
 
 TEST(AssetStream, readFileContents_BinaryFile) {
-    using Engine::AssetStream;
-
     // Data to compare against
     std::vector<uint8_t> data = {0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0x00,
                                  0x01, 0x23, 0x45, 0x67, 0x89, 0x98, 0x76, 0x54, 0x32, 0x10};
@@ -36,8 +31,6 @@ TEST(AssetStream, readFileContents_BinaryFile) {
 }
 
 TEST(AssetStream, readFileContents_BinaryFileWithFakeEnding) {
-    using Engine::AssetStream;
-
     // Data to compare against
     std::vector<uint8_t> data = {0xFF, 0xEE, 0xDD, 0xCC, 0xBB, 0xAA, 0x99, 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0x00,
                                  0x01, 0x23, 0x45, 0x67, 0x89, 0x98, 0x76, 0x54, 0x32, 0x10,
@@ -48,8 +41,6 @@ TEST(AssetStream, readFileContents_BinaryFileWithFakeEnding) {
 }
 
 TEST(AssetStream, unixifyLineEndings) {
-    using Engine::AssetStream;
-
     std::string windowsEndings = "This is a test\r\n"
                                  "Of Windows style\r\n"
                                  "Line endings\r\n"

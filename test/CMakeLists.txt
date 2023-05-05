@@ -32,9 +32,9 @@ option(INSTALL_GTEST "Enable installation of googletest. (Projects embedding goo
 option(GTEST_HAS_ABSL "Use Abseil and RE2. Requires Abseil and RE2 to be separately added to the build." OFF)
 
 if(BUILD_GMOCK)
-    add_subdirectory( googlemock )
+    add_subdirectory( lib/googlemock )
 else()
-    add_subdirectory( googletest )
+    add_subdirectory( lib/googletest )
 endif()
 
 # -----
@@ -43,7 +43,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 file(GLOB_RECURSE TEST_FILES CONFIGURE_DEPENDS
         ${CMAKE_CURRENT_SOURCE_DIR}/*_test.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/**/*_test.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/jage/**/*_test.cpp)
 
 add_executable(BuildTest ${TEST_FILES})
 target_link_libraries(BuildTest gtest gtest_main gmock)

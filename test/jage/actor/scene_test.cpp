@@ -1,22 +1,23 @@
+#include "jage/actor/scene.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
-
-#include "engine/time.hpp"
-#include "engine/scene.hpp"
-
 #include <thread>
 
+#include "jage/runtime/time.hpp"
+#include "jage/actor/abc/actor_abc.hpp"
+
+using jage::actor::Scene;
 using namespace testing;
 
 TEST(Scene, actorInstantiation) {
-    using Engine::Scene;
-    namespace Actors = Engine::Actors;
+    using namespace jage::actor;
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addChild<Actors::Actor>("Child1");
-    auto* child2 = scene->addChild<Actors::Actor>("Child1");
+    auto* child1 = scene->addChild<Actor>("Child1");
+    auto* child2 = scene->addChild<Actor>("Child1");
 
     ASSERT_EQ(child1->getName(), "Child1");
     ASSERT_EQ(child2->getName(), "Child1 (2)");
@@ -27,13 +28,12 @@ TEST(Scene, actorInstantiation) {
 }
 
 TEST(Scene, volatileActorInstantiation) {
-    using Engine::Scene;
-    namespace Actors = Engine::Actors;
+    using namespace jage::actor;
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addVolatileChild<Actors::Actor>("Child1");
-    auto* child2 = scene->addVolatileChild<Actors::Actor>("Child1");
+    auto* child1 = scene->addVolatileChild<Actor>("Child1");
+    auto* child2 = scene->addVolatileChild<Actor>("Child1");
 
     ASSERT_EQ(child1->getName(), "Child1");
     ASSERT_EQ(child2->getName(), "Child1");
@@ -44,15 +44,14 @@ TEST(Scene, volatileActorInstantiation) {
 }
 
 TEST(Actor, volatileChildLifeCycle) {
-    using Engine::Scene;
-    using Engine::Time;
-    namespace Actors = Engine::Actors;
+    using namespace jage::actor;
+    using jage::runtime::Time;
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addVolatileChild<Actors::Actor>("");
-    auto* child2 = scene->addVolatileChild<Actors::Actor>("");
-    auto* child12 = scene->addVolatileChild<Actors::Actor>("");
+    auto* child1 = scene->addVolatileChild<Actor>("");
+    auto* child2 = scene->addVolatileChild<Actor>("");
+    auto* child12 = scene->addVolatileChild<Actor>("");
 
     Time::init();
     Time::setMaxFramerate(144);
@@ -87,9 +86,9 @@ TEST(Actor, volatileChildLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public Engine::Actors::Actor {
+class RecursionTest : public jage::actor::Actor {
 public:
-    RecursionTest(Engine::Scene* scene, ActorBase* actor, std::string name)
+    RecursionTest(Scene* scene, jage::actor::abc::ActorABC* actor, std::string name)
             : Actor(scene, actor, std::move(name))
     { }
 
@@ -97,20 +96,19 @@ public:
         throw RecursionTestSuccess();
     }
 
-    void draw(Graphics::Shader &shader) override {
+    void draw(jage::graphics::Shader &shader) override {
         throw RecursionTestSuccess();
     }
 };
 
 TEST(Actor, volatileRecursion) {
-    using Engine::Scene;
-    namespace Actors = Engine::Actors;
+    using namespace jage::actor;
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addVolatileChild<RecursionTest>("Child1");
+    scene->addVolatileChild<RecursionTest>("Child1");
 
-    Graphics::Shader shader;
+    jage::graphics::Shader shader;
 
     ASSERT_THROW(scene->update(), RecursionTestSuccess);
     ASSERT_THROW(scene->draw(shader), RecursionTestSuccess);

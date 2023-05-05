@@ -1,21 +1,20 @@
+#include "jage/actor/physicsactor.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
-
-#include "engine/time.hpp"
-#include "engine/actor/physicsactor.hpp"
-
 #include <thread>
 
+#include "jage/runtime/time.hpp"
+
+using jage::actor::PhysicsActor;
+using jage::runtime::Time;
 using namespace testing;
 
 TEST(PhysicsActor, applyLinearVelocity) {
-    using Engine::Time;
-    using Engine::Actors::PhysicsActor;
-
     Time::init();
 
-    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -35,12 +34,9 @@ TEST(PhysicsActor, applyLinearVelocity) {
 }
 
 TEST(PhysicsActor, applyAngularVelocity) {
-    using Engine::Time;
-    using Engine::Actors::PhysicsActor;
-
     Time::init();
 
-    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -59,12 +55,9 @@ TEST(PhysicsActor, applyAngularVelocity) {
 }
 
 TEST(PhysicsActor, diminishVelocity) {
-    using Engine::Time;
-    using Engine::Actors::PhysicsActor;
-
     Time::init();
 
-    Engine::Actors::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "");
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -85,8 +78,6 @@ TEST(PhysicsActor, diminishVelocity) {
 }
 
 TEST(PhysicsActor, isVectorZero) {
-    using Engine::Actors::PhysicsActor;
-
     ASSERT_TRUE(PhysicsActor::isVectorZero(glm::vec3(0.0, 0.0, 0.0)));
 
     ASSERT_FALSE(PhysicsActor::isVectorZero(glm::vec3(1.0, 0.0, 0.0)));

@@ -1,17 +1,19 @@
+#include "jage/graphics/shader.hpp"
+
 #include <gtest/gtest.h>
 #include <gmock/gmock-actions.h>
 
-#include "graphics/window.hpp"
-#include "graphics/shader.hpp"
+#include "jage/runtime/window.hpp"
+#include "jage/utility/utility.hpp"
 
-#include "utils.hpp"
+using jage::graphics::Shader;
 
 TEST(Shader, LoadCompilable) {
     return;  // Disable test due to missing Headless X11 support
 
-    ASSERT_NO_THROW(Utility::initializeOpenGL());
+    ASSERT_NO_THROW(jage::utility::initializeOpenGL());
 
-    using namespace Graphics;
+    using namespace jage::runtime;
 
     Window window(100, 100);
     window.activate();
@@ -22,9 +24,9 @@ TEST(Shader, LoadCompilable) {
 TEST(Shader, LoadNotCompilable) {
     return;  // Disable test due to missing Headless X11 support
 
-    ASSERT_NO_THROW(Utility::initializeOpenGL());
+    ASSERT_NO_THROW(jage::utility::initializeOpenGL());
 
-    using namespace Graphics;
+    using namespace jage::runtime;
 
     Window window(100, 100);
     window.activate();
