@@ -1,4 +1,4 @@
-file( GLOB_RECURSE _JAGE_SOURCE CONFIGURE_DEPENDS
+file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         engine.cpp
         actor/*.cpp
         actor/abc/*.cpp
@@ -12,5 +12,5 @@ file( GLOB_RECURSE _JAGE_SOURCE CONFIGURE_DEPENDS
 
 # -----
 
-add_library( JAGE_LIB OBJECT ${_JAGE_SOURCE} )
+add_library( jage_lib OBJECT ${_jage_SOURCE} )
 include_directories( ${PROJECT_SOURCE_DIR}/include )

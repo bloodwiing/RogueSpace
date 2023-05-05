@@ -45,8 +45,8 @@ add_subdirectory( test )
 include_directories( ${CMAKE_SOURCE_DIR}/include )
 target_include_directories( BuildTest PRIVATE ${CMAKE_SOURCE_DIR}/include )
 
-link_libraries( $<TARGET_OBJECTS:JAGE> )
-target_link_libraries( BuildTest $<TARGET_OBJECTS:JAGE> )
+link_libraries( $<TARGET_OBJECTS:jage> )
+target_link_libraries( BuildTest $<TARGET_OBJECTS:jage> )
 
 add_executable( Build ${CMAKE_SOURCE_DIR}/src/main.cpp )
 
