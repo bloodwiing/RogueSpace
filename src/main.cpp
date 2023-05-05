@@ -1,10 +1,8 @@
-#define GLFW_INCLUDE_NONE
-
-#include "engine/engine.hpp"
+#include "jage/engine.hpp"
 
 int main() {
 
-    auto& engine = Engine::JAGEngine::getInstance();
+    auto& engine = jage::JAGEngine::getInstance();
     engine.init();
     engine.loadScene();
     engine.loop();
