@@ -9,7 +9,7 @@ using jage::actor::StaticActor;
 using glm::vec3;
 
 std::string StaticActor::getTypeName() const {
-    return "Actor";
+    return "StaticActor";
 }
 
 StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name)
