@@ -1,4 +1,4 @@
-#include "jage/actor/actor.hpp"
+#include "jage/actor/staticactor.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -7,17 +7,17 @@
 
 #include "jage/runtime/time.hpp"
 
-using jage::actor::Actor;
+using jage::actor::StaticActor;
 using namespace testing;
 
 TEST(Actor, childNaming) {
-    auto* actor = new Actor(nullptr, nullptr, "");
+    auto* actor = new StaticActor(nullptr, nullptr, "");
 
-    auto* child1 = actor->addChild<Actor>("Child1");
-    auto* child2 = actor->addChild<Actor>("Child2");
-    auto* child12 = actor->addChild<Actor>("Child1 (2)");
-    auto* child122 = actor->addChild<Actor>("Child1");
-    auto* child13 = actor->addChild<Actor>("Child1");
+    auto* child1 = actor->addChild<StaticActor>("Child1");
+    auto* child2 = actor->addChild<StaticActor>("Child2");
+    auto* child12 = actor->addChild<StaticActor>("Child1 (2)");
+    auto* child122 = actor->addChild<StaticActor>("Child1");
+    auto* child13 = actor->addChild<StaticActor>("Child1");
 
     ASSERT_EQ(child1->getName(), "Child1");
     ASSERT_EQ(child2->getName(), "Child2");
@@ -36,11 +36,11 @@ TEST(Actor, childNaming) {
 TEST(Actor, childLifeCycle) {
     using jage::runtime::Time;
 
-    auto* actor = new Actor(nullptr, nullptr, "");
+    auto* actor = new StaticActor(nullptr, nullptr, "");
 
-    auto* child1 = actor->addChild<Actor>("Child1");
-    auto* child2 = actor->addChild<Actor>("Child2");
-    auto* child12 = actor->addChild<Actor>("Child1 (2)");
+    auto* child1 = actor->addChild<StaticActor>("Child1");
+    auto* child2 = actor->addChild<StaticActor>("Child2");
+    auto* child12 = actor->addChild<StaticActor>("Child1 (2)");
 
     Time::init();
     Time::setMaxFramerate(144);
@@ -75,10 +75,10 @@ TEST(Actor, childLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public jage::actor::Actor {
+class RecursionTest : public jage::actor::StaticActor {
 public:
     RecursionTest(jage::actor::Scene* scene, jage::actor::abc::ActorABC* actor, std::string name)
-        : Actor(scene, actor, std::move(name))
+        : StaticActor(scene, actor, std::move(name))
     { }
 
     void update() override {
@@ -91,7 +91,7 @@ public:
 };
 
 TEST(Actor, recursion) {
-    auto* actor = new Actor(nullptr, nullptr, "");
+    auto* actor = new StaticActor(nullptr, nullptr, "");
 
     auto* child1 = actor->addChild<RecursionTest>("Child1");
 

@@ -9,7 +9,7 @@ std::string DynamicActor::getTypeName() const {
 }
 
 DynamicActor::DynamicActor(Scene* scene, abc::ActorABC* parent, std::string name)
-    : Actor(scene, parent, name)
+    : StaticActor(scene, parent, name)
 { }
 
 void DynamicActor::update() {
@@ -28,7 +28,7 @@ void DynamicActor::update() {
                 dynamicChild->flagForMatrixUpdate();
         }
     }
-    Actor::update();
+    StaticActor::update();
 }
 
 glm::vec3 DynamicActor::getTranslation() const {

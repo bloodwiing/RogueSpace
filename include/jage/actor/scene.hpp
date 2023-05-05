@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "jage/actor/actor.hpp"
+#include "jage/actor/staticactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
 
 #include "quicklist.hpp"

@@ -16,8 +16,8 @@ TEST(Scene, actorInstantiation) {
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addChild<Actor>("Child1");
-    auto* child2 = scene->addChild<Actor>("Child1");
+    auto* child1 = scene->addChild<StaticActor>("Child1");
+    auto* child2 = scene->addChild<StaticActor>("Child1");
 
     ASSERT_EQ(child1->getName(), "Child1");
     ASSERT_EQ(child2->getName(), "Child1 (2)");
@@ -32,8 +32,8 @@ TEST(Scene, volatileActorInstantiation) {
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addVolatileChild<Actor>("Child1");
-    auto* child2 = scene->addVolatileChild<Actor>("Child1");
+    auto* child1 = scene->addVolatileChild<StaticActor>("Child1");
+    auto* child2 = scene->addVolatileChild<StaticActor>("Child1");
 
     ASSERT_EQ(child1->getName(), "Child1");
     ASSERT_EQ(child2->getName(), "Child1");
@@ -49,9 +49,9 @@ TEST(Actor, volatileChildLifeCycle) {
 
     auto* scene = new Scene();
 
-    auto* child1 = scene->addVolatileChild<Actor>("");
-    auto* child2 = scene->addVolatileChild<Actor>("");
-    auto* child12 = scene->addVolatileChild<Actor>("");
+    auto* child1 = scene->addVolatileChild<StaticActor>("");
+    auto* child2 = scene->addVolatileChild<StaticActor>("");
+    auto* child12 = scene->addVolatileChild<StaticActor>("");
 
     Time::init();
     Time::setMaxFramerate(144);
@@ -86,10 +86,10 @@ TEST(Actor, volatileChildLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public jage::actor::Actor {
+class RecursionTest : public jage::actor::StaticActor {
 public:
     RecursionTest(Scene* scene, jage::actor::abc::ActorABC* actor, std::string name)
-            : Actor(scene, actor, std::move(name))
+            : StaticActor(scene, actor, std::move(name))
     { }
 
     void update() override {

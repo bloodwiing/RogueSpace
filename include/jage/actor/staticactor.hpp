@@ -14,7 +14,7 @@ namespace jage::actor {
 
     /// \brief          Main world object type.
     /// \details        This Actor can exist in the world but is static in Transformation and is able to die
-    class Actor : public abc::ActorABC {
+    class StaticActor : public abc::ActorABC {
     public:
         /// \note           Should not be used raw, please use addChild
         /// \param scene    Containing Scene of the Actor node
@@ -22,7 +22,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        Actor(Scene* scene, abc::ActorABC* parent, std::string name);
+        StaticActor(Scene* scene, abc::ActorABC* parent, std::string name);
 
         /// \brief          Creates a new Child under this Parent Actor
         /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
@@ -87,6 +87,6 @@ namespace jage::actor {
     };
 }
 
-#include "actor_impl.tpp"
+#include "staticactor_impl.tpp"
 
 #endif //ACTOR_CLASS_H
