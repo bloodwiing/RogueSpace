@@ -1,5 +1,5 @@
-#ifndef TEXTURE_CLASS_H
-#define TEXTURE_CLASS_H
+#ifndef JAGE_TEXTURE_HPP
+#define JAGE_TEXTURE_HPP
 
 #include <memory>
 #include <thread>
@@ -28,7 +28,7 @@ namespace jage::graphics {
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
-        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
+        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
         [[nodiscard]] bool isReady();
 
@@ -73,7 +73,7 @@ namespace jage::graphics {
         LOD(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
         static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
 
-        void queue(int priority = ASSET_STREAM_BASE_PRIORITY);
+        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
         [[nodiscard]] bool isReady();
 
@@ -107,4 +107,4 @@ namespace jage::graphics {
     };
 }
 
-#endif //TEXTURE_CLASS_H
+#endif //JAGE_TEXTURE_HPP

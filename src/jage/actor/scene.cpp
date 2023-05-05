@@ -37,7 +37,7 @@ glm::vec3 Scene::getScale() const {
 }
 
 void Scene::update() {
-    if (!m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
+    if (!m_f2Held and JAGE_IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;
 
         if (!m_freeFly) {
@@ -52,7 +52,7 @@ void Scene::update() {
 
         m_freeFly = !m_freeFly;
     }
-    else if (m_f2Held and IS_KEY(GLFW_KEY_F2, GLFW_RELEASE)) {
+    else if (m_f2Held and JAGE_IS_KEY(GLFW_KEY_F2, GLFW_RELEASE)) {
         m_f2Held = false;
     }
 

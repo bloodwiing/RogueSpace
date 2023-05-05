@@ -1,5 +1,5 @@
-#ifndef SCENE_CLASS_H
-#define SCENE_CLASS_H
+#ifndef JAGE_SCENE_HPP
+#define JAGE_SCENE_HPP
 
 #include <vector>
 
@@ -84,4 +84,4 @@ namespace jage::actor {
 
 #include "scene_impl.tpp"
 
-#endif //SCENE_CLASS_H
+#endif //JAGE_SCENE_HPP

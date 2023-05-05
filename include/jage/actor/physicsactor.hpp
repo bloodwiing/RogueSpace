@@ -1,5 +1,5 @@
-#ifndef PHYSICS_ACTOR_CLASS_H
-#define PHYSICS_ACTOR_CLASS_H
+#ifndef JAGE_PHYSICS_ACTOR_HPP
+#define JAGE_PHYSICS_ACTOR_HPP
 
 #include <glm/glm.hpp>
 
@@ -99,4 +99,4 @@ namespace jage::actor {
     };
 }
 
-#endif //PHYSICS_ACTOR_CLASS_H
+#endif //JAGE_PHYSICS_ACTOR_CLASS_H

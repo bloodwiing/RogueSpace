@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_ACTOR_CLASS_H
-#define DYNAMIC_ACTOR_CLASS_H
+#ifndef JAGE_DYNAMIC_ACTOR_HPP
+#define JAGE_DYNAMIC_ACTOR_HPP
 
 #include "jage/actor/staticactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
@@ -73,4 +73,4 @@ namespace jage::actor {
     };
 }
 
-#endif //DYNAMIC_ACTOR_CLASS_H
+#endif //JAGE_DYNAMIC_ACTOR_HPP

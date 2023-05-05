@@ -29,40 +29,40 @@ void PlayerActor::update() {
         return;
     }
 
-    if (IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
         addForce(m_linearSpeed * m_orientation * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
         addForce(m_linearSpeed * -m_orientation * Time::getDeltaFloat());
     }
 
-    if (IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
         addTorque(m_angularSpeed * m_orientation * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
         addTorque(m_angularSpeed * -m_orientation * Time::getDeltaFloat());
     }
 
-    if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_PRESS)) {
         m_linearSpeed = 10.0f;
-    } else if (IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_RELEASE)) {
+    } else if (JAGE_IS_KEY(GLFW_KEY_LEFT_SHIFT, GLFW_RELEASE)) {
         m_linearSpeed = 3.0f;
     }
 
     using jage::runtime::Window;
-    if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {
+    if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_clicked) {
         m_clicked = true;
         glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-        RESET_MOUSE();
+        JAGE_RESET_MOUSE();
     }
-    if (IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
         m_clicked = false;
         glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     if (m_clicked) {
         double rot_x = 0.0, rot_y = 0.0;
-        GET_RELATIVE_MOUSE(rot_x, rot_y);
+        JAGE_GET_RELATIVE_MOUSE(rot_x, rot_y);
 
         rot_x *= m_sensitivity;
         rot_y *= m_sensitivity;
@@ -76,7 +76,7 @@ void PlayerActor::update() {
         if (m_fireCoolDown > 0.0f)
             m_fireCoolDown -= Time::getDeltaFloat();
 
-        if (m_fireCoolDown <= 0.0f and IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
+        if (m_fireCoolDown <= 0.0f and JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
             auto bullet = m_scene->addVolatileChild<PhysicsActor>("Bullet(AsShipToTestLoadTimes)", 0.0f, 0.0f);
             auto model = bullet->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
             model->setScale(glm::vec3(0.2));
@@ -87,7 +87,7 @@ void PlayerActor::update() {
             m_fireCoolDown = 0.1f;
         }
 
-        RESET_MOUSE();
+        JAGE_RESET_MOUSE();
     }
 
     PhysicsActor::update();

@@ -1,5 +1,5 @@
-#ifndef ENGINE_CLASS_H
-#define ENGINE_CLASS_H
+#ifndef JAGE_ENGINE_HPP
+#define JAGE_ENGINE_HPP
 
 #include <memory>
 
@@ -31,4 +31,4 @@ namespace jage {
     };
 }
 
-#endif //ENGINE_CLASS_H
+#endif //JAGE_ENGINE_HPP

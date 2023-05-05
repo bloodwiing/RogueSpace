@@ -1,5 +1,5 @@
-#ifndef MODEL_ACTOR_CLASS_H
-#define MODEL_ACTOR_CLASS_H
+#ifndef JAGE_MODEL_ACTOR_HPP
+#define JAGE_MODEL_ACTOR_HPP
 
 #include "jage/actor/dynamicactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
@@ -10,7 +10,7 @@ namespace jage::actor {
 
     class ModelActor : public DynamicActor {
     public:
-        ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, const char *fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
+        ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, const char *fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
         void draw(jage::graphics::Shader &shader) override;
 
@@ -22,4 +22,4 @@ namespace jage::actor {
     };
 }
 
-#endif //MODEL_ACTOR_CLASS_H
+#endif //JAGE_MODEL_ACTOR_HPP

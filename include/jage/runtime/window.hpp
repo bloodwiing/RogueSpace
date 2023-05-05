@@ -1,14 +1,14 @@
-#ifndef WINDOW_CLASS_H
-#define WINDOW_CLASS_H
+#ifndef JAGE_WINDOW_HPP
+#define JAGE_WINDOW_HPP
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#define IS_KEY(key, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isKey(key, state))
-#define IS_MOUSE(button, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isMouse(button, state))
-#define RESET_MOUSE() (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->resetMouse() : void())
-#define GET_RELATIVE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getRelativeMouse(x, y) : void())
-#define GET_ABSOLUTE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getAbsoluteMouse(x, y) : void())
+#define JAGE_IS_KEY(key, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isKey(key, state))
+#define JAGE_IS_MOUSE(button, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isMouse(button, state))
+#define JAGE_RESET_MOUSE() (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->resetMouse() : void())
+#define JAGE_GET_RELATIVE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getRelativeMouse(x, y) : void())
+#define JAGE_GET_ABSOLUTE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getAbsoluteMouse(x, y) : void())
 
 namespace jage::runtime {
 
@@ -95,4 +95,4 @@ namespace jage::runtime {
     };
 }
 
-#endif //WINDOW_CLASS_H
+#endif //JAGE_WINDOW_HPP

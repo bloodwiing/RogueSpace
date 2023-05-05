@@ -1,5 +1,5 @@
-#ifndef CAMERA_CLASS_H
-#define CAMERA_CLASS_H
+#ifndef JAGE_CAMERA_HPP
+#define JAGE_CAMERA_HPP
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -74,4 +74,4 @@ namespace jage::actor {
     };
 }
 
-#endif //CAMERA_CLASS_H
+#endif //JAGE_CAMERA_HPP

@@ -1,5 +1,5 @@
-#ifndef COMPONENT_CLASS_H
-#define COMPONENT_CLASS_H
+#ifndef JAGE_SCRIPT_ABC_HPP
+#define JAGE_SCRIPT_ABC_HPP
 
 namespace jage::script::abc {
 
@@ -12,4 +12,4 @@ namespace jage::script::abc {
     };
 }
 
-#endif //COMPONENT_CLASS_H
+#endif //JAGE_SCRIPT_ABC_HPP

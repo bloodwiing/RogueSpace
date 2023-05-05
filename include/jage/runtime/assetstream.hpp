@@ -1,5 +1,5 @@
-#ifndef ASSET_STREAM_CLASS_H
-#define ASSET_STREAM_CLASS_H
+#ifndef JAGE_ASSET_STREAM_HPP
+#define JAGE_ASSET_STREAM_HPP
 
 #include <string>
 #include <map>
@@ -10,7 +10,7 @@
 #include <memory>
 #include <mutex>
 
-#define ASSET_STREAM_BASE_PRIORITY 5
+#define JAGE_ASSET_STREAM_BASE_PRIORITY 5
 
 namespace jage::runtime {
 
@@ -25,8 +25,8 @@ namespace jage::runtime {
         bool getCachedBinaryAsset(const std::string& filePath, const binaryCallback& callback);
         void saveToCache(const std::string& filePath, const std::shared_ptr<std::string>& data);
 
-        void getTextAssetAsync(const std::string& filePath, const textCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
-        void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback, int priority = ASSET_STREAM_BASE_PRIORITY);
+        void getTextAssetAsync(const std::string& filePath, const textCallback& callback, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void getBinaryAssetAsync(const std::string& filePath, const binaryCallback& callback, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
         void getTextAsset(const std::string& filePath, const textCallback& callback);
         void getBinaryAsset(const std::string& filePath, const binaryCallback& callback);
@@ -80,4 +80,4 @@ namespace jage::runtime {
     };
 }
 
-#endif //ASSET_STREAM_CLASS_H
+#endif //JAGE_ASSET_STREAM_HPP

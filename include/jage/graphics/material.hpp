@@ -1,5 +1,5 @@
-#ifndef MATERIAL_CLASS_H
-#define MATERIAL_CLASS_H
+#ifndef JAGE_MATERIAL_HPP
+#define JAGE_MATERIAL_HPP
 
 #include <string>
 #include <cinttypes>
@@ -65,4 +65,4 @@ namespace jage::graphics {
     };
 }
 
-#endif //MATERIAL_CLASS_H
+#endif //JAGE_MATERIAL_HPP

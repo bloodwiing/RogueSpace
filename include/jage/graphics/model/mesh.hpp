@@ -1,5 +1,5 @@
-#ifndef MESH_CLASS_H
-#define MESH_CLASS_H
+#ifndef JAGE_MESH_HPP
+#define JAGE_MESH_HPP
 
 #include <vector>
 #include <string>
@@ -57,4 +57,4 @@ namespace jage::graphics::model {
     };
 }
 
-#endif //MESH_CLASS_H
+#endif //JAGE_MESH_HPP

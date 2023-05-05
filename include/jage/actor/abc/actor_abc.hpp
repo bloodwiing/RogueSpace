@@ -1,5 +1,5 @@
-#ifndef ACTOR_BASE_CLASS_H
-#define ACTOR_BASE_CLASS_H
+#ifndef JAGE_ACTOR_ABC_HPP
+#define JAGE_ACTOR_ABC_HPP
 
 #include <map>
 #include <memory>
@@ -149,4 +149,4 @@ std::ostream& operator<<(std::ostream& stream, jage::actor::abc::ActorABC* actor
 
 #include "actor_abc_impl.tpp"
 
-#endif //ACTOR_BASE_CLASS_H
+#endif //JAGE_ACTOR_ABC_HPP

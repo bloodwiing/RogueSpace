@@ -1,5 +1,5 @@
-#ifndef ACTOR_CLASS_H
-#define ACTOR_CLASS_H
+#ifndef JAGE_STATIC_ACTOR_HPP
+#define JAGE_STATIC_ACTOR_HPP
 
 #include <vector>
 #include <string>
@@ -89,4 +89,4 @@ namespace jage::actor {
 
 #include "staticactor_impl.tpp"
 
-#endif //ACTOR_CLASS_H
+#endif //JAGE_STATIC_ACTOR_HPP

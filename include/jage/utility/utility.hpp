@@ -1,5 +1,5 @@
-#ifndef UTILITY_FILE_H
-#define UTILITY_FILE_H
+#ifndef JAGE_UTILITY_HPP
+#define JAGE_UTILITY_HPP
 
 #include <string>
 #include <streambuf>
@@ -12,4 +12,4 @@ namespace jage::utility {
     void initializeOpenGL();
 }
 
-#endif //UTILITY_FILE_H
+#endif //JAGE_UTILITY_HPP

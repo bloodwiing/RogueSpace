@@ -1,5 +1,5 @@
-#ifndef TIME_CLASS_H
-#define TIME_CLASS_H
+#ifndef JAGE_TIME_HPP
+#define JAGE_TIME_HPP
 
 #include <chrono>
 
@@ -51,4 +51,4 @@ namespace jage::runtime {
     };
 }
 
-#endif //TIME_CLASS_H
+#endif //JAGE_TIME_HPP

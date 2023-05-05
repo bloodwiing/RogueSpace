@@ -75,44 +75,44 @@ void Camera::freeFlyUpdate() {
     using jage::runtime::Time;
     using jage::runtime::Window;
 
-    if (IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
         translate(m_flySpeed * m_orientation * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
         translate(m_flySpeed * -m_orientation * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
         translate(m_flySpeed * -normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
         translate(m_flySpeed * normalize(glm::cross(m_orientation, m_up)) * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_E, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_E, GLFW_PRESS)) {
         translate(m_flySpeed * m_up * Time::getDeltaFloat());
     }
-    if (IS_KEY(GLFW_KEY_Q, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_Q, GLFW_PRESS)) {
         translate(m_flySpeed * -m_up * Time::getDeltaFloat());
     }
 
-    if (IS_KEY(GLFW_KEY_SPACE, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_SPACE, GLFW_PRESS)) {
         m_flySpeed = 5.0f;
-    } else if (IS_KEY(GLFW_KEY_SPACE, GLFW_RELEASE)) {
+    } else if (JAGE_IS_KEY(GLFW_KEY_SPACE, GLFW_RELEASE)) {
         m_flySpeed = 1.0f;
     }
 
-    if (IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_flyClicked) {
+    if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS) && !m_flyClicked) {
         m_flyClicked = true;
         glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-        RESET_MOUSE();
+        JAGE_RESET_MOUSE();
     }
-    if (IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
+    if (JAGE_IS_KEY(GLFW_KEY_ESCAPE, GLFW_PRESS)) {
         m_flyClicked = false;
         glfwSetInputMode(Window::getActive()->getWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     if (m_flyClicked) {
         double rot_x, rot_y;
-        GET_RELATIVE_MOUSE(rot_x, rot_y);
+        JAGE_GET_RELATIVE_MOUSE(rot_x, rot_y);
 
         rot_x *= m_flySensitivity;
         rot_y *= m_flySensitivity;
@@ -131,7 +131,7 @@ void Camera::freeFlyUpdate() {
 
         m_orientation = rotate(m_orientation, radians(-(float)rot_x), m_up);
 
-        RESET_MOUSE();
+        JAGE_RESET_MOUSE();
     }
 
     DynamicActor::update();

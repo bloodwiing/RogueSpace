@@ -1,5 +1,5 @@
-#ifndef PLAYER_ACTOR_CLASS_H
-#define PLAYER_ACTOR_CLASS_H
+#ifndef JAGE_PLAYER_ACTOR_HPP
+#define JAGE_PLAYER_ACTOR_HPP
 
 #include "jage/actor/physicsactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
@@ -50,4 +50,4 @@ namespace jage::actor {
     };
 }
 
-#endif //PLAYER_ACTOR_CLASS_H
+#endif //JAGE_PLAYER_ACTOR_HPP

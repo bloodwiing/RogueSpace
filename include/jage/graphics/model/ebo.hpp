@@ -1,5 +1,5 @@
-#ifndef EBO_CLASS_H
-#define EBO_CLASS_H
+#ifndef JAGE_EBO_HPP
+#define JAGE_EBO_HPP
 
 #include <vector>
 #include <glad/glad.h>
@@ -30,4 +30,4 @@ namespace jage::graphics::model {
     };
 }
 
-#endif //EBO_CLASS_H
+#endif //JAGE_EBO_HPP
