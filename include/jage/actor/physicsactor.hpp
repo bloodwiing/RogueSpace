@@ -87,6 +87,7 @@ namespace jage::actor {
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
+    private:
         /// The current Weight of the PhysicsActor
         float m_weight;
         /// The current Drag of the PhysicsActor
