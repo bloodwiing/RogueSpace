@@ -6,8 +6,9 @@
 #include "jage/system/super.hpp"
 #include "jage/runtime/assetstream.hpp"
 #include "jage/actor/modelactor.hpp"
-#include "jage/actor/playeractor.hpp"
+#include "jage/actor/shipactor.hpp"
 #include "jage/actor/physicsactor.hpp"
+#include "jage/script/playercontrollerscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;
@@ -53,7 +54,7 @@ void JAGEngine::loop() {
         if (!m_shader->isErrored()) {
             m_shader->activate();
             auto* camera = jage::actor::Camera::getActiveCamera();
-            camera->updateMatrix(45.0f, 0.001f, 10000.0f);
+            camera->updateMatrix(45.0f, 0.001f, 1000.0f);
         }
 
         m_scene->draw(*m_shader);
@@ -82,7 +83,8 @@ void JAGEngine::loadScene() {
     auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
     map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
-    auto player = m_scene->addChild<PlayerActor>("Player");
+    auto player = m_scene->addChild<ShipActor>("Player");
+    player->attachScript<script::PlayerControllerScript>();
     auto camera = player->addChild<Camera>("Camera");
     camera->setActive();
 

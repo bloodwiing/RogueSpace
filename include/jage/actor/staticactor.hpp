@@ -38,6 +38,11 @@ namespace jage::actor {
         template<class T, class... Args>
         T* addChild(std::string name, Args&&... args);
 
+        template<class T>
+        T* attachScript();
+        template<class T, class... Args>
+        T* attachScript(Args&&... args);
+
         /// \returns        The containing Scene
         [[nodiscard]] Scene* getScene() const;
 
@@ -47,6 +52,8 @@ namespace jage::actor {
         [[nodiscard]] glm::quat getRotation() const override;
         /// \return         The relative Scale
         [[nodiscard]] glm::vec3 getScale() const override;
+        [[nodiscard]] glm::vec3 getOrientation() const override;
+        [[nodiscard]] glm::vec3 getUp() const override;
         [[nodiscard]] bool isDead() const override;
 
         /// \brief          Sets the relative Translation of the object
@@ -83,7 +90,7 @@ namespace jage::actor {
         bool m_dead = false;
 
         /// A list of attachable Scripts (WIP)
-        std::vector<jage::script::abc::ScriptABC> m_scripts;
+        std::vector<std::shared_ptr<jage::script::abc::ScriptABC>> m_scripts;
     };
 }
 
