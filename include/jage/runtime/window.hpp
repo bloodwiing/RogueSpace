@@ -73,7 +73,7 @@ namespace jage::runtime {
         /// \param[out] y   The absolute Y position
         void getAbsoluteMouse(int& x, int& y) const;
         /// \brief          Reads the Cursor position and updates the coordinate parameters to match them
-        /// \details        This function is in screen space, within the [-0.5; 0.5] range for both X and Y components
+        /// \details        This function is in screen space, within the [-0.5; 0.5] range for the shorter component and aspect relative other
         /// \param[out] x   The relative X position
         /// \param[out] y   The relative Y position
         void getRelativeMouse(double& x, double& y) const;

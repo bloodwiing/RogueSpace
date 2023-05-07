@@ -108,6 +108,7 @@ void Window::getRelativeMouse(double &x, double &y) const {
     if (m_glWindow == nullptr)
         return;
     glfwGetCursorPos(m_glWindow, &x, &y);
-    x = (x - ((float)m_width / 2)) / (float)m_width;
-    y = (y - ((float)m_height / 2)) / (float)m_height;
+    float bounds = m_width > m_height ? (float)m_height : (float)m_width;
+    x = (x - ((float)m_width / 2)) / bounds;
+    y = (y - ((float)m_height / 2)) / bounds;
 }
