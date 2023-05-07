@@ -90,6 +90,8 @@ namespace jage::actor::abc {
         /// \return         The relative Scale
         [[nodiscard]] virtual glm::vec3 getScale() const = 0;
         /// \return         A conditional check whether the Actor should be removed from the Hierarchy during the next update
+        [[nodiscard]] virtual glm::vec3 getOrientation() const = 0;
+        [[nodiscard]] virtual glm::vec3 getUp() const = 0;
         [[nodiscard]] virtual bool isDead() const;
 
         /// \brief          Sets the relative Translation of the object

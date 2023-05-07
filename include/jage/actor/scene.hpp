@@ -47,6 +47,8 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;
         [[nodiscard]] glm::vec3 getScale() const override;
+        [[nodiscard]] glm::vec3 getOrientation() const override;
+        [[nodiscard]] glm::vec3 getUp() const override;
 
         void setTranslation(const glm::vec3 &tra) override {};
         void setRotation(const glm::quat &rot) override {};

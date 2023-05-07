@@ -40,7 +40,7 @@ void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) 
 
     vec3 point = glm::column(DynamicActor::getWorldMatrix(), 3);
 
-    view = glm::lookAt(point, point + m_orientation, m_up);
+    view = glm::lookAt(point, point + DynamicActor::getOrientation(), DynamicActor::getUp());
     proj = glm::perspective(glm::radians(fov_degrees), Window::getActive()->getAspectRatio(), near_plane, far_plane);
 
     m_matrix = proj * view;
@@ -60,7 +60,4 @@ void Camera::setActive() const {
 
 void Camera::update() {
     DynamicActor::update();
-
-    m_up = normalize(vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
-    m_orientation = normalize(vec4(1.0f, 0.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
 }

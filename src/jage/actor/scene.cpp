@@ -36,6 +36,14 @@ glm::vec3 Scene::getScale() const {
     return glm::vec3(1.0);
 }
 
+glm::vec3 jage::actor::Scene::getOrientation() const {
+    return {1.0f, 0.0f, 0.0f};
+}
+
+glm::vec3 jage::actor::Scene::getUp() const {
+    return {0.0f, 1.0f, 0.0f};
+}
+
 void Scene::update() {
     if (!m_f2Held and JAGE_IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
         m_f2Held = true;
