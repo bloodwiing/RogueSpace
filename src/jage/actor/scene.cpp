@@ -16,8 +16,6 @@ std::string Scene::getTypeName() const {
 
 Scene::Scene()
     : ActorABC(nullptr, m_hierarchyDisplayName)
-    , m_freeFly(false)
-    , m_freeFlyCamera(new Camera(this, nullptr, "root_freeFlyCamera"))
 { }
 
 Utility::QuickList<std::shared_ptr<jage::actor::abc::ActorABC>> Scene::getVolatileChildren() const {
@@ -45,29 +43,6 @@ glm::vec3 jage::actor::Scene::getUp() const {
 }
 
 void Scene::update() {
-    if (!m_f2Held and JAGE_IS_KEY(GLFW_KEY_F2, GLFW_PRESS)) {
-        m_f2Held = true;
-
-        if (!m_freeFly) {
-            m_prevCamera = Camera::getActiveCamera();
-            m_freeFlyCamera->copyOrientation(m_prevCamera, false);
-            m_freeFlyCamera->setMatrix(m_prevCamera->getWorldMatrix());
-            m_freeFlyCamera->setActive();
-        } else {
-            m_prevCamera->setActive();
-            m_prevCamera = nullptr;
-        }
-
-        m_freeFly = !m_freeFly;
-    }
-    else if (m_f2Held and JAGE_IS_KEY(GLFW_KEY_F2, GLFW_RELEASE)) {
-        m_f2Held = false;
-    }
-
-    if (m_freeFly) {
-        m_freeFlyCamera->freeFlyUpdate();
-    }
-
     abc::ActorABC::update();
 
     for (auto iter = m_volatileActors.begin(); iter != m_volatileActors.end();) {
@@ -100,8 +75,4 @@ void Scene::draw(jage::graphics::Shader &shader) {
         if (child)
             child->draw(shader);
     }
-}
-
-bool Scene::isInFreeFlight() const {
-    return m_freeFly;
 }
