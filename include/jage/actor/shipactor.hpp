@@ -16,6 +16,8 @@ namespace jage::actor {
         void setRoll(float roll);
         void setSteer(glm::vec2 euler);
 
+        [[nodiscard]] glm::vec3 getThrottleVelocity() const;
+
         void throttleForward();
         void throttleBackward();
         void throttleReset();

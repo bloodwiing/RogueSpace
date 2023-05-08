@@ -56,6 +56,10 @@ void ShipActor::setSteer(glm::vec2 euler) {
     m_steer = euler;
 }
 
+glm::vec3 jage::actor::ShipActor::getThrottleVelocity() const {
+    return DynamicActor::getOrientation() * m_throttle;
+}
+
 void jage::actor::ShipActor::throttleForward() {
     setThrottle(m_maxForwardSpeed);
 }
