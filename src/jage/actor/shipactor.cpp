@@ -62,11 +62,11 @@ void jage::actor::ShipActor::throttleReset() {
 }
 
 void jage::actor::ShipActor::rollClockwise() {
-    setRoll(m_maxRollSpeed);
+    setRoll(-m_maxRollSpeed);
 }
 
 void jage::actor::ShipActor::rollCounterClockwise() {
-    setRoll(-m_maxRollSpeed);
+    setRoll(m_maxRollSpeed);
 }
 
 void jage::actor::ShipActor::rollReset() {
