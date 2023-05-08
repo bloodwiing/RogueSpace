@@ -26,6 +26,7 @@ namespace jage::script {
         float m_sensitivity = 2.5f;
 
         float m_fireCoolDown = 0.0f;
+        bool m_fireFromLeft = true;
     };
 }
 

@@ -78,10 +78,15 @@ void PlayerControllerScript::onMouseInput() {
 
         model->setScale(glm::vec3(0.2));
         bullet->setTranslation(m_node->getTranslation());
+        if (m_fireFromLeft)
+            bullet->translate(-glm::cross(orientation, up) * 0.35f + up * -0.15f);
+        else
+            bullet->translate(glm::cross(orientation, up) * 0.35f + up * -0.15f);
         bullet->setRotation(glm::quatLookAt((glm::vec3)bulletOrientation, up));
         bullet->addForce((glm::vec3)bulletOrientation * 40.0f + m_node->getThrottleVelocity());
         bullet->markDead(10.0f);
 
         m_fireCoolDown = 0.1f;
+        m_fireFromLeft = !m_fireFromLeft;
     }
 }
