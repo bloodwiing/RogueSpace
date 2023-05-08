@@ -27,8 +27,6 @@ void ShipActor::update() {
     const auto& up = DynamicActor::getUp();
 
     m_throttle += (m_targetThrottle - m_throttle) * m_throttleEasing * Time::getDeltaFloat();
-    auto test = orientation;
-    std::cout << test.x << " " << test.y << " " << test.z << " " << glm::length(orientation) << std::endl;
     applyLinearVelocity(this, orientation * m_throttle);
 
     m_roll += (m_targetRoll - m_roll) * m_rollEasing * Time::getDeltaFloat();
