@@ -14,8 +14,9 @@ namespace jage::actor {
 
         void setThrottle(float throttle);
         void setRoll(float roll);
-        void setSteer(glm::vec2 euler);
+        void setSteer(glm::vec3 euler);
 
+        [[nodiscard]] float getThrottle() const;
         [[nodiscard]] glm::vec3 getThrottleVelocity() const;
 
         void throttleForward();
@@ -39,7 +40,7 @@ namespace jage::actor {
 
         const float m_stoppingMultiplier = 2.0f;
 
-        const float m_steerResistance = 1.0f / 40.0f * 0.4f;
+        const float m_steerResistance = 1.0f / m_maxForwardSpeed * 0.7f;
 
         static float weight;
         static float drag;
@@ -50,7 +51,7 @@ namespace jage::actor {
         float m_throttle = 0.0f;
         float m_roll = 0.0f;
 
-        glm::vec2 m_steer = glm::vec2(0.0f);
+        glm::vec3 m_steer = glm::vec3(0.0f);
     };
 }
 

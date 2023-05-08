@@ -37,9 +37,7 @@ void ShipActor::update() {
     applyAngularVelocity(this, orientation * m_roll);
 
     float resistance = 1.0f - m_throttle * m_steerResistance;
-
-    rotate(glm::rotate(glm::radians(m_steer.y * resistance), glm::normalize(glm::cross(orientation, up))));
-    rotate(glm::rotate(glm::radians(m_steer.x * resistance), up));
+    rotate(glm::quat(m_steer * resistance * Time::getDeltaFloat()));
 
     PhysicsActor::update();
 }
@@ -52,34 +50,38 @@ void ShipActor::setRoll(float roll) {
     m_targetRoll = roll;
 }
 
-void ShipActor::setSteer(glm::vec2 euler) {
+void ShipActor::setSteer(glm::vec3 euler) {
     m_steer = euler;
 }
 
-glm::vec3 jage::actor::ShipActor::getThrottleVelocity() const {
+float jage::actor::ShipActor::getThrottle() const {
+    return m_throttle;
+}
+
+glm::vec3 ShipActor::getThrottleVelocity() const {
     return DynamicActor::getOrientation() * m_throttle;
 }
 
-void jage::actor::ShipActor::throttleForward() {
+void ShipActor::throttleForward() {
     setThrottle(m_maxForwardSpeed);
 }
 
-void jage::actor::ShipActor::throttleBackward() {
+void ShipActor::throttleBackward() {
     setThrottle(-m_maxBackwardSpeed);
 }
 
-void jage::actor::ShipActor::throttleReset() {
+void ShipActor::throttleReset() {
     setThrottle(m_throttle);
 }
 
-void jage::actor::ShipActor::rollClockwise() {
+void ShipActor::rollClockwise() {
     setRoll(-m_maxRollSpeed);
 }
 
-void jage::actor::ShipActor::rollCounterClockwise() {
+void ShipActor::rollCounterClockwise() {
     setRoll(m_maxRollSpeed);
 }
 
-void jage::actor::ShipActor::rollReset() {
+void ShipActor::rollReset() {
     setRoll(0.0f);
 }
