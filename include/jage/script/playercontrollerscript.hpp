@@ -23,7 +23,7 @@ namespace jage::script {
     private:
         RequiredNodeType* m_node;
 
-        float m_sensitivity = 1.0f;
+        float m_sensitivity = 2.5f;
 
         float m_fireCoolDown = 0.0f;
     };

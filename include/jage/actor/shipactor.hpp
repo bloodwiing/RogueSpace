@@ -28,9 +28,9 @@ namespace jage::actor {
         [[nodiscard]] std::string getTypeName() const override;
 
     private:
-        const float m_maxForwardSpeed = 1.0f;
-        const float m_maxBackwardSpeed = 1.5f;
-        const float m_maxRollSpeed = 5.0f;
+        const float m_maxForwardSpeed = 40.0f;
+        const float m_maxBackwardSpeed = 10.5f;
+        const float m_maxRollSpeed = 4.0f;
 
         const float m_throttleEasing = 0.1f;
         const float m_rollEasing = 3.0f;
