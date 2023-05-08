@@ -62,12 +62,13 @@ void PlayerControllerScript::onMouseInput() {
     double rot_x = 0.0, rot_y = 0.0;
     JAGE_GET_RELATIVE_MOUSE(rot_x, rot_y);
 
-    m_node->setSteer(glm::vec2(rot_x, rot_y) * m_sensitivity);
-
     using jage::runtime::Time;
 
     const auto& orientation = m_node->getOrientation();
     const auto& up = m_node->getUp();
+
+    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)rot_y + up * (float)rot_x;
+    m_node->setSteer(steer * m_sensitivity);
 
     glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
     bulletOrientation = bulletOrientation * glm::rotate(glm::radians((float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians((float)rot_x * 45.0f), up);
@@ -77,7 +78,7 @@ void PlayerControllerScript::onMouseInput() {
         auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
 
         model->setScale(glm::vec3(0.2));
-        bullet->setTranslation(m_node->getTranslation());
+        bullet->setTranslation(m_node->getWorldPosition());
         if (m_fireFromLeft)
             bullet->translate(-glm::cross(orientation, up) * 0.35f + up * -0.15f);
         else
