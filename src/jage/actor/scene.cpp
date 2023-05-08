@@ -34,12 +34,16 @@ glm::vec3 Scene::getScale() const {
     return glm::vec3(1.0);
 }
 
-glm::vec3 jage::actor::Scene::getOrientation() const {
+glm::vec3 Scene::getOrientation() const {
     return {1.0f, 0.0f, 0.0f};
 }
 
-glm::vec3 jage::actor::Scene::getUp() const {
+glm::vec3 Scene::getUp() const {
     return {0.0f, 1.0f, 0.0f};
+}
+
+glm::vec3 Scene::getWorldPosition() const {
+    return glm::vec3(0.0f);
 }
 
 void Scene::update() {

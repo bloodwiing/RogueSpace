@@ -54,6 +54,7 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getScale() const override;
         [[nodiscard]] glm::vec3 getOrientation() const override;
         [[nodiscard]] glm::vec3 getUp() const override;
+        [[nodiscard]] glm::vec3 getWorldPosition() const override;
         [[nodiscard]] bool isDead() const override;
 
         /// \brief          Sets the relative Translation of the object

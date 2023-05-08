@@ -26,6 +26,7 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getScale() const override;
         [[nodiscard]] glm::vec3 getOrientation() const override;
         [[nodiscard]] glm::vec3 getUp() const override;
+        [[nodiscard]] glm::vec3 getWorldPosition() const override;
 
         [[nodiscard]] glm::mat4 getWorldMatrix() const override;
 

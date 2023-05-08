@@ -38,12 +38,16 @@ glm::vec3 StaticActor::getScale() const {
     return vec3(1.0f);
 }
 
-glm::vec3 jage::actor::StaticActor::getOrientation() const {
+glm::vec3 StaticActor::getOrientation() const {
     return {1.0f, 0.0f, 0.0f};
 }
 
-glm::vec3 jage::actor::StaticActor::getUp() const {
+glm::vec3 StaticActor::getUp() const {
     return {0.0f, 1.0f, 0.0f};
+}
+
+glm::vec3 StaticActor::getWorldPosition() const {
+    return glm::vec3(0.0f);
 }
 
 void StaticActor::markDead(float wait /* = -1.0f */) {

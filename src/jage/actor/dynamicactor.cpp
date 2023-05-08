@@ -62,6 +62,10 @@ glm::vec3 jage::actor::DynamicActor::getUp() const {
     return m_up;
 }
 
+glm::vec3 DynamicActor::getWorldPosition() const {
+    return {getWorldMatrix()[3]};
+}
+
 glm::mat4 DynamicActor::getWorldMatrix() const {
     return m_worldMatrix;
 }
