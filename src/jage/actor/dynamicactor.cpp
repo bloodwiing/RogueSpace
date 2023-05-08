@@ -23,8 +23,8 @@ void DynamicActor::update() {
         m_needsMatrixUpdate = false;
 
         if (m_needsVectorUpdate) {
-            m_up = glm::normalize(glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
-            m_orientation = glm::normalize(glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) * DynamicActor::getWorldMatrix());
+            m_up = glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f) * glm::mat3(DynamicActor::getWorldMatrix()));
+            m_orientation = glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f) * glm::mat3(DynamicActor::getWorldMatrix()));
         }
 
         for (auto& [name, child] : m_children) {
