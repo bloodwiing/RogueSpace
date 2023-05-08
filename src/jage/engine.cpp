@@ -54,7 +54,7 @@ void JAGEngine::loop() {
         if (!m_shader->isErrored()) {
             m_shader->activate();
             auto* camera = jage::actor::Camera::getActiveCamera();
-            camera->updateMatrix(45.0f, 0.001f, 1000.0f);
+            camera->updateMatrix(45.0f, 0.001f, 10000.0f);
         }
 
         m_scene->draw(*m_shader);
