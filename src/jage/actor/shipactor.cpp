@@ -1,5 +1,6 @@
 #include "jage/actor/shipactor.hpp"
 
+#include <iostream>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "jage/runtime/time.hpp"
@@ -26,13 +27,17 @@ void ShipActor::update() {
     const auto& up = DynamicActor::getUp();
 
     m_throttle += (m_targetThrottle - m_throttle) * m_throttleEasing * Time::getDeltaFloat();
-    translate(orientation * m_throttle * Time::getDeltaFloat());
+    auto test = orientation;
+    std::cout << test.x << " " << test.y << " " << test.z << " " << glm::length(orientation) << std::endl;
+    applyLinearVelocity(this, orientation * m_throttle);
 
     m_roll += (m_targetRoll - m_roll) * m_rollEasing * Time::getDeltaFloat();
-    rotate(glm::quat(orientation * m_roll * Time::getDeltaFloat()));
+    applyAngularVelocity(this, orientation * m_roll);
 
-    rotate(glm::rotate(glm::radians(m_steer.y), glm::normalize(glm::cross(orientation, up))));
-    rotate(glm::rotate(glm::radians(m_steer.x), up));
+    float resistance = 1.0f - m_throttle * m_steerResistance;
+
+    rotate(glm::rotate(glm::radians(m_steer.y * resistance), glm::normalize(glm::cross(orientation, up))));
+    rotate(glm::rotate(glm::radians(m_steer.x * resistance), up));
 
     PhysicsActor::update();
 }
