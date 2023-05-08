@@ -35,6 +35,8 @@ namespace jage::actor {
         const float m_throttleEasing = 0.3f;
         const float m_rollEasing = 3.0f;
 
+        const float m_stoppingMultiplier = 2.0f;
+
         const float m_steerResistance = 1.0f / 40.0f * 0.4f;
 
         static float weight;
