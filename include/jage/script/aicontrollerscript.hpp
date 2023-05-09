@@ -45,8 +45,8 @@ namespace jage::script {
         const float m_seekAngleBegin = 0.2f;
         const float m_seekAngleEnd = 0.5f;
 
-        const float m_seekDistance = 20.0f;
-        const float m_attackDistance = 30.0f;
+        const float m_seekDistance = 30.0f;
+        const float m_attackDistance = 60.0f;
         const float m_avoidDistance = 8.0f;
 
         float m_fireCoolDown = 0.0f;
