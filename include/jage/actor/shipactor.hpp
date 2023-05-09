@@ -23,9 +23,14 @@ namespace jage::actor {
         void throttleBackward();
         void throttleReset();
 
+        [[nodiscard]] float getMaxForwardSpeed() const;
+        [[nodiscard]] float getMaxBackwardSpeed() const;
+
         void rollClockwise();
         void rollCounterClockwise();
         void rollReset();
+
+        [[nodiscard]] float getMaxRollSpeed() const;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;

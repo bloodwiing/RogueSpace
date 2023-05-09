@@ -74,14 +74,26 @@ void ShipActor::throttleReset() {
     setThrottle(m_throttle);
 }
 
+float ShipActor::getMaxForwardSpeed() const {
+    return m_maxForwardSpeed;
+}
+
+float ShipActor::getMaxBackwardSpeed() const {
+    return m_maxBackwardSpeed;
+}
+
 void ShipActor::rollClockwise() {
-    setRoll(-m_maxRollSpeed);
+    setRoll(m_maxRollSpeed);
 }
 
 void ShipActor::rollCounterClockwise() {
-    setRoll(m_maxRollSpeed);
+    setRoll(-m_maxRollSpeed);
 }
 
 void ShipActor::rollReset() {
     setRoll(0.0f);
+}
+
+float ShipActor::getMaxRollSpeed() const {
+    return m_maxRollSpeed;
 }
