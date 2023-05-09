@@ -81,8 +81,8 @@ void JAGEngine::loadScene() {
     auto sphere = m_scene->addChild<ModelActor>("sphere", "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
 
-    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
-    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
+//    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
+//    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
     auto player = m_scene->addChild<ShipActor>("Player");
     player->attachScript<script::PlayerControllerScript>();
@@ -90,7 +90,6 @@ void JAGEngine::loadScene() {
     camera->setActive();
 
     auto starship = m_scene->addChild<ShipActor>("Starship");
-    starship->scale(glm::vec3(0.50f));
     auto controller = starship->attachScript<script::AIControllerScript>();
     controller->setTarget(player);
     try {
@@ -99,20 +98,6 @@ void JAGEngine::loadScene() {
         std::cerr << e.what();
     }
     starship->translate(glm::vec3(4.0f, 0.0f, 0.0f));
-
-    auto starship2 = m_scene->addChild<ShipActor>("Starship2");
-    starship2->scale(glm::vec3(0.50f));
-    auto controller2 = starship2->attachScript<script::AIControllerScript>();
-    controller2->setTarget(player);
-    try {
-        auto starship_model = starship2->addChild<ModelActor>("model2", "./res/bullet/BulletTemp.gltf");
-    } catch (std::exception& e) {
-        std::cerr << e.what();
-    }
-    starship2->translate(glm::vec3(4.0f, 0.0f, 4.0f));
-    starship2->setScale(glm::vec3(10.0f));
-//    starship->rotate(glm::quat(glm::vec3(0.0f, 0.0f, glm::pi<float>() / 2.0f)));
-//    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
 
     std::cout << m_scene.get();
 }
