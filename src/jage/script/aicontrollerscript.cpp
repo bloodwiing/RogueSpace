@@ -1,16 +1,13 @@
 #include "jage/script/aicontrollerscript.hpp"
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
-#include <iostream>
 
 #include "jage/actor/physicsactor.hpp"
-#include "jage/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
-#include "jage/runtime/window.hpp"
 
 using jage::script::AIControllerScript;
+
+std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
 AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node) {
     auto* cast = dynamic_cast<RequiredNodeType*>(node);
@@ -30,26 +27,82 @@ void AIControllerScript::onSpawn() {
 void AIControllerScript::onUpdate() {
     using jage::runtime::Time;
 
+    // Weapon cool down
     if (m_fireCoolDown > 0.0f)
         m_fireCoolDown -= Time::getDeltaFloat();
 
+    // Don't continue if you have nothing to target
     if (m_target == nullptr)
         return;
 
+    // Direction towards target
     const glm::vec3 toTarget = m_target->getWorldPosition() - m_node->getWorldPosition();
-    const float distanceToTarget = glm::length(toTarget);
-    const glm::vec3 toTargetNormal = glm::normalize(toTarget);
+    const float distanceToTarget = glm::length(toTarget - m_node->getThrottle() * Time::getDeltaFloat());
+    glm::vec3 toTargetNormal = glm::normalize(toTarget);
 
-//    m_node->setSteer((glm::normalize(toTarget) - glm::normalize(glm::cross(m_node->getOrientation(), m_node->getUp()))) * m_sensitivity);
-//    m_node->setRotation((glm::eulerAngles(glm::quatLookAt(glm::normalize(glm::normalize(toTarget)), m_node->getUp()))));
-    m_node->setRotation(glm::slerp(m_node->getRotation(), glm::normalize(glm::quatLookAt(-toTargetNormal, m_node->getUp())), m_sensitivity * Time::getDeltaFloat()));
-    std::cout << toTargetNormal.x << " " << toTargetNormal.y << " " << toTargetNormal.z << " - " << m_node->getOrientation().x << " " << m_node->getOrientation().y << " " << m_node->getOrientation().z << " - " << glm::angle(m_node->getRotation() - glm::normalize(glm::quatLookAt(-toTargetNormal, m_node->getUp()))) << std::endl;
+    // Avoidance Machine Block
+    // If distance to target is too close, save a vector to target, but slightly above it to continue moving there
+    // Keep avoiding until distance gets larger
+    if (!m_avoiding and distanceToTarget < m_avoidDistance) {
+        m_avoidVector = glm::normalize(toTargetNormal + m_node->getUp());
+        m_avoidEase = 0.0f;
+        m_avoiding = true;
+    }
+    else if (m_avoiding and distanceToTarget > m_seekDistance) {
+        m_avoiding = false;
+        m_seekCoolDown = m_seekApplyCoolDown(random);
+        m_orbitAngle = m_orbitApplyAngle(random);
+    }
 
-    if (glm::angle(m_node->getRotation() - glm::normalize(glm::quatLookAt(-toTargetNormal, m_node->getUp()))) < 0.5f) {
+    // If avoiding use the remembered vector
+    if (m_avoiding)
+        toTargetNormal = m_avoidVector;
+    // If not (just recently went out of it) ease into the "orbit" vector
+    // This mode is only partially interested in the player
+    else if (m_seekCoolDown >= 0.0f) {
+        m_avoidEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
+        m_seekCoolDown -= Time::getDeltaFloat();
+        toTargetNormal = glm::normalize(glm::mix(m_avoidVector, glm::rotate(glm::cross(toTargetNormal, m_target->getUp()), m_orbitAngle, toTargetNormal), m_avoidEase));
+        if (m_seekCoolDown < 0.0f) {
+            m_avoidEase = 0.0f;
+        }
+    }
+    // When it ends, the AI will ease into the actual target vector
+    else if (m_avoidEase < 1.0f) {
+        m_avoidEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
+        toTargetNormal = glm::normalize(glm::mix(m_avoidVector, toTargetNormal, m_avoidEase));
+    }
+
+    // Quaternion towards the vector
+    glm::quat targetQuaternion = glm::normalize(glm::quatLookAt(toTargetNormal, m_node->getUp()));
+    // Difference in current and goal quaternions
+    // A condition is here in case the two quaternions are inverts (which actually means they are still equal rotations, just a different sign)
+    const float targetAngleDiff = glm::sign(m_node->getRotation().w) == glm::sign(targetQuaternion.w) ?
+                                  glm::length(m_node->getRotation() - targetQuaternion) :
+                                  glm::length(m_node->getRotation() + targetQuaternion);
+
+    // Clamp turning rate, so it's not too fast or slow
+    float turnRate = glm::max(glm::min(targetAngleDiff * m_sensitivity, m_maxTurnRate), m_minTurnRate);
+
+    // Apply the turn
+    m_node->setRotation(glm::normalize(glm::slerp(m_node->getRotation(), targetQuaternion, turnRate * Time::getDeltaFloat())));
+
+    // Seeking Machine Block
+    // "Seek" the target (engage forward thrusters) if not already and the angle is close enough
+    if (!m_seeking and targetAngleDiff < m_seekAngleBegin)
+        m_seeking = true;
+    // Stop seeking the target if the angle goes off too far
+    else if (m_seeking and targetAngleDiff > m_seekAngleEnd)
+        m_seeking = false;
+
+    // Only go forward if Avoiding or Seeking or Orbiting
+    if (m_seeking or m_avoiding or m_seekCoolDown >= 0.0f) {
         m_node->throttleForward();
     } else {
-        if (m_node->getThrottle() > 0.2f) {
+        // Otherwise slow down to a specific speed
+        if (m_node->getThrottle() > 0.9f) {
             m_node->throttleBackward();
+        // Keep the speed after
         } else {
             m_node->throttleReset();
         }
