@@ -38,7 +38,11 @@ void AIControllerScript::onUpdate() {
     // Direction towards target
     const glm::vec3 toTarget = m_target->getWorldPosition() - m_node->getWorldPosition();
     const float distanceToTarget = glm::length(toTarget - m_node->getThrottle() * Time::getDeltaFloat());
-    glm::vec3 toTargetNormal = glm::normalize(toTarget);
+    const float timeToTarget = distanceToTarget / m_node->getMaxForwardSpeed();
+
+    // Fixed for movement speed
+    const glm::vec3 correctedToTarget = toTarget + m_target->getThrottleVelocity() * timeToTarget;
+    glm::vec3 toTargetNormal = glm::normalize(correctedToTarget);
 
     // Avoidance Machine Block
     // If distance to target is too close, save a vector to target, but slightly above it to continue moving there
