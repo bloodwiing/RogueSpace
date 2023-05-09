@@ -40,8 +40,8 @@ void AIControllerScript::onUpdate() {
 
     // Direction towards target
     const glm::vec3 toTarget = m_target->getWorldPosition() - m_node->getWorldPosition();
-    const float distanceToTarget = glm::length(toTarget - (m_node->getThrottle() + bulletSpeed) * Time::getDeltaFloat());
-    const float timeToTarget = distanceToTarget / m_node->getMaxForwardSpeed();
+    const float distanceToTarget = glm::length(toTarget - m_node->getThrottle() * Time::getDeltaFloat());
+    const float timeToTarget = distanceToTarget / (m_node->getMaxForwardSpeed());
 
     // Fixed for movement speed
     const glm::vec3 correctedToTarget = toTarget + m_target->getThrottleVelocity() * timeToTarget;
