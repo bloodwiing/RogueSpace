@@ -36,6 +36,9 @@ namespace jage::runtime {
         /// \details    Only useful for testing, please do not call this function otherwise
         static void setDelta(TDoubleSec delta);
 
+        static void setTimeScale(double timeScale);
+        static double getTimeScale();
+
         /// \brief      Helpful function that halts the current thread until a new frame can begin
         static void waitForNextFrame();
 
@@ -48,6 +51,7 @@ namespace jage::runtime {
         static TTimePoint m_frameStart;
         /// Time to wait in microseconds for how short a frame should be
         static std::chrono::microseconds m_requiredFrameTime;
+        static double m_timeScale;
     };
 }
 
