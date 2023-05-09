@@ -1,6 +1,5 @@
 #include "jage/script/aicontrollerscript.hpp"
 
-#include <iostream>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "jage/actor/physicsactor.hpp"
@@ -119,8 +118,6 @@ void AIControllerScript::onUpdate() {
             m_node->throttleReset();
         }
     }
-
-    std::cout << distanceToTarget << "\t" << targetAngleDiff << "\t" << m_avoiding << " " << m_seeking << std::endl;
 
     // Firing
     if ((m_seeking and !m_avoiding) and distanceToTarget < m_attackDistance and m_fireCoolDown <= 0.0f) {
