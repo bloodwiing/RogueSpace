@@ -18,4 +18,5 @@ ModelActor::ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, co
 
 void ModelActor::draw(jage::graphics::Shader &shader) {
     m_model->draw(shader, getWorldMatrix());
+    DynamicActor::draw(shader);
 }
