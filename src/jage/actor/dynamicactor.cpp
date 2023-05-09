@@ -23,8 +23,8 @@ void DynamicActor::update() {
         m_needsMatrixUpdate = false;
 
         if (m_needsVectorUpdate) {
-            m_up = glm::normalize(glm::vec3(0.0f, 1.0f, 0.0f) * glm::mat3(DynamicActor::getWorldMatrix()));
-            m_orientation = glm::normalize(glm::vec3(1.0f, 0.0f, 0.0f) * glm::mat3(DynamicActor::getWorldMatrix()));
+            m_up = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 1.0f, 0.0f));
+            m_orientation = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 0.0f, -1.0f));
         }
 
         for (auto& [name, child] : m_children) {
@@ -100,7 +100,7 @@ void DynamicActor::translate(const glm::vec3 &tra) {
 }
 
 void DynamicActor::rotate(const glm::quat &rot) {
-    m_rotation = glm::normalize(m_rotation * rot);
+    m_rotation = glm::normalize(rot * m_rotation);
     flagForVectorUpdate();
     flagForMatrixUpdate();
 }
