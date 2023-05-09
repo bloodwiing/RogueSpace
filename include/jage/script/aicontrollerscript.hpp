@@ -28,11 +28,10 @@ namespace jage::script {
         const float m_maxTurnRate = 0.9f * m_sensitivity;
         const float m_minTurnRate = 0.4f * m_sensitivity;
 
-        glm::vec3 m_avoidVector = glm::vec3(0.0);
-        float m_avoidEase = 1.0f;
+        glm::vec3 m_fleeVector = glm::vec3(0.0);
         const float m_avoidEaseMultiplier = 0.3f;
 
-        bool m_avoiding = false;
+        bool m_fleeing = false;
         bool m_seeking = false;
 
         static std::mt19937 random;
@@ -47,7 +46,9 @@ namespace jage::script {
 
         const float m_seekDistance = 30.0f;
         const float m_attackDistance = 60.0f;
-        const float m_avoidDistance = 8.0f;
+        const float m_fleeDistance = 8.0f;
+
+        float m_vectorChangeEase = 1.0f;
 
         float m_fireCoolDown = 0.0f;
         bool m_fireFromLeft = true;

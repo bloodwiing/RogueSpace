@@ -47,41 +47,41 @@ void AIControllerScript::onUpdate() {
     const glm::vec3 correctedToTarget = toTarget + m_target->getThrottleVelocity() * timeToTarget;
     glm::vec3 toTargetNormal = glm::normalize(correctedToTarget);
 
-    // Avoidance Machine Block
+    // Fleeing Machine Block
     // If distance to target is too close, save a vector to target, but slightly above it to continue moving there
-    // Keep avoiding until distance gets larger
-    if (!m_avoiding and distanceToTarget < m_avoidDistance) {
-        m_avoidVector = glm::normalize(toTargetNormal + m_node->getUp());
-        m_avoidEase = 0.0f;
-        m_avoiding = true;
+    // Keep fleeing until distance gets larger
+    if (!m_fleeing and distanceToTarget < m_fleeDistance) {
+        m_fleeVector = glm::normalize(toTargetNormal + m_node->getUp());
+        m_vectorChangeEase = 0.0f;
+        m_fleeing = true;
         m_seeking = false;
     }
-    else if (m_avoiding and distanceToTarget > m_seekDistance) {
-        m_avoiding = false;
+    else if (m_fleeing and distanceToTarget > m_seekDistance) {
+        m_fleeing = false;
         m_seekCoolDown = m_seekApplyCoolDown(random);
         m_orbitAngle = m_orbitApplyAngle(random);
     }
 
     bool orbiting = false;
 
-    // If avoiding use the remembered vector
-    if (m_avoiding)
-        toTargetNormal = m_avoidVector;
+    // If fleeing use the remembered vector
+    if (m_fleeing)
+        toTargetNormal = m_fleeVector;
     // If not (just recently went out of it) ease into the "orbit" vector
     // This mode is only partially interested in the player
     else if (m_seekCoolDown >= 0.0f) {
         orbiting = true;
-        m_avoidEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
+        m_vectorChangeEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
         m_seekCoolDown -= Time::getDeltaFloat();
-        toTargetNormal = glm::normalize(glm::mix(m_avoidVector, glm::rotate(glm::cross(toTargetNormal, m_target->getUp()), m_orbitAngle, toTargetNormal), m_avoidEase));
+        toTargetNormal = glm::normalize(glm::mix(m_fleeVector, glm::rotate(glm::cross(toTargetNormal, m_target->getUp()), m_orbitAngle, toTargetNormal), m_vectorChangeEase));
         if (m_seekCoolDown < 0.0f) {
-            m_avoidEase = 0.0f;
+            m_vectorChangeEase = 0.0f;
         }
     }
     // When it ends, the AI will ease into the actual target vector
-    else if (m_avoidEase < 1.0f) {
-        m_avoidEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
-        toTargetNormal = glm::normalize(glm::mix(m_avoidVector, toTargetNormal, m_avoidEase));
+    else if (m_vectorChangeEase < 1.0f) {
+        m_vectorChangeEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
+        toTargetNormal = glm::normalize(glm::mix(m_fleeVector, toTargetNormal, m_vectorChangeEase));
     }
 
     // Quaternion towards the vector
@@ -100,14 +100,14 @@ void AIControllerScript::onUpdate() {
 
     // Seeking Machine Block
     // "Seek" the target (engage forward thrusters) if not already, not orbiting and the angle is close enough
-    if (!m_seeking and !m_avoiding and !orbiting and targetAngleDiff < m_seekAngleBegin)
+    if (!m_seeking and !m_fleeing and !orbiting and targetAngleDiff < m_seekAngleBegin)
         m_seeking = true;
     // Stop seeking the target if the angle goes off too far
-    else if (m_seeking and !m_avoiding and targetAngleDiff > m_seekAngleEnd)
+    else if (m_seeking and !m_fleeing and targetAngleDiff > m_seekAngleEnd)
         m_seeking = false;
 
     // Only go forward if Avoiding or Seeking or Orbiting
-    if (m_seeking or m_avoiding or orbiting) {
+    if (m_seeking or m_fleeing or orbiting) {
         m_node->throttleForward();
     } else {
         // Otherwise slow down to a specific speed
@@ -120,7 +120,7 @@ void AIControllerScript::onUpdate() {
     }
 
     // Firing
-    if ((m_seeking and !m_avoiding) and distanceToTarget < m_attackDistance and m_fireCoolDown <= 0.0f) {
+    if ((m_seeking and !m_fleeing) and distanceToTarget < m_attackDistance and m_fireCoolDown <= 0.0f) {
         const auto& orientation = m_node->getOrientation();
         const auto& up = m_node->getUp();
 
