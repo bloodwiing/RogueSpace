@@ -101,7 +101,7 @@ void JAGEngine::loadScene() {
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
-    starship->translate(glm::vec3(4.0f, 0.0f, 0.0f));
+    starship->translate(glm::vec3(100.0f, 0.0f, 0.0f));
 
     std::cout << m_scene.get();
 }

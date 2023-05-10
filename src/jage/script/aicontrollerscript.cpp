@@ -10,7 +10,9 @@ using jage::script::AIControllerScript;
 
 std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
-AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node) {
+AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node)
+    : m_state(State::SEEKING)
+{
     validate(node);
     m_weaponScript = dependsOn<WeaponScript>();
 }
@@ -30,90 +32,22 @@ void AIControllerScript::onUpdate() {
     if (m_target == nullptr)
         return;
 
-    // Direction towards target
-    const glm::vec3 toTarget = m_target->getWorldPosition() - m_node->getWorldPosition();
-    const float distanceToTarget = glm::length(toTarget - m_node->getThrottle() * Time::getDeltaFloat());
-    const float timeToTarget = distanceToTarget / (m_node->getMaxForwardSpeed());
+    const glm::vec3 target = m_target->getWorldPosition() - m_node->getWorldPosition();
 
-    // Fixed for movement speed
-    const glm::vec3 correctedToTarget = toTarget + m_target->getThrottleVelocity() * timeToTarget;
-    glm::vec3 toTargetNormal = glm::normalize(correctedToTarget);
+    const float distance = getTargetDistance(target);
+    const glm::vec3& predicted = predictTargetPosition(target, distance);
 
-    // Fleeing Machine Block
-    // If distance to target is too close, save a vector to target, but slightly above it to continue moving there
-    // Keep fleeing until distance gets larger
-    if (!m_fleeing and distanceToTarget < m_fleeDistance) {
-        m_fleeVector = glm::normalize(toTargetNormal + m_node->getUp());
-        m_vectorChangeEase = 0.0f;
-        m_fleeing = true;
-        m_seeking = false;
-    }
-    else if (m_fleeing and distanceToTarget > m_seekDistance) {
-        m_fleeing = false;
-        m_seekCoolDown = m_seekApplyCoolDown(random);
-        m_orbitAngle = m_orbitApplyAngle(random);
-    }
-
-    bool orbiting = false;
-
-    // If fleeing use the remembered vector
-    if (m_fleeing)
-        toTargetNormal = m_fleeVector;
-    // If not (just recently went out of it) ease into the "orbit" vector
-    // This mode is only partially interested in the player
-    else if (m_seekCoolDown >= 0.0f) {
-        orbiting = true;
-        m_vectorChangeEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
-        m_seekCoolDown -= Time::getDeltaFloat();
-        toTargetNormal = glm::normalize(glm::mix(m_fleeVector, glm::rotate(glm::cross(toTargetNormal, m_target->getUp()), m_orbitAngle, toTargetNormal), m_vectorChangeEase));
-        if (m_seekCoolDown < 0.0f) {
-            m_vectorChangeEase = 0.0f;
-        }
-    }
-    // When it ends, the AI will ease into the actual target vector
-    else if (m_vectorChangeEase < 1.0f) {
-        m_vectorChangeEase += Time::getDeltaFloat() * m_avoidEaseMultiplier;
-        toTargetNormal = glm::normalize(glm::mix(m_fleeVector, toTargetNormal, m_vectorChangeEase));
-    }
-
-    // Quaternion towards the vector
-    glm::quat targetQuaternion = glm::normalize(glm::quatLookAt(toTargetNormal, m_node->getUp()));
-    // Difference in current and goal quaternions
-    // A condition is here in case the two quaternions are inverts (which actually means they are still equal rotations, just a different sign)
-    const float targetAngleDiff = glm::sign(m_node->getRotation().w) == glm::sign(targetQuaternion.w) ?
-                                  glm::length(m_node->getRotation() - targetQuaternion) :
-                                  glm::length(m_node->getRotation() + targetQuaternion);
-
-    // Clamp turning rate, so it's not too fast or slow
-    float turnRate = glm::max(glm::min(targetAngleDiff * m_sensitivity, m_maxTurnRate), m_minTurnRate);
-
-    // Apply the turn
-    m_node->setRotation(glm::normalize(glm::slerp(m_node->getRotation(), targetQuaternion, turnRate * Time::getDeltaFloat())));
-
-    // Seeking Machine Block
-    // "Seek" the target (engage forward thrusters) if not already, not orbiting and the angle is close enough
-    if (!m_seeking and !m_fleeing and !orbiting and targetAngleDiff < m_seekAngleBegin)
-        m_seeking = true;
-    // Stop seeking the target if the angle goes off too far
-    else if (m_seeking and !m_fleeing and targetAngleDiff > m_seekAngleEnd)
-        m_seeking = false;
-
-    // Only go forward if Avoiding or Seeking or Orbiting
-    if (m_seeking or m_fleeing or orbiting) {
-        m_node->throttleForward();
-    } else {
-        // Otherwise slow down to a specific speed
-        if (m_node->getThrottle() > 0.9f) {
-            m_node->throttleBackward();
-        // Keep the speed after
-        } else {
-            m_node->throttleReset();
-        }
-    }
-
-    // Firing
-    if ((m_seeking and !m_fleeing) and distanceToTarget < m_attackDistance) {
-        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
+    switch (m_state) {
+        case SEARCHING:
+            return runSearch(predicted, distance);
+        case SEEKING:
+            return runSeek(predicted, distance);
+        case FLEEING:
+            return runFlee(predicted, distance);
+        case ORBITING:
+            return runOrbit(predicted, distance);
+        default:
+            return;
     }
 }
 
@@ -121,58 +55,126 @@ void AIControllerScript::onDeath() {
 
 }
 
-void jage::script::AIControllerScript::setTarget(jage::actor::ShipActor *target) {
+void AIControllerScript::setTarget(jage::actor::ShipActor *target) {
     m_target = target;
 }
 
-//void AIControllerScript::onKeyboardInput() {
-//    if (JAGE_IS_KEY(GLFW_KEY_W, GLFW_PRESS)) {
-//        m_node->throttleForward();
-//    } else if (JAGE_IS_KEY(GLFW_KEY_S, GLFW_PRESS)) {
-//        m_node->throttleBackward();
-//    } else {
-//        m_node->throttleReset();
-//    }
-//
-//    if (JAGE_IS_KEY(GLFW_KEY_A, GLFW_PRESS)) {
-//        m_node->rollCounterClockwise();
-//    } else if (JAGE_IS_KEY(GLFW_KEY_D, GLFW_PRESS)) {
-//        m_node->rollClockwise();
-//    } else {
-//        m_node->rollReset();
-//    }
-//}
+void AIControllerScript::runSearch(const glm::vec3& predicted, float distance) {
+    float angleDifference = 0.0f;
+    turnToVector(predicted, predicted, angleDifference);
 
-//void AIControllerScript::onMouseInput() {
-//    double rot_x = 0.0, rot_y = 0.0;
-//    JAGE_GET_RELATIVE_MOUSE(rot_x, rot_y);
-//
-//    using jage::runtime::Time;
-//
-//    const auto& orientation = m_node->getOrientation();
-//    const auto& up = m_node->getUp();
-//
-//    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)rot_y + up * (float)rot_x;
-//    m_node->setSteer(steer * m_sensitivity);
-//
-//    glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
-//    bulletOrientation = bulletOrientation * glm::rotate(glm::radians((float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians((float)rot_x * 45.0f), up);
-//
-//    if (m_fireCoolDown <= 0.0f and JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-//        auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", 0.0f, 0.0f);
-//        auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
-//
-//        model->setScale(glm::vec3(0.2));
-//        bullet->setTranslation(m_node->getTranslation());
-//        if (m_fireFromLeft)
-//            bullet->translate(-glm::cross(orientation, up) * 0.35f + up * -0.15f);
-//        else
-//            bullet->translate(glm::cross(orientation, up) * 0.35f + up * -0.15f);
-//        bullet->setRotation(glm::quatLookAt((glm::vec3)bulletOrientation, up));
-//        bullet->addForce((glm::vec3)bulletOrientation * 40.0f + m_node->getThrottleVelocity());
-//        bullet->markDead(10.0f);
-//
-//        m_fireCoolDown = 0.1f;
-//        m_fireFromLeft = !m_fireFromLeft;
-//    }
-//}
+    slowDown();
+
+    if (angleDifference < m_seekAngleBegin) {
+        m_state = State::SEEKING;
+    }
+}
+
+void AIControllerScript::runSeek(const glm::vec3& predicted, float distance) {
+    float angleDifference = 0.0f;
+    turnToVector(m_orbitVector, predicted, angleDifference);
+
+    if (angleDifference > m_seekAngleEnd) {
+        m_state = State::SEARCHING;
+    }
+
+    m_node->throttleForward();
+
+    if (distance < m_fleeDistance) {
+        m_state = State::FLEEING;
+        m_fleeVector = glm::normalize(predicted + m_node->getUp());
+    } else if (distance < m_attackDistance) {
+        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
+    }
+}
+
+void AIControllerScript::runFlee(const glm::vec3& predicted, float distance) {
+    float angleDifference = 0.0f;
+    turnToVector(predicted, m_fleeVector, angleDifference);
+
+    if (distance > m_seekDistance) {
+        m_state = State::ORBITING;
+        m_orbitDuration = m_orbitApplyDuration(random);
+        m_orbitAngle = m_orbitApplyAngle(random);
+        resetEasing();
+    }
+
+    m_node->throttleForward();
+}
+
+void AIControllerScript::runOrbit(const glm::vec3& predicted, float distance) {
+    using jage::runtime::Time;
+
+    m_orbitDuration -= Time::getDeltaFloat();
+
+    m_orbitVector = glm::rotate(glm::cross(predicted, m_target->getUp()), m_orbitAngle, predicted);
+
+    float angleDifference = 0.0f;
+    turnToVector(m_fleeVector, m_orbitVector, angleDifference);
+
+    m_node->throttleForward();
+
+    if (m_orbitDuration < 0.0f) {
+        m_state = State::SEARCHING;
+        resetEasing();
+    }
+}
+
+float AIControllerScript::getTargetDistance(const glm::vec3& target) {
+    return glm::length(target - m_node->getThrottle() * jage::runtime::Time::getDeltaFloat());
+}
+
+glm::vec3 AIControllerScript::predictTargetPosition(const glm::vec3& target, float distance) {
+    glm::vec3 bulletVelocity = (m_node->getMaxForwardSpeed() + m_weaponScript->getBulletSpeed()) * m_node->getOrientation();
+
+    float approachSpeed = glm::length(bulletVelocity - m_target->getThrottleVelocity());
+    // Assume approach speed even if it's invalid
+    if (approachSpeed == 0.0f)
+        approachSpeed = 1.0f;
+
+    const float timeToTarget = distance / approachSpeed;
+
+    return glm::normalize(target + m_target->getThrottleVelocity() * timeToTarget);
+}
+
+void AIControllerScript::slowDown() {
+    // Slow down to a specific speed
+    if (m_node->getThrottle() > 0.9f) {
+        m_node->throttleBackward();
+    // Keep the speed after
+    } else {
+        m_node->throttleReset();
+    }
+}
+
+void AIControllerScript::turnToVector(const glm::vec3& prevVector, glm::vec3 vector, float& angleDifference) {
+    // If easing is enabled, ease from an old to a new vector
+    vector = easeBetweenVectors(prevVector, vector);
+
+    // Quaternion towards the vector
+    glm::quat targetQuaternion = glm::normalize(glm::quatLookAt(vector, m_node->getUp()));
+
+    // Difference in current and goal quaternions
+    // A condition is here in case the two quaternions are inverts (which actually means they are still equal rotations, just a different sign)
+    angleDifference = glm::sign(m_node->getRotation().w) == glm::sign(targetQuaternion.w)
+            ? glm::length(m_node->getRotation() - targetQuaternion)
+            : glm::length(m_node->getRotation() + targetQuaternion);
+
+    // Clamp turning rate, so it's not too fast or slow
+    float turnRate = glm::max(glm::min(angleDifference * m_sensitivity, m_maxTurnRate), m_minTurnRate);
+
+    // Apply the turn
+    m_node->setRotation(glm::normalize(glm::slerp(m_node->getRotation(), targetQuaternion, turnRate * jage::runtime::Time::getDeltaFloat())));
+}
+
+void jage::script::AIControllerScript::resetEasing() {
+    m_vectorChangeEase = 0.0f;
+}
+
+glm::vec3 jage::script::AIControllerScript::easeBetweenVectors(const glm::vec3 &a, const glm::vec3 &b) {
+    if (m_vectorChangeEase < 1.0f) {
+        m_vectorChangeEase += jage::runtime::Time::getDeltaFloat() * m_easeMultiplier;
+        return glm::normalize(glm::mix(a, b, m_vectorChangeEase));
+    }
+    return b;
+}
