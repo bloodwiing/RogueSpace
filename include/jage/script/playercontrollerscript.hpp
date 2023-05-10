@@ -9,7 +9,7 @@ namespace jage::script {
 
     class PlayerControllerScript : public abc::AttachableScriptABC<jage::actor::ShipActor> {
     public:
-        explicit PlayerControllerScript(jage::actor::abc::ActorABC *node);
+        explicit PlayerControllerScript(jage::actor::abc::ActorABC *node, CameraShakeScript* cameraShake);
 
         void onAttach() override;
         void onSpawn() override;
@@ -25,7 +25,7 @@ namespace jage::script {
         float m_fireCoolDown = 0.0f;
         bool m_fireFromLeft = true;
 
-        jage::script::CameraShakeScript* m_cameraShakeScript;
+        CameraShakeScript* m_cameraShakeScript;
     };
 }
 

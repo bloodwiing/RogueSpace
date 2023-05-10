@@ -10,7 +10,7 @@ namespace jage::script {
 
     class CameraShakeScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
     public:
-        explicit CameraShakeScript(jage::actor::abc::ActorABC *node);
+        explicit CameraShakeScript(jage::actor::abc::ActorABC *node, float amplitude, float frequency);
 
         void onAttach() override;
         void onSpawn() override;
@@ -18,14 +18,20 @@ namespace jage::script {
         void onDeath() override;
 
         void setAmplitude(float amplitude);
+        void setFrequency(float frequency);
         void setOffset(float x, float y);
 
     private:
-        float m_amplitude = 0.0f;
+        float m_amplitude;
+        float m_frequency;
         glm::vec2 m_offset = glm::vec2(0.0f);
 
         static std::mt19937 random;
         std::uniform_real_distribution<float> m_range = std::uniform_real_distribution<float>(-1.0f, 1.0f);
+
+        float m_cumTime = 1.0f;
+        glm::quat m_shakePrev = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+        glm::quat m_shakeNew = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     };
 }
 
