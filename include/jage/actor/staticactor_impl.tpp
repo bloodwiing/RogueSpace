@@ -25,3 +25,13 @@ T* jage::actor::StaticActor::attachScript(Args&&... args) {
     child->onAttach();
     return child.get();
 }
+
+template<class T>
+T* jage::actor::StaticActor::findScript() {
+    for (auto& script : m_scripts) {
+        auto* cast = dynamic_cast<T*>(script.get());
+        if (cast != nullptr)
+            return cast;
+    }
+    return nullptr;
+}

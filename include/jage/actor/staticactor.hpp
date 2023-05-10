@@ -43,6 +43,9 @@ namespace jage::actor {
         template<class T, class... Args>
         T* attachScript(Args&&... args);
 
+        template<class T>
+        T* findScript();
+
         /// \returns        The containing Scene
         [[nodiscard]] Scene* getScene() const;
 
