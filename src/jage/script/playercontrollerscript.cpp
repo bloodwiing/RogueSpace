@@ -12,10 +12,7 @@
 using jage::script::PlayerControllerScript;
 
 PlayerControllerScript::PlayerControllerScript(jage::actor::abc::ActorABC *node) {
-    auto* cast = dynamic_cast<RequiredNodeType*>(node);
-    if (cast == nullptr)
-        throw abc::ScriptABC::AttachError();
-    m_node = cast;
+    validate(node);
 }
 
 void PlayerControllerScript::onAttach() {

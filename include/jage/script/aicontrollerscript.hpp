@@ -8,10 +8,8 @@
 
 namespace jage::script {
 
-    class AIControllerScript : public abc::ScriptABC {
+    class AIControllerScript : public abc::AttachableScriptABC<jage::actor::ShipActor> {
     public:
-        typedef jage::actor::ShipActor RequiredNodeType;
-
         explicit AIControllerScript(jage::actor::abc::ActorABC *node);
 
         void onAttach() override;
@@ -22,8 +20,6 @@ namespace jage::script {
         void setTarget(jage::actor::ShipActor* target);
 
     private:
-        RequiredNodeType* m_node;
-
         const float m_sensitivity = 2.5f;
         const float m_maxTurnRate = 0.9f * m_sensitivity;
         const float m_minTurnRate = 0.4f * m_sensitivity;

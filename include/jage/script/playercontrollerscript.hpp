@@ -6,10 +6,8 @@
 
 namespace jage::script {
 
-    class PlayerControllerScript : public abc::ScriptABC {
+    class PlayerControllerScript : public abc::AttachableScriptABC<jage::actor::ShipActor> {
     public:
-        typedef jage::actor::ShipActor RequiredNodeType;
-
         explicit PlayerControllerScript(jage::actor::abc::ActorABC *node);
 
         void onAttach() override;
@@ -21,8 +19,6 @@ namespace jage::script {
         void onMouseInput() override;
 
     private:
-        RequiredNodeType* m_node;
-
         float m_sensitivity = 2.5f;
 
         float m_fireCoolDown = 0.0f;

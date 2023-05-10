@@ -90,7 +90,7 @@ namespace jage::actor {
         /// \see        Actor#markDead
         bool m_dead = false;
 
-        /// A list of attachable Scripts (WIP)
+        /// A list of attachable Scripts
         std::vector<std::shared_ptr<jage::script::abc::ScriptABC>> m_scripts;
     };
 }

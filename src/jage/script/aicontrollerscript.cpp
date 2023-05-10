@@ -11,10 +11,7 @@ using jage::script::AIControllerScript;
 std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
 AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node) {
-    auto* cast = dynamic_cast<RequiredNodeType*>(node);
-    if (cast == nullptr)
-        throw abc::ScriptABC::AttachError();
-    m_node = cast;
+    validate(node);
 }
 
 void AIControllerScript::onAttach() {
