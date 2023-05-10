@@ -1,5 +1,5 @@
-#ifndef VAO_CLASS_H
-#define VAO_CLASS_H
+#ifndef JAGE_VAO_HPP
+#define JAGE_VAO_HPP
 
 #include <glad/glad.h>
 
@@ -38,4 +38,4 @@ namespace jage::graphics::model {
     };
 }
 
-#endif //VAO_CLASS_H
+#endif //JAGE_VAO_HPP

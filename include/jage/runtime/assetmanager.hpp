@@ -1,5 +1,5 @@
-#ifndef ASSET_MANAGER_CLASS_H
-#define ASSET_MANAGER_CLASS_H
+#ifndef JAGE_ASSET_MANAGER_HPP
+#define JAGE_ASSET_MANAGER_HPP
 
 #include <map>
 #include <thread>
@@ -19,8 +19,8 @@ namespace jage::runtime {
     public:
         static AssetManager* getInstance();
 
-        std::shared_ptr<Model> getModel(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
-        std::shared_ptr<Texture> getTexture(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Model> getModel(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Texture> getTexture(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
     private:
         AssetManager();
@@ -33,9 +33,9 @@ namespace jage::runtime {
         mutable std::mutex m_modelMutex,
                            m_textureMutex;
 
-        std::shared_ptr<Model> loadModel(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
-        std::shared_ptr<Texture> loadTexture(const std::string& fileName, int priority = ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Model> loadModel(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        std::shared_ptr<Texture> loadTexture(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
     };
 }
 
-#endif //ASSET_MANAGER_CLASS_H
+#endif //JAGE_ASSET_MANAGER_HPP

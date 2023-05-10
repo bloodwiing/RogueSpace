@@ -1,5 +1,5 @@
-#ifndef SHADER_CLASS_H
-#define SHADER_CLASS_H
+#ifndef JAGE_SHADER_HPP
+#define JAGE_SHADER_HPP
 
 #include <glad/glad.h>
 #include <string>
@@ -77,8 +77,8 @@ namespace jage::graphics {
 
     class Shader::ProgramError : Shader::ShaderError {
     public:
-        ProgramError(GLchar* infoLog);
+        explicit ProgramError(GLchar* infoLog);
     };
 }
 
-#endif //SHADER_CLASS_H
+#endif //JAGE_SHADER_HPP

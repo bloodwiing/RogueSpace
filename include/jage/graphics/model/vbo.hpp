@@ -1,5 +1,5 @@
-#ifndef VBO_CLASS_H
-#define VBO_CLASS_H
+#ifndef JAGE_VBO_HPP
+#define JAGE_VBO_HPP
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -44,4 +44,4 @@ namespace jage::graphics::model {
     };
 }
 
-#endif //VBO_CLASS_H
+#endif //JAGE_VBO_HPP

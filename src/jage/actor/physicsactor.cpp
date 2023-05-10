@@ -78,7 +78,7 @@ bool PhysicsActor::applyLinearVelocity(DynamicActor* target, const glm::vec3 &li
 bool PhysicsActor::applyAngularVelocity(DynamicActor* target, const glm::vec3 &angular) {
     using jage::runtime::Time;
     if (!isVectorZero(angular)) {
-        target->rotate(glm::quat(angular) * Time::getDeltaFloat());
+        target->rotate(glm::quat(angular * Time::getDeltaFloat()));
         return true;
     }
     return false;

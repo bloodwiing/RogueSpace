@@ -1,5 +1,5 @@
-#ifndef SCENE_CLASS_H
-#define SCENE_CLASS_H
+#ifndef JAGE_SCENE_HPP
+#define JAGE_SCENE_HPP
 
 #include <vector>
 
@@ -47,6 +47,9 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;
         [[nodiscard]] glm::vec3 getScale() const override;
+        [[nodiscard]] glm::vec3 getOrientation() const override;
+        [[nodiscard]] glm::vec3 getUp() const override;
+        [[nodiscard]] glm::vec3 getWorldPosition() const override;
 
         void setTranslation(const glm::vec3 &tra) override {};
         void setRotation(const glm::quat &rot) override {};
@@ -54,9 +57,6 @@ namespace jage::actor {
 
         void update() override;
         void draw(jage::graphics::Shader &shader) override;
-
-        /// \return         The flag if Debug Free Flight is enabled
-        [[nodiscard]] bool isInFreeFlight() const;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
@@ -67,21 +67,9 @@ namespace jage::actor {
 
         /// QuickList of Volatile Actors
         Utility::QuickList<std::shared_ptr<abc::ActorABC>> m_volatileActors;
-
-        // ----- Free Fly toggle -----
-
-        /// A flag that check if Free Fly is enabled
-        bool m_freeFly;
-        /// The Free Fly Camera
-        jage::actor::Camera* m_freeFlyCamera;
-
-        /// Check that stops F2 from calling code more than once during a state change
-        bool m_f2Held = false;
-        /// The previous Camera that was just unassigned when switched to Free Fly
-        jage::actor::Camera* m_prevCamera = nullptr;
     };
 }
 
 #include "scene_impl.tpp"
 
-#endif //SCENE_CLASS_H
+#endif //JAGE_SCENE_HPP

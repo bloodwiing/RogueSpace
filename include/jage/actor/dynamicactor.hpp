@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_ACTOR_CLASS_H
-#define DYNAMIC_ACTOR_CLASS_H
+#ifndef JAGE_DYNAMIC_ACTOR_HPP
+#define JAGE_DYNAMIC_ACTOR_HPP
 
 #include "jage/actor/staticactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
@@ -24,6 +24,9 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;
         [[nodiscard]] glm::vec3 getScale() const override;
+        [[nodiscard]] glm::vec3 getOrientation() const override;
+        [[nodiscard]] glm::vec3 getUp() const override;
+        [[nodiscard]] glm::vec3 getWorldPosition() const override;
 
         [[nodiscard]] glm::mat4 getWorldMatrix() const override;
 
@@ -53,6 +56,7 @@ namespace jage::actor {
 
         /// \brief          Marks the element as pending for a Matrix recalculation.
         void flagForMatrixUpdate();
+        void flagForVectorUpdate();
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
@@ -64,13 +68,16 @@ namespace jage::actor {
         glm::quat m_rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
         /// The relative Scale of the Actor
         glm::vec3 m_scale = glm::vec3(1.0f);
+        glm::vec3 m_orientation = glm::vec3(1.0f, 0.0f, 0.0f);
+        glm::vec3 m_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
         /// The calculated and cached Matrix after being applied from Parent and relative Transformations
         glm::mat4 m_worldMatrix = glm::mat4(1.0f);
 
         /// Marks that m_worldMatrix needs a recalculation during the next ActorBase#update
         bool m_needsMatrixUpdate = false;
+        bool m_needsVectorUpdate = false;
     };
 }
 
-#endif //DYNAMIC_ACTOR_CLASS_H
+#endif //JAGE_DYNAMIC_ACTOR_HPP

@@ -46,11 +46,11 @@ TEST(PhysicsActor, applyAngularVelocity) {
     ASSERT_EQ(actor.getRotation(), glm::quat(glm::vec3(0.0, 0.0, 0.0)));
 
     PhysicsActor::applyAngularVelocity(&actor, angularVelocity);
-    glm::quat expected = glm::normalize(glm::quat(1.0, 0.0, 0.0, 0.0) * (glm::quat(glm::vec3(glm::pi<float>(), 0.0, -glm::pi<float>())) * 0.5f));
+    glm::quat expected = glm::normalize(glm::quat(angularVelocity * 0.5f) * glm::quat(1.0, 0.0, 0.0, 0.0));
     ASSERT_EQ(actor.getRotation(), expected);
 
     PhysicsActor::applyAngularVelocity(&actor, -angularVelocity);
-    expected = glm::normalize(expected * (glm::quat(-glm::vec3(glm::pi<float>(), 0.0, -glm::pi<float>())) * 0.5f));
+    expected = glm::normalize(glm::quat(-angularVelocity * 0.5f) * expected);
     ASSERT_EQ(actor.getRotation(), expected);
 }
 

@@ -38,6 +38,18 @@ glm::vec3 StaticActor::getScale() const {
     return vec3(1.0f);
 }
 
+glm::vec3 StaticActor::getOrientation() const {
+    return {1.0f, 0.0f, 0.0f};
+}
+
+glm::vec3 StaticActor::getUp() const {
+    return {0.0f, 1.0f, 0.0f};
+}
+
+glm::vec3 StaticActor::getWorldPosition() const {
+    return glm::vec3(0.0f);
+}
+
 void StaticActor::markDead(float wait /* = -1.0f */) {
     if (wait <= 0.0f)
         m_dead = true;
@@ -55,6 +67,13 @@ void StaticActor::update() {
             m_deathTimer = -1.0f;
         }
     }
+
+    for (auto& script : m_scripts) {
+        script->onUpdate();
+        if (m_dead)
+            script->onDeath();
+    }
+
     abc::ActorABC::update();
 }
 

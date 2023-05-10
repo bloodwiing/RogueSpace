@@ -1,14 +1,14 @@
-#ifndef WINDOW_CLASS_H
-#define WINDOW_CLASS_H
+#ifndef JAGE_WINDOW_HPP
+#define JAGE_WINDOW_HPP
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#define IS_KEY(key, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isKey(key, state))
-#define IS_MOUSE(button, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isMouse(button, state))
-#define RESET_MOUSE() (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->resetMouse() : void())
-#define GET_RELATIVE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getRelativeMouse(x, y) : void())
-#define GET_ABSOLUTE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getAbsoluteMouse(x, y) : void())
+#define JAGE_IS_KEY(key, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isKey(key, state))
+#define JAGE_IS_MOUSE(button, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isMouse(button, state))
+#define JAGE_RESET_MOUSE() (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->resetMouse() : void())
+#define JAGE_GET_RELATIVE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getRelativeMouse(x, y) : void())
+#define JAGE_GET_ABSOLUTE_MOUSE(x, y) (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->getAbsoluteMouse(x, y) : void())
 
 namespace jage::runtime {
 
@@ -73,7 +73,7 @@ namespace jage::runtime {
         /// \param[out] y   The absolute Y position
         void getAbsoluteMouse(int& x, int& y) const;
         /// \brief          Reads the Cursor position and updates the coordinate parameters to match them
-        /// \details        This function is in screen space, within the [-0.5; 0.5] range for both X and Y components
+        /// \details        This function is in screen space, within the [-0.5; 0.5] range for the shorter component and aspect relative other
         /// \param[out] x   The relative X position
         /// \param[out] y   The relative Y position
         void getRelativeMouse(double& x, double& y) const;
@@ -95,4 +95,4 @@ namespace jage::runtime {
     };
 }
 
-#endif //WINDOW_CLASS_H
+#endif //JAGE_WINDOW_HPP

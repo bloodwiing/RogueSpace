@@ -1,5 +1,5 @@
-#ifndef CAMERA_CLASS_H
-#define CAMERA_CLASS_H
+#ifndef JAGE_CAMERA_HPP
+#define JAGE_CAMERA_HPP
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -42,23 +42,10 @@ namespace jage::actor {
 
         void update() override;
 
-        /// \brief              Helper function to copy camera Transformations from one Camera to another
-        /// \param camera       The origin Camera to copy from
-        /// \param copyUpVector An option to also copy the UP vector
-        void copyOrientation(Camera* camera, bool copyUpVector = true);
-        /// \brief          PlayerActor inspired Keyboard and Mouse controllable update event
-        /// \details        Used for Free Fly controls
-        void freeFlyUpdate();
-
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
     private:
-        /// The orientation vector where the Camera is currently looking at
-        glm::vec3 m_orientation = glm::vec3(1.0f, 0.0f, 0.0f),
-        /// The vector pointing upwards from the Actor's perspective
-        m_up = glm::vec3(0.0f, 1.0f, 0.0f);
-
         /// The calculated Camera matrix, result of the View and Projection matrices
         glm::mat4 m_matrix = glm::mat4(1.0f);
 
@@ -74,4 +61,4 @@ namespace jage::actor {
     };
 }
 
-#endif //CAMERA_CLASS_H
+#endif //JAGE_CAMERA_HPP

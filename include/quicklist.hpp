@@ -75,8 +75,8 @@
 /// and removed frequently.
 /// </p>
 
-#ifndef QUICK_LIST_CLASS_H
-#define QUICK_LIST_CLASS_H
+#ifndef QUICK_LIST_HPP
+#define QUICK_LIST_HPP
 
 #include <string>
 #include <vector>
@@ -329,4 +329,4 @@ namespace Utility {
     }
 }
 
-#endif //QUICK_LIST_CLASS_H
+#endif //QUICK_LIST_HPP

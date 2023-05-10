@@ -11,6 +11,7 @@ Time::TTimePoint Time::m_frameStart = chrono::steady_clock::now();
 Time::TTimePoint Time::m_frameEnd = Time::m_frameStart;
 Time::TDoubleSec Time::m_delta = TDoubleSec(0.0);
 chrono::microseconds Time::m_requiredFrameTime(0);
+double Time::m_timeScale = 1.0;
 
 void Time::init() {
     m_frameStart = chrono::steady_clock::now();
@@ -19,7 +20,7 @@ void Time::init() {
 
 void Time::update() {
     auto newTime = chrono::steady_clock::now();
-    m_delta = newTime - m_frameStart;
+    m_delta = (newTime - m_frameStart) * m_timeScale;
     m_frameStart = newTime;
     m_frameEnd = m_frameStart + m_requiredFrameTime;
 }
@@ -45,6 +46,14 @@ double Time::getDeltaDouble() {
 
 void Time::setDelta(TDoubleSec delta) {
     m_delta = delta;
+}
+
+void jage::runtime::Time::setTimeScale(double timeScale) {
+    m_timeScale = timeScale;
+}
+
+double jage::runtime::Time::getTimeScale() {
+    return m_timeScale;
 }
 
 void Time::waitForNextFrame() {

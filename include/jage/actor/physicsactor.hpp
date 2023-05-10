@@ -1,5 +1,5 @@
-#ifndef PHYSICS_ACTOR_CLASS_H
-#define PHYSICS_ACTOR_CLASS_H
+#ifndef JAGE_PHYSICS_ACTOR_HPP
+#define JAGE_PHYSICS_ACTOR_HPP
 
 #include <glm/glm.hpp>
 
@@ -87,6 +87,7 @@ namespace jage::actor {
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
+    private:
         /// The current Weight of the PhysicsActor
         float m_weight;
         /// The current Drag of the PhysicsActor
@@ -99,4 +100,4 @@ namespace jage::actor {
     };
 }
 
-#endif //PHYSICS_ACTOR_CLASS_H
+#endif //JAGE_PHYSICS_ACTOR_CLASS_H

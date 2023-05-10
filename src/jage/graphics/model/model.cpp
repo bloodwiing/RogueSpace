@@ -86,10 +86,10 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
 
     glm::quat rotation(1.0f, 0.0f, 0.0f, 0.0f);
     if (node.find("rotation") != node.end()) {
-        float data[4];
-        for (size_t i = 0; i < node["rotation"].size(); ++i)
-            data[i] = node["rotation"][i];
-        rotation = glm::make_quat(data);
+        rotation = glm::quat(node["rotation"][3],
+                             node["rotation"][0],
+                             node["rotation"][1],
+                             node["rotation"][2]);
     }
 
     glm::vec3 scale(1.0f);

@@ -1,5 +1,5 @@
-#ifndef SUPER_CLASS_H
-#define SUPER_CLASS_H
+#ifndef JAGE_SUPER_HPP
+#define JAGE_SUPER_HPP
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -30,4 +30,4 @@ namespace jage::system {
     };
 }
 
-#endif //SUPER_CLASS_H
+#endif //JAGE_SUPER_HPP

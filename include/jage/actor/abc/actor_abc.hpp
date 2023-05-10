@@ -1,5 +1,5 @@
-#ifndef ACTOR_BASE_CLASS_H
-#define ACTOR_BASE_CLASS_H
+#ifndef JAGE_ACTOR_ABC_HPP
+#define JAGE_ACTOR_ABC_HPP
 
 #include <map>
 #include <memory>
@@ -90,6 +90,9 @@ namespace jage::actor::abc {
         /// \return         The relative Scale
         [[nodiscard]] virtual glm::vec3 getScale() const = 0;
         /// \return         A conditional check whether the Actor should be removed from the Hierarchy during the next update
+        [[nodiscard]] virtual glm::vec3 getOrientation() const = 0;
+        [[nodiscard]] virtual glm::vec3 getUp() const = 0;
+        [[nodiscard]] virtual glm::vec3 getWorldPosition() const = 0;
         [[nodiscard]] virtual bool isDead() const;
 
         /// \brief          Sets the relative Translation of the object
@@ -149,4 +152,4 @@ std::ostream& operator<<(std::ostream& stream, jage::actor::abc::ActorABC* actor
 
 #include "actor_abc_impl.tpp"
 
-#endif //ACTOR_BASE_CLASS_H
+#endif //JAGE_ACTOR_ABC_HPP

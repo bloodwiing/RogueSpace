@@ -6,8 +6,11 @@
 #include "jage/system/super.hpp"
 #include "jage/runtime/assetstream.hpp"
 #include "jage/actor/modelactor.hpp"
-#include "jage/actor/playeractor.hpp"
+#include "jage/actor/shipactor.hpp"
 #include "jage/actor/physicsactor.hpp"
+#include "jage/script/playercontrollerscript.hpp"
+#include "jage/script/aicontrollerscript.hpp"
+#include "jage/script/weaponscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;
@@ -43,7 +46,7 @@ void JAGEngine::loop() {
 
     while (!Window::getActive()->isClosing()) {
 
-        glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
+        glClearColor(0.005f, 0.008f, 0.058f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Time::update();
@@ -79,24 +82,26 @@ void JAGEngine::loadScene() {
     auto sphere = m_scene->addChild<ModelActor>("sphere", "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
 
-    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
-    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
+//    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
+//    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
-    auto player = m_scene->addChild<PlayerActor>("Player");
+    auto player = m_scene->addChild<ShipActor>("Player");
     auto camera = player->addChild<Camera>("Camera");
+    auto cameraShakeScript = camera->attachScript<script::CameraShakeScript>(0.0f, 0.05f);
     camera->setActive();
+    player->attachScript<script::WeaponScript>(40.0f);
+    player->attachScript<script::PlayerControllerScript>(cameraShakeScript);
 
-    auto starship = m_scene->addChild<PhysicsActor>("Starship", 1.0f, 1.0f);
-    starship->scale(glm::vec3(0.50f));
+    auto starship = m_scene->addChild<ShipActor>("Starship");
+    starship->attachScript<script::WeaponScript>(40.0f);
+    auto controller = starship->attachScript<script::AIControllerScript>();
+    controller->setTarget(player);
     try {
         auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }
-    starship->setWeight(0.5f);
-    starship->translate(glm::vec3(4.0f, 0.0f, 0.0f));
-    starship->rotate(glm::quat(glm::vec3(0.0f, 0.0f, glm::pi<float>() / 2.0f)));
-//    starship->setLinearVelocity(glm::vec3(10.0f, 0.0f, 0.0f));
+    starship->translate(glm::vec3(100.0f, 0.0f, 0.0f));
 
     std::cout << m_scene.get();
 }
