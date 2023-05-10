@@ -85,6 +85,7 @@ void JAGEngine::loadScene() {
 //    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
     auto player = m_scene->addChild<ShipActor>("Player");
+    player->attachScript<script::CameraShakeScript>();
     player->attachScript<script::PlayerControllerScript>();
     auto camera = player->addChild<Camera>("Camera");
     camera->setActive();

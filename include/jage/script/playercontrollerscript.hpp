@@ -2,6 +2,7 @@
 #define JAGE_PLAYER_CONTROLLER_SCRIPT_HPP
 
 #include "jage/actor/shipactor.hpp"
+#include "jage/script/camerashakescript.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
 namespace jage::script {
@@ -23,6 +24,8 @@ namespace jage::script {
 
         float m_fireCoolDown = 0.0f;
         bool m_fireFromLeft = true;
+
+        jage::script::CameraShakeScript* m_cameraShakeScript;
     };
 }
 
