@@ -27,7 +27,6 @@ Camera::Camera(Scene *scene, abc::ActorABC *parent, std::string name)
 {  }
 
 Camera::~Camera() {
-    DynamicActor::~DynamicActor();
     if (m_active == this)
         m_active = nullptr;
 }
