@@ -22,7 +22,7 @@ namespace jage::script {
     private:
         const float m_sensitivity = 2.5f;
         const float m_maxTurnRate = 0.9f * m_sensitivity;
-        const float m_minTurnRate = 0.4f * m_sensitivity;
+        const float m_minTurnRate = 0.6f * m_sensitivity;
 
         glm::vec3 m_fleeVector = glm::vec3(0.0);
         const float m_avoidEaseMultiplier = 0.3f;
@@ -41,7 +41,7 @@ namespace jage::script {
         const float m_seekAngleEnd = 0.5f;
 
         const float m_seekDistance = 30.0f;
-        const float m_attackDistance = 60.0f;
+        const float m_attackDistance = 100.0f;
         const float m_fleeDistance = 8.0f;
 
         float m_vectorChangeEase = 1.0f;
