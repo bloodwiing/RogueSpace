@@ -45,36 +45,39 @@ namespace jage::script {
 
         State m_state;
 
+        static std::mt19937 random;
+
+        // Control
         const float m_sensitivity = 2.5f;
         const float m_maxTurnRate = 0.9f * m_sensitivity;
         const float m_minTurnRate = 0.6f * m_sensitivity;
 
+        // Seeking
+        const float m_seekAngleBegin = 0.2f;
+        const float m_seekAngleEnd = 0.5f;
+
+        // Fleeing
         glm::vec3 m_fleeVector = glm::vec3(0.0);
-        const float m_easeMultiplier = 0.3f;
 
-        bool m_fleeing = false;
-        bool m_seeking = false;
-
-        static std::mt19937 random;
-
+        // Orbiting
         float m_orbitDuration = -1.0f;
         std::uniform_real_distribution<float> m_orbitApplyDuration = std::uniform_real_distribution<float>(2.0f, 5.0f);
         float m_orbitAngle = 0.0f;
         std::uniform_real_distribution<float> m_orbitApplyAngle = std::uniform_real_distribution<float>(-glm::pi<float>(), glm::pi<float>());
         glm::vec3 m_orbitVector = glm::vec3(0.0f, 0.0f, 0.0f);
 
-        const float m_seekAngleBegin = 0.2f;
-        const float m_seekAngleEnd = 0.5f;
-
+        // Distances to change mode
         const float m_seekDistance = 30.0f;
         const float m_attackDistance = 100.0f;
         const float m_fleeDistance = 8.0f;
 
+        // Easing
         float m_vectorChangeEase = 1.0f;
-
-        WeaponScript* m_weaponScript;
+        const float m_easeMultiplier = 0.3f;
 
         jage::actor::ShipActor* m_target = nullptr;
+
+        WeaponScript* m_weaponScript;
     };
 }
 
