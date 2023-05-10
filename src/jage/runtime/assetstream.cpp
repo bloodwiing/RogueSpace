@@ -8,6 +8,7 @@
 using jage::runtime::AssetStream;
 using std::ios;
 using std::lock_guard;
+using std::unique_lock;
 using std::mutex;
 using std::shared_ptr;
 using std::string;
@@ -54,26 +55,30 @@ void AssetStream::getTextAssetAsync(const std::string& filePath, const AssetStre
     if (getCachedTextAsset(filePath, callback))
         return;
 
-    lock_guard<mutex> lock(m_assetQueueMutex);
+    unique_lock<mutex> lock(m_assetQueueMutex);
     getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
         .callback = callback,
         .mode = ios::in,
         .priority = priority
     });
+    lock.unlock();
+    m_assetQueueCV.notify_one();
 }
 
 void AssetStream::getBinaryAssetAsync(const std::string& filePath, const AssetStream::binaryCallback& callback, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     if (getCachedBinaryAsset(filePath, callback))
         return;
 
-    lock_guard<mutex> lock(m_assetQueueMutex);
+    unique_lock<mutex> lock(m_assetQueueMutex);
     getInstance().m_assetQueue.emplace((AssetQuery){
         .filePath = filePath,
         .callback = [callback](const shared_ptr<string>& data) { callback((uint8_t*)data->c_str(), data->length()); },
         .mode = ios::in | ios::binary,
         .priority = priority
     });
+    lock.unlock();
+    m_assetQueueCV.notify_one();
 }
 
 void AssetStream::getTextAsset(const std::string &filePath, const AssetStream::textCallback &callback) {
@@ -100,6 +105,7 @@ void AssetStream::shutdown() {
 
 void AssetStream::asyncLoop() {
     while (getInstance().m_active) {
+
         AssetQuery entry;
         if (!getInstance().getNextQuery(entry)) {
             std::this_thread::yield();
@@ -205,11 +211,20 @@ void AssetStream::unixifyLineEndings(std::string &text) {
 }
 
 bool AssetStream::getNextQuery(AssetStream::AssetQuery& entry) {
-    lock_guard<mutex> lock(m_assetQueueMutex);
+    unique_lock<std::mutex> lock(m_assetQueueMutex);
+    bool empty = m_assetQueue.empty();
+
+    if (empty) {
+        m_assetQueueCV.wait(lock);
+    }
+
     if (m_assetQueue.empty())
         return false;
+
     entry = m_assetQueue.top();
     m_assetQueue.pop();
+
+    lock.unlock();
     return true;
 }
 

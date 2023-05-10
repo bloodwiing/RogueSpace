@@ -9,6 +9,7 @@
 #include <thread>
 #include <memory>
 #include <mutex>
+#include <condition_variable>
 
 #define JAGE_ASSET_STREAM_BASE_PRIORITY 5
 
@@ -71,6 +72,7 @@ namespace jage::runtime {
 
         std::priority_queue<AssetQuery, std::vector<AssetQuery>, std::less<>> m_assetQueue;
         std::mutex m_assetQueueMutex;
+        std::condition_variable m_assetQueueCV;
         std::map<const std::string, std::shared_ptr<std::string>> m_cachedAssets;
         std::mutex m_cachedAssetsMutex;
 
