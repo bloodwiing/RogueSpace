@@ -26,17 +26,26 @@ namespace jage::script::abc {
         typedef TNode* RequiredNodeType;
 
         class AttachError;
+        class RequireError;
 
     protected:
         TNode* m_node;
 
         void validate(jage::actor::abc::ActorABC* node);
+        template<class T>
+        T* dependsOn();
     };
 
     template<class TNode>
     class AttachableScriptABC<TNode>::AttachError : std::invalid_argument {
     public:
         AttachError();
+    };
+
+    template<class TNode>
+    class AttachableScriptABC<TNode>::RequireError : std::runtime_error {
+    public:
+        RequireError();
     };
 }
 
