@@ -77,7 +77,7 @@ namespace jage::graphics {
 
     class Shader::ProgramError : Shader::ShaderError {
     public:
-        ProgramError(GLchar* infoLog);
+        explicit ProgramError(GLchar* infoLog);
     };
 }
 
