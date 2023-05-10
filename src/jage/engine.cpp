@@ -10,6 +10,7 @@
 #include "jage/actor/physicsactor.hpp"
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
+#include "jage/script/weaponscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;
@@ -45,7 +46,7 @@ void JAGEngine::loop() {
 
     while (!Window::getActive()->isClosing()) {
 
-        glClearColor(0.07f, 0.05f, 0.21f, 1.0f);
+        glClearColor(0.005f, 0.008f, 0.058f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Time::update();
@@ -88,9 +89,11 @@ void JAGEngine::loadScene() {
     auto camera = player->addChild<Camera>("Camera");
     auto cameraShakeScript = camera->attachScript<script::CameraShakeScript>(0.0f, 0.05f);
     camera->setActive();
+    player->attachScript<script::WeaponScript>(40.0f);
     player->attachScript<script::PlayerControllerScript>(cameraShakeScript);
 
     auto starship = m_scene->addChild<ShipActor>("Starship");
+    starship->attachScript<script::WeaponScript>(40.0f);
     auto controller = starship->attachScript<script::AIControllerScript>();
     controller->setTarget(player);
     try {

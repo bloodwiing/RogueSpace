@@ -13,6 +13,8 @@ using jage::script::PlayerControllerScript;
 
 PlayerControllerScript::PlayerControllerScript(jage::actor::abc::ActorABC *node, CameraShakeScript* cameraShake) {
     validate(node);
+    m_weaponScript = dependsOn<WeaponScript>();
+
     m_cameraShakeScript = cameraShake;
 }
 
@@ -26,9 +28,6 @@ void PlayerControllerScript::onSpawn() {
 
 void PlayerControllerScript::onUpdate() {
     using jage::runtime::Time;
-
-    if (m_fireCoolDown > 0.0f)
-        m_fireCoolDown -= Time::getDeltaFloat();
 
     onKeyboardInput();
     onMouseInput();
@@ -74,21 +73,7 @@ void PlayerControllerScript::onMouseInput() {
     glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
     bulletOrientation = glm::rotate(glm::radians(-(float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
 
-    if (m_fireCoolDown <= 0.0f and JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-        auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", 0.0f, 0.0f);
-        auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
-
-        model->setScale(glm::vec3(0.2));
-        bullet->setTranslation(m_node->getWorldPosition());
-        if (m_fireFromLeft)
-            bullet->translate(-glm::cross(orientation, up) * 0.35f + up * -0.15f);
-        else
-            bullet->translate(glm::cross(orientation, up) * 0.35f + up * -0.15f);
-        bullet->setRotation(glm::quatLookAt((glm::vec3)bulletOrientation, up));
-        bullet->addForce((glm::vec3)bulletOrientation * 40.0f + m_node->getThrottleVelocity());
-        bullet->markDead(10.0f);
-
-        m_fireCoolDown = 0.1f;
-        m_fireFromLeft = !m_fireFromLeft;
+    if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
+        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
     }
 }

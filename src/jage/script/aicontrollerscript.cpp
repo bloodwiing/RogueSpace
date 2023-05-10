@@ -12,6 +12,7 @@ std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
 AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node) {
     validate(node);
+    m_weaponScript = dependsOn<WeaponScript>();
 }
 
 void AIControllerScript::onAttach() {
@@ -24,12 +25,6 @@ void AIControllerScript::onSpawn() {
 
 void AIControllerScript::onUpdate() {
     using jage::runtime::Time;
-
-    const float bulletSpeed = 40.0f;
-
-    // Weapon cool down
-    if (m_fireCoolDown > 0.0f)
-        m_fireCoolDown -= Time::getDeltaFloat();
 
     // Don't continue if you have nothing to target
     if (m_target == nullptr)
@@ -117,25 +112,8 @@ void AIControllerScript::onUpdate() {
     }
 
     // Firing
-    if ((m_seeking and !m_fleeing) and distanceToTarget < m_attackDistance and m_fireCoolDown <= 0.0f) {
-        const auto& orientation = m_node->getOrientation();
-        const auto& up = m_node->getUp();
-
-        auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", 0.0f, 0.0f);
-        auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
-
-        model->setScale(glm::vec3(0.2));
-        bullet->setTranslation(m_node->getWorldPosition());
-        if (m_fireFromLeft)
-            bullet->translate(-glm::cross(orientation, up) * 0.35f + up * -0.15f);
-        else
-            bullet->translate(glm::cross(orientation, up) * 0.35f + up * -0.15f);
-        bullet->setRotation(glm::quatLookAt((glm::vec3)glm::vec4(orientation, 0.0), up));
-        bullet->addForce((glm::vec3)glm::vec4(orientation, 0.0) * bulletSpeed + m_node->getThrottleVelocity());
-        bullet->markDead(10.0f);
-
-        m_fireCoolDown = 0.1f;
-        m_fireFromLeft = !m_fireFromLeft;
+    if ((m_seeking and !m_fleeing) and distanceToTarget < m_attackDistance) {
+        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
     }
 }
 

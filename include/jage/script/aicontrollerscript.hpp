@@ -5,6 +5,7 @@
 
 #include "jage/actor/shipactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
+#include "jage/script/weaponscript.hpp"
 
 namespace jage::script {
 
@@ -46,8 +47,7 @@ namespace jage::script {
 
         float m_vectorChangeEase = 1.0f;
 
-        float m_fireCoolDown = 0.0f;
-        bool m_fireFromLeft = true;
+        WeaponScript* m_weaponScript;
 
         jage::actor::ShipActor* m_target = nullptr;
     };

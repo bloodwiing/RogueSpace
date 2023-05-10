@@ -3,6 +3,7 @@
 
 #include "jage/actor/shipactor.hpp"
 #include "jage/script/camerashakescript.hpp"
+#include "jage/script/weaponscript.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
 namespace jage::script {
@@ -22,10 +23,8 @@ namespace jage::script {
     private:
         float m_sensitivity = 2.5f;
 
-        float m_fireCoolDown = 0.0f;
-        bool m_fireFromLeft = true;
-
         CameraShakeScript* m_cameraShakeScript;
+        WeaponScript* m_weaponScript;
     };
 }
 
