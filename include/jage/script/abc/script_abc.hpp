@@ -11,6 +11,10 @@ namespace jage::script::abc {
 
     class ScriptABC {
     public:
+        ScriptABC() = default;
+        ~ScriptABC() = default;
+        ScriptABC& operator=(const ScriptABC& ref) = default;
+
         virtual void onAttach() = 0;
         virtual void onSpawn() = 0;
         virtual void onUpdate() = 0;
