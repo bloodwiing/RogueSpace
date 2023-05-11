@@ -322,6 +322,8 @@ namespace Utility {
         }
     };
 
+//    Todo: QuickList copy operator
+
     template<class T>
     std::ostream& operator<<(std::ostream& stream, QuickList<T>& list) {
         stream << list.toString();

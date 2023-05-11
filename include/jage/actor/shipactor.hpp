@@ -36,6 +36,9 @@ namespace jage::actor {
         [[nodiscard]] std::string getTypeName() const override;
 
     private:
+
+        // Todo: deny parent class functions
+
         const float m_maxForwardSpeed = 30.0f;
         const float m_maxBackwardSpeed = 15.5f;
         const float m_maxRollSpeed = 3.5f;
