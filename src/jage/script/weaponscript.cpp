@@ -32,7 +32,7 @@ void WeaponScript::onDeath() {
 
 }
 
-void jage::script::WeaponScript::shootThisFrame(glm::vec3 extraVelocity) {
+void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
     if (m_fireCoolDown > 0.0f)
         return;
 
