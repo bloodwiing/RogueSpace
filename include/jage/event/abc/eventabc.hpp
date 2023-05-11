@@ -11,20 +11,42 @@ namespace jage::event::abc {
         typedef Type EventType;
 
         class Manager;
+        class Handler;
+
+        ~EventABC();
 
         virtual void notify(Args...) = 0;
+
+    protected:
+        void setHandler(Handler* handler);
+
+    private:
+        Handler* m_handler = nullptr;
+    };
+
+    template<class Type, class... Args>
+    class EventABC<Type, Args...>::Handler {
+    public:
+        friend class EventABC<Type, Args...>;
+
+        explicit Handler(Type* handle);
+
+        [[nodiscard]] Type* getHandle() const;
+
+    private:
+        Type* m_handle = nullptr;
     };
 
     template<class Type, class... Args>
     class EventABC<Type, Args...>::Manager {
     public:
-        void notifyAll(Args&&... args);
+        void notifyAll(Args&&... args) const;
 
-        void addHandler(Type handler);
-        Manager& operator+=(Type handler);
+        void addHandler(Type& event);
+        Manager& operator+=(Type& event);
 
     protected:
-        std::vector<Type> m_handlers;
+        std::vector<EventABC<Type, Args...>::Handler*> m_handlers;
     };
 }
 
