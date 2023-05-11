@@ -1,5 +1,7 @@
 #include "jage/engine.hpp"
 
+#include "jage/event/timerevent.hpp"
+
 int main() {
 
     auto& engine = jage::JAGEngine::getInstance();

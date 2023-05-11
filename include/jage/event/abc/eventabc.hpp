@@ -5,24 +5,26 @@
 
 namespace jage::event::abc {
 
-    template<class... Args>
+    template<class Type, class... Args>
     class EventABC {
     public:
+        typedef Type EventType;
+
         class Manager;
 
-        virtual void notify(Args&&...) = 0;
+        virtual void notify(Args...) = 0;
     };
 
-    template<class... Args>
-    class EventABC<Args...>::Manager {
+    template<class Type, class... Args>
+    class EventABC<Type, Args...>::Manager {
     public:
         void notifyAll(Args&&... args);
 
-        void addHandler(EventABC<Args...> handler);
-        Manager& operator+=(EventABC<Args...> handler);
+        void addHandler(Type handler);
+        Manager& operator+=(Type handler);
 
     protected:
-        std::vector<EventABC<Args...>> m_handlers;
+        std::vector<Type> m_handlers;
     };
 }
 
