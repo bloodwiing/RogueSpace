@@ -5,12 +5,13 @@
 using jage::actor::abc::ActorABC;
 
 std::string ActorABC::getTypeName() const {
-    return "Actor ABSTRACT BASE CLASS";
+    return "ActorABC (ABSTRACT BASE CLASS)";
 }
 
-ActorABC::ActorABC(ActorABC *parent, std::string& name)
+ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag)
     : m_parent(parent)
     , m_name(name)
+    , m_tag(tag)
 { }
 
 std::map<std::string, ActorABC::ChildEntry> ActorABC::getChildren() const {
@@ -31,12 +32,20 @@ std::string ActorABC::getName() const {
     return m_name;
 }
 
+jage::Tag ActorABC::getTag() const {
+    return m_tag;
+}
+
 glm::mat4 ActorABC::getWorldMatrix() const {
     return glm::mat4(1.0f);
 }
 
 bool ActorABC::isDead() const {
     return false;
+}
+
+void ActorABC::setTag(jage::Tag tag) {
+    m_tag = tag;
 }
 
 void ActorABC::update() {

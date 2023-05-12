@@ -15,7 +15,7 @@ std::string Scene::getTypeName() const {
 }
 
 Scene::Scene()
-    : ActorABC(nullptr, m_hierarchyDisplayName)
+    : ActorABC(nullptr, m_hierarchyDisplayName, Tag::SYSTEM)
 { }
 
 Utility::QuickList<std::shared_ptr<jage::actor::abc::ActorABC>> Scene::getVolatileChildren() const {

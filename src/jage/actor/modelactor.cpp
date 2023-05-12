@@ -10,8 +10,8 @@ std::string ModelActor::getTypeName() const {
     return "ModelActor";
 }
 
-ModelActor::ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, const char *fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */)
-    : DynamicActor(scene, parent, std::move(name))
+ModelActor::ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, const char *fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */)
+    : DynamicActor(scene, parent, std::move(name), tag)
 {
     m_model = jage::runtime::AssetManager::getInstance()->getModel(fileName, priority);
 }

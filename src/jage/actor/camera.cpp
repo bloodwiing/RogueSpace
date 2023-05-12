@@ -22,8 +22,8 @@ std::string Camera::getTypeName() const {
     return "Camera";
 }
 
-Camera::Camera(Scene *scene, abc::ActorABC *parent, std::string name)
-    : DynamicActor(scene, parent, name)
+Camera::Camera(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag)
+    : DynamicActor(scene, parent, std::move(name), tag, 0.0f)
 {  }
 
 Camera::~Camera() {

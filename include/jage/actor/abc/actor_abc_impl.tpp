@@ -23,17 +23,17 @@ void jage::actor::abc::ActorABC::internalRegisterChild(std::shared_ptr<T> child)
 }
 
 template<class T>
-T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name) {
+T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag) {
     static_assert(std::is_base_of<ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(scene, parent, name);
+    auto child = std::make_shared<T>(scene, parent, name, tag);
     internalRegisterChild(child);
     return child.get();
 }
 
 template<class T, class... Args>
-T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name, Args&&... args) {
+T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, Args&&... args) {
     static_assert(std::is_base_of<ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(scene, parent, name, std::forward<Args>(args)...);
+    auto child = std::make_shared<T>(scene, parent, name, tag, std::forward<Args>(args)...);
     internalRegisterChild(child);
     return child.get();
 }

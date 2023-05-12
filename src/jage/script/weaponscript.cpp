@@ -42,8 +42,8 @@ void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) 
     const auto right = glm::cross(orientation, up);
 
     // Actor
-    auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", 0.0f, 0.0f);
-    auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
+    auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", Tag::BULLET, 0.0f, 0.0f);
+    auto model = bullet->addChild<jage::actor::ModelActor>("model", Tag::MESH, "./res/bullet/BulletTemp.gltf");
 
     // Translate to world position
     glm::vec3 offset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;

@@ -12,8 +12,8 @@ std::string StaticActor::getTypeName() const {
     return "StaticActor";
 }
 
-StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name)
-    : ActorABC(parent, name)
+StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag)
+    : ActorABC(parent, name, tag)
     , m_scene(scene)
     , m_dead(false)
 { }

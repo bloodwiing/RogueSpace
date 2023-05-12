@@ -19,9 +19,9 @@ namespace jage::actor {
         Scene();
 
         template<class T>
-        T* addChild(std::string name);
+        T* addChild(std::string name, Tag tag);
         template<class T, class... Args>
-        T* addChild(std::string name, Args&&... args);
+        T* addChild(std::string name, Tag tag, Args&&... args);
 
         /// \brief          Returns the QuickList of Volatile Actors
         [[nodiscard]] Utility::QuickList<std::shared_ptr<abc::ActorABC>> getVolatileChildren() const;
@@ -33,7 +33,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \return         A pointer to the newly created Actor
         template<class T>
-        T* addVolatileChild(std::string name);
+        T* addVolatileChild(std::string name, Tag tag);
         /// \brief          Creates a new Volatile Child under this Parent Actor
         /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
         ///                 needs to be spawned and destroyed frequently.
@@ -42,7 +42,7 @@ namespace jage::actor {
         /// \param args     The list of extra arguments to pass when creating the Actor
         /// \return         A pointer to the newly created Actor
         template<class T, class... Args>
-        T* addVolatileChild(std::string name, Args&&... args);
+        T* addVolatileChild(std::string name, Tag tag, Args&&... args);
 
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;

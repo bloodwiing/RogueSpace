@@ -20,7 +20,7 @@ namespace jage::actor {
         /// \param drag     The influence of how fast the Actor slows its angular velocity down
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        PhysicsActor(Scene* scene, abc::ActorABC* parent, std::string name, float weight, float drag);
+        PhysicsActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, float weight, float drag);
 
         void update() override;
 
