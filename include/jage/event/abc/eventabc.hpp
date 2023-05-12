@@ -2,51 +2,35 @@
 #define JAGE_EVENT_ABC_HPP
 
 #include <vector>
+#include <memory>
 
 namespace jage::event::abc {
 
     template<class Type, class... Args>
-    class EventABC {
+    class EventABC : std::enable_shared_from_this<EventABC<Type, Args...>> {
     public:
         typedef Type EventType;
 
         class Manager;
-        class Handler;
-
-        ~EventABC();
 
         virtual void notify(Args...) = 0;
-
-    protected:
-        void setHandler(Handler* handler);
-
-    private:
-        Handler* m_handler = nullptr;
-    };
-
-    template<class Type, class... Args>
-    class EventABC<Type, Args...>::Handler {
-    public:
-        friend class EventABC<Type, Args...>;
-
-        explicit Handler(Type* handle);
-
-        [[nodiscard]] Type* getHandle() const;
-
-    private:
-        Type* m_handle = nullptr;
     };
 
     template<class Type, class... Args>
     class EventABC<Type, Args...>::Manager {
     public:
+        Manager() = default;
+
         void notifyAll(Args&&... args);
 
-        void addHandler(Type& event);
-        Manager& operator+=(Type& event);
+        void addListener(std::shared_ptr<Type>& event);
+        typename Type::Manager& operator+=(std::shared_ptr<Type>& event);
 
     protected:
-        std::vector<EventABC<Type, Args...>::Handler*> m_handlers;
+        std::vector<std::weak_ptr<Type>> m_listeners;
+
+        Manager(Manager& ref) = default;
+        Manager& operator=(const Manager& ref) = default;
     };
 }
 
