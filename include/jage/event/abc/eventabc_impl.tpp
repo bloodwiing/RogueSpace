@@ -24,12 +24,15 @@ Type* jage::event::abc::EventABC<Type, Args...>::Handler::getHandle() const {
 }
 
 template<class Type, class... Args>
-void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&&... args) const {
+void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&&... args) {
     for (auto iter = m_handlers.begin(); iter != m_handlers.end();) {
         auto handle = (*iter)->getHandle();
-        if (handle != nullptr) {
-            handle->notify(args...);
+        if (handle == nullptr) {
+            delete handle;
+            iter = m_handlers.erase(iter);
+            continue;
         }
+        handle->notify(args...);
         ++iter;
     }
 }

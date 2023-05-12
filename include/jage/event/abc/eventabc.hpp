@@ -40,7 +40,7 @@ namespace jage::event::abc {
     template<class Type, class... Args>
     class EventABC<Type, Args...>::Manager {
     public:
-        void notifyAll(Args&&... args) const;
+        void notifyAll(Args&&... args);
 
         void addHandler(Type& event);
         Manager& operator+=(Type& event);
