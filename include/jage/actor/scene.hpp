@@ -16,6 +16,8 @@ namespace jage::actor {
     /// \details        This is the main or "root" node of every Hierarchy
     class Scene : public abc::ActorABC {
     public:
+        class TagIterator;
+
         Scene();
 
         template<class T>
@@ -46,6 +48,9 @@ namespace jage::actor {
 
         void tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor);
 
+        TagIterator beginTagged(Tag tag);
+        TagIterator endTagged(Tag tag);
+
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;
         [[nodiscard]] glm::vec3 getScale() const override;
@@ -71,6 +76,33 @@ namespace jage::actor {
         Utility::QuickList<std::shared_ptr<abc::ActorABC>> m_volatileActors;
 
         std::vector<std::vector<std::weak_ptr<abc::ActorABC>>> m_taggedMap;
+    };
+
+    class Scene::TagIterator {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = std::shared_ptr<abc::ActorABC>;
+        using pointer           = value_type*;
+        using reference         = value_type;
+
+        typedef std::vector<std::weak_ptr<abc::ActorABC>> InternalType;
+
+        TagIterator(InternalType::iterator iter, InternalType& original);
+
+        reference operator*();
+
+        TagIterator& operator++();
+        TagIterator operator++(int);
+
+        bool operator== (const TagIterator& other);
+        bool operator!= (const TagIterator& other);
+
+    protected:
+        InternalType::iterator m_iter;
+        InternalType& m_original;
+
+        void moveTillMatch();
     };
 }
 

@@ -86,3 +86,55 @@ void Scene::draw(jage::graphics::Shader &shader) {
             child->draw(shader);
     }
 }
+
+Scene::TagIterator jage::actor::Scene::beginTagged(jage::Tag tag) {
+    return {m_taggedMap[tag].begin(), m_taggedMap[tag]};
+}
+
+Scene::TagIterator jage::actor::Scene::endTagged(jage::Tag tag) {
+    return {m_taggedMap[tag].end(), m_taggedMap[tag]};
+}
+
+Scene::TagIterator::TagIterator(InternalType::iterator iter, InternalType& original)
+    : m_iter(iter)
+    , m_original(original)
+{
+    moveTillMatch();
+}
+
+Scene::TagIterator::value_type Scene::TagIterator::operator*() {
+    return (*m_iter).lock();
+}
+
+Scene::TagIterator& Scene::TagIterator::operator++() {
+    if (m_iter == m_original.end())
+        return *this;
+
+    ++m_iter;
+    moveTillMatch();
+    return *this;
+}
+
+Scene::TagIterator Scene::TagIterator::operator++(int) {
+    auto prev = *this;
+    ++(*this);
+    return prev;
+}
+
+bool jage::actor::Scene::TagIterator::operator==(const Scene::TagIterator &other) {
+    return this->m_iter == other.m_iter;
+}
+
+bool jage::actor::Scene::TagIterator::operator!=(const Scene::TagIterator &other) {
+    return this->m_iter != other.m_iter;
+}
+
+void jage::actor::Scene::TagIterator::moveTillMatch() {
+    while (m_iter != m_original.end()) {
+        if (m_iter->expired()) {
+            m_iter = m_original.erase(m_iter);
+        } else {
+            break;
+        }
+    }
+}
