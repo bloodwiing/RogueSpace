@@ -102,8 +102,12 @@ Scene::TagIterator::TagIterator(InternalType::iterator iter, InternalType& origi
     moveTillMatch();
 }
 
-Scene::TagIterator::value_type Scene::TagIterator::operator*() {
-    return (*m_iter).lock();
+Scene::TagIterator::reference Scene::TagIterator::operator*() {
+    return ((StaticActor*)((*m_iter).lock()).get());
+}
+
+Scene::TagIterator::pointer Scene::TagIterator::operator->() {
+    return *(*this);
 }
 
 Scene::TagIterator& Scene::TagIterator::operator++() {

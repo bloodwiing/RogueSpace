@@ -58,8 +58,6 @@ namespace jage::actor {
         void flagForMatrixUpdate();
         void flagForVectorUpdate();
 
-        jage::event::CollideEvent::Manager onCollide;
-
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 

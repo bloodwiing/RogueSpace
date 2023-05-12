@@ -69,15 +69,16 @@ void ActorABC::update() {
                 child->update();
             } catch (std::exception& e) {
                 std::cerr << e.what();
-                m_children.erase(iter++);
+                iter = m_children.erase(iter);
                 continue;
             }
             if (child->isDead()) {
-                m_children.erase(iter++);
-            } else
+                iter = m_children.erase(iter);
+            } else {
                 ++iter;
+            }
         } else {
-            m_children.erase(iter++);
+            iter = m_children.erase(iter);
         }
     }
 }

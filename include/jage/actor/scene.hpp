@@ -82,15 +82,16 @@ namespace jage::actor {
     public:
         using iterator_category = std::forward_iterator_tag;
         using difference_type   = std::ptrdiff_t;
-        using value_type        = std::shared_ptr<abc::ActorABC>;
-        using pointer           = value_type*;
-        using reference         = value_type;
+        using value_type        = jage::actor::StaticActor*;
+        using pointer           = jage::actor::StaticActor*;
+        using reference         = jage::actor::StaticActor*;
 
         typedef std::vector<std::weak_ptr<abc::ActorABC>> InternalType;
 
         TagIterator(InternalType::iterator iter, InternalType& original);
 
         reference operator*();
+        pointer operator->();
 
         TagIterator& operator++();
         TagIterator operator++(int);
