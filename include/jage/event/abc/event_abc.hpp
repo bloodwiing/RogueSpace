@@ -34,6 +34,6 @@ namespace jage::event::abc {
     };
 }
 
-#include "eventabc_impl.tpp"
+#include "event_abc_impl.tpp"
 
 #endif //JAGE_EVENT_ABC_HPP
