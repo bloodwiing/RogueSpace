@@ -17,7 +17,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        DynamicActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag);
+        DynamicActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, bool isVolatile);
 
         void update() override;
 
@@ -57,6 +57,8 @@ namespace jage::actor {
         /// \brief          Marks the element as pending for a Matrix recalculation.
         void flagForMatrixUpdate();
         void flagForVectorUpdate();
+
+        jage::event::CollideEvent::Manager onCollide;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;

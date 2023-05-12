@@ -1,11 +1,11 @@
 template<class T>
 T* jage::actor::StaticActor::addChild(std::string name, Tag tag) {
-    return abc::ActorABC::addChild<T>(m_scene, this, name, tag);
+    return abc::ActorABC::addChild<T>(m_scene, this, name, tag, m_volatile);
 }
 
 template<class T, class... Args>
 T* jage::actor::StaticActor::addChild(std::string name, Tag tag, Args&&... args) {
-    return abc::ActorABC::addChild<T>(m_scene, this, name, tag, std::forward<Args>(args)...);
+    return abc::ActorABC::addChild<T>(m_scene, this, name, tag, m_volatile, std::forward<Args>(args)...);
 }
 
 template<class T>

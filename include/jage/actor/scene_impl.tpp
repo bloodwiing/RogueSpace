@@ -1,17 +1,17 @@
 template<class T>
 T *jage::actor::Scene::addChild(std::string name, Tag tag) {
-    return abc::ActorABC::addChild<T>(this, nullptr, name, tag);
+    return abc::ActorABC::addChild<T>(this, nullptr, name, tag, false);
 }
 
 template<class T, class... Args>
 T *jage::actor::Scene::addChild(std::string name, Tag tag, Args&&... args) {
-    return abc::ActorABC::addChild<T>(this, nullptr, name, tag, std::forward<Args>(args)...);
+    return abc::ActorABC::addChild<T>(this, nullptr, name, tag, false, std::forward<Args>(args)...);
 }
 
 template<class T>
 T *jage::actor::Scene::addVolatileChild(std::string name, Tag tag) {
     static_assert(std::is_base_of<abc::ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(this, nullptr, name, tag);
+    auto child = std::make_shared<T>(this, nullptr, name, tag, true);
     m_volatileActors.add(child);
     return child.get();
 }
@@ -19,7 +19,7 @@ T *jage::actor::Scene::addVolatileChild(std::string name, Tag tag) {
 template<class T, class... Args>
 T *jage::actor::Scene::addVolatileChild(std::string name, Tag tag, Args&&... args) {
     static_assert(std::is_base_of<abc::ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(this, nullptr, name, tag, std::forward<Args>(args)...);
+    auto child = std::make_shared<T>(this, nullptr, name, tag, true, std::forward<Args>(args)...);
     m_volatileActors.add(child);
     return child.get();
 }

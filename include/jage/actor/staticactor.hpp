@@ -22,7 +22,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        StaticActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag);
+        StaticActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, bool isVolatile);
 
         /// \brief          Creates a new Child under this Parent Actor
         /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)

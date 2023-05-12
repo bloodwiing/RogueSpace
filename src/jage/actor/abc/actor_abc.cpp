@@ -2,17 +2,22 @@
 
 #include <iostream>
 
+#include "jage/actor/scene.hpp"
+
 using jage::actor::abc::ActorABC;
 
 std::string ActorABC::getTypeName() const {
     return "ActorABC (ABSTRACT BASE CLASS)";
 }
 
-ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag)
+ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag, bool isVolatile)
     : m_parent(parent)
     , m_name(name)
     , m_tag(tag)
-{ }
+    , m_volatile(isVolatile)
+{
+
+}
 
 std::map<std::string, ActorABC::ChildEntry> ActorABC::getChildren() const {
     return m_children;
@@ -34,6 +39,10 @@ std::string ActorABC::getName() const {
 
 jage::Tag ActorABC::getTag() const {
     return m_tag;
+}
+
+bool jage::actor::abc::ActorABC::isVolatile() const {
+    return m_volatile;
 }
 
 glm::mat4 ActorABC::getWorldMatrix() const {

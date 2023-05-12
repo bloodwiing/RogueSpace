@@ -15,11 +15,17 @@ std::string Scene::getTypeName() const {
 }
 
 Scene::Scene()
-    : ActorABC(nullptr, m_hierarchyDisplayName, Tag::SYSTEM)
+    : ActorABC(nullptr, m_hierarchyDisplayName, Tag::SYSTEM, false)
+    , m_taggedMap(utility::EnumSize<jage::Tag>::value, std::vector<std::weak_ptr<abc::ActorABC>>())
 { }
 
 Utility::QuickList<std::shared_ptr<jage::actor::abc::ActorABC>> Scene::getVolatileChildren() const {
     return m_volatileActors;
+}
+
+void Scene::tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor) {
+    if (!actor->isVolatile())
+        m_taggedMap[actor->getTag()].push_back(actor);
 }
 
 glm::vec3 Scene::getTranslation() const {

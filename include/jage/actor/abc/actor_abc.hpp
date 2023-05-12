@@ -24,7 +24,7 @@ namespace jage::actor::abc {
     /// \note       Should not be used raw, but has 2 implementations as a test <b>Scene</b> or <b>Actor</b>
     /// \see        Scene
     /// \see        Actor
-    class ActorABC {
+    class ActorABC : public std::enable_shared_from_this<ActorABC> {
     protected:
         /// \brief          A container that remembers how many times a name has been reused for a child
         struct ChildEntry {
@@ -37,7 +37,9 @@ namespace jage::actor::abc {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        ActorABC(ActorABC* parent, std::string& name, Tag tag);
+        ActorABC(ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
+
+        void tagToScene(Scene* scene);
     public:
         /// \brief          Returns the map of Actor name and Actor entry pairs
         [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
@@ -58,7 +60,7 @@ namespace jage::actor::abc {
         /// \see            Scene#addChild
         /// \see            Actor#addChild
         template<class T>
-        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag);
+        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
 
         /// \brief          Creates a new Child under this Hierarchy element
         /// \note           Should not be used raw, please use addChild
@@ -71,7 +73,7 @@ namespace jage::actor::abc {
         /// \see            Scene#addChild
         /// \see            Actor#addChild
         template<class T, class... Args>
-        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, Args&&... args);
+        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile, Args&&... args);
 
         /// \returns        Possible values:
         ///                 - #ActorABC
@@ -81,6 +83,7 @@ namespace jage::actor::abc {
         /// \returns        The name of the current Hierarchy element
         [[nodiscard]] std::string getName() const;
         [[nodiscard]] Tag getTag() const;
+        [[nodiscard]] bool isVolatile() const;
 
         /// \return         The calculated Transformation matrix after applying all parent transformations
         [[nodiscard]] virtual glm::mat4 getWorldMatrix() const;
@@ -133,6 +136,7 @@ namespace jage::actor::abc {
         /// The name of the Hierarchy element
         std::string m_name;
         Tag m_tag = Tag::UNTAGGED;
+        const bool m_volatile;
         /// Hierarchy element's map of children
         std::map<std::string, ChildEntry> m_children;
         /// The pointer of the Hierarchy element's parent

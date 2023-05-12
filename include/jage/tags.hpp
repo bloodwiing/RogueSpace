@@ -9,13 +9,13 @@ namespace jage {
         UNTAGGED,
         SYSTEM,
 
+        ENVIRONMENT,
         CAMERA,
         MESH,
         UI,
 
         PLAYER,
         ENEMY,
-        ENVIRONMENT,
 
         BULLET,
     };

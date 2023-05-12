@@ -44,6 +44,8 @@ namespace jage::actor {
         template<class T, class... Args>
         T* addVolatileChild(std::string name, Tag tag, Args&&... args);
 
+        void tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor);
+
         [[nodiscard]] glm::vec3 getTranslation() const override;
         [[nodiscard]] glm::quat getRotation() const override;
         [[nodiscard]] glm::vec3 getScale() const override;
@@ -67,6 +69,8 @@ namespace jage::actor {
 
         /// QuickList of Volatile Actors
         Utility::QuickList<std::shared_ptr<abc::ActorABC>> m_volatileActors;
+
+        std::vector<std::vector<std::weak_ptr<abc::ActorABC>>> m_taggedMap;
     };
 }
 

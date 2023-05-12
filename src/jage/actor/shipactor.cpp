@@ -14,8 +14,8 @@ std::string ShipActor::getTypeName() const {
 float ShipActor::weight = 0.01f;
 float ShipActor::drag = 1.5f;
 
-ShipActor::ShipActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag)
-    : PhysicsActor(scene, parent, std::move(name), tag, weight, drag)
+ShipActor::ShipActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile)
+    : PhysicsActor(scene, parent, std::move(name), tag, isVolatile, weight, drag)
 {
 
 }
