@@ -14,7 +14,7 @@ using namespace testing;
 TEST(PhysicsActor, applyLinearVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -36,7 +36,7 @@ TEST(PhysicsActor, applyLinearVelocity) {
 TEST(PhysicsActor, applyAngularVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -57,7 +57,7 @@ TEST(PhysicsActor, applyAngularVelocity) {
 TEST(PhysicsActor, diminishVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "");
+    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
