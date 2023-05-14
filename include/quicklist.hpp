@@ -265,7 +265,7 @@ namespace Utility {
 
         /// Helper function to increase the capacity if the QuickList is about to hit it
         void expandIfNeeded() {
-            if (size + 2 >= capacity) {
+            if (size + 1 >= capacity) {
                 capacity += chunkSize;
                 entries.resize(capacity, {});
             }
