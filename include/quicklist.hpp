@@ -85,6 +85,7 @@
 #include <algorithm>
 #include <thread>
 #include <mutex>
+#include <iostream>
 
 namespace Utility {
 
@@ -187,8 +188,16 @@ namespace Utility {
                 return;
             }
 
+            // move the busy slot ouf of the chain
+            if (targetElem.prev != -1) {
+                entries[targetElem.prev].next = targetElem.next;
+            }
+            if (targetElem.next != -1) {
+                entries[targetElem.next].prev = targetElem.prev;
+            }
+
             // insert a free slot in the chain (if it isn't already)
-            index_t newPrev;
+            index_t newPrev = targetElem.prev;
             if (nextFreeElem.prev != index) {
                 entries[nextFreeElem.prev].next = index;
                 newPrev = nextFreeElem.prev;
@@ -197,11 +206,6 @@ namespace Utility {
                 newPrev = targetElem.prev;
             }
 
-            // move the busy slot ouf of the chain
-            if (targetElem.prev != -1)
-                entries[targetElem.prev].next = targetElem.next;
-            if (targetElem.next != -1)
-                entries[targetElem.next].prev = targetElem.prev;
             targetElem.prev = newPrev;
             targetElem.next = nextFree;
 
