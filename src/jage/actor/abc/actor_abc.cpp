@@ -20,7 +20,8 @@ ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag, bool isVolatile
 }
 
 void ActorABC::tagToScene(Scene *scene) {
-    scene->tagActorToMap(shared_from_this());
+    if (scene != nullptr)
+        scene->tagActorToMap(shared_from_this());
 }
 
 std::map<std::string, ActorABC::ChildEntry> ActorABC::getChildren() const {
