@@ -51,10 +51,6 @@ namespace jage::actor {
         [[nodiscard]] glm::vec3 getUp() const override;
         [[nodiscard]] glm::vec3 getWorldPosition() const override;
 
-        void setTranslation(const glm::vec3 &tra) override {};
-        void setRotation(const glm::quat &rot) override {};
-        void setScale(const glm::vec3 &sca) override {};
-
         void update() override;
         void draw(jage::graphics::Shader &shader) override;
 
@@ -67,6 +63,10 @@ namespace jage::actor {
 
         /// QuickList of Volatile Actors
         Utility::QuickList<std::shared_ptr<abc::ActorABC>> m_volatileActors;
+
+        void setTranslation(const glm::vec3 &tra) override {};
+        void setRotation(const glm::quat &rot) override {};
+        void setScale(const glm::vec3 &sca) override {};
     };
 }
 
