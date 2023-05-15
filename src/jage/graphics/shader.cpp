@@ -46,6 +46,12 @@ Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
     checkProgramErrors();
 }
 
+Shader::~Shader() {
+    if (m_error)
+        return;
+    glDeleteProgram(m_ID);
+}
+
 void Shader::activate() {
     glUseProgram(m_ID);
 }

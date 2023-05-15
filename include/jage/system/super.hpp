@@ -14,6 +14,7 @@ namespace jage::system {
     class Super {
     public:
         Super(int width, int height);
+        ~Super() = default;
 
         [[nodiscard]] static Super& getInstance();
 
@@ -23,10 +24,14 @@ namespace jage::system {
         jage::runtime::Window* getWindow();
 
     private:
+        Super(const Super& ref);
+
         static std::unique_ptr<Super> instance;
 
         /// The created Window
         jage::runtime::Window* m_window;
+
+        Super& operator=(const Super& ref);
     };
 }
 

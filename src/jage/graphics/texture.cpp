@@ -198,6 +198,13 @@ Texture::LOD::create(GLubyte *bytes, int width, int height, int channels, int le
     return std::make_shared<LOD>(bytes, width, height, channels, level, priority, container);
 }
 
+Texture::LOD::~LOD() {
+    glDeleteTextures(1, &m_ID);
+    if (m_PBO != 0) {
+        glDeleteBuffers(1, &m_PBO);
+    }
+}
+
 void Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     if (m_ready)
         return;

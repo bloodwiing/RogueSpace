@@ -92,6 +92,8 @@ namespace jage::runtime {
 
         /// A flag that stops OpenGL from loading multiple times
         static bool m_wasGLLoaded;
+
+        Window& operator=(const Window& ref);
     };
 }
 
