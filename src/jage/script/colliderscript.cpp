@@ -25,7 +25,7 @@ void ColliderScript::onUpdate() {
         auto* target = iter->findScript<CollisionReceiverScript>();
 
         if (target != nullptr and (target->getRadius() + getRadius()) >= glm::distance(iter->getWorldPosition(), m_node->getWorldPosition())) {
-            target->onCollide(m_node);
+            target->runCollision(m_node);
             m_node->markDead();
         }
     }

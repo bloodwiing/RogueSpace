@@ -3,6 +3,7 @@
 
 #include "jage/actor/dynamicactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
+#include "jage/event/collisionevent.hpp"
 
 namespace jage::script {
 
@@ -15,7 +16,9 @@ namespace jage::script {
         void onUpdate() override;
         void onDeath() override;
 
-        void onCollide(jage::actor::DynamicActor*& other);
+        void runCollision(jage::actor::DynamicActor*& other);
+
+        jage::event::CollisionEvent::Manager onCollide;
 
         [[nodiscard]] float getRadius() const;
         void setRadius(float radius);

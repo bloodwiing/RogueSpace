@@ -1,7 +1,5 @@
 #include "jage/script/collisionreceiverscript.hpp"
 
-#include <iostream>
-
 using jage::script::CollisionReceiverScript;
 
 CollisionReceiverScript::CollisionReceiverScript(jage::actor::abc::ActorABC* node, float radius)
@@ -30,8 +28,8 @@ float CollisionReceiverScript::getRadius() const {
     return m_radius;
 }
 
-void CollisionReceiverScript::onCollide(jage::actor::DynamicActor *&other) {
-    std::cout << "Hit to " << m_node->getName() << " by " << other->getName() << std::endl;
+void CollisionReceiverScript::runCollision(jage::actor::DynamicActor*& other) {
+    onCollide.notifyAll(other);
 }
 
 void CollisionReceiverScript::setRadius(float radius) {

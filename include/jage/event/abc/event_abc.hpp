@@ -7,7 +7,7 @@
 namespace jage::event::abc {
 
     template<class Type, class... Args>
-    class EventABC : std::enable_shared_from_this<EventABC<Type, Args...>> {
+    class EventABC {
     public:
         typedef Type EventType;
 
@@ -23,8 +23,8 @@ namespace jage::event::abc {
 
         void notifyAll(Args&&... args);
 
-        void addListener(std::shared_ptr<Type>& event);
-        typename Type::Manager& operator+=(std::shared_ptr<Type>& event);
+        void addListener(const std::shared_ptr<Type>& event);
+        typename Type::Manager& operator+=(const std::shared_ptr<Type>& event);
 
     protected:
         std::vector<std::weak_ptr<Type>> m_listeners;

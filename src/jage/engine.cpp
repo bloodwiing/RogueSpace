@@ -13,6 +13,7 @@
 #include "jage/script/weaponscript.hpp"
 #include "jage/script/colliderscript.hpp"
 #include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/healthscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;
@@ -94,10 +95,12 @@ void JAGEngine::loadScene() {
     player->attachScript<script::WeaponScript>(60.0f, Tag::ENEMY);
     player->attachScript<script::PlayerControllerScript>(cameraShakeScript);
     player->attachScript<script::CollisionReceiverScript>(1.0f);
+    player->attachScript<script::HealthScript>(100.0f);
 
     auto starship = m_scene->addChild<ShipActor>("Starship", Tag::ENEMY);
     starship->attachScript<script::WeaponScript>(60.0f, Tag::PLAYER);
     starship->attachScript<script::CollisionReceiverScript>(1.0f);
+    starship->attachScript<script::HealthScript>(100.0f);
     auto controller = starship->attachScript<script::AIControllerScript>();
     controller->setTarget(player);
     try {
