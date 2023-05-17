@@ -11,6 +11,7 @@
 
 #include "jage/graphics/shader.hpp"
 #include "jage/tags.hpp"
+#include "jage/node/abc/node_abc.hpp"
 
 namespace jage::actor {
     class Scene;
@@ -24,13 +25,8 @@ namespace jage::actor::abc {
     /// \note       Should not be used raw, but has 2 implementations as a test <b>Scene</b> or <b>Actor</b>
     /// \see        Scene
     /// \see        Actor
-    class ActorABC : public std::enable_shared_from_this<ActorABC> {
+    class ActorABC : public node::abc::NodeABC<ActorABC> {
     protected:
-        /// \brief          A container that remembers how many times a name has been reused for a child
-        struct ChildEntry {
-            std::shared_ptr<ActorABC> value;
-            uint16_t nameRepeat;
-        };
 
         /// \note           Should not be used raw, please use addChild
         /// \param parent   Parent of the Actor node
@@ -41,39 +37,13 @@ namespace jage::actor::abc {
 
         void tagToScene(Scene* scene);
     public:
-        /// \brief          Returns the map of Actor name and Actor entry pairs
         [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
-        /// \brief          Returns a pointer to a child Actor of the current Hierarchy element
-        /// \param name     The name of the child to search for
-        /// \returns        Possible values:
-        ///                 - #ActorBase*
-        ///                 - nullptr
         [[nodiscard]] ActorABC* getChild(const std::string& name) const;
 
-        /// \brief          Creates a new Child under this Hierarchy element
-        /// \note           Should not be used raw, please use addChild
-        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-        /// \param scene    Containing Scene of the Actor node
-        /// \param parent   Parent of the Actor node
-        /// \param name     Name of the Actor node
-        /// \return         A pointer to the newly created Actor
-        /// \see            Scene#addChild
-        /// \see            Actor#addChild
         template<class T>
-        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
-
-        /// \brief          Creates a new Child under this Hierarchy element
-        /// \note           Should not be used raw, please use addChild
-        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-        /// \param scene    Containing Scene of the Actor node
-        /// \param parent   Parent of the Actor node
-        /// \param name     Name of the Actor node
-        /// \param args     The list of extra arguments to pass when creating the Actor
-        /// \return         A pointer to the newly created Actor
-        /// \see            Scene#addChild
-        /// \see            Actor#addChild
+        T* addChild(ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
         template<class T, class... Args>
-        T* addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile, Args&&... args);
+        T* addChild(ActorABC* parent, std::string& name, Tag tag, bool isVolatile, Args&&... args);
 
         /// \returns        Possible values:
         ///                 - #ActorABC
@@ -130,11 +100,9 @@ namespace jage::actor::abc {
         [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
 
     protected:
-        /// \returns        Returns its own Hierarchy element type name
-        [[nodiscard]] virtual std::string getTypeName() const;
+        [[nodiscard]] std::string getTypeName() const override;
 
         /// The name of the Hierarchy element
-        std::string m_name;
         Tag m_tag = Tag::UNTAGGED;
         const bool m_volatile;
         /// Hierarchy element's map of children

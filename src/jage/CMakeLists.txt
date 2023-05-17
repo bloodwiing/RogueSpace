@@ -6,6 +6,7 @@ file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         event/abc/*.cpp
         graphics/*.cpp
         graphics/model/*.cpp
+        node/abc/*.cpp
         runtime/*.cpp
         script/*.cpp
         script/abc/*.cpp
