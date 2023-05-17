@@ -58,6 +58,8 @@ namespace jage::actor {
         float m_flySensitivity = 100.0f;
         /// A flag for if the mouse is being captured and hidden
         bool m_flyClicked = false;
+
+        using DynamicActor::addChild;
     };
 }
 

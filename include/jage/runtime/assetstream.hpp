@@ -54,6 +54,7 @@ namespace jage::runtime {
 
     private:
         AssetStream();
+        ~AssetStream();
 
         std::thread m_thread;
 
@@ -79,6 +80,8 @@ namespace jage::runtime {
         static std::shared_ptr<std::string> asyncReadFileContents(std::string filePath, std::ios::openmode mode = std::ios::in);
 
         bool getNextQuery(AssetQuery& entry);
+
+        AssetStream& operator=(const AssetStream& ref);
     };
 }
 

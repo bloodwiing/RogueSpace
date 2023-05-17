@@ -22,6 +22,8 @@ namespace jage::graphics {
         /// \brief          Creates a new Material container
         /// \param name     The name of the material (used for identification purposes)
         explicit Material(std::string name);
+        Material(const Material &ref) = default;
+        ~Material() = default;
 
         /// \return         The name of the Material
         [[nodiscard]] std::string getName() const;

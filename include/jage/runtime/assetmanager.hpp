@@ -24,6 +24,7 @@ namespace jage::runtime {
 
     private:
         AssetManager();
+        ~AssetManager() = default;
 
         static AssetManager* m_instance;
 
@@ -35,6 +36,8 @@ namespace jage::runtime {
 
         std::shared_ptr<Model> loadModel(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
         std::shared_ptr<Texture> loadTexture(const std::string& fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+
+        AssetManager& operator=(const AssetManager& ref);
     };
 }
 

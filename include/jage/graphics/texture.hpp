@@ -25,6 +25,7 @@ namespace jage::graphics {
         explicit Texture(GLubyte *bytes, int width, int height, int channels);
         static std::shared_ptr<Texture> create(GLubyte *bytes, int width, int height, int channels);
         static void createDefaultTexture(GLubyte *bytes, int width, int height, int channels);
+        ~Texture() = default;
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
@@ -64,6 +65,8 @@ namespace jage::graphics {
         [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
 
         static std::shared_ptr<Texture> defaultTexture;
+
+        Texture& operator=(const Texture& ref);
     };
 
     class Texture::LOD : public std::enable_shared_from_this<LOD> {
@@ -72,6 +75,7 @@ namespace jage::graphics {
         static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
         LOD(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
         static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
+        ~LOD();
 
         void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
@@ -104,6 +108,8 @@ namespace jage::graphics {
         const int m_priority;
 
         const std::string m_fileName;
+
+        LOD& operator=(const LOD& ref);
     };
 }
 

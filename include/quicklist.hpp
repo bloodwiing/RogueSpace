@@ -119,6 +119,13 @@ namespace Utility {
                 , entries(ref.entries)
                 , nextFree(ref.nextFree)
         { }
+        QuickList& operator=(const QuickList<T>& ref) {
+            chunkSize = ref.chunkSize;
+            capacity = ref.capacity;
+            size = ref.size;
+            entries = ref.entries;
+            nextFree = ref.nextFree;
+        }
 
         /// Insert an element into the QuickList.<br>
         /// To access this element in the list, please use the returned index, which is picked vacant

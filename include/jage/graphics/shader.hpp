@@ -16,6 +16,7 @@ namespace jage::graphics {
         /// \param vertexFile      Path to a Vertex shader
         /// \param fragmentFile    Path to a Fragment shader
         Shader(const std::string& vertexFile, const std::string& fragmentFile);
+        ~Shader();
 
         /// \brief          Makes the Shader Program active
         void activate();
@@ -58,6 +59,8 @@ namespace jage::graphics {
         void checkShaderErrors(GLuint shaderID, const std::string &type, const std::string &file);
         /// \brief              Checks for program errors
         void checkProgramErrors();
+
+        Shader& operator=(const Shader& ref);
     };
 
     class Shader::ShaderError : public std::runtime_error {

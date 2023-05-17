@@ -97,6 +97,9 @@ namespace jage::actor {
         glm::vec3 m_linearVelocity;
         /// The current Angular Velocity of the PhysicsActor
         glm::vec3 m_angularVelocity;
+
+        using DynamicActor::flagForMatrixUpdate;
+        using DynamicActor::flagForVectorUpdate;
     };
 }
 
