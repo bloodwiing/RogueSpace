@@ -3,11 +3,13 @@
 #include "jage/actor/physicsactor.hpp"
 #include "jage/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
+#include "jage/script/colliderscript.hpp"
 
 using jage::script::WeaponScript;
 
-WeaponScript::WeaponScript(jage::actor::abc::ActorABC *node, float bulletSpeed)
+WeaponScript::WeaponScript(jage::actor::abc::ActorABC *node, float bulletSpeed, Tag bulletTargetTag)
     : m_bulletSpeed(bulletSpeed)
+    , m_bulletTargetTag(bulletTargetTag)
 {
     validate(node);
 }
@@ -32,7 +34,7 @@ void WeaponScript::onDeath() {
 
 }
 
-void jage::script::WeaponScript::shootThisFrame(glm::vec3 extraVelocity) {
+void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
     if (m_fireCoolDown > 0.0f)
         return;
 
@@ -42,8 +44,9 @@ void jage::script::WeaponScript::shootThisFrame(glm::vec3 extraVelocity) {
     const auto right = glm::cross(orientation, up);
 
     // Actor
-    auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", 0.0f, 0.0f);
-    auto model = bullet->addChild<jage::actor::ModelActor>("model", "./res/bullet/BulletTemp.gltf");
+    auto bullet = m_node->getScene()->addVolatileChild<jage::actor::PhysicsActor>("Bullet", Tag::BULLET, 0.0f, 0.0f);
+    auto model = bullet->addChild<jage::actor::ModelActor>("model", Tag::MESH, "./res/bullet/BulletTemp.gltf");
+    bullet->attachScript<script::ColliderScript>(m_bulletTargetTag, 1.0f);
 
     // Translate to world position
     glm::vec3 offset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;

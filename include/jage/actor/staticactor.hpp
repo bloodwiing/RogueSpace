@@ -22,21 +22,21 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        StaticActor(Scene* scene, abc::ActorABC* parent, std::string name);
+        StaticActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, bool isVolatile);
 
         /// \brief          Creates a new Child under this Parent Actor
         /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
         /// \param name     Name of the Actor node
         /// \return         A pointer to the newly created Actor
         template<class T>
-        T* addChild(std::string name);
+        T* addChild(std::string name, Tag tag);
         /// \brief          Creates a new Child under this Parent Actor
         /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
         /// \param name     Name of the Actor node
         /// \param args     The list of extra arguments to pass when creating the Actor
         /// \return         A pointer to the newly created Actor
         template<class T, class... Args>
-        T* addChild(std::string name, Args&&... args);
+        T* addChild(std::string name, Tag tag, Args&&... args);
 
         template<class T>
         T* attachScript();

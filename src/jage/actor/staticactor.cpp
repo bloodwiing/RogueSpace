@@ -12,11 +12,13 @@ std::string StaticActor::getTypeName() const {
     return "StaticActor";
 }
 
-StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name)
-    : ActorABC(parent, name)
+StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile)
+    : ActorABC(parent, name, tag, isVolatile)
     , m_scene(scene)
     , m_dead(false)
-{ }
+{
+
+}
 
 jage::actor::Scene *StaticActor::getScene() const {
     return m_scene;

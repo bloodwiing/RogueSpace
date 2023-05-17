@@ -8,14 +8,14 @@ namespace jage::script {
 
     class WeaponScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
     public:
-        WeaponScript(jage::actor::abc::ActorABC *node, float bulletSpeed);
+        WeaponScript(jage::actor::abc::ActorABC *node, float bulletSpeed, Tag bulletTargetTag);
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
 
-        void shootThisFrame(glm::vec3 extraVelocity);
+        void shootThisFrame(const glm::vec3 &extraVelocity);
 
         [[nodiscard]] float getBulletSpeed() const;
         void setBulletSpeed(float bulletSpeed);
@@ -25,6 +25,8 @@ namespace jage::script {
 
         float m_fireCoolDown = 0.0f;
         bool m_fireFromLeft = true;
+
+        Tag m_bulletTargetTag;
     };
 };
 

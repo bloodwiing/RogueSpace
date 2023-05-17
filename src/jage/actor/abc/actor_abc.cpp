@@ -2,16 +2,27 @@
 
 #include <iostream>
 
+#include "jage/actor/scene.hpp"
+
 using jage::actor::abc::ActorABC;
 
 std::string ActorABC::getTypeName() const {
-    return "Actor ABSTRACT BASE CLASS";
+    return "ActorABC (ABSTRACT BASE CLASS)";
 }
 
-ActorABC::ActorABC(ActorABC *parent, std::string& name)
+ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag, bool isVolatile)
     : m_parent(parent)
     , m_name(name)
-{ }
+    , m_tag(tag)
+    , m_volatile(isVolatile)
+{
+
+}
+
+void ActorABC::tagToScene(Scene *scene) {
+    if (scene != nullptr)
+        scene->tagActorToMap(shared_from_this());
+}
 
 std::map<std::string, ActorABC::ChildEntry> ActorABC::getChildren() const {
     return m_children;
@@ -31,12 +42,24 @@ std::string ActorABC::getName() const {
     return m_name;
 }
 
+jage::Tag ActorABC::getTag() const {
+    return m_tag;
+}
+
+bool jage::actor::abc::ActorABC::isVolatile() const {
+    return m_volatile;
+}
+
 glm::mat4 ActorABC::getWorldMatrix() const {
     return glm::mat4(1.0f);
 }
 
 bool ActorABC::isDead() const {
     return false;
+}
+
+void ActorABC::setTag(jage::Tag tag) {
+    m_tag = tag;
 }
 
 void ActorABC::update() {
@@ -47,15 +70,16 @@ void ActorABC::update() {
                 child->update();
             } catch (std::exception& e) {
                 std::cerr << e.what();
-                m_children.erase(iter++);
+                iter = m_children.erase(iter);
                 continue;
             }
             if (child->isDead()) {
-                m_children.erase(iter++);
-            } else
+                iter = m_children.erase(iter);
+            } else {
                 ++iter;
+            }
         } else {
-            m_children.erase(iter++);
+            iter = m_children.erase(iter);
         }
     }
 }

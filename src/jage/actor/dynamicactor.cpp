@@ -8,8 +8,8 @@ std::string DynamicActor::getTypeName() const {
     return "DynamicActor";
 }
 
-DynamicActor::DynamicActor(Scene* scene, abc::ActorABC* parent, std::string name)
-    : StaticActor(scene, parent, name)
+DynamicActor::DynamicActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, bool isVolatile)
+    : StaticActor(scene, parent, std::move(name), tag, isVolatile)
 { }
 
 void DynamicActor::update() {

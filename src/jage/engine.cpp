@@ -11,6 +11,9 @@
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
 #include "jage/script/weaponscript.hpp"
+#include "jage/script/colliderscript.hpp"
+#include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/healthscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;
@@ -79,25 +82,29 @@ void JAGEngine::loadScene() {
 
     m_scene = std::make_unique<Scene>();
 
-    auto sphere = m_scene->addChild<ModelActor>("sphere", "./res/sphere/sphere.gltf");
+    auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
 
 //    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
 //    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
-    auto player = m_scene->addChild<ShipActor>("Player");
-    auto camera = player->addChild<Camera>("Camera");
+    auto player = m_scene->addChild<ShipActor>("Player", Tag::PLAYER);
+    auto camera = player->addChild<Camera>("Camera", Tag::CAMERA);
     auto cameraShakeScript = camera->attachScript<script::CameraShakeScript>(0.0f, 0.05f);
     camera->setActive();
-    player->attachScript<script::WeaponScript>(40.0f);
+    player->attachScript<script::WeaponScript>(60.0f, Tag::ENEMY);
     player->attachScript<script::PlayerControllerScript>(cameraShakeScript);
+    player->attachScript<script::CollisionReceiverScript>(1.0f);
+    player->attachScript<script::HealthScript>(100.0f);
 
-    auto starship = m_scene->addChild<ShipActor>("Starship");
-    starship->attachScript<script::WeaponScript>(40.0f);
+    auto starship = m_scene->addChild<ShipActor>("Starship", Tag::ENEMY);
+    starship->attachScript<script::WeaponScript>(60.0f, Tag::PLAYER);
+    starship->attachScript<script::CollisionReceiverScript>(1.0f);
+    starship->attachScript<script::HealthScript>(100.0f);
     auto controller = starship->attachScript<script::AIControllerScript>();
     controller->setTarget(player);
     try {
-        auto starship_model = starship->addChild<ModelActor>("model", "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<ModelActor>("model", Tag::MESH, "./res/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }

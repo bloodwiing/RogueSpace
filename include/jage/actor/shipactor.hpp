@@ -8,7 +8,7 @@ namespace jage::actor {
 
     class ShipActor : public PhysicsActor {
     public:
-        ShipActor(Scene *scene, abc::ActorABC *parent, std::string name);
+        ShipActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile);
 
         void update() override;
 

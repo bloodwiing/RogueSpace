@@ -83,6 +83,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <thread>
+#include <mutex>
+#include <iostream>
 
 namespace Utility {
 
@@ -130,6 +133,8 @@ namespace Utility {
         /// \param value The value of the element to insert
         /// \return The reserved index of the value
         index_t add(const T& value) {
+            std::lock_guard<std::mutex> lock(m_mutex);
+
             expandIfNeeded();
 
             Entry& targetElem = entries[nextFree];
@@ -154,6 +159,8 @@ namespace Utility {
         /// \param index The reserved index of the element
         /// \return The element stored in the QuickList
         [[nodiscard]] T& get(index_t index) {
+            std::lock_guard<std::mutex> lock(m_mutex);
+
             if (index >= entries.capacity())
                 throw std::out_of_range("Index is out of bounds");
 
@@ -169,6 +176,8 @@ namespace Utility {
         /// <i>If you want to iterate over elements and remove them during an iteration, use the safeRemove() function of the iterator</i>
         /// \param index The reserved index of the element
         void remove(index_t index) {
+            std::lock_guard<std::mutex> lock(m_mutex);
+
             if (index >= entries.capacity())
                 throw std::out_of_range("Index is out of bounds");
 
@@ -186,8 +195,16 @@ namespace Utility {
                 return;
             }
 
+            // move the busy slot ouf of the chain
+            if (targetElem.prev != -1) {
+                entries[targetElem.prev].next = targetElem.next;
+            }
+            if (targetElem.next != -1) {
+                entries[targetElem.next].prev = targetElem.prev;
+            }
+
             // insert a free slot in the chain (if it isn't already)
-            index_t newPrev;
+            index_t newPrev = targetElem.prev;
             if (nextFreeElem.prev != index) {
                 entries[nextFreeElem.prev].next = index;
                 newPrev = nextFreeElem.prev;
@@ -196,11 +213,6 @@ namespace Utility {
                 newPrev = targetElem.prev;
             }
 
-            // move the busy slot ouf of the chain
-            if (targetElem.prev != -1)
-                entries[targetElem.prev].next = targetElem.next;
-            if (targetElem.next != -1)
-                entries[targetElem.next].prev = targetElem.prev;
             targetElem.prev = newPrev;
             targetElem.next = nextFree;
 
@@ -267,6 +279,8 @@ namespace Utility {
         }
 
         const size_t chunkSize;
+
+        std::mutex m_mutex;
     };
 
     template<class T>
@@ -292,7 +306,7 @@ namespace Utility {
         iterator(const iterator &it)
                 : cur(it.cur)
                 , list(it.list)
-                , toSafeRemove(it.toSafeRemove)
+                , toSafeRemove(-1)
         { }
 
         iterator& operator++() {
