@@ -21,7 +21,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        Camera(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile);
+        Camera(JAGE_ACTOR_ARGS);
         ~Camera();
 
         /// \brief              Updates the Camera Matrix based off of the World Matrix and Camera settings

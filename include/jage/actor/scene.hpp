@@ -5,8 +5,11 @@
 
 #include "jage/actor/staticactor.hpp"
 #include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/abc/node_abc.hpp"
 
 #include "quicklist.hpp"
+
+#define JAGE_SCENE_ACTOR_ARGS std::string name, jage::Tag tag
 
 namespace jage::actor {
 
@@ -14,16 +17,16 @@ namespace jage::actor {
 
     /// \brief          The main container for every Actor node
     /// \details        This is the main or "root" node of every Hierarchy
-    class Scene : public abc::ActorABC {
+    class Scene : public jage::node::abc::NodeABC<jage::actor::abc::ActorABC> {
     public:
         class TagIterator;
 
         Scene();
 
         template<class T>
-        T* addChild(std::string name, Tag tag);
+        T* addChild(JAGE_SCENE_ACTOR_ARGS);
         template<class T, class... Args>
-        T* addChild(std::string name, Tag tag, Args&&... args);
+        T* addChild(JAGE_SCENE_ACTOR_ARGS, Args&&... args);
 
         /// \brief          Returns the QuickList of Volatile Actors
         [[nodiscard]] Utility::QuickList<std::shared_ptr<abc::ActorABC>> getVolatileChildren() const;
@@ -35,7 +38,7 @@ namespace jage::actor {
         /// \param name     Name of the Actor node
         /// \return         A pointer to the newly created Actor
         template<class T>
-        T* addVolatileChild(std::string name, Tag tag);
+        T* addVolatileChild(JAGE_SCENE_ACTOR_ARGS);
         /// \brief          Creates a new Volatile Child under this Parent Actor
         /// \details        A Volatile Actor list is faster than a Hierarchy, preferred to be used whenever something
         ///                 needs to be spawned and destroyed frequently.
@@ -44,22 +47,15 @@ namespace jage::actor {
         /// \param args     The list of extra arguments to pass when creating the Actor
         /// \return         A pointer to the newly created Actor
         template<class T, class... Args>
-        T* addVolatileChild(std::string name, Tag tag, Args&&... args);
+        T* addVolatileChild(JAGE_SCENE_ACTOR_ARGS, Args&&... args);
 
         void tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor);
 
         TagIterator beginTagged(Tag tag);
         TagIterator endTagged(Tag tag);
 
-        [[nodiscard]] glm::vec3 getTranslation() const override;
-        [[nodiscard]] glm::quat getRotation() const override;
-        [[nodiscard]] glm::vec3 getScale() const override;
-        [[nodiscard]] glm::vec3 getOrientation() const override;
-        [[nodiscard]] glm::vec3 getUp() const override;
-        [[nodiscard]] glm::vec3 getWorldPosition() const override;
-
-        void update() override;
-        void draw(jage::graphics::Shader &shader) override;
+        void update();
+        void draw(jage::graphics::Shader &shader);
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
@@ -70,12 +66,10 @@ namespace jage::actor {
 
         /// QuickList of Volatile Actors
         Utility::QuickList<std::shared_ptr<abc::ActorABC>> m_volatileActors;
-      
-        void setTranslation(const glm::vec3 &tra) override {};
-        void setRotation(const glm::quat &rot) override {};
-        void setScale(const glm::vec3 &sca) override {};
 
         std::vector<std::vector<std::weak_ptr<abc::ActorABC>>> m_taggedMap;
+
+        using jage::node::abc::NodeABC<jage::actor::abc::ActorABC>::addChild;
     };
 
     class Scene::TagIterator {

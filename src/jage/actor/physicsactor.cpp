@@ -8,8 +8,8 @@ std::string PhysicsActor::getTypeName() const {
     return "PhysicsActor";
 }
 
-PhysicsActor::PhysicsActor(Scene* scene, abc::ActorABC* parent, std::string name, Tag tag, bool isVolatile, float weight, float drag)
-    : DynamicActor(scene, parent, std::move(name), tag, isVolatile)
+PhysicsActor::PhysicsActor(JAGE_ACTOR_ARGS, float weight, float drag)
+    : DynamicActor(parent, std::move(name), scene, tag, isVolatile)
     , m_weight(weight)
     , m_drag(drag)
     , m_linearVelocity(0.0f)

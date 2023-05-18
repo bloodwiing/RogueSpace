@@ -10,9 +10,8 @@ std::string ActorABC::getTypeName() const {
     return "ActorABC (ABSTRACT BASE CLASS)";
 }
 
-ActorABC::ActorABC(ActorABC *parent, std::string& name, Tag tag, bool isVolatile)
-    : m_parent(parent)
-    , m_name(name)
+ActorABC::ActorABC(JAGE_ACTOR_ARGS)
+    : node::abc::NodeABC<ActorABC>(parent, std::move(name))
     , m_tag(tag)
     , m_volatile(isVolatile)
 {
@@ -60,44 +59,6 @@ bool ActorABC::isDead() const {
 
 void ActorABC::setTag(jage::Tag tag) {
     m_tag = tag;
-}
-
-void ActorABC::update() {
-    for (auto iter = m_children.begin(); iter != m_children.end();) {
-        auto& child = iter->second.value;
-        if (child) {
-            try {
-                child->update();
-            } catch (std::exception& e) {
-                std::cerr << e.what();
-                iter = m_children.erase(iter);
-                continue;
-            }
-            if (child->isDead()) {
-                iter = m_children.erase(iter);
-            } else {
-                ++iter;
-            }
-        } else {
-            iter = m_children.erase(iter);
-        }
-    }
-}
-
-void ActorABC::draw(jage::graphics::Shader& shader) {
-    for (auto& [name, child] : m_children) {
-        if (child.value)
-            child.value->draw(shader);
-    }
-}
-
-std::string ActorABC::toHierarchyString(uint16_t indent /* = 0 */) const {
-    std::string result = m_name + ": " + getTypeName() + "\n";
-    for (const auto& iter : m_children) {
-        result += std::string(" | ", indent * 3) + " > ";
-        result += iter.second.value->toHierarchyString(indent + 1);
-    }
-    return result;
 }
 
 std::ostream& operator<<(std::ostream& stream, ActorABC *actor) {

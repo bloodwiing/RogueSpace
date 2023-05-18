@@ -1,41 +1,9 @@
 template<class T>
-void jage::actor::abc::ActorABC::internalRegisterChild(std::shared_ptr<T> child) {
-    static_assert(std::is_base_of<ActorABC, T>::value, "Cannot register a non-Hierarchy child");
-
-    // Prepare as if key is unique
-    ActorABC::ChildEntry entry {
-        .value = child,
-        .nameRepeat = 1
-    };
-
-    // Find if key is actually unique
-    if (m_children.find(child->m_name) != m_children.end()) {
-        auto& existingEntry = m_children.at(child->m_name);
-        // Try to create the child as "{name} ({repeat})", example: "Bullet (2)"
-        // Recursive in case a name with parenthesis was added manually before, will stack parenthesis as a result
-        child->m_name += " (" + std::to_string(++existingEntry.nameRepeat) + ")";
-        internalRegisterChild(child);
-        return;
-    }
-
-    // If code reached here, we can finally add the child
-    m_children[child->m_name] = entry;
-}
-
-template<class T>
-T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile) {
-    static_assert(std::is_base_of<ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(scene, parent, name, tag, isVolatile);
-    internalRegisterChild(child);
-    child->tagToScene(scene);
-    return child.get();
+T* jage::actor::abc::ActorABC::addChild(JAGE_ACTOR_ARGS) {
+    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(parent, name, scene, tag, isVolatile);
 }
 
 template<class T, class... Args>
-T* jage::actor::abc::ActorABC::addChild(Scene* scene, ActorABC* parent, std::string& name, Tag tag, bool isVolatile, Args&&... args) {
-    static_assert(std::is_base_of<ActorABC, T>::value, "Cannot add a non-Hierarchy child");
-    auto child = std::make_shared<T>(scene, parent, name, tag, isVolatile, std::forward<Args>(args)...);
-    internalRegisterChild(child);
-    child->tagToScene(scene);
-    return child.get();
+T* jage::actor::abc::ActorABC::addChild(JAGE_ACTOR_ARGS, Args&&... args) {
+    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(parent, name, scene, tag, isVolatile, std::forward<Args>(args)...);
 }

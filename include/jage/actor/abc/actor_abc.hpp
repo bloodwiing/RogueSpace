@@ -13,6 +13,8 @@
 #include "jage/tags.hpp"
 #include "jage/node/abc/node_abc.hpp"
 
+#define JAGE_ACTOR_ARGS JAGE_NODE_ARGS(jage::actor::abc::ActorABC), jage::actor::Scene* scene, jage::Tag tag, bool isVolatile
+
 namespace jage::actor {
     class Scene;
 }
@@ -27,13 +29,7 @@ namespace jage::actor::abc {
     /// \see        Actor
     class ActorABC : public node::abc::NodeABC<ActorABC> {
     protected:
-
-        /// \note           Should not be used raw, please use addChild
-        /// \param parent   Parent of the Actor node
-        /// \param name     Name of the Actor node
-        /// \see            Scene#addChild
-        /// \see            Actor#addChild
-        ActorABC(ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
+        ActorABC(JAGE_ACTOR_ARGS);
 
         void tagToScene(Scene* scene);
     public:
@@ -41,9 +37,9 @@ namespace jage::actor::abc {
         [[nodiscard]] ActorABC* getChild(const std::string& name) const;
 
         template<class T>
-        T* addChild(ActorABC* parent, std::string& name, Tag tag, bool isVolatile);
+        T* addChild(JAGE_ACTOR_ARGS);
         template<class T, class... Args>
-        T* addChild(ActorABC* parent, std::string& name, Tag tag, bool isVolatile, Args&&... args);
+        T* addChild(JAGE_ACTOR_ARGS, Args&&... args);
 
         /// \returns        Possible values:
         ///                 - #ActorABC
@@ -85,43 +81,15 @@ namespace jage::actor::abc {
         /// \param sca      New Scale
         virtual void setScale(const glm::vec3& sca) = 0;
 
-        /// \brief          Hierarchy element update event, runs every frame
-        /// \note           Runs before every draw event
-        virtual void update();
-
-        /// \brief          Hierarchy element draw event, runs every frame
-        /// \note           Runs after every update event
-        virtual void draw(jage::graphics::Shader& shader);
-
-        /// \brief          Creates a Human-readable text visualisation of the Hierarchy
-        ///                 (current element being the root node of reference)
-        /// \param indent   Optional indentation offset, please keep blank for best appearance
-        /// \return         Generated Hierarchy representation
-        [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
-
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
         /// The name of the Hierarchy element
         Tag m_tag = Tag::UNTAGGED;
         const bool m_volatile;
-        /// Hierarchy element's map of children
-        std::map<std::string, ChildEntry> m_children;
-        /// The pointer of the Hierarchy element's parent
-        ActorABC* m_parent;
 
     private:
-        /// \brief          Internal function. Registers the created actor to the map of children.
-        /// \details        Keep checking if the name is taken, if it is, it will increment the entry with the same name
-        ///                 and will attempt to insert the child with an altered name that has a number appended to it.<br>
-        ///                 This is recursive until an empty slot is found.
-        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-        /// \return         A pointer to the newly created Actor
-        template<class T>
-        void internalRegisterChild(std::shared_ptr<T> child);
-
-        ActorABC(const ActorABC&);
-        ActorABC& operator=(const ActorABC&);
+        using node::abc::NodeABC<ActorABC>::addChild;
     };
 }
 

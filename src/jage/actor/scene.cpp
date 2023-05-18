@@ -15,7 +15,7 @@ std::string Scene::getTypeName() const {
 }
 
 Scene::Scene()
-    : ActorABC(nullptr, m_hierarchyDisplayName, Tag::SYSTEM, false)
+    : jage::node::abc::NodeABC<jage::actor::abc::ActorABC>(nullptr, m_hierarchyDisplayName)
     , m_taggedMap(utility::EnumSize<jage::Tag>::value, std::vector<std::weak_ptr<abc::ActorABC>>())
 { }
 
@@ -28,32 +28,8 @@ void Scene::tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor) {
         m_taggedMap[actor->getTag()].push_back(actor);
 }
 
-glm::vec3 Scene::getTranslation() const {
-    return glm::vec3(0.0);
-}
-
-glm::quat Scene::getRotation() const {
-    return {1.0, 0.0, 0.0, 0.0};
-}
-
-glm::vec3 Scene::getScale() const {
-    return glm::vec3(1.0);
-}
-
-glm::vec3 Scene::getOrientation() const {
-    return {1.0f, 0.0f, 0.0f};
-}
-
-glm::vec3 Scene::getUp() const {
-    return {0.0f, 1.0f, 0.0f};
-}
-
-glm::vec3 Scene::getWorldPosition() const {
-    return glm::vec3(0.0f);
-}
-
 void Scene::update() {
-    abc::ActorABC::update();
+    jage::node::abc::NodeABC<jage::actor::abc::ActorABC>::update();
 
     for (auto iter = m_volatileActors.begin(); iter != m_volatileActors.end();) {
         auto& child = *iter;
@@ -79,7 +55,7 @@ void Scene::update() {
 }
 
 void Scene::draw(jage::graphics::Shader &shader) {
-    abc::ActorABC::draw(shader);
+    jage::node::abc::NodeABC<jage::actor::abc::ActorABC>::draw(shader);
 
     for (const auto& child : m_volatileActors) {
         if (child)

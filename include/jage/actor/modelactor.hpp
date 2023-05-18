@@ -10,7 +10,7 @@ namespace jage::actor {
 
     class ModelActor : public DynamicActor {
     public:
-        ModelActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile, const char *fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        ModelActor(JAGE_ACTOR_ARGS, const char *fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
         void draw(jage::graphics::Shader &shader) override;
 

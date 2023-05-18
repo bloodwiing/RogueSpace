@@ -12,8 +12,8 @@ std::string StaticActor::getTypeName() const {
     return "StaticActor";
 }
 
-StaticActor::StaticActor(Scene *scene, abc::ActorABC *parent, std::string name, Tag tag, bool isVolatile)
-    : ActorABC(parent, name, tag, isVolatile)
+StaticActor::StaticActor(JAGE_ACTOR_ARGS)
+    : ActorABC(parent, std::move(name), scene, tag, isVolatile)
     , m_scene(scene)
     , m_dead(false)
 {
