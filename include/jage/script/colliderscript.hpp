@@ -8,7 +8,7 @@ namespace jage::script {
 
     class ColliderScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        ColliderScript(jage::node::actor::abc::ActorABC* node, Tag tagFilter, float radius);
+        ColliderScript(abc::ScriptableABC* node, Tag tagFilter, float radius);
 
         void onAttach() override;
         void onSpawn() override;

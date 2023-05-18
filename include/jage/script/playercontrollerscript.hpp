@@ -10,7 +10,7 @@ namespace jage::script {
 
     class PlayerControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
     public:
-        explicit PlayerControllerScript(jage::node::actor::abc::ActorABC *node, CameraShakeScript* cameraShake);
+        explicit PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake);
 
         void onAttach() override;
         void onSpawn() override;

@@ -10,7 +10,7 @@ namespace jage::script {
 
     class CameraShakeScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        explicit CameraShakeScript(jage::node::actor::abc::ActorABC *node, float amplitude, float frequency);
+        explicit CameraShakeScript(abc::ScriptableABC* node, float amplitude, float frequency);
 
         void onAttach() override;
         void onSpawn() override;

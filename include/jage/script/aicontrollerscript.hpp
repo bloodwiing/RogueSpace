@@ -11,7 +11,7 @@ namespace jage::script {
 
     class AIControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
     public:
-        explicit AIControllerScript(jage::node::actor::abc::ActorABC* node);
+        explicit AIControllerScript(abc::ScriptableABC* node);
 
         void onAttach() override;
         void onSpawn() override;

@@ -8,7 +8,7 @@ namespace jage::script {
 
     class WeaponScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        WeaponScript(jage::node::actor::abc::ActorABC *node, float bulletSpeed, Tag bulletTargetTag);
+        WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag);
 
         void onAttach() override;
         void onSpawn() override;

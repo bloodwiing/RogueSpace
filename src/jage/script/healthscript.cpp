@@ -6,7 +6,7 @@
 
 using jage::script::HealthScript;
 
-HealthScript::HealthScript(jage::node::actor::abc::ActorABC* node, float maxHealth)
+HealthScript::HealthScript(abc::ScriptableABC* node, float maxHealth)
     : m_maxHealth(maxHealth)
     , m_health(maxHealth)
 {

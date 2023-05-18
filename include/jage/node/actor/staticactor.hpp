@@ -9,12 +9,13 @@
 
 #include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/script/abc/script_abc.hpp"
+#include "jage/script/abc/scriptable_abc.hpp"
 
 namespace jage::node::actor {
 
     /// \brief          Main world object type.
     /// \details        This Actor can exist in the world but is static in Transformation and is able to die
-    class StaticActor : public abc::ActorABC {
+    class StaticActor : public abc::ActorABC, public script::abc::ScriptableABC {
     public:
         /// \note           Should not be used raw, please use addChild
         /// \param scene    Containing Scene of the Actor node
@@ -37,14 +38,6 @@ namespace jage::node::actor {
         /// \return         A pointer to the newly created Actor
         template<class T, class... Args>
         T* addChild(std::string name, Tag tag, Args&&... args);
-
-        template<class T>
-        T* attachScript();
-        template<class T, class... Args>
-        T* attachScript(Args&&... args);
-
-        template<class T>
-        T* findScript();
 
         /// \returns        The containing Scene
         [[nodiscard]] Scene* getScene() const;
@@ -93,8 +86,8 @@ namespace jage::node::actor {
         /// \see        Actor#markDead
         bool m_dead = false;
 
-        /// A list of attachable Scripts
-        std::vector<std::shared_ptr<jage::script::abc::ScriptABC>> m_scripts;
+    private:
+        using script::abc::ScriptableABC::update;
     };
 }
 

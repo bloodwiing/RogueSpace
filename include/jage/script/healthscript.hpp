@@ -10,7 +10,7 @@ namespace jage::script {
 
 class HealthScript : public abc::AttachableScriptABC<jage::node::actor::StaticActor>, public jage::event::CollisionEvent, public std::enable_shared_from_this<HealthScript> {
     public:
-        HealthScript(jage::node::actor::abc::ActorABC* node, float maxHealth);
+        HealthScript(abc::ScriptableABC* node, float maxHealth);
 
         void notify(jage::node::actor::StaticActor* notifier) override;
 

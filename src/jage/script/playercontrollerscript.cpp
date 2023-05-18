@@ -11,7 +11,7 @@
 
 using jage::script::PlayerControllerScript;
 
-PlayerControllerScript::PlayerControllerScript(jage::node::actor::abc::ActorABC *node, CameraShakeScript* cameraShake) {
+PlayerControllerScript::PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake) {
     validate(node);
     m_weaponScript = dependsOn<WeaponScript>();
 

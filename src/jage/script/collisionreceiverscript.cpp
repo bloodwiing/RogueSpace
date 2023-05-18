@@ -2,7 +2,7 @@
 
 using jage::script::CollisionReceiverScript;
 
-CollisionReceiverScript::CollisionReceiverScript(jage::node::actor::abc::ActorABC* node, float radius)
+CollisionReceiverScript::CollisionReceiverScript(abc::ScriptableABC* node, float radius)
     : m_radius(radius)
 {
     validate(node);

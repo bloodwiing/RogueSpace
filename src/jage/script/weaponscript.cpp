@@ -7,7 +7,7 @@
 
 using jage::script::WeaponScript;
 
-WeaponScript::WeaponScript(jage::node::actor::abc::ActorABC *node, float bulletSpeed, Tag bulletTargetTag)
+WeaponScript::WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag)
     : m_bulletSpeed(bulletSpeed)
     , m_bulletTargetTag(bulletTargetTag)
 {

@@ -70,12 +70,7 @@ void StaticActor::update() {
         }
     }
 
-    for (auto& script : m_scripts) {
-        script->onUpdate();
-        if (m_dead)
-            script->onDeath();
-    }
-
+    script::abc::ScriptableABC::update();
     abc::ActorABC::update();
 }
 

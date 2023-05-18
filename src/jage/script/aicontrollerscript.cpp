@@ -10,7 +10,7 @@ using jage::script::AIControllerScript;
 
 std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
-AIControllerScript::AIControllerScript(jage::node::actor::abc::ActorABC *node)
+AIControllerScript::AIControllerScript(abc::ScriptableABC* node)
     : m_state(State::SEEKING)
 {
     validate(node);

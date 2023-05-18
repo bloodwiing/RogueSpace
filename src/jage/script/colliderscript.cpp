@@ -4,7 +4,7 @@
 
 using jage::script::ColliderScript;
 
-ColliderScript::ColliderScript(jage::node::actor::abc::ActorABC *node, jage::Tag tagFilter, float radius)
+ColliderScript::ColliderScript(abc::ScriptableABC* node, jage::Tag tagFilter, float radius)
     : m_tagFilter(tagFilter)
     , m_radius(radius)
 {
