@@ -94,3 +94,9 @@ void jage::node::abc::NodeABC<TNode>::draw(jage::graphics::Shader& shader) {
             child.value->draw(shader);
     }
 }
+
+template<class TNode>
+std::ostream& operator<<(std::ostream& stream, jage::node::abc::NodeABC<TNode> *node) {
+    stream << node->toHierarchyString();
+    return stream;
+}

@@ -60,8 +60,3 @@ bool ActorABC::isDead() const {
 void ActorABC::setTag(jage::Tag tag) {
     m_tag = tag;
 }
-
-std::ostream& operator<<(std::ostream& stream, ActorABC *actor) {
-    stream << actor->toHierarchyString();
-    return stream;
-}

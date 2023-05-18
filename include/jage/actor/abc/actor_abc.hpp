@@ -93,8 +93,6 @@ namespace jage::actor::abc {
     };
 }
 
-std::ostream& operator<<(std::ostream& stream, jage::actor::abc::ActorABC* actor);
-
 #include "actor_abc_impl.tpp"
 
 #endif //JAGE_ACTOR_ABC_HPP

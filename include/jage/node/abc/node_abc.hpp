@@ -49,6 +49,9 @@ namespace jage::node::abc {
     };
 }
 
+template<class TNode>
+std::ostream& operator<<(std::ostream& stream, jage::node::abc::NodeABC<TNode>* node);
+
 #include "node_abc_impl.tpp"
 
 #endif //JAGE_NODE_ABC_HPP
