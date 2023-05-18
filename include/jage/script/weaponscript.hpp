@@ -15,7 +15,8 @@ namespace jage::script {
         void onUpdate() override;
         void onDeath() override;
 
-        void shootThisFrame(const glm::vec3 &extraVelocity);
+        void shootThisFrame(const glm::vec3& extraVelocity, const glm::vec3& orientation, const glm::vec3& up);
+        void shootThisFrame(const glm::vec3& extraVelocity);
 
         [[nodiscard]] float getBulletSpeed() const;
         void setBulletSpeed(float bulletSpeed);

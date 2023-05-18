@@ -34,13 +34,11 @@ void WeaponScript::onDeath() {
 
 }
 
-void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
+void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec3& orientation, const glm::vec3& up) {
     if (m_fireCoolDown > 0.0f)
         return;
 
     // relative vectors
-    const auto& orientation = m_node->getOrientation();
-    const auto& up = m_node->getUp();
     const auto right = glm::cross(orientation, up);
 
     // Actor
@@ -49,8 +47,8 @@ void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) 
     bullet->attachScript<script::ColliderScript>(m_bulletTargetTag, 1.0f);
 
     // Translate to world position
-    glm::vec3 offset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;
-    bullet->setTranslation(m_node->getWorldPosition() + offset);
+    glm::vec3 spawnOffset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;
+    bullet->setTranslation(m_node->getWorldPosition() + spawnOffset);
 
     // Launch it
     bullet->setRotation(glm::quatLookAt((glm::vec3)glm::vec4(orientation, 0.0), up));
@@ -60,6 +58,10 @@ void jage::script::WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) 
     // Remember for next projectile
     m_fireCoolDown = 0.1f;
     m_fireFromLeft = !m_fireFromLeft;
+}
+
+void WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
+    shootThisFrame(extraVelocity, m_node->getOrientation(), m_node->getUp());
 }
 
 float jage::script::WeaponScript::getBulletSpeed() const {

@@ -74,6 +74,6 @@ void PlayerControllerScript::onMouseInput() {
     bulletOrientation = glm::rotate(glm::radians(-(float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
 
     if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
+        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
     }
 }
