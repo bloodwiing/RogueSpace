@@ -1,8 +1,8 @@
-#include "jage/actor/dynamicactor.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 
 #include <glm/gtx/matrix_decompose.hpp>
 
-using jage::actor::DynamicActor;
+using jage::node::actor::DynamicActor;
 
 std::string DynamicActor::getTypeName() const {
     return "DynamicActor";
@@ -54,11 +54,11 @@ glm::vec3 DynamicActor::getScale() const {
     return m_scale;
 }
 
-glm::vec3 jage::actor::DynamicActor::getOrientation() const {
+glm::vec3 DynamicActor::getOrientation() const {
     return m_orientation;
 }
 
-glm::vec3 jage::actor::DynamicActor::getUp() const {
+glm::vec3 DynamicActor::getUp() const {
     return m_up;
 }
 
@@ -114,6 +114,6 @@ void DynamicActor::flagForMatrixUpdate() {
     m_needsMatrixUpdate = true;
 }
 
-void jage::actor::DynamicActor::flagForVectorUpdate() {
+void DynamicActor::flagForVectorUpdate() {
     m_needsVectorUpdate = true;
 }

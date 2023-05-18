@@ -1,10 +1,10 @@
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 
 #include <iostream>
 
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
 
-using jage::actor::abc::ActorABC;
+using jage::node::actor::abc::ActorABC;
 
 std::string ActorABC::getTypeName() const {
     return "ActorABC (ABSTRACT BASE CLASS)";
@@ -45,7 +45,7 @@ jage::Tag ActorABC::getTag() const {
     return m_tag;
 }
 
-bool jage::actor::abc::ActorABC::isVolatile() const {
+bool ActorABC::isVolatile() const {
     return m_volatile;
 }
 

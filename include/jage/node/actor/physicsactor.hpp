@@ -3,10 +3,10 @@
 
 #include <glm/glm.hpp>
 
-#include "jage/actor/dynamicactor.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
 
     /// \brief          A Velocity-based subclass of DynamicActor.
     /// \details        This Actor can move on its own, have both linear and angular velocity and slow down over time

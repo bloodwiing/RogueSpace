@@ -4,13 +4,13 @@
 #include <random>
 
 #include "jage/script/abc/script_abc.hpp"
-#include "jage/actor/dynamicactor.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 
 namespace jage::script {
 
-    class CameraShakeScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
+    class CameraShakeScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        explicit CameraShakeScript(jage::actor::abc::ActorABC *node, float amplitude, float frequency);
+        explicit CameraShakeScript(jage::node::actor::abc::ActorABC *node, float amplitude, float frequency);
 
         void onAttach() override;
         void onSpawn() override;

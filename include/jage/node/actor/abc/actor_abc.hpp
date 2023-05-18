@@ -13,13 +13,13 @@
 #include "jage/tags.hpp"
 #include "jage/node/abc/node_abc.hpp"
 
-#define JAGE_ACTOR_ARGS JAGE_NODE_ARGS(jage::actor::abc::ActorABC), jage::actor::Scene* scene, jage::Tag tag, bool isVolatile
+#define JAGE_ACTOR_ARGS JAGE_NODE_ARGS(jage::node::actor::abc::ActorABC), jage::node::Scene* scene, jage::Tag tag, bool isVolatile
 
-namespace jage::actor {
+namespace jage::node {
     class Scene;
 }
 
-namespace jage::actor::abc {
+namespace jage::node::actor::abc {
 
     /// \brief      The main Hierarchy-item base class.
     /// \details    An implementation of a Hierarchy-node system, where every node is an ActorBase and knows references

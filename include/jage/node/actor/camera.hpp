@@ -5,12 +5,12 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "jage/actor/scene.hpp"
-#include "jage/actor/dynamicactor.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/scene.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/graphics/shader.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
 
     /// \brief      A DynamicActor that can be used as a point to render all in-engine 3D Graphics
     class Camera : public DynamicActor {

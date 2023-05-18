@@ -1,10 +1,10 @@
-#include "jage/actor/modelactor.hpp"
+#include "jage/node/actor/modelactor.hpp"
 
 #include <utility>
 
 #include "jage/runtime/assetmanager.hpp"
 
-using jage::actor::ModelActor;
+using jage::node::actor::ModelActor;
 
 std::string ModelActor::getTypeName() const {
     return "ModelActor";

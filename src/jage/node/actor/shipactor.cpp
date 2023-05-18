@@ -1,11 +1,11 @@
-#include "jage/actor/shipactor.hpp"
+#include "jage/node/actor/shipactor.hpp"
 
 #include <iostream>
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "jage/runtime/time.hpp"
 
-using jage::actor::ShipActor;
+using jage::node::actor::ShipActor;
 
 std::string ShipActor::getTypeName() const {
     return "ShipActor";
@@ -54,7 +54,7 @@ void ShipActor::setSteer(glm::vec3 euler) {
     m_steer = euler;
 }
 
-float jage::actor::ShipActor::getThrottle() const {
+float ShipActor::getThrottle() const {
     return m_throttle;
 }
 

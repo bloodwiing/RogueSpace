@@ -1,15 +1,15 @@
 template<class T>
-T* jage::actor::StaticActor::addChild(std::string name, Tag tag) {
+T* jage::node::actor::StaticActor::addChild(std::string name, Tag tag) {
     return abc::ActorABC::addChild<T>(this, name, m_scene, tag, m_volatile);
 }
 
 template<class T, class... Args>
-T* jage::actor::StaticActor::addChild(std::string name, Tag tag, Args&&... args) {
+T* jage::node::actor::StaticActor::addChild(std::string name, Tag tag, Args&&... args) {
     return abc::ActorABC::addChild<T>(this, name, m_scene, tag, m_volatile, std::forward<Args>(args)...);
 }
 
 template<class T>
-T* jage::actor::StaticActor::attachScript() {
+T* jage::node::actor::StaticActor::attachScript() {
     static_assert(std::is_base_of<jage::script::abc::ScriptABC, T>::value, "Attached class needs to be a ScriptABC type");
     auto child = std::make_shared<T>(this);
     m_scripts.push_back(child);
@@ -18,7 +18,7 @@ T* jage::actor::StaticActor::attachScript() {
 }
 
 template<class T, class... Args>
-T* jage::actor::StaticActor::attachScript(Args&&... args) {
+T* jage::node::actor::StaticActor::attachScript(Args&&... args) {
     static_assert(std::is_base_of<jage::script::abc::ScriptABC, T>::value, "Attached class needs to be a ScriptABC type");
     auto child = std::make_shared<T>(this, std::forward<Args>(args)...);
     m_scripts.push_back(child);
@@ -27,7 +27,7 @@ T* jage::actor::StaticActor::attachScript(Args&&... args) {
 }
 
 template<class T>
-T* jage::actor::StaticActor::findScript() {
+T* jage::node::actor::StaticActor::findScript() {
     for (auto& script : m_scripts) {
         auto* cast = dynamic_cast<T*>(script.get());
         if (cast != nullptr)

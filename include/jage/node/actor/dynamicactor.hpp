@@ -1,11 +1,11 @@
 #ifndef JAGE_DYNAMIC_ACTOR_HPP
 #define JAGE_DYNAMIC_ACTOR_HPP
 
-#include "jage/actor/staticactor.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
-#include "jage/actor/scene.hpp"
+#include "jage/node/actor/staticactor.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
+#include "jage/node/scene.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
     /// \brief          A Transformable subclass of Actor.
     /// \details        This Actor is able to be Translated, Rotated and Scaled.
     ///                 Any transformation will mark itself and its children for a Matrix update

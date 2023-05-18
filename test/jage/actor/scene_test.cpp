@@ -1,4 +1,4 @@
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

@@ -7,10 +7,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
 
     /// \brief          Main world object type.
     /// \details        This Actor can exist in the world but is static in Transformation and is able to die

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace jage::actor::abc {
+namespace jage::node::actor::abc {
     class ActorABC;
 }
 
@@ -35,7 +35,7 @@ namespace jage::script::abc {
     protected:
         TNode* m_node;
 
-        void validate(jage::actor::abc::ActorABC* node);
+        void validate(jage::node::actor::abc::ActorABC* node);
         template<class T>
         T* dependsOn();
     };

@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "jage/graphics/shader.hpp"
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
 
 namespace jage {
 
@@ -23,7 +23,7 @@ namespace jage {
         JAGEngine();
 
         std::unique_ptr<jage::graphics::Shader> m_shader;
-        std::unique_ptr<jage::actor::Scene> m_scene;
+        std::unique_ptr<jage::node::Scene> m_scene;
 
         const int width = 1366,
                   height = 700,

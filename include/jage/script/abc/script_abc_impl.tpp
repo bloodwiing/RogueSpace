@@ -1,5 +1,5 @@
 template<class TNode>
-void jage::script::abc::AttachableScriptABC<TNode>::validate(jage::actor::abc::ActorABC* node) {
+void jage::script::abc::AttachableScriptABC<TNode>::validate(jage::node::actor::abc::ActorABC* node) {
     auto* cast = dynamic_cast<TNode*>(node);
     if (cast == nullptr)
         throw abc::AttachableScriptABC<TNode>::AttachError();

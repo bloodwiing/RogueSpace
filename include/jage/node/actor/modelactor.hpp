@@ -1,12 +1,12 @@
 #ifndef JAGE_MODEL_ACTOR_HPP
 #define JAGE_MODEL_ACTOR_HPP
 
-#include "jage/actor/dynamicactor.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/runtime/assetstream.hpp"
 #include "jage/graphics/model/model.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
 
     class ModelActor : public DynamicActor {
     public:

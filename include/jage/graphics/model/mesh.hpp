@@ -9,7 +9,7 @@
 
 #include "jage/graphics/model/vao.hpp"
 #include "jage/graphics/model/ebo.hpp"
-#include "jage/actor/camera.hpp"
+#include "jage/node/actor/camera.hpp"
 #include "jage/graphics/texture.hpp"
 #include "jage/graphics/material.hpp"
 
@@ -36,7 +36,7 @@ namespace jage::graphics::model {
         ///                 This is used to position the whole model after the Relative Transformation is applied
         void draw(
                 Shader& shader,
-                jage::actor::Camera* camera,
+                jage::node::actor::Camera* camera,
                 glm::mat4 relative = glm::mat4(1.0f),
                 glm::mat4 model = glm::mat4(1.0f));
 

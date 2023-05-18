@@ -27,7 +27,7 @@ Mesh::Mesh(const Mesh &mesh)
 
 void Mesh::draw(
         Shader& shader,
-        jage::actor::Camera* camera,
+        jage::node::actor::Camera* camera,
         glm::mat4 relative /* = glm::mat4(1.0f) */,
         glm::mat4 model /* = glm::mat4(1.0f) */)
 {

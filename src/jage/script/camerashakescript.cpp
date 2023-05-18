@@ -8,7 +8,7 @@ using jage::script::CameraShakeScript;
 
 std::mt19937 CameraShakeScript::random = std::mt19937(time(nullptr));
 
-CameraShakeScript::CameraShakeScript(jage::actor::abc::ActorABC *node, float amplitude, float frequency)
+CameraShakeScript::CameraShakeScript(jage::node::actor::abc::ActorABC *node, float amplitude, float frequency)
     : m_amplitude(amplitude)
     , m_frequency(frequency)
 {

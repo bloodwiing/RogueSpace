@@ -1,11 +1,11 @@
-#include "jage/actor/staticactor.hpp"
+#include "jage/node/actor/staticactor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 #include "jage/runtime/time.hpp"
 
-using jage::actor::StaticActor;
+using jage::node::actor::StaticActor;
 using glm::vec3;
 
 std::string StaticActor::getTypeName() const {
@@ -20,7 +20,7 @@ StaticActor::StaticActor(JAGE_ACTOR_ARGS)
 
 }
 
-jage::actor::Scene *StaticActor::getScene() const {
+jage::node::Scene *StaticActor::getScene() const {
     return m_scene;
 }
 

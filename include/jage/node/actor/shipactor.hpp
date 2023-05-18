@@ -1,10 +1,10 @@
 #ifndef JAGE_SHIP_ACTOR_HPP
 #define JAGE_SHIP_ACTOR_HPP
 
-#include "jage/actor/physicsactor.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/physicsactor.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 
-namespace jage::actor {
+namespace jage::node::actor {
 
     class ShipActor : public PhysicsActor {
     public:

@@ -1,8 +1,8 @@
-#include "jage/actor/physicsactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
 
 #include "jage/runtime/time.hpp"
 
-using jage::actor::PhysicsActor;
+using jage::node::actor::PhysicsActor;
 
 std::string PhysicsActor::getTypeName() const {
     return "PhysicsActor";

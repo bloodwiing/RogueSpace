@@ -4,14 +4,14 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "jage/actor/physicsactor.hpp"
-#include "jage/actor/modelactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
+#include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
 #include "jage/runtime/window.hpp"
 
 using jage::script::PlayerControllerScript;
 
-PlayerControllerScript::PlayerControllerScript(jage::actor::abc::ActorABC *node, CameraShakeScript* cameraShake) {
+PlayerControllerScript::PlayerControllerScript(jage::node::actor::abc::ActorABC *node, CameraShakeScript* cameraShake) {
     validate(node);
     m_weaponScript = dependsOn<WeaponScript>();
 

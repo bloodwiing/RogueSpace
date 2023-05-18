@@ -2,15 +2,15 @@
 
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "jage/actor/physicsactor.hpp"
-#include "jage/actor/modelactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
+#include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
 
 using jage::script::AIControllerScript;
 
 std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
-AIControllerScript::AIControllerScript(jage::actor::abc::ActorABC *node)
+AIControllerScript::AIControllerScript(jage::node::actor::abc::ActorABC *node)
     : m_state(State::SEEKING)
 {
     validate(node);
@@ -55,7 +55,7 @@ void AIControllerScript::onDeath() {
 
 }
 
-void AIControllerScript::setTarget(jage::actor::ShipActor *target) {
+void AIControllerScript::setTarget(jage::node::actor::ShipActor *target) {
     m_target = target;
 }
 

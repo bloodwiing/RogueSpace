@@ -1,12 +1,13 @@
 file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         engine.cpp
-        actor/*.cpp
-        actor/abc/*.cpp
         event/*.cpp
         event/abc/*.cpp
         graphics/*.cpp
         graphics/model/*.cpp
+        node/*.cpp
         node/abc/*.cpp
+        node/actor/*.cpp
+        node/actor/abc/*.cpp
         runtime/*.cpp
         script/*.cpp
         script/abc/*.cpp

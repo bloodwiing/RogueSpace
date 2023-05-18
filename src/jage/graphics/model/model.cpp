@@ -38,7 +38,7 @@ void Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) 
     if (!isReady())
         return;
     for (size_t i = 0; i < m_meshes.size(); ++i) {
-        m_meshes[i].draw(shader, jage::actor::Camera::getActiveCamera(), m_meshMatrices[i], worldMatrix);
+        m_meshes[i].draw(shader, jage::node::actor::Camera::getActiveCamera(), m_meshMatrices[i], worldMatrix);
     }
 }
 

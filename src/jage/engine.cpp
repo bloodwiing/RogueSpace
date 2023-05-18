@@ -5,9 +5,9 @@
 #include "jage/runtime/time.hpp"
 #include "jage/system/super.hpp"
 #include "jage/runtime/assetstream.hpp"
-#include "jage/actor/modelactor.hpp"
-#include "jage/actor/shipactor.hpp"
-#include "jage/actor/physicsactor.hpp"
+#include "jage/node/actor/modelactor.hpp"
+#include "jage/node/actor/shipactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
 #include "jage/script/weaponscript.hpp"
@@ -58,7 +58,7 @@ void JAGEngine::loop() {
 
         if (!m_shader->isErrored()) {
             m_shader->activate();
-            auto* camera = jage::actor::Camera::getActiveCamera();
+            auto* camera = jage::node::actor::Camera::getActiveCamera();
             camera->updateMatrix(45.0f, 0.001f, 10000.0f);
         }
 
@@ -78,9 +78,9 @@ void JAGEngine::loop() {
 }
 
 void JAGEngine::loadScene() {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
-    m_scene = std::make_unique<Scene>();
+    m_scene = std::make_unique<jage::node::Scene>();
 
     auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));

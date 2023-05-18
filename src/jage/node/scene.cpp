@@ -1,12 +1,12 @@
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
 
 #include <iostream>
 
-#include "jage/actor/camera.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/camera.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/runtime/window.hpp"
 
-using jage::actor::Scene;
+using jage::node::Scene;
 
 std::string Scene::m_hierarchyDisplayName = "root";
 
@@ -15,21 +15,21 @@ std::string Scene::getTypeName() const {
 }
 
 Scene::Scene()
-    : jage::node::abc::NodeABC<jage::actor::abc::ActorABC>(nullptr, m_hierarchyDisplayName)
-    , m_taggedMap(utility::EnumSize<jage::Tag>::value, std::vector<std::weak_ptr<abc::ActorABC>>())
+    : jage::node::abc::NodeABC<jage::node::actor::abc::ActorABC>(nullptr, m_hierarchyDisplayName)
+    , m_taggedMap(utility::EnumSize<jage::Tag>::value, std::vector<std::weak_ptr<actor::abc::ActorABC>>())
 { }
 
-Utility::QuickList<std::shared_ptr<jage::actor::abc::ActorABC>> Scene::getVolatileChildren() const {
+Utility::QuickList<std::shared_ptr<jage::node::actor::abc::ActorABC>> Scene::getVolatileChildren() const {
     return m_volatileActors;
 }
 
-void Scene::tagActorToMap(const std::shared_ptr<abc::ActorABC>& actor) {
+void Scene::tagActorToMap(const std::shared_ptr<actor::abc::ActorABC>& actor) {
     if (!actor->isVolatile())
         m_taggedMap[actor->getTag()].push_back(actor);
 }
 
 void Scene::update() {
-    jage::node::abc::NodeABC<jage::actor::abc::ActorABC>::update();
+    jage::node::abc::NodeABC<NodeType>::update();
 
     for (auto iter = m_volatileActors.begin(); iter != m_volatileActors.end();) {
         auto& child = *iter;
@@ -55,7 +55,7 @@ void Scene::update() {
 }
 
 void Scene::draw(jage::graphics::Shader &shader) {
-    jage::node::abc::NodeABC<jage::actor::abc::ActorABC>::draw(shader);
+    jage::node::abc::NodeABC<NodeType>::draw(shader);
 
     for (const auto& child : m_volatileActors) {
         if (child)
@@ -63,11 +63,11 @@ void Scene::draw(jage::graphics::Shader &shader) {
     }
 }
 
-Scene::TagIterator jage::actor::Scene::beginTagged(jage::Tag tag) {
+Scene::TagIterator Scene::beginTagged(jage::Tag tag) {
     return {m_taggedMap[tag].begin(), m_taggedMap[tag]};
 }
 
-Scene::TagIterator jage::actor::Scene::endTagged(jage::Tag tag) {
+Scene::TagIterator Scene::endTagged(jage::Tag tag) {
     return {m_taggedMap[tag].end(), m_taggedMap[tag]};
 }
 
@@ -79,7 +79,7 @@ Scene::TagIterator::TagIterator(InternalType::iterator iter, InternalType& origi
 }
 
 Scene::TagIterator::reference Scene::TagIterator::operator*() {
-    return ((StaticActor*)((*m_iter).lock()).get());
+    return ((actor::StaticActor*)((*m_iter).lock()).get());
 }
 
 Scene::TagIterator::pointer Scene::TagIterator::operator->() {
@@ -101,15 +101,15 @@ Scene::TagIterator Scene::TagIterator::operator++(int) {
     return prev;
 }
 
-bool jage::actor::Scene::TagIterator::operator==(const Scene::TagIterator &other) {
+bool Scene::TagIterator::operator==(const Scene::TagIterator &other) {
     return this->m_iter == other.m_iter;
 }
 
-bool jage::actor::Scene::TagIterator::operator!=(const Scene::TagIterator &other) {
+bool Scene::TagIterator::operator!=(const Scene::TagIterator &other) {
     return this->m_iter != other.m_iter;
 }
 
-void jage::actor::Scene::TagIterator::moveTillMatch() {
+void Scene::TagIterator::moveTillMatch() {
     while (m_iter != m_original.end()) {
         if (m_iter->expired()) {
             m_iter = m_original.erase(m_iter);

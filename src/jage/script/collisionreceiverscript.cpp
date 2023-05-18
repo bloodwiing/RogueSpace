@@ -2,7 +2,7 @@
 
 using jage::script::CollisionReceiverScript;
 
-CollisionReceiverScript::CollisionReceiverScript(jage::actor::abc::ActorABC* node, float radius)
+CollisionReceiverScript::CollisionReceiverScript(jage::node::actor::abc::ActorABC* node, float radius)
     : m_radius(radius)
 {
     validate(node);
@@ -28,7 +28,7 @@ float CollisionReceiverScript::getRadius() const {
     return m_radius;
 }
 
-void CollisionReceiverScript::runCollision(jage::actor::DynamicActor*& other) {
+void CollisionReceiverScript::runCollision(jage::node::actor::DynamicActor*& other) {
     onCollide.notifyAll(other);
 }
 

@@ -6,7 +6,7 @@
 
 using jage::script::HealthScript;
 
-HealthScript::HealthScript(jage::actor::abc::ActorABC* node, float maxHealth)
+HealthScript::HealthScript(jage::node::actor::abc::ActorABC* node, float maxHealth)
     : m_maxHealth(maxHealth)
     , m_health(maxHealth)
 {
@@ -30,7 +30,7 @@ void HealthScript::onDeath() {
 
 }
 
-void HealthScript::notify(jage::actor::StaticActor* notifier) {
+void HealthScript::notify(jage::node::actor::StaticActor* notifier) {
     m_health -= 1.0f;
     std::cout << m_node->getName() << " " << m_health << "/" << m_maxHealth << "HP" << std::endl;
 }

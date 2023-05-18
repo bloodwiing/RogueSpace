@@ -1,4 +1,4 @@
-#include "jage/actor/camera.hpp"
+#include "jage/node/actor/camera.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,7 +10,7 @@
 #include "jage/runtime/time.hpp"
 #include "jage/runtime/window.hpp"
 
-using jage::actor::Camera;
+using jage::node::actor::Camera;
 using glm::mat4;
 using glm::vec3;
 using glm::vec4;
