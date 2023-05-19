@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-namespace jage::types {
+namespace jage::type {
 
     template<typename T>
     struct Rect {

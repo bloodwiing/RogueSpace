@@ -1,5 +1,5 @@
 template<typename T>
-jage::types::Rect<T>::Rect()
+jage::type::Rect<T>::Rect()
     : x1(0.0)
     , y1(0.0)
     , x2(1.0)
@@ -9,7 +9,7 @@ jage::types::Rect<T>::Rect()
 }
 
 template<typename T>
-jage::types::Rect<T>::Rect(T width, T height)
+jage::type::Rect<T>::Rect(T width, T height)
         : x1(0.0)
         , y1(0.0)
         , x2(width)
@@ -19,7 +19,7 @@ jage::types::Rect<T>::Rect(T width, T height)
 }
 
 template<typename T>
-jage::types::Rect<T>::Rect(T x1, T y1, T x2, T y2)
+jage::type::Rect<T>::Rect(T x1, T y1, T x2, T y2)
     : x1(x1)
     , y1(y1)
     , x2(x2)
@@ -29,7 +29,7 @@ jage::types::Rect<T>::Rect(T x1, T y1, T x2, T y2)
 }
 
 template<typename T>
-jage::types::Rect<T>::Rect(glm::vec2 corner, T width, T height)
+jage::type::Rect<T>::Rect(glm::vec2 corner, T width, T height)
     : x1(corner.x)
     , y1(corner.y)
     , x2(corner.x + width)
@@ -39,7 +39,7 @@ jage::types::Rect<T>::Rect(glm::vec2 corner, T width, T height)
 }
 
 template<typename T>
-jage::types::Rect<T>::Rect(glm::vec2 corner1, glm::vec2 corner2)
+jage::type::Rect<T>::Rect(glm::vec2 corner1, glm::vec2 corner2)
     : x1(corner1.x)
     , y1(corner1.y)
     , x2(corner2.x)
@@ -49,7 +49,7 @@ jage::types::Rect<T>::Rect(glm::vec2 corner1, glm::vec2 corner2)
 }
 
 template<typename T>
-jage::types::Rect<T>::Rect(const Rect &ref)
+jage::type::Rect<T>::Rect(const Rect &ref)
         : x1(ref.x1)
         , y1(ref.y1)
         , x2(ref.x2)
@@ -60,34 +60,34 @@ jage::types::Rect<T>::Rect(const Rect &ref)
 
 template<typename T>
 template<typename TNew>
-jage::types::Rect<TNew> jage::types::Rect<T>::as() {
+jage::type::Rect<TNew> jage::type::Rect<T>::as() {
     return Rect<TNew>((TNew)x1, (TNew)y1, (TNew)x2, (TNew)y2);
 }
 
 template<typename T>
-void jage::types::Rect<T>::moveX(T x) {
+void jage::type::Rect<T>::moveX(T x) {
     x2 = x2 - x1 + x;
     x1 = x;
 }
 
 template<typename T>
-void jage::types::Rect<T>::moveY(T y) {
+void jage::type::Rect<T>::moveY(T y) {
     y2 = y2 - y1 + y;
     y1 = y;
 }
 
 template<typename T>
-void jage::types::Rect<T>::setWidth(T width) {
+void jage::type::Rect<T>::setWidth(T width) {
     x2 = x1 + width;
 }
 
 template<typename T>
-void jage::types::Rect<T>::setHeight(T height) {
+void jage::type::Rect<T>::setHeight(T height) {
     x2 = x1 + height;
 }
 
 template<typename T>
-jage::types::Rect<T> jage::types::Rect<T>::scalePhysical(const Rect& parentImaginary, const Rect& parentPhysical, const Rect& anchor) {
+jage::type::Rect<T> jage::type::Rect<T>::scalePhysical(const Rect& parentImaginary, const Rect& parentPhysical, const Rect& anchor) {
     const T diffX1 = parentPhysical.x1 - parentImaginary.x1;
     const T diffY1 = parentPhysical.y1 - parentImaginary.y1;
     const T diffX2 = parentPhysical.x2 - parentImaginary.x2;
@@ -102,31 +102,31 @@ jage::types::Rect<T> jage::types::Rect<T>::scalePhysical(const Rect& parentImagi
 }
 
 template<typename T>
-jage::types::Rect<T> jage::types::Rect<T>::normalized() {
+jage::type::Rect<T> jage::type::Rect<T>::normalized() {
     return Rect();
 }
 
 template<typename T>
-bool jage::types::Rect<T>::isContaining(const glm::vec2 &point) {
+bool jage::type::Rect<T>::isContaining(const glm::vec2 &point) {
     return false;
 }
 
 template<typename T>
-bool jage::types::Rect<T>::isIntersecting(const Rect &other) {
+bool jage::type::Rect<T>::isIntersecting(const Rect &other) {
     return false;
 }
 
 template<typename T>
-bool jage::types::Rect<T>::operator==(const Rect &other) const {
+bool jage::type::Rect<T>::operator==(const Rect &other) const {
     return x1 == other.x1 and x2 == other.x2 and y1 == other.y1 and y2 == other.y2;
 }
 
 template<typename T>
-bool jage::types::Rect<T>::operator!=(const Rect &other) const {
+bool jage::type::Rect<T>::operator!=(const Rect &other) const {
     return !this->operator==(other);
 }
 
 template<typename T>
-jage::types::Rect<T>& jage::types::Rect<T>::operator=(const Rect &ref) {
+jage::type::Rect<T>& jage::type::Rect<T>::operator=(const Rect &ref) {
     return *this;
 }
