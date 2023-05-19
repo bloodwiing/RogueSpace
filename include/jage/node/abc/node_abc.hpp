@@ -31,6 +31,16 @@ namespace jage::node::abc {
         template<class T, class... Args>
         T* addChild(JAGE_NODE_ARGS(TNode), Args&&... args);
 
+        [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
+        [[nodiscard]] TNode* getChild(const std::string& name) const;
+
+        /// \returns        Possible values:
+        ///                 - #ActorABC
+        ///                 - nullptr
+        [[nodiscard]] TNode* getParent() const;
+        /// \returns        The name of the current Hierarchy element
+        [[nodiscard]] std::string getName() const;
+
         [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
 
         virtual void update();

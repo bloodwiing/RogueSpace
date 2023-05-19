@@ -33,21 +33,11 @@ namespace jage::node::actor::abc {
 
         void tagToScene(Scene* scene);
     public:
-        [[nodiscard]] std::map<std::string, ChildEntry> getChildren() const;
-        [[nodiscard]] ActorABC* getChild(const std::string& name) const;
-
         template<class T>
         T* addChild(JAGE_ACTOR_ARGS);
         template<class T, class... Args>
         T* addChild(JAGE_ACTOR_ARGS, Args&&... args);
 
-        /// \returns        Possible values:
-        ///                 - #ActorABC
-        ///                 - nullptr
-        [[nodiscard]] ActorABC* getParent() const;
-
-        /// \returns        The name of the current Hierarchy element
-        [[nodiscard]] std::string getName() const;
         [[nodiscard]] Tag getTag() const;
         [[nodiscard]] bool isVolatile() const;
 

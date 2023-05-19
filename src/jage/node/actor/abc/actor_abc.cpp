@@ -23,24 +23,6 @@ void ActorABC::tagToScene(Scene *scene) {
         scene->tagActorToMap(shared_from_this());
 }
 
-std::map<std::string, ActorABC::ChildEntry> ActorABC::getChildren() const {
-    return m_children;
-}
-
-ActorABC* ActorABC::getChild(const std::string &name) const {
-    if (m_children.find(name) == m_children.end())
-        return nullptr;
-    return m_children.at(name).value.get();
-}
-
-ActorABC* ActorABC::getParent() const {
-    return m_parent;
-}
-
-std::string ActorABC::getName() const {
-    return m_name;
-}
-
 jage::Tag ActorABC::getTag() const {
     return m_tag;
 }

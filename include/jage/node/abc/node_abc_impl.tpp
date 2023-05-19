@@ -50,6 +50,28 @@ T* jage::node::abc::NodeABC<TNode>::addChild(JAGE_NODE_ARGS(TNode), Args&&... ar
 }
 
 template<class TNode>
+std::map<std::string, typename jage::node::abc::NodeABC<TNode>::ChildEntry> jage::node::abc::NodeABC<TNode>::getChildren() const {
+    return m_children;
+}
+
+template<class TNode>
+TNode* jage::node::abc::NodeABC<TNode>::getChild(const std::string &name) const {
+    if (m_children.find(name) == m_children.end())
+        return nullptr;
+    return m_children.at(name).value.get();
+}
+
+template<class TNode>
+TNode* jage::node::abc::NodeABC<TNode>::getParent() const {
+    return m_parent;
+}
+
+template<class TNode>
+std::string jage::node::abc::NodeABC<TNode>::getName() const {
+    return m_name;
+}
+
+template<class TNode>
 std::string jage::node::abc::NodeABC<TNode>::toHierarchyString(uint16_t indent /* = 0 */) const {
     std::string result = m_name + ": " + getTypeName() + "\n";
     for (const auto& iter : m_children) {
