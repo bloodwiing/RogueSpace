@@ -6,13 +6,13 @@
 #include <thread>
 
 #include "jage/runtime/time.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 
-using jage::actor::Scene;
+using jage::node::Scene;
 using namespace testing;
 
 TEST(Scene, actorInstantiation) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
@@ -28,7 +28,7 @@ TEST(Scene, actorInstantiation) {
 }
 
 TEST(Scene, volatileActorInstantiation) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
@@ -44,7 +44,7 @@ TEST(Scene, volatileActorInstantiation) {
 }
 
 TEST(Actor, volatileChildLifeCycle) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
     using jage::runtime::Time;
 
     auto* scene = new Scene();
@@ -86,10 +86,10 @@ TEST(Actor, volatileChildLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public jage::actor::StaticActor {
+class RecursionTest : public jage::node::actor::StaticActor {
 public:
-    RecursionTest(Scene* scene, jage::actor::abc::ActorABC* actor, std::string name, jage::Tag tag, bool isVolatile)
-            : StaticActor(scene, actor, std::move(name), tag, isVolatile)
+    RecursionTest(JAGE_ACTOR_ARGS)
+            : StaticActor(parent, std::move(name), scene, tag, isVolatile)
     { }
 
     void update() override {
@@ -102,7 +102,7 @@ public:
 };
 
 TEST(Actor, volatileRecursion) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
