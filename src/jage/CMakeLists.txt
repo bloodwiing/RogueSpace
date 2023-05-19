@@ -12,6 +12,7 @@ file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         script/*.cpp
         script/abc/*.cpp
         system/*.cpp
+        types/*.cpp
         utility/*.cpp )
 
 # -----
