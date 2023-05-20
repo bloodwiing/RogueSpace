@@ -27,7 +27,7 @@ namespace jage::type {
         void setWidth(T width);
         void setHeight(T height);
 
-        Rect scalePhysical(const Rect& parentImaginary, const Rect& parentPhysical, const Rect& anchor);
+        Rect scalePhysical(const Rect<T>& parentImaginary, const Rect<T>& parentPhysical, const Rect<float>& anchor);
 
         Rect normalized();
 
@@ -39,6 +39,9 @@ namespace jage::type {
 
         Rect& operator=(const Rect& ref);
     };
+
+    typedef Rect<float> RectF;
+    typedef Rect<double> RectD;
 }
 
 #include "rect_impl.tpp"

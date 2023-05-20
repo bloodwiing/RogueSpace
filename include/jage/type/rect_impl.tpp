@@ -87,7 +87,7 @@ void jage::type::Rect<T>::setHeight(T height) {
 }
 
 template<typename T>
-jage::type::Rect<T> jage::type::Rect<T>::scalePhysical(const Rect& parentImaginary, const Rect& parentPhysical, const Rect& anchor) {
+jage::type::Rect<T> jage::type::Rect<T>::scalePhysical(const Rect<T>& parentImaginary, const Rect<T>& parentPhysical, const Rect<float>& anchor) {
     const T diffX1 = parentPhysical.x1 - parentImaginary.x1;
     const T diffY1 = parentPhysical.y1 - parentImaginary.y1;
     const T diffX2 = parentPhysical.x2 - parentImaginary.x2;
