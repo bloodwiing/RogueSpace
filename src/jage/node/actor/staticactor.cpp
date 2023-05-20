@@ -15,17 +15,12 @@ std::string StaticActor::getTypeName() const {
 StaticActor::StaticActor(JAGE_ACTOR_ARGS)
     : ActorABC(parent, std::move(name), scene, tag, isVolatile)
     , m_scene(scene)
-    , m_dead(false)
 {
 
 }
 
 jage::node::Scene *StaticActor::getScene() const {
     return m_scene;
-}
-
-bool StaticActor::isDead() const {
-    return m_dead;
 }
 
 glm::vec3 StaticActor::getTranslation() const {
@@ -52,6 +47,10 @@ glm::vec3 StaticActor::getWorldPosition() const {
     return glm::vec3(0.0f);
 }
 
+bool StaticActor::isDead() const {
+    return m_dead;
+}
+
 void StaticActor::markDead(float wait /* = -1.0f */) {
     if (wait <= 0.0f)
         m_dead = true;
@@ -61,7 +60,7 @@ void StaticActor::markDead(float wait /* = -1.0f */) {
 
 void StaticActor::update() {
     using jage::runtime::Time;
-    
+
     if (m_deathTimer >= 0.0f) {
         m_deathTimer -= Time::getDeltaFloat();
         if (m_deathTimer <= 0.0f) {

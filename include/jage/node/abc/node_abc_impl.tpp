@@ -72,6 +72,11 @@ std::string jage::node::abc::NodeABC<TNode>::getName() const {
 }
 
 template<class TNode>
+bool jage::node::abc::NodeABC<TNode>::isDead() const {
+    return false;
+}
+
+template<class TNode>
 std::string jage::node::abc::NodeABC<TNode>::toHierarchyString(uint16_t indent /* = 0 */) const {
     std::string result = m_name + ": " + getTypeName() + "\n";
     for (const auto& iter : m_children) {
@@ -79,11 +84,6 @@ std::string jage::node::abc::NodeABC<TNode>::toHierarchyString(uint16_t indent /
         result += iter.second.value->toHierarchyString(indent + 1);
     }
     return result;
-}
-
-template<class TNode>
-std::string jage::node::abc::NodeABC<TNode>::getTypeName() const {
-    return "Node ABC";
 }
 
 template<class TNode>
@@ -115,6 +115,11 @@ void jage::node::abc::NodeABC<TNode>::draw(jage::graphics::Shader& shader) {
         if (child.value)
             child.value->draw(shader);
     }
+}
+
+template<class TNode>
+std::string jage::node::abc::NodeABC<TNode>::getTypeName() const {
+    return "Node ABC";
 }
 
 template<class TNode>

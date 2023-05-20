@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "jage/graphics/shader.hpp"
+#include "jage/runtime/time.hpp"
 
 #define JAGE_NODE_ARGS(Type) Type* parent, std::string name
 
@@ -40,6 +41,7 @@ namespace jage::node::abc {
         [[nodiscard]] TNode* getParent() const;
         /// \returns        The name of the current Hierarchy element
         [[nodiscard]] std::string getName() const;
+        [[nodiscard]] virtual bool isDead() const;
 
         [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
 

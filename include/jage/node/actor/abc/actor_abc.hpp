@@ -54,7 +54,6 @@ namespace jage::node::actor::abc {
         [[nodiscard]] virtual glm::vec3 getOrientation() const = 0;
         [[nodiscard]] virtual glm::vec3 getUp() const = 0;
         [[nodiscard]] virtual glm::vec3 getWorldPosition() const = 0;
-        [[nodiscard]] virtual bool isDead() const;
 
         void setTag(Tag tag);
 
