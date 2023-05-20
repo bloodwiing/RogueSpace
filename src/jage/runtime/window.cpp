@@ -51,6 +51,10 @@ int Window::getHeight() const {
     return m_height;
 }
 
+jage::type::Rect<int> Window::getRect() const {
+    return {m_width, m_height};
+}
+
 float Window::getAspectRatio() const {
     return (float)m_width / (float)m_height;
 }

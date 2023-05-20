@@ -4,6 +4,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include "jage/type/rect.hpp"
+
 #define JAGE_IS_KEY(key, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isKey(key, state))
 #define JAGE_IS_MOUSE(button, state) (jage::runtime::Window::getActive() != nullptr and jage::runtime::Window::getActive()->isMouse(button, state))
 #define JAGE_RESET_MOUSE() (jage::runtime::Window::getActive() != nullptr ? jage::runtime::Window::getActive()->resetMouse() : void())
@@ -35,6 +37,7 @@ namespace jage::runtime {
         [[nodiscard]] int getWidth() const;
         /// \return         The Height of the Window
         [[nodiscard]] int getHeight() const;
+        [[nodiscard]] jage::type::Rect<int> getRect() const;
         /// \return         The Aspect Ratio or Width/Height Ratio of the Window
         [[nodiscard]] float getAspectRatio() const;
 
