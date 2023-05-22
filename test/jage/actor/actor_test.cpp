@@ -47,9 +47,9 @@ TEST(Actor, childLifeCycle) {
     Time::update();
 
     ASSERT_FALSE(child1->isDead());
-    child2->markDead();
+    child2->kill();
     ASSERT_TRUE(child2->isDead());
-    child12->markDead(0.001f);
+    child12->kill(0.001f);
     ASSERT_FALSE(child12->isDead());
 
     Time::waitForNextFrame();
@@ -63,7 +63,7 @@ TEST(Actor, childLifeCycle) {
 
     ASSERT_EQ(actor->getChildren().size(), 1);
 
-    child1->markDead(0.001f);
+    child1->kill(0.001f);
 
     Time::waitForNextFrame();
     Time::update();
@@ -85,7 +85,7 @@ public:
         throw RecursionTestSuccess();
     }
 
-    void draw(jage::graphics::Shader &shader) override {
+    void draw() override {
         throw RecursionTestSuccess();
     }
 };
@@ -95,8 +95,6 @@ TEST(Actor, recursion) {
 
     actor->addChild<RecursionTest>("Child1", jage::Tag::UNTAGGED);
 
-    jage::graphics::Shader shader;
-
     ASSERT_THROW(actor->update(), RecursionTestSuccess);
-    ASSERT_THROW(actor->draw(shader), RecursionTestSuccess);
+    ASSERT_THROW(actor->draw(), RecursionTestSuccess);
 }
