@@ -6,7 +6,7 @@
 using jage::node::Canvas;
 
 Canvas::Canvas(const jage::type::RectF& rect)
-    : frame::abc::FrameABC(nullptr, "root canvas", this)
+    : abc::NodeABC<frame::abc::FrameABC>(nullptr, "root canvas")
     , m_rect(rect)
 {
 
@@ -37,5 +37,5 @@ void Canvas::update() {
         }
     }
 
-    NodeABC::update();
+    jage::node::abc::NodeABC<NodeType>::update();
 }

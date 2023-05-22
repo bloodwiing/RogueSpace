@@ -2,11 +2,14 @@
 #define JAGE_CANVAS_HPP
 
 #include "jage/node/abc/node_abc.hpp"
+#include "jage/node/abc/rectnode_abc.hpp"
 #include "jage/node/frame/abc/frame_abc.hpp"
 
 namespace jage::node {
 
-    class Canvas : public frame::abc::FrameABC {
+    class Canvas
+            : public abc::NodeABC<frame::abc::FrameABC>
+            , public abc::RectNodeABC {
     public:
         explicit Canvas(const jage::type::RectF& rect);
 

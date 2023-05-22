@@ -23,6 +23,21 @@ namespace jage::node::frame::abc {
             , public script::abc::ScriptableABC
             , public jage::node::base::DyingBase {
     public:
+        template<class T>
+        T* addChild(std::string name);
+        template<class T, class... Args>
+        T* addChild(std::string name, Args&&... args);
+
+        [[nodiscard]] Canvas* getCanvas() const;
+        [[nodiscard]] RectNodeABC* getRectParent() const;
+
+        void update() override;
+
+        void kill() override;
+        void kill(float delay) override;
+        bool isDead() const override;
+
+    protected:
         FrameABC(JAGE_FRAME_ARGS);
 
         [[nodiscard]] std::string getTypeName() const override;

@@ -5,7 +5,7 @@
 using jage::node::frame::BasicFrame;
 
 BasicFrame::BasicFrame(JAGE_FRAME_ARGS)
-    : FrameABC(parent, std::move(name), canvas)
+    : FrameABC(parent, std::move(name), canvas, rectParent)
     , m_rect(0.0f, 0.0f)
     , m_anchor(1.0f, 1.0f)
     , m_fill(0.0f)
@@ -14,7 +14,7 @@ BasicFrame::BasicFrame(JAGE_FRAME_ARGS)
 }
 
 BasicFrame::BasicFrame(JAGE_FRAME_ARGS, const jage::type::RectF& rect, const jage::type::RectF& anchor, glm::vec4 fill /* = glm::vec4(0.0f) */)
-    : FrameABC(parent, std::move(name), canvas)
+    : FrameABC(parent, std::move(name), canvas, rectParent)
     , m_rect(rect)
     , m_anchor(anchor)
     , m_fill(fill)
@@ -59,13 +59,19 @@ void BasicFrame::update() {
     abc::FrameABC::update();
 }
 
-    if (m_deathTimer >= 0.0f) {
-        m_deathTimer -= Time::getDeltaFloat();
-        if (m_deathTimer <= 0.0f) {
-            m_dead = true;
-            m_deathTimer = -1.0f;
+void BasicFrame::updateReflow() {
+    if (!m_needsRectReflow)
+        return;
+
+    m_physicalRect = m_rect.scalePhysical(getRectParent()->getRect(), getRectParent()->getPhysicalRect(), m_anchor);
+
+    for (auto& [name, child] : m_children) {
+        auto canvasChild = dynamic_cast<BasicFrame*>(child.value.get());
+        if (canvasChild != nullptr) {
+            canvasChild->markForReflow();
         }
     }
+}
 
 void BasicFrame::updateTransformations() {
     if (!m_needsMatrixUpdate)
