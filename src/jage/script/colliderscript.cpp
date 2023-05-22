@@ -26,7 +26,7 @@ void ColliderScript::onUpdate() {
 
         if (target != nullptr and (target->getRadius() + getRadius()) >= glm::distance(iter->getWorldPosition(), m_node->getWorldPosition())) {
             target->runCollision(m_node);
-            m_node->markDead();
+            m_node->kill();
         }
     }
 }
