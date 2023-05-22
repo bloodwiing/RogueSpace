@@ -1,22 +1,22 @@
 #ifndef JAGE_COLLISION_RECEIVER_SCRIPT_HPP
 #define JAGE_COLLISION_RECEIVER_SCRIPT_HPP
 
-#include "jage/actor/dynamicactor.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/event/collisionevent.hpp"
 
 namespace jage::script {
 
-    class CollisionReceiverScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
+    class CollisionReceiverScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        explicit CollisionReceiverScript(jage::actor::abc::ActorABC* node, float radius);
+        explicit CollisionReceiverScript(abc::ScriptableABC* node, float radius);
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
 
-        void runCollision(jage::actor::DynamicActor*& other);
+        void runCollision(jage::node::actor::DynamicActor*& other);
 
         jage::event::CollisionEvent::Manager onCollide;
 

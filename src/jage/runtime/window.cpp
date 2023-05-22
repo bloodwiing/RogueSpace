@@ -18,6 +18,8 @@ Window::Window(int width, int height)
 }
 
 Window::~Window() {
+    if (glfwGetCurrentContext() == m_glWindow)
+        glfwMakeContextCurrent(nullptr);
     glfwDestroyWindow(m_glWindow);
 }
 
@@ -49,6 +51,10 @@ int Window::getWidth() const {
 
 int Window::getHeight() const {
     return m_height;
+}
+
+jage::type::Rect<int> Window::getRect() const {
+    return {m_width, m_height};
 }
 
 float Window::getAspectRatio() const {

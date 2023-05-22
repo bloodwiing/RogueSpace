@@ -4,7 +4,8 @@
 #include <memory>
 
 #include "jage/graphics/shader.hpp"
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
+#include "jage/node/canvas.hpp"
 
 namespace jage {
 
@@ -20,10 +21,11 @@ namespace jage {
     private:
         static JAGEngine instance;
 
-        JAGEngine();
+        JAGEngine() = default;
+        ~JAGEngine();
 
-        std::unique_ptr<jage::graphics::Shader> m_shader;
-        std::unique_ptr<jage::actor::Scene> m_scene;
+        std::unique_ptr<jage::node::Scene> m_scene;
+        std::unique_ptr<jage::node::Canvas> m_canvas;
 
         const int width = 1366,
                   height = 700,

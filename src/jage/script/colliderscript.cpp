@@ -4,7 +4,7 @@
 
 using jage::script::ColliderScript;
 
-ColliderScript::ColliderScript(jage::actor::abc::ActorABC *node, jage::Tag tagFilter, float radius)
+ColliderScript::ColliderScript(abc::ScriptableABC* node, jage::Tag tagFilter, float radius)
     : m_tagFilter(tagFilter)
     , m_radius(radius)
 {
@@ -20,13 +20,13 @@ void ColliderScript::onSpawn() {
 }
 
 void ColliderScript::onUpdate() {
-    actor::Scene& scene = *m_node->getScene();
+    node::Scene& scene = *m_node->getScene();
     for (auto iter = scene.beginTagged(m_tagFilter); iter != scene.endTagged(m_tagFilter); ++iter) {
         auto* target = iter->findScript<CollisionReceiverScript>();
 
         if (target != nullptr and (target->getRadius() + getRadius()) >= glm::distance(iter->getWorldPosition(), m_node->getWorldPosition())) {
             target->runCollision(m_node);
-            m_node->markDead();
+            m_node->kill();
         }
     }
 }

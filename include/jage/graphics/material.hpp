@@ -28,6 +28,7 @@ namespace jage::graphics {
         /// \return         The name of the Material
         [[nodiscard]] std::string getName() const;
         [[nodiscard]] static Material& getDefaultMaterial();
+        static void clearDefaultMaterial();
 
         /// \brief          Sets a Diffuse texture under the 0th Diffuse sampler
         /// \param texture  The texture to use for Diffuse colour
@@ -63,7 +64,7 @@ namespace jage::graphics {
         /// Roughness influence multiplier
         float m_roughnessFactor;
 
-        static Material defaultMaterial;
+        static Material* defaultMaterial;
     };
 }
 

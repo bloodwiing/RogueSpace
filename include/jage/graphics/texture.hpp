@@ -9,13 +9,15 @@
 #include <yaml-cpp/yaml.h>
 
 #include "jage/graphics/shader.hpp"
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/abc/asset_abc.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 namespace jage::graphics {
 
     /// \brief      Image Texture
     /// \details    OpenGL Texture
-    class Texture : public std::enable_shared_from_this<Texture> {
+    class Texture
+            : public jage::runtime::asset::abc::AssetABC<Texture> {
     public:
         /// \brief          Creates and loads a Texture
         /// \details        Uses STB to load Images, so support is dependent on the library
@@ -25,13 +27,17 @@ namespace jage::graphics {
         explicit Texture(GLubyte *bytes, int width, int height, int channels);
         static std::shared_ptr<Texture> create(GLubyte *bytes, int width, int height, int channels);
         static void createDefaultTexture(GLubyte *bytes, int width, int height, int channels);
+        static void clearDefaultTexture();
         ~Texture() = default;
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
-        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void onQueue(int priority) override;
+        void onPrepare() override;
 
-        [[nodiscard]] bool isReady();
+        [[nodiscard]] bool isProcessed() const override;
+        [[nodiscard]] bool isPrepared() const override;
+        [[nodiscard]] bool isReady() const override;
 
         /// \brief          Assigns a Texture slot to a Shader's sampler
         /// \param shader   The Shader program reference
@@ -69,7 +75,8 @@ namespace jage::graphics {
         Texture& operator=(const Texture& ref);
     };
 
-    class Texture::LOD : public std::enable_shared_from_this<LOD> {
+    class Texture::LOD
+            : public jage::runtime::asset::abc::AssetABC<Texture::LOD> {
     public:
         LOD(std::string fileName, const YAML::Node& node, Texture* container);
         static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
@@ -77,9 +84,8 @@ namespace jage::graphics {
         static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
         ~LOD();
 
-        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
-
-        [[nodiscard]] bool isReady();
+        void onQueue(int priority) override;
+        void onPrepare() override;
 
         void bind(GLint unit) const;
         void unbind() const;
@@ -93,8 +99,6 @@ namespace jage::graphics {
         [[nodiscard]] int getLevel() const;
 
     private:
-        std::atomic<bool> m_ready;
-
         GLuint m_ID;
         GLuint m_PBO;
 

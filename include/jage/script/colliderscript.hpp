@@ -1,14 +1,14 @@
 #ifndef JAGE_COLLIDER_SCRIPT_HPP
 #define JAGE_COLLIDER_SCRIPT_HPP
 
-#include "jage/actor/dynamicactor.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
 namespace jage::script {
 
-    class ColliderScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
+    class ColliderScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        ColliderScript(jage::actor::abc::ActorABC *node, Tag tagFilter, float radius);
+        ColliderScript(abc::ScriptableABC* node, Tag tagFilter, float radius);
 
         void onAttach() override;
         void onSpawn() override;

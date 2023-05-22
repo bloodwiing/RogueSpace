@@ -8,6 +8,7 @@
 #include <GL/glext.h>
 
 using jage::graphics::Texture;
+using jage::runtime::asset::AssetStream;
 
 std::shared_ptr<Texture> Texture::defaultTexture = std::shared_ptr<Texture>();
 
@@ -16,7 +17,7 @@ Texture::Texture(const std::string& filePath)
     , m_activeLOD(-1)
     , m_main(LOD::create(filePath, m_metadata, this))
 {
-    std::string directory = jage::runtime::AssetStream::getFileDirectory(filePath);
+    std::string directory = AssetStream::getFileDirectory(filePath);
 
     YAML::Node LODs = m_metadata["lod"];
     if (LODs.IsDefined() && LODs.IsSequence()) {
@@ -46,18 +47,47 @@ void Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int ch
     defaultTexture = create(bytes, width, height, channels);
 }
 
+void Texture::clearDefaultTexture() {
+    defaultTexture.reset();
+    defaultTexture = nullptr;
+}
+
 std::shared_ptr<Texture> Texture::getDefaultTexture() {
     return defaultTexture;
 }
 
-void Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    m_main->queue(priority);
+void Texture::onQueue(int priority) {
+    m_main->enqueue(priority);
     for (auto& level : m_levels) {
-        level->queue(priority);
+        level->enqueue(priority);
     }
 }
 
-bool Texture::isReady() {
+void Texture::onPrepare() {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return;
+
+    LOD->prepare();
+}
+
+bool Texture::isProcessed() const {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return false;
+
+    return LOD->isProcessed();
+}
+
+bool Texture::isPrepared() const {
+    std::shared_ptr<LOD> LOD;
+    if (!getActiveLOD(LOD))
+        return false;
+
+    return LOD->isPrepared();
+}
+
+bool Texture::isReady() const {
     std::shared_ptr<LOD> LOD;
     if (!getActiveLOD(LOD))
         return false;
@@ -139,7 +169,6 @@ Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* contain
     , m_channels(node["channels"].as<int>())
     , m_level(node["level"].as<int>())
     , m_priority(node["priority"].as<int>())
-    , m_ready(false)
     , m_container(container)
 {
     glGenBuffers(1, &m_PBO);
@@ -176,7 +205,6 @@ Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level
     , m_container(container)
     , m_priority(priority)
     , m_fileName()
-    , m_ready(true)
 {
     glGenTextures(1, &m_ID);
 
@@ -191,6 +219,8 @@ Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, bytes);
 
     unbind();
+
+    markProcessed();
 }
 
 std::shared_ptr<Texture::LOD>
@@ -205,37 +235,34 @@ Texture::LOD::~LOD() {
     }
 }
 
-void Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    if (m_ready)
-        return;
-    jage::runtime::AssetStream::getInstance().getBinaryAssetAsync(
+void Texture::LOD::onQueue(int priority) {
+    AssetStream::getInstance().getBinaryAssetAsync(
             m_fileName,
             [self = shared_from_this()](const uint8_t* data, size_t size){
+                Texture::LOD& lod = self->asObject();
+
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
-                memcpy(self->m_buffer, finalData, width * height * channels);
+                memcpy(lod.m_buffer, finalData, width * height * channels);
                 stbi_image_free(finalData);
-                self->m_ready = true;
+                lod.markProcessed();
 
-                self->m_container->setActiveLOD(self->m_level);
+                lod.m_container->setActiveLOD(lod.m_level);
             }, priority + m_priority);
 }
 
-bool Texture::LOD::isReady() {
-    if (m_ready and m_buffer != nullptr) {
-        bind(0);
+void Texture::LOD::onPrepare() {
+    bind(0);
 
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
-        glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
-        m_buffer = nullptr;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
+    glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
+    m_buffer = nullptr;
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, nullptr);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, nullptr);
 
-        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
-        unbind();
-    }
-    return m_ready;
+    unbind();
 }
 
 void Texture::LOD::bind(GLint unit) const {

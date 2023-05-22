@@ -1,4 +1,4 @@
-#include "jage/actor/physicsactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -7,14 +7,14 @@
 
 #include "jage/runtime/time.hpp"
 
-using jage::actor::PhysicsActor;
+using jage::node::actor::PhysicsActor;
 using jage::runtime::Time;
 using namespace testing;
 
 TEST(PhysicsActor, applyLinearVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
+    jage::node::actor::DynamicActor actor(nullptr, "", nullptr, jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -36,7 +36,7 @@ TEST(PhysicsActor, applyLinearVelocity) {
 TEST(PhysicsActor, applyAngularVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
+    jage::node::actor::DynamicActor actor(nullptr, "", nullptr, jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));
@@ -57,7 +57,7 @@ TEST(PhysicsActor, applyAngularVelocity) {
 TEST(PhysicsActor, diminishVelocity) {
     Time::init();
 
-    jage::actor::DynamicActor actor(nullptr, nullptr, "", jage::Tag::UNTAGGED, false);
+    jage::node::actor::DynamicActor actor(nullptr, "", nullptr, jage::Tag::UNTAGGED, false);
 
     // Get a 0.5s delta ready
     Time::setDelta(Time::TDoubleSec(0.5));

@@ -1,4 +1,4 @@
-#include "jage/actor/scene.hpp"
+#include "jage/node/scene.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -6,13 +6,13 @@
 #include <thread>
 
 #include "jage/runtime/time.hpp"
-#include "jage/actor/abc/actor_abc.hpp"
+#include "jage/node/actor/abc/actor_abc.hpp"
 
-using jage::actor::Scene;
+using jage::node::Scene;
 using namespace testing;
 
 TEST(Scene, actorInstantiation) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
@@ -28,7 +28,7 @@ TEST(Scene, actorInstantiation) {
 }
 
 TEST(Scene, volatileActorInstantiation) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
@@ -44,7 +44,7 @@ TEST(Scene, volatileActorInstantiation) {
 }
 
 TEST(Actor, volatileChildLifeCycle) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
     using jage::runtime::Time;
 
     auto* scene = new Scene();
@@ -58,9 +58,9 @@ TEST(Actor, volatileChildLifeCycle) {
     Time::update();
 
     ASSERT_FALSE(child1->isDead());
-    child2->markDead();
+    child2->kill();
     ASSERT_TRUE(child2->isDead());
-    child12->markDead(0.001f);
+    child12->kill(0.001f);
     ASSERT_FALSE(child12->isDead());
 
     Time::waitForNextFrame();
@@ -74,7 +74,7 @@ TEST(Actor, volatileChildLifeCycle) {
 
     ASSERT_EQ(scene->getVolatileChildren().getSize(), 1);
 
-    child1->markDead(0.001f);
+    child1->kill(0.001f);
 
     Time::waitForNextFrame();
     Time::update();
@@ -86,30 +86,28 @@ TEST(Actor, volatileChildLifeCycle) {
 class RecursionTestSuccess : std::exception
 { };
 
-class RecursionTest : public jage::actor::StaticActor {
+class RecursionTest : public jage::node::actor::StaticActor {
 public:
-    RecursionTest(Scene* scene, jage::actor::abc::ActorABC* actor, std::string name, jage::Tag tag, bool isVolatile)
-            : StaticActor(scene, actor, std::move(name), tag, isVolatile)
+    RecursionTest(JAGE_ACTOR_ARGS)
+            : StaticActor(parent, std::move(name), scene, tag, isVolatile)
     { }
 
     void update() override {
         throw RecursionTestSuccess();
     }
 
-    void draw(jage::graphics::Shader &shader) override {
+    void draw() override {
         throw RecursionTestSuccess();
     }
 };
 
 TEST(Actor, volatileRecursion) {
-    using namespace jage::actor;
+    using namespace jage::node::actor;
 
     auto* scene = new Scene();
 
     scene->addVolatileChild<RecursionTest>("Child1", jage::Tag::UNTAGGED);
 
-    jage::graphics::Shader shader;
-
     ASSERT_THROW(scene->update(), RecursionTestSuccess);
-    ASSERT_THROW(scene->draw(shader), RecursionTestSuccess);
+    ASSERT_THROW(scene->draw(), RecursionTestSuccess);
 }

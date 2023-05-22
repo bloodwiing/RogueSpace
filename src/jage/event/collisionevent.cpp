@@ -2,6 +2,6 @@
 
 using jage::event::CollisionEvent;
 
-void CollisionEvent::notify(jage::actor::StaticActor* notifier) {
+void CollisionEvent::notify(jage::node::actor::StaticActor* notifier) {
 
 }

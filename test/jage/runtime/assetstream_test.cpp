@@ -1,10 +1,10 @@
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <gmock/gmock-matchers.h>
 
-using jage::runtime::AssetStream;
+using jage::runtime::asset::AssetStream;
 using namespace testing;
 
 TEST(AssetStream, readFileContents_TextFile) {

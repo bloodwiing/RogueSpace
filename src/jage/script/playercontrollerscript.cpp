@@ -4,14 +4,14 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
 
-#include "jage/actor/physicsactor.hpp"
-#include "jage/actor/modelactor.hpp"
+#include "jage/node/actor/physicsactor.hpp"
+#include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
 #include "jage/runtime/window.hpp"
 
 using jage::script::PlayerControllerScript;
 
-PlayerControllerScript::PlayerControllerScript(jage::actor::abc::ActorABC *node, CameraShakeScript* cameraShake) {
+PlayerControllerScript::PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake) {
     validate(node);
     m_weaponScript = dependsOn<WeaponScript>();
 
@@ -74,6 +74,6 @@ void PlayerControllerScript::onMouseInput() {
     bulletOrientation = glm::rotate(glm::radians(-(float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
 
     if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
+        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
     }
 }

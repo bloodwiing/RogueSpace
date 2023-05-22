@@ -4,7 +4,7 @@
 
 using jage::graphics::Material;
 
-Material Material::defaultMaterial("Default");
+Material* Material::defaultMaterial = nullptr;
 
 Material::Material(std::string name)
     : m_name(std::move(name))
@@ -16,7 +16,14 @@ Material::Material(std::string name)
 }
 
 Material& Material::getDefaultMaterial() {
-    return defaultMaterial;
+    if (defaultMaterial == nullptr)
+        defaultMaterial = new Material("Default");
+    return *defaultMaterial;
+}
+
+void Material::clearDefaultMaterial() {
+    delete defaultMaterial;
+    defaultMaterial = nullptr;
 }
 
 std::string Material::getName() const {
@@ -66,6 +73,7 @@ bool Material::apply(Shader &shader) const {
         return false;
 
     auto diffuse0 = getDiffuse0();
+    diffuse0->prepare();
     if (!diffuse0->isReady())
         return false;
     diffuse0->assign(shader, "Diffuse0", 0);
@@ -76,6 +84,7 @@ bool Material::apply(Shader &shader) const {
             m_diffuseFactor.x, m_diffuseFactor.y, m_diffuseFactor.z, m_diffuseFactor.w);
 
     auto specular0 = getSpecular0();
+    diffuse0->prepare();
     if (!specular0->isReady())
         return false;
     specular0->assign(shader, "Specular0", 1);

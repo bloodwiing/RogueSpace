@@ -5,18 +5,27 @@
 #include <string>
 #include <stdexcept>
 
+#include "jage/runtime/asset/abc/asset_abc.hpp"
+
 namespace jage::graphics {
 
     /// \brief      Shader program
     /// \details    OpenGL Shader Program
-    class Shader {
+    class Shader
+            : public jage::runtime::asset::abc::AssetABC<Shader> {
     public:
         Shader();
         /// \brief                  Loads a new OpenGL program with the given Vertex and Fragment shader source files
         /// \param vertexFile      Path to a Vertex shader
         /// \param fragmentFile    Path to a Fragment shader
-        Shader(const std::string& vertexFile, const std::string& fragmentFile);
+        Shader(std::string vertexFile, std::string fragmentFile);
+        explicit Shader(const std::string& fileName);
         ~Shader();
+
+        static std::shared_ptr<Shader> create(std::string vertexFile, std::string fragmentFile);
+        static std::shared_ptr<Shader> create(const std::string& fileName);
+
+        void onQueue(int priority) override;
 
         /// \brief          Makes the Shader Program active
         void activate();
@@ -41,6 +50,8 @@ namespace jage::graphics {
         class ProgramError;
 
     private:
+        std::string m_fragmentFile;
+        std::string m_vertexFile;
         /// Shader Program OpenGL ID
         GLuint m_ID;
         /// Shader Program compiling status

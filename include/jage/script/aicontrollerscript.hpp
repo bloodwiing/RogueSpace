@@ -3,22 +3,22 @@
 
 #include <random>
 
-#include "jage/actor/shipactor.hpp"
+#include "jage/node/actor/shipactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/script/weaponscript.hpp"
 
 namespace jage::script {
 
-    class AIControllerScript : public abc::AttachableScriptABC<jage::actor::ShipActor> {
+    class AIControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
     public:
-        explicit AIControllerScript(jage::actor::abc::ActorABC *node);
+        explicit AIControllerScript(abc::ScriptableABC* node);
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
 
-        void setTarget(jage::actor::ShipActor* target);
+        void setTarget(jage::node::actor::ShipActor* target);
 
     protected:
         void runSearch(const glm::vec3& predicted, float distance);
@@ -75,7 +75,7 @@ namespace jage::script {
         float m_vectorChangeEase = 1.0f;
         const float m_easeMultiplier = 0.3f;
 
-        jage::actor::ShipActor* m_target = nullptr;
+        jage::node::actor::ShipActor* m_target = nullptr;
 
         WeaponScript* m_weaponScript;
     };

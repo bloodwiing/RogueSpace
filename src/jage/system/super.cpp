@@ -1,5 +1,6 @@
 #include "jage/system/super.hpp"
 
+#include "jage/graphics/material.hpp"
 #include "jage/graphics/texture.hpp"
 
 using jage::system::Super;
@@ -21,8 +22,20 @@ Super::Super(int width, int height)
     jage::graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4);
 }
 
+Super::~Super() {
+    m_window->close();
+    delete m_window;
+    m_window = nullptr;
+}
+
 void Super::initialise(int width, int height) {
     instance = std::make_unique<Super>(width, height);
+}
+
+void Super::destroy() {
+    jage::graphics::Material::clearDefaultMaterial();
+    jage::graphics::Texture::clearDefaultTexture();
+    instance.reset();
 }
 
 jage::runtime::Window* Super::getWindow() {

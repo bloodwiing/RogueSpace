@@ -2,20 +2,21 @@
 #define JAGE_WEAPON_SCRIPT_HPP
 
 #include "jage/script/abc/script_abc.hpp"
-#include "jage/actor/dynamicactor.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 
 namespace jage::script {
 
-    class WeaponScript : public abc::AttachableScriptABC<jage::actor::DynamicActor> {
+    class WeaponScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        WeaponScript(jage::actor::abc::ActorABC *node, float bulletSpeed, Tag bulletTargetTag);
+        WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag);
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
 
-        void shootThisFrame(const glm::vec3 &extraVelocity);
+        void shootThisFrame(const glm::vec3& extraVelocity, const glm::vec3& orientation, const glm::vec3& up);
+        void shootThisFrame(const glm::vec3& extraVelocity);
 
         [[nodiscard]] float getBulletSpeed() const;
         void setBulletSpeed(float bulletSpeed);

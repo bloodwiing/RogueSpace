@@ -2,14 +2,15 @@
 
 #include <iostream>
 
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 using jage::graphics::Shader;
+using jage::runtime::asset::AssetStream;
 
 GLuint Shader::loadShaderFile(const std::string &filePath, GLenum type) {
     GLuint id = glCreateShader(type);
 
-    jage::runtime::AssetStream::getInstance().getTextAsset(
+    AssetStream::getInstance().getTextAsset(
             filePath,
             [id](const std::shared_ptr<const std::string>& data) {
                 const char* vertexCode = data->c_str();
@@ -26,14 +27,41 @@ Shader::Shader()
     , m_error(true)
 { }
 
-Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
+Shader::Shader(std::string vertexFile, std::string fragmentFile)
     : m_error(false)
+    , m_ID()
+    , m_vertexFile(std::move(vertexFile))
+    , m_fragmentFile(std::move(fragmentFile))
 {
-    GLuint vertID = loadShaderFile(vertexFile, GL_VERTEX_SHADER);
-    checkShaderErrors(vertID, "Vertex", vertexFile);
 
-    GLuint fragID = loadShaderFile(fragmentFile, GL_FRAGMENT_SHADER);
-    checkShaderErrors(fragID, "Fragment", fragmentFile);
+}
+
+Shader::Shader(const std::string& fileName)
+    : Shader(fileName + ".vert", fileName + ".frag")
+{
+
+}
+
+Shader::~Shader() {
+    if (m_error)
+        return;
+    glDeleteProgram(m_ID);
+}
+
+std::shared_ptr<Shader> Shader::create(std::string vertexFile, std::string fragmentFile) {
+    return std::make_shared<Shader>(std::move(vertexFile), std::move(fragmentFile));
+}
+
+std::shared_ptr<Shader> Shader::create(const std::string &fileName) {
+    return std::make_shared<Shader>(fileName);
+}
+
+void Shader::onQueue(int priority) {
+    GLuint vertID = loadShaderFile(m_vertexFile, GL_VERTEX_SHADER);
+    checkShaderErrors(vertID, "Vertex", m_vertexFile);
+
+    GLuint fragID = loadShaderFile(m_fragmentFile, GL_FRAGMENT_SHADER);
+    checkShaderErrors(fragID, "Fragment", m_fragmentFile);
 
     m_ID = glCreateProgram();
     glAttachShader(m_ID, vertID);
@@ -44,12 +72,8 @@ Shader::Shader(const std::string& vertexFile, const std::string& fragmentFile)
     glDeleteShader(fragID);
 
     checkProgramErrors();
-}
 
-Shader::~Shader() {
-    if (m_error)
-        return;
-    glDeleteProgram(m_ID);
+    markProcessed();
 }
 
 void Shader::activate() {
