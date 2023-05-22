@@ -21,7 +21,8 @@ namespace jage {
     private:
         static JAGEngine instance;
 
-        JAGEngine();
+        JAGEngine() = default;
+        ~JAGEngine();
 
         std::unique_ptr<jage::graphics::Shader> m_shader;
         std::unique_ptr<jage::node::Scene> m_scene;

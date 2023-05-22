@@ -14,11 +14,12 @@ namespace jage::system {
     class Super {
     public:
         Super(int width, int height);
-        ~Super() = default;
+        ~Super();
 
         [[nodiscard]] static Super& getInstance();
 
         static void initialise(int width, int height);
+        static void destroy();
 
         /// \return         The created Window during the game's initialisation process
         jage::runtime::Window* getWindow();

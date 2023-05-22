@@ -21,7 +21,17 @@ using jage::JAGEngine;
 
 JAGEngine JAGEngine::instance = JAGEngine();
 
-JAGEngine::JAGEngine() = default;
+JAGEngine::~JAGEngine() {
+    m_shader.reset();
+    m_scene.reset();
+    m_canvas.reset();
+
+    jage::system::Super::destroy();
+
+    jage::runtime::AssetStream::shutdown();
+
+    glfwTerminate();
+}
 
 JAGEngine &JAGEngine::getInstance() {
     return instance;
@@ -71,11 +81,6 @@ void JAGEngine::loop() {
 
         Time::waitForNextFrame();
     }
-
-    jage::runtime::AssetStream::shutdown();
-
-    m_shader->destroy();
-    glfwTerminate();
 }
 
 void JAGEngine::loadScene() {

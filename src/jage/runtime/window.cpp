@@ -18,6 +18,8 @@ Window::Window(int width, int height)
 }
 
 Window::~Window() {
+    if (glfwGetCurrentContext() == m_glWindow)
+        glfwMakeContextCurrent(nullptr);
     glfwDestroyWindow(m_glWindow);
 }
 
