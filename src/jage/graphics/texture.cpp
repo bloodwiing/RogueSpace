@@ -46,6 +46,11 @@ void Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int ch
     defaultTexture = create(bytes, width, height, channels);
 }
 
+void Texture::clearDefaultTexture() {
+    defaultTexture.reset();
+    defaultTexture = nullptr;
+}
+
 std::shared_ptr<Texture> Texture::getDefaultTexture() {
     return defaultTexture;
 }

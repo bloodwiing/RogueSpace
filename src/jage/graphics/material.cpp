@@ -4,7 +4,7 @@
 
 using jage::graphics::Material;
 
-Material Material::defaultMaterial("Default");
+Material* Material::defaultMaterial = nullptr;
 
 Material::Material(std::string name)
     : m_name(std::move(name))
@@ -16,7 +16,14 @@ Material::Material(std::string name)
 }
 
 Material& Material::getDefaultMaterial() {
-    return defaultMaterial;
+    if (defaultMaterial == nullptr)
+        defaultMaterial = new Material("Default");
+    return *defaultMaterial;
+}
+
+void Material::clearDefaultMaterial() {
+    delete defaultMaterial;
+    defaultMaterial = nullptr;
 }
 
 std::string Material::getName() const {

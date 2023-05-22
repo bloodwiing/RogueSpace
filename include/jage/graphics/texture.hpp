@@ -25,6 +25,7 @@ namespace jage::graphics {
         explicit Texture(GLubyte *bytes, int width, int height, int channels);
         static std::shared_ptr<Texture> create(GLubyte *bytes, int width, int height, int channels);
         static void createDefaultTexture(GLubyte *bytes, int width, int height, int channels);
+        static void clearDefaultTexture();
         ~Texture() = default;
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
