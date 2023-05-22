@@ -105,10 +105,10 @@ void jage::node::abc::NodeABC<TNode>::update() {
 }
 
 template<class TNode>
-void jage::node::abc::NodeABC<TNode>::draw(jage::graphics::Shader& shader) {
+void jage::node::abc::NodeABC<TNode>::draw() {
     for (auto& [name, child] : m_children) {
         if (child.value)
-            child.value->draw(shader);
+            child.value->draw();
     }
 }
 

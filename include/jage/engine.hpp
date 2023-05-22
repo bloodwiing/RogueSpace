@@ -24,7 +24,6 @@ namespace jage {
         JAGEngine() = default;
         ~JAGEngine();
 
-        std::unique_ptr<jage::graphics::Shader> m_shader;
         std::unique_ptr<jage::node::Scene> m_scene;
         std::unique_ptr<jage::node::Canvas> m_canvas;
 

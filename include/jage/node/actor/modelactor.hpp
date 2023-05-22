@@ -12,13 +12,14 @@ namespace jage::node::actor {
     public:
         ModelActor(JAGE_ACTOR_ARGS, const char *fileName, int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
 
-        void draw(jage::graphics::Shader &shader) override;
+        void draw() override;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
 
     private:
         std::shared_ptr<jage::graphics::model::Model> m_model;
+        std::shared_ptr<jage::graphics::Shader> m_shader;
     };
 }
 

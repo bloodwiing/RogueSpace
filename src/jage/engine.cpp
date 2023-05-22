@@ -22,7 +22,6 @@ using jage::JAGEngine;
 JAGEngine JAGEngine::instance = JAGEngine();
 
 JAGEngine::~JAGEngine() {
-    m_shader.reset();
     m_scene.reset();
     m_canvas.reset();
 
@@ -48,8 +47,6 @@ void JAGEngine::init() {
 
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
-
-    m_shader = std::make_unique<jage::graphics::Shader>("./res/default.vert", "./res/default.frag");
 }
 
 void JAGEngine::loop() {
@@ -66,14 +63,7 @@ void JAGEngine::loop() {
         Time::update();
 
         m_scene->update();
-
-        if (!m_shader->isErrored()) {
-            m_shader->activate();
-            auto* camera = jage::node::actor::Camera::getActiveCamera();
-            camera->updateMatrix(45.0f, 0.001f, 10000.0f);
-        }
-
-        m_scene->draw(*m_shader);
+        m_scene->draw();
 
         Window::getActive()->swapBuffers();
 
@@ -98,7 +88,7 @@ void JAGEngine::loadScene() {
 //    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
 
     auto player = m_scene->addChild<ShipActor>("Player", Tag::PLAYER);
-    auto camera = player->addChild<Camera>("Camera", Tag::CAMERA);
+    auto camera = player->addChild<Camera>("Camera", Tag::CAMERA, 45.0f, 0.001f, 1000.0f);
     auto cameraShakeScript = camera->attachScript<script::CameraShakeScript>(0.0f, 0.05f);
     camera->setActive();
     player->attachScript<script::WeaponScript>(60.0f, Tag::ENEMY);

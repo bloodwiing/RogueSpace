@@ -57,7 +57,7 @@ namespace jage::node {
         TagIterator endTagged(Tag tag);
 
         void update() override;
-        void draw(jage::graphics::Shader &shader) override;
+        void draw() override;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;

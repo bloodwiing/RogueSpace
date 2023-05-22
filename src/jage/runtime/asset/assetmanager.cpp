@@ -13,8 +13,10 @@ AssetManager* AssetManager::m_instance = nullptr;
 AssetManager::AssetManager()
     : m_models()
     , m_textures()
+    , m_shaders()
     , m_modelMutex()
     , m_textureMutex()
+    , m_shaderMutex()
 { }
 
 AssetManager *AssetManager::getInstance() {

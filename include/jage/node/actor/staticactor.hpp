@@ -48,7 +48,6 @@ namespace jage::node::actor {
         void setScale(const glm::vec3& sca) override {};
 
         using jage::node::actor::abc::ActorABC::update;
-        void draw(jage::graphics::Shader &shader) override;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;

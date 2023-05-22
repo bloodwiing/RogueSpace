@@ -54,12 +54,13 @@ void Scene::update() {
     }
 }
 
-void Scene::draw(jage::graphics::Shader &shader) {
-    jage::node::abc::NodeABC<NodeType>::draw(shader);
+void Scene::draw() {
+    jage::node::abc::NodeABC<NodeType>::draw();
 
     for (const auto& child : m_volatileActors) {
-        if (child)
-            child->draw(shader);
+        if (child) {
+            child->draw();
+        }
     }
 }
 

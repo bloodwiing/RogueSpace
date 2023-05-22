@@ -47,7 +47,7 @@ namespace jage::node::abc {
         [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
 
         virtual void update();
-        virtual void draw(jage::graphics::Shader& shader);
+        virtual void draw();
 
     protected:
         [[nodiscard]] virtual std::string getTypeName() const;

@@ -1,9 +1,6 @@
 #include "jage/node/actor/staticactor.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-
-#include "jage/runtime/time.hpp"
 
 using jage::node::actor::StaticActor;
 using glm::vec3;
@@ -40,11 +37,4 @@ glm::vec3 StaticActor::getUp() const {
 
 glm::vec3 StaticActor::getWorldPosition() const {
     return glm::vec3(0.0f);
-}
-
-void StaticActor::draw(jage::graphics::Shader& shader) {
-    for (auto& [name, child] : m_children) {
-        if (child.value != nullptr)
-            child.value->draw(shader);
-    }
 }

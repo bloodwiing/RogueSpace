@@ -29,11 +29,11 @@ namespace jage::runtime::asset {
 
         static AssetManager* m_instance;
 
-        std::map<std::string, std::shared_ptr<abc::AssetABC<Model>>> m_models;
-        std::map<std::string, std::shared_ptr<abc::AssetABC<Texture>>> m_textures;
+        AssetMap<Types::Model> m_models;
+        AssetMap<Types::Texture> m_textures;
+        AssetMap<Types::Shader> m_shaders;
 
-        mutable std::mutex m_modelMutex,
-                           m_textureMutex;
+        mutable std::mutex m_modelMutex, m_textureMutex, m_shaderMutex;
 
         template<class T>
         std::shared_ptr<T> load(const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
