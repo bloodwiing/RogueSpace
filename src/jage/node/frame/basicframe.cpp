@@ -2,13 +2,15 @@
 
 #include <glm/matrix.hpp>
 
+#include "jage/runtime/asset/assetmanager.hpp"
+
 using jage::node::frame::BasicFrame;
+using jage::type::RectF;
+using jage::graphics::mesh2d::Quad2D;
+using jage::runtime::asset::AssetManager;
 
 BasicFrame::BasicFrame(JAGE_FRAME_ARGS)
-    : FrameABC(parent, std::move(name), canvas, rectParent)
-    , m_rect(0.0f, 0.0f)
-    , m_anchor(1.0f, 1.0f)
-    , m_fill(0.0f)
+    : BasicFrame(parent, std::move(name), canvas, rectParent, RectF(0.0f, 0.0f), RectF(1.0f, 1.0f), glm::vec4(0.0f))
 {
 
 }
@@ -18,8 +20,10 @@ BasicFrame::BasicFrame(JAGE_FRAME_ARGS, const jage::type::RectF& rect, const jag
     , m_rect(rect)
     , m_anchor(anchor)
     , m_fill(fill)
+    , m_material(jage::graphics::Material::getDefaultMaterial())
+    , m_quad(Quad2D(rect, m_material))
 {
-
+    m_shader = AssetManager::getInstance()->get<AssetManager::Types::Shader>("./res/ui", 10);
 }
 
 jage::type::RectF BasicFrame::getRect() const {
@@ -57,6 +61,10 @@ void BasicFrame::update() {
     updateReflow();
     updateTransformations();
     abc::FrameABC::update();
+}
+
+void BasicFrame::draw() {
+    Quad2D(RectF(0.5f, 0.5f), jage::graphics::Material::getDefaultMaterial()).draw(*m_shader);
 }
 
 void BasicFrame::updateReflow() {
@@ -108,17 +116,21 @@ glm::vec2 BasicFrame::getScale() const {
     return m_scale;
 }
 
-void BasicFrame::setTranslation(const glm::vec2 &tra) {
+void BasicFrame::setWorldMatrix(const glm::mat3& mat) {
+    m_worldMatrix = mat;
+}
+
+void BasicFrame::setTranslation(const glm::vec2& tra) {
     m_translation = tra;
     markForMatrixUpdate();
 }
 
-void BasicFrame::setRotation(const float &rot) {
+void BasicFrame::setRotation(const float& rot) {
     m_rotation = rot;
     markForMatrixUpdate();
 }
 
-void BasicFrame::setScale(const glm::vec2 &sca) {
+void BasicFrame::setScale(const glm::vec2& sca) {
     m_scale = sca;
     markForMatrixUpdate();
 }

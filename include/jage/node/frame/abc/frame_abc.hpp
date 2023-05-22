@@ -46,6 +46,7 @@ namespace jage::node::frame::abc {
         Canvas* m_canvas;
         RectNodeABC* m_rectParent;
 
+        using node::abc::NodeABC<FrameABC>::addChild;
         using node::abc::NodeABC<FrameABC>::update;
     };
 }

@@ -2,6 +2,7 @@
 #define JAGE_BASIC_CANVAS_HPP
 
 #include "jage/node/frame/abc/frame_abc.hpp"
+#include "jage/graphics/mesh2d/quad2d.hpp"
 
 namespace jage::node::frame {
 
@@ -19,20 +20,21 @@ namespace jage::node::frame {
         [[nodiscard]] glm::vec4 getFill() const;
 
         glm::mat3 getWorldMatrix() const override;
-
         glm::vec2 getTranslation() const override;
         float getRotation() const override;
         glm::vec2 getScale() const override;
 
-        void setTranslation(const glm::vec2 &tra) override;
-        void setRotation(const float &rot) override;
-        void setScale(const glm::vec2 &sca) override;
+        void setWorldMatrix(const glm::mat3& mat) override;
+        void setTranslation(const glm::vec2& tra) override;
+        void setRotation(const float& rot) override;
+        void setScale(const glm::vec2& sca) override;
 
         void setRect(const type::RectF& rect);
         void setAnchor(const type::RectF& anchor);
         void setFill(glm::vec4 fill);
 
         void update() override;
+        void draw() override;
 
     protected:
         type::RectF m_rect;
@@ -46,6 +48,10 @@ namespace jage::node::frame {
         float m_rotation = 0.0f;
         glm::vec2 m_scale = glm::vec2(1.0f);
         glm::mat3 m_worldMatrix = glm::mat3(1.0f);
+
+        jage::graphics::mesh2d::Quad2D m_quad;
+        jage::graphics::Material m_material;
+        std::shared_ptr<jage::graphics::Shader> m_shader;
 
         bool m_needsMatrixUpdate = false;
 

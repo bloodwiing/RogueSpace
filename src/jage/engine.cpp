@@ -59,11 +59,17 @@ void JAGEngine::loop() {
 
         glClearColor(0.005f, 0.008f, 0.058f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
 
         Time::update();
 
         m_scene->update();
         m_scene->draw();
+
+        glDisable(GL_DEPTH_TEST);
+
+        m_canvas->update();
+        m_canvas->draw();
 
         Window::getActive()->swapBuffers();
 
@@ -115,5 +121,5 @@ void JAGEngine::loadScene() {
 
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectF(1000.0f, 1000.0f));
 
-//    m_canvas->addChild<BasicFrame>()
+    m_canvas->addChild<BasicFrame>("Test");
 }
