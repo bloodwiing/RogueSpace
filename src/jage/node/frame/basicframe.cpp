@@ -1,5 +1,7 @@
 #include "jage/node/frame/basicframe.hpp"
 
+#include <glm/matrix.hpp>
+
 using jage::node::frame::BasicFrame;
 
 BasicFrame::BasicFrame(JAGE_FRAME_ARGS)
@@ -36,10 +38,6 @@ glm::vec4 BasicFrame::getFill() const {
     return m_fill;
 }
 
-bool jage::node::frame::BasicFrame::isDead() const {
-    return m_dead;
-}
-
 void BasicFrame::setRect(const jage::type::RectF& rect) {
     m_rect = rect;
     markForReflow();
@@ -54,15 +52,12 @@ void BasicFrame::setFill(glm::vec4 fill) {
     m_fill = fill;
 }
 
-void BasicFrame::markDead(float wait /* = -1.0f */) {
-    if (wait <= 0.0f)
-        m_dead = true;
-    else
-        m_deathTimer = wait;
-}
-
 void BasicFrame::update() {
-    using jage::runtime::Time;
+    base::DyingBase::updateDeathTimer();
+    updateReflow();
+    updateTransformations();
+    abc::FrameABC::update();
+}
 
     if (m_deathTimer >= 0.0f) {
         m_deathTimer -= Time::getDeltaFloat();
@@ -72,20 +67,56 @@ void BasicFrame::update() {
         }
     }
 
-    if (m_needsRectReflow) {
-        m_physicalRect = m_rect.scalePhysical(m_parent->getRect(), m_parent->getPhysicalRect(), m_anchor);
+void BasicFrame::updateTransformations() {
+    if (!m_needsMatrixUpdate)
+        return;
 
-        for (auto& [name, child] : m_children) {
-            auto canvasChild = dynamic_cast<BasicFrame*>(child.value.get());
-            if (canvasChild != nullptr) {
-                canvasChild->markForReflow();
-            }
+    Transformable2DABC::updateTransformations(getParent() != nullptr ? getParent()->getWorldMatrix() : glm::mat3(1.0f));
+    m_needsMatrixUpdate = false;
+
+    for (auto& [name, child] : m_children) {
+        auto canvasChild = dynamic_cast<BasicFrame*>(child.value.get());
+        if (canvasChild != nullptr) {
+            canvasChild->markForReflow();
         }
     }
-
-    NodeABC::update();
 }
 
 void BasicFrame::markForReflow() {
     m_needsRectReflow = true;
+}
+
+glm::mat3 BasicFrame::getWorldMatrix() const {
+    return m_worldMatrix;
+}
+
+glm::vec2 BasicFrame::getTranslation() const {
+    return m_translation;
+}
+
+float BasicFrame::getRotation() const {
+    return m_rotation;
+}
+
+glm::vec2 BasicFrame::getScale() const {
+    return m_scale;
+}
+
+void BasicFrame::setTranslation(const glm::vec2 &tra) {
+    m_translation = tra;
+    markForMatrixUpdate();
+}
+
+void BasicFrame::setRotation(const float &rot) {
+    m_rotation = rot;
+    markForMatrixUpdate();
+}
+
+void BasicFrame::setScale(const glm::vec2 &sca) {
+    m_scale = sca;
+    markForMatrixUpdate();
+}
+
+void BasicFrame::markForMatrixUpdate() {
+    m_needsMatrixUpdate = true;
 }

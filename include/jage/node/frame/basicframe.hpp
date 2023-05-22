@@ -5,7 +5,8 @@
 
 namespace jage::node::frame {
 
-    class BasicFrame : public abc::FrameABC {
+    class BasicFrame
+            : public abc::FrameABC {
     public:
         friend class jage::node::Canvas;
 
@@ -16,6 +17,16 @@ namespace jage::node::frame {
         type::RectF getAnchor() const override;
         type::RectF getPhysicalRect() const override;
         [[nodiscard]] glm::vec4 getFill() const;
+
+        glm::mat3 getWorldMatrix() const override;
+
+        glm::vec2 getTranslation() const override;
+        float getRotation() const override;
+        glm::vec2 getScale() const override;
+
+        void setTranslation(const glm::vec2 &tra) override;
+        void setRotation(const float &rot) override;
+        void setScale(const glm::vec2 &sca) override;
 
         void setRect(const type::RectF& rect);
         void setAnchor(const type::RectF& anchor);
@@ -31,6 +42,17 @@ namespace jage::node::frame {
 
         glm::vec4 m_fill;
 
+        glm::vec2 m_translation = glm::vec2(0.0f);
+        float m_rotation = 0.0f;
+        glm::vec2 m_scale = glm::vec2(1.0f);
+        glm::mat3 m_worldMatrix = glm::mat3(1.0f);
+
+        bool m_needsMatrixUpdate = false;
+
+        void updateReflow();
+        void updateTransformations();
+
+        void markForMatrixUpdate();
         void markForReflow();
 
     private:

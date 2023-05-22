@@ -19,3 +19,11 @@ void Transformable3DABC::rotate(const glm::quat& rot) {
 void Transformable3DABC::scale(const glm::vec3& sca) {
     setScale(sca * getScale());
 }
+
+void jage::node::abc::Transformable3DABC::updateTransformations(const glm::mat4& parentMatrix) {
+    auto trans = glm::translate(glm::mat4(1.0f), getTranslation());
+    auto rot = glm::mat4_cast(getRotation());
+    auto sca = glm::scale(glm::mat4(1.0f), getScale());
+
+    setWorldMatrix(parentMatrix * trans * rot * sca);
+}

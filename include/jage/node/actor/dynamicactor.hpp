@@ -30,6 +30,7 @@ namespace jage::node::actor {
 
         [[nodiscard]] glm::mat4 getWorldMatrix() const override;
 
+        void setWorldMatrix(const glm::mat4& mat) override;
         void setTranslation(const glm::vec3& tra) override;
         void setRotation(const glm::quat& rot) override;
         void setScale(const glm::vec3& sca) override;
@@ -44,6 +45,8 @@ namespace jage::node::actor {
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
+
+        void updateTransformations();
 
     private:
         /// The relative Translation of the Actor

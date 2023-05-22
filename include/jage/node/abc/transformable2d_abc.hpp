@@ -14,6 +14,8 @@ namespace jage::node::abc {
         void translate(const glm::vec2& tra) override;
         void rotate(const float& rot) override;
         void scale(const glm::vec2& sca) override;
+
+        void updateTransformations(const glm::mat3& parentMatrix) override;
     };
 }
 

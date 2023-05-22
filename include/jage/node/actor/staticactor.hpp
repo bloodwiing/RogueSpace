@@ -50,6 +50,7 @@ namespace jage::node::actor {
         [[nodiscard]] glm::vec3 getUp() const override;
         [[nodiscard]] glm::vec3 getWorldPosition() const override;
 
+        void setWorldMatrix(const glm::mat4 &mat) override {};
         /// \brief          Sets the relative Translation of the object
         /// \note           Only implemented in <b>DynamicActor</b>
         /// \param tra      New Translation

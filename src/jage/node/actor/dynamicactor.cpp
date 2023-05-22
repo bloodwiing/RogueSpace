@@ -13,33 +13,32 @@ DynamicActor::DynamicActor(JAGE_ACTOR_ARGS)
 { }
 
 void DynamicActor::update() {
-    if (m_needsMatrixUpdate) {
-        auto trans = glm::translate(glm::mat4(1.0f), getTranslation());
-        auto rot = glm::mat4_cast(getRotation());
-        auto sca = glm::scale(glm::mat4(1.0f), getScale());
+    updateTransformations();
+    StaticActor::update();
+}
 
-        glm::mat4 parentMatrix = getParent() != nullptr ? getParent()->getWorldMatrix() : glm::mat4(1.0f);
-        m_worldMatrix = parentMatrix * trans * rot * sca;
-        m_needsMatrixUpdate = false;
+void DynamicActor::updateTransformations() {
+    if (!m_needsMatrixUpdate)
+        return;
 
-        if (m_needsVectorUpdate) {
-            m_up = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 1.0f, 0.0f));
-            m_orientation = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 0.0f, -1.0f));
-        }
+    Transformable3DABC::updateTransformations(getParent() != nullptr ? getParent()->getWorldMatrix() : glm::mat4(1.0f));
+    m_needsMatrixUpdate = false;
 
-        for (auto& [name, child] : m_children) {
-            auto dynamicChild = dynamic_cast<DynamicActor*>(child.value.get());
-            if (dynamicChild != nullptr) {
-                dynamicChild->flagForMatrixUpdate();
-                if (m_needsVectorUpdate)
-                    dynamicChild->flagForVectorUpdate();
-            }
-        }
-
-        m_needsVectorUpdate = false;
+    if (m_needsVectorUpdate) {
+        m_up = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 1.0f, 0.0f));
+        m_orientation = glm::normalize(glm::mat3(m_worldMatrix) * glm::vec3(0.0f, 0.0f, -1.0f));
     }
 
-    StaticActor::update();
+    for (auto& [name, child] : m_children) {
+        auto dynamicChild = dynamic_cast<DynamicActor*>(child.value.get());
+        if (dynamicChild != nullptr) {
+            dynamicChild->flagForMatrixUpdate();
+            if (m_needsVectorUpdate)
+                dynamicChild->flagForVectorUpdate();
+        }
+    }
+
+    m_needsVectorUpdate = false;
 }
 
 glm::vec3 DynamicActor::getTranslation() const {
@@ -68,6 +67,10 @@ glm::vec3 DynamicActor::getWorldPosition() const {
 
 glm::mat4 DynamicActor::getWorldMatrix() const {
     return m_worldMatrix;
+}
+
+void DynamicActor::setWorldMatrix(const glm::mat4& mat) {
+    m_worldMatrix = mat;
 }
 
 void DynamicActor::setTranslation(const glm::vec3 &tra) {
