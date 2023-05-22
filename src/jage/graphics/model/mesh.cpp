@@ -34,7 +34,8 @@ void Mesh::draw(
     if (!m_initialised)
         initialise();
 
-    if (shader.isErrored())
+    shader.prepare();
+    if (!shader.isReady() or shader.isErrored())
         return;
 
     shader.activate();

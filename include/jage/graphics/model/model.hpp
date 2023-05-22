@@ -25,9 +25,7 @@ namespace jage::graphics::model {
         explicit Model(std::string fileName);
         static std::shared_ptr<Model> create(std::string fileName);
 
-        void queue(int priority) override;
-
-        [[nodiscard]] bool isReady() const;
+        void onQueue(int priority) override;
 
         void draw(Shader& shader, glm::mat4 worldMatrix = glm::mat4(1.0f));
 
@@ -38,7 +36,6 @@ namespace jage::graphics::model {
         std::vector<uint8_t> m_data;
         /// Deserialized glTF file
         json m_json;
-        std::atomic<bool> m_ready;
 
         /// List of all Meshes detected while traversing glTF Nodes
         std::vector<Mesh> m_meshes;

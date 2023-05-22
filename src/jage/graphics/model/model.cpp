@@ -11,16 +11,13 @@ using jage::runtime::asset::AssetManager;
 
 Model::Model(std::string fileName)
     : m_fileName(std::move(fileName))
-    , m_ready(false)
 { }
 
 std::shared_ptr<Model> Model::create(std::string fileName) {
     return std::make_shared<Model>(std::move(fileName));
 }
 
-void Model::queue(int priority) {
-    if (m_ready)
-        return;
+void Model::onQueue(int priority) {
     AssetStream::getInstance().getTextAsset(
             m_fileName,
             [self = shared_from_this(), priority](const std::shared_ptr<const std::string>& content){
@@ -33,11 +30,8 @@ void Model::queue(int priority) {
             });
 }
 
-bool Model::isReady() const {
-    return m_ready;
-}
-
 void Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) {
+    prepare();
     if (!isReady())
         return;
     for (size_t i = 0; i < m_meshes.size(); ++i) {
@@ -150,7 +144,7 @@ void Model::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
                     model.traverseNode(node);
                 }
 
-                model.m_ready = true;
+                model.markProcessed();
             }, priority);
 }
 
@@ -239,7 +233,7 @@ void Model::getTextures(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
 
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
-        m_textures.push_back(AssetManager::getInstance()->get<Texture>(directory + texturePath, priority));
+        m_textures.push_back(AssetManager::getInstance()->get<AssetManager::Types::Texture>(directory + texturePath, priority));
     }
 }
 

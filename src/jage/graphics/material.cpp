@@ -73,6 +73,7 @@ bool Material::apply(Shader &shader) const {
         return false;
 
     auto diffuse0 = getDiffuse0();
+    diffuse0->prepare();
     if (!diffuse0->isReady())
         return false;
     diffuse0->assign(shader, "Diffuse0", 0);
@@ -83,6 +84,7 @@ bool Material::apply(Shader &shader) const {
             m_diffuseFactor.x, m_diffuseFactor.y, m_diffuseFactor.z, m_diffuseFactor.w);
 
     auto specular0 = getSpecular0();
+    diffuse0->prepare();
     if (!specular0->isReady())
         return false;
     specular0->assign(shader, "Specular0", 1);

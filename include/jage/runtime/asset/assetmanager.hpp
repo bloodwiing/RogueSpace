@@ -9,15 +9,20 @@
 #include "jage/runtime/asset/assetstream.hpp"
 #include "jage/graphics/model/model.hpp"
 #include "jage/graphics/texture.hpp"
+#include "jage/graphics/shader.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 
 namespace jage::runtime::asset {
 
-    using jage::graphics::model::Model;
-    using jage::graphics::Texture;
-
     class AssetManager {
     public:
+        class Types {
+        public:
+            typedef jage::graphics::model::Model Model;
+            typedef jage::graphics::Texture Texture;
+            typedef jage::graphics::Shader Shader;
+        };
+
         static AssetManager* getInstance();
 
         template<class T>
@@ -26,6 +31,9 @@ namespace jage::runtime::asset {
     private:
         AssetManager();
         ~AssetManager() = default;
+
+        template<class T>
+        using AssetMap = std::map<std::string, std::shared_ptr<abc::AssetABC<T>>>;
 
         static AssetManager* m_instance;
 
@@ -36,7 +44,10 @@ namespace jage::runtime::asset {
         mutable std::mutex m_modelMutex, m_textureMutex, m_shaderMutex;
 
         template<class T>
-        std::shared_ptr<T> load(const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
+        static std::shared_ptr<T> get(std::mutex& mutex, AssetMap<T>& map, const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
+
+        template<class T>
+        static std::shared_ptr<T> load(const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
 
         AssetManager& operator=(const AssetManager& ref);
     };

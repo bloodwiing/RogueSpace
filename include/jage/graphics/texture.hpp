@@ -32,9 +32,12 @@ namespace jage::graphics {
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
-        void queue(int priority) override;
+        void onQueue(int priority) override;
+        void onPrepare() override;
 
-        [[nodiscard]] bool isReady();
+        [[nodiscard]] bool isProcessed() const override;
+        [[nodiscard]] bool isPrepared() const override;
+        [[nodiscard]] bool isReady() const override;
 
         /// \brief          Assigns a Texture slot to a Shader's sampler
         /// \param shader   The Shader program reference
@@ -81,9 +84,8 @@ namespace jage::graphics {
         static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
         ~LOD();
 
-        void queue(int priority) override;
-
-        [[nodiscard]] bool isReady();
+        void onQueue(int priority) override;
+        void onPrepare() override;
 
         void bind(GLint unit) const;
         void unbind() const;
@@ -97,8 +99,6 @@ namespace jage::graphics {
         [[nodiscard]] int getLevel() const;
 
     private:
-        std::atomic<bool> m_ready;
-
         GLuint m_ID;
         GLuint m_PBO;
 
