@@ -1,13 +1,13 @@
-#ifndef JAGE_TRANSFORMABLE_2D_HPP
-#define JAGE_TRANSFORMABLE_2D_HPP
+#ifndef JAGE_TRANSFORMABLE_2D_ABC_HPP
+#define JAGE_TRANSFORMABLE_2D_ABC_HPP
 
 #include <glm/glm.hpp>
 
 #include "jage/node/abc/transformable_abc.hpp"
 
-namespace jage::node::base {
+namespace jage::node::abc {
 
-    class Transformable2D : public abc::TransformableABC<glm::vec2, float, glm::mat3> {
+    class Transformable2DABC : public abc::TransformableABC<glm::vec2, float, glm::mat3> {
     public:
         [[nodiscard]] glm::vec2 getWorldPosition() const override;
 
@@ -17,4 +17,4 @@ namespace jage::node::base {
     };
 }
 
-#endif //JAGE_TRANSFORMABLE_2D_HPP
+#endif //JAGE_TRANSFORMABLE_2D_ABC_HPP

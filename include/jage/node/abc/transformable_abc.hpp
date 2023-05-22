@@ -32,4 +32,4 @@ namespace jage::node::abc {
 
 #include "transformable_abc_impl.tpp"
 
-#endif // JAGE_TRANSFORMABLE_ABC_HPP
+#endif //JAGE_TRANSFORMABLE_ABC_HPP
