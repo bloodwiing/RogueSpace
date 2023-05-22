@@ -2,14 +2,15 @@
 
 #include <iostream>
 
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 using jage::graphics::Shader;
+using jage::runtime::asset::AssetStream;
 
 GLuint Shader::loadShaderFile(const std::string &filePath, GLenum type) {
     GLuint id = glCreateShader(type);
 
-    jage::runtime::AssetStream::getInstance().getTextAsset(
+    AssetStream::getInstance().getTextAsset(
             filePath,
             [id](const std::shared_ptr<const std::string>& data) {
                 const char* vertexCode = data->c_str();

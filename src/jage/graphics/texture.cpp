@@ -8,6 +8,7 @@
 #include <GL/glext.h>
 
 using jage::graphics::Texture;
+using jage::runtime::asset::AssetStream;
 
 std::shared_ptr<Texture> Texture::defaultTexture = std::shared_ptr<Texture>();
 
@@ -16,7 +17,7 @@ Texture::Texture(const std::string& filePath)
     , m_activeLOD(-1)
     , m_main(LOD::create(filePath, m_metadata, this))
 {
-    std::string directory = jage::runtime::AssetStream::getFileDirectory(filePath);
+    std::string directory = AssetStream::getFileDirectory(filePath);
 
     YAML::Node LODs = m_metadata["lod"];
     if (LODs.IsDefined() && LODs.IsSequence()) {
@@ -55,7 +56,7 @@ std::shared_ptr<Texture> Texture::getDefaultTexture() {
     return defaultTexture;
 }
 
-void Texture::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Texture::queue(int priority) {
     m_main->queue(priority);
     for (auto& level : m_levels) {
         level->queue(priority);
@@ -210,19 +211,21 @@ Texture::LOD::~LOD() {
     }
 }
 
-void Texture::LOD::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Texture::LOD::queue(int priority) {
     if (m_ready)
         return;
-    jage::runtime::AssetStream::getInstance().getBinaryAssetAsync(
+    AssetStream::getInstance().getBinaryAssetAsync(
             m_fileName,
             [self = shared_from_this()](const uint8_t* data, size_t size){
+                Texture::LOD& lod = self->asObject();
+
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
-                memcpy(self->m_buffer, finalData, width * height * channels);
+                memcpy(lod.m_buffer, finalData, width * height * channels);
                 stbi_image_free(finalData);
-                self->m_ready = true;
+                lod.m_ready = true;
 
-                self->m_container->setActiveLOD(self->m_level);
+                lod.m_container->setActiveLOD(lod.m_level);
             }, priority + m_priority);
 }
 

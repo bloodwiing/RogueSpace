@@ -3,10 +3,11 @@
 #include <utility>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "jage/runtime/assetmanager.hpp"
+#include "jage/runtime/asset/assetmanager.hpp"
 
 using jage::graphics::model::Model;
-using jage::runtime::AssetStream;
+using jage::runtime::asset::AssetStream;
+using jage::runtime::asset::AssetManager;
 
 Model::Model(std::string fileName)
     : m_fileName(std::move(fileName))
@@ -17,16 +18,18 @@ std::shared_ptr<Model> Model::create(std::string fileName) {
     return std::make_shared<Model>(std::move(fileName));
 }
 
-void Model::queue(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Model::queue(int priority) {
     if (m_ready)
         return;
     AssetStream::getInstance().getTextAsset(
             m_fileName,
             [self = shared_from_this(), priority](const std::shared_ptr<const std::string>& content){
-                self->m_json = json::parse(*content);
+                Model& model = self->asObject();
 
-                self->getTextures(priority);
-                self->getData(priority);
+                model.m_json = json::parse(*content);
+
+                model.getTextures(priority);
+                model.getData(priority);
             });
 }
 
@@ -127,7 +130,7 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 }
 
-void Model::getData(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Model::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     using std::string;
 
     string bytes_text;
@@ -138,13 +141,16 @@ void Model::getData(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     AssetStream::getInstance().getBinaryAssetAsync(
             directory + uri,
             [self = shared_from_this()](const uint8_t* data, size_t size){
-                self->m_data = std::vector<uint8_t>(data, data + size);
+                Model& model = self->asObject();
 
-                uint8_t modelMainScene = self->m_json.value("scene", 0);
-                for (uint16_t node : self->m_json["scenes"][modelMainScene]["nodes"])
-                    self->traverseNode(node);
+                model.m_data = std::vector<uint8_t>(data, data + size);
 
-                self->m_ready = true;
+                uint8_t modelMainScene = model.m_json.value("scene", 0);
+                for (uint16_t node : model.m_json["scenes"][modelMainScene]["nodes"]) {
+                    model.traverseNode(node);
+                }
+
+                model.m_ready = true;
             }, priority);
 }
 
@@ -226,14 +232,14 @@ std::vector<GLuint> Model::getIndices(json accessor) {
     return result;
 }
 
-void Model::getTextures(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+void Model::getTextures(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     m_textures.clear();
 
     std::string directory = AssetStream::getFileDirectory(m_fileName);
 
     for (size_t i = 0; i < m_json["images"].size(); ++i) {
         std::string texturePath = m_json["images"][i]["uri"];
-        m_textures.push_back(jage::runtime::AssetManager::getInstance()->getTexture(directory + texturePath, priority));
+        m_textures.push_back(AssetManager::getInstance()->get<Texture>(directory + texturePath, priority));
     }
 }
 

@@ -1,11 +1,11 @@
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 #include <stdexcept>
 #include <thread>
 #include <fstream>
 #include <filesystem>
 
-using jage::runtime::AssetStream;
+using jage::runtime::asset::AssetStream;
 using std::ios;
 using std::lock_guard;
 using std::unique_lock;

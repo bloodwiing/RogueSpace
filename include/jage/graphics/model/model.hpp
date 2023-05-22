@@ -8,7 +8,8 @@
 
 #include "jage/graphics/model/mesh.hpp"
 #include "jage/graphics/material.hpp"
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/abc/asset_abc.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 namespace jage::runtime {
     class AssetManager;
@@ -18,12 +19,14 @@ namespace jage::graphics::model {
 
     using json = nlohmann::json;
 
-    class Model : public std::enable_shared_from_this<Model> {
+    class Model
+            : public jage::runtime::asset::abc::AssetABC<Model> {
     public:
         explicit Model(std::string fileName);
         static std::shared_ptr<Model> create(std::string fileName);
 
-        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void queue(int priority) override;
+
         [[nodiscard]] bool isReady() const;
 
         void draw(Shader& shader, glm::mat4 worldMatrix = glm::mat4(1.0f));
@@ -57,14 +60,14 @@ namespace jage::graphics::model {
         /// \param matrix       The Parent node inherited Transformation
         void traverseNode(uint16_t nodeIndex, glm::mat4 matrix = glm::mat4(1.0f));
 
-        void getData(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void getData(int priority = JAGE_ASSET_BASE_PRIORITY);
         /// \param accessor     The glTF accessor where Floats are to be read
         /// \return             The generated list of Floats from the Accessor's reference
         std::vector<float> getFloats(json accessor);
         /// \param accessor     The glTF accessor where Indices are to be read
         /// \return             The generated list of Indices from the Accessor's reference
         std::vector<GLuint> getIndices(json accessor);
-        void getTextures(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void getTextures(int priority = JAGE_ASSET_BASE_PRIORITY);
         /// \brief              Creates a Material from the Json data of the glTF Mesh entry and the full list of Textures
         /// \param data         glTF Material entry
         /// \param textures     The list of textures, made via getTextures()

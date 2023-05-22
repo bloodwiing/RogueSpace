@@ -9,13 +9,15 @@
 #include <yaml-cpp/yaml.h>
 
 #include "jage/graphics/shader.hpp"
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/abc/asset_abc.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 
 namespace jage::graphics {
 
     /// \brief      Image Texture
     /// \details    OpenGL Texture
-    class Texture : public std::enable_shared_from_this<Texture> {
+    class Texture
+            : public jage::runtime::asset::abc::AssetABC<Texture> {
     public:
         /// \brief          Creates and loads a Texture
         /// \details        Uses STB to load Images, so support is dependent on the library
@@ -30,7 +32,7 @@ namespace jage::graphics {
 
         [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
-        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void queue(int priority) override;
 
         [[nodiscard]] bool isReady();
 
@@ -70,7 +72,8 @@ namespace jage::graphics {
         Texture& operator=(const Texture& ref);
     };
 
-    class Texture::LOD : public std::enable_shared_from_this<LOD> {
+    class Texture::LOD
+            : public jage::runtime::asset::abc::AssetABC<Texture::LOD> {
     public:
         LOD(std::string fileName, const YAML::Node& node, Texture* container);
         static std::shared_ptr<LOD> create(const std::string& fileName, const YAML::Node& node, Texture* container);
@@ -78,7 +81,7 @@ namespace jage::graphics {
         static std::shared_ptr<LOD> create(GLubyte* bytes, int width, int height, int channels, int level, int priority, Texture* container);
         ~LOD();
 
-        void queue(int priority = JAGE_ASSET_STREAM_BASE_PRIORITY);
+        void queue(int priority) override;
 
         [[nodiscard]] bool isReady();
 

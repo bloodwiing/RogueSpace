@@ -13,7 +13,7 @@
 
 #define JAGE_ASSET_STREAM_BASE_PRIORITY 5
 
-namespace jage::runtime {
+namespace jage::runtime::asset {
 
     class AssetStream {
     public:

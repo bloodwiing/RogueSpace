@@ -4,7 +4,7 @@
 
 #include "jage/runtime/time.hpp"
 #include "jage/system/super.hpp"
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/node/actor/shipactor.hpp"
 #include "jage/node/actor/physicsactor.hpp"
@@ -28,7 +28,7 @@ JAGEngine::~JAGEngine() {
 
     jage::system::Super::destroy();
 
-    jage::runtime::AssetStream::shutdown();
+    jage::runtime::asset::AssetStream::shutdown();
 
     glfwTerminate();
 }

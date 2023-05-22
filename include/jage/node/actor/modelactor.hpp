@@ -3,7 +3,7 @@
 
 #include "jage/node/actor/dynamicactor.hpp"
 #include "jage/node/actor/abc/actor_abc.hpp"
-#include "jage/runtime/assetstream.hpp"
+#include "jage/runtime/asset/assetstream.hpp"
 #include "jage/graphics/model/model.hpp"
 
 namespace jage::node::actor {
