@@ -1,11 +1,11 @@
-#include "jage/graphics/model/mesh.hpp"
+#include "jage/graphics/mesh3d/mesh3d.hpp"
 
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-using jage::graphics::model::Mesh;
+using jage::graphics::mesh3d::Mesh3D;
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material& material)
+Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<GLuint>& indices, Material& material)
     : m_vertices(vertices)
     , m_indices(indices)
     , m_material(material)
@@ -15,7 +15,7 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, Material
 
 }
 
-Mesh::Mesh(const Mesh &mesh)
+Mesh3D::Mesh3D(const Mesh3D &mesh)
     : m_vertices(mesh.m_vertices)
     , m_indices(mesh.m_indices)
     , m_material(mesh.m_material)
@@ -25,7 +25,7 @@ Mesh::Mesh(const Mesh &mesh)
 
 }
 
-void Mesh::draw(
+void Mesh3D::draw(
         Shader& shader,
         jage::node::actor::Camera* camera,
         glm::mat4 relative /* = glm::mat4(1.0f) */,
@@ -53,17 +53,17 @@ void Mesh::draw(
     glDrawElements(GL_TRIANGLES, (GLint)m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Mesh::initialise() {
-    m_VAO = VAO();
+void Mesh3D::initialise() {
+    m_VAO = VAO3D();
     m_VAO.bind();
 
-    VBO VBO(m_vertices);
-    EBO EBO(m_indices);
+    VBO3D VBO(m_vertices);
+    EBO3D EBO(m_indices);
 
-    m_VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void *)0);
-    m_VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void *)(3 * sizeof(float)));
-    m_VAO.linkAttribute(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void *)(6 * sizeof(float)));
-    m_VAO.linkAttribute(VBO, 3, 2, GL_FLOAT, sizeof(Vertex), (void *)(9 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex3D), (void *)0);
+    m_VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex3D), (void *)(3 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 2, 3, GL_FLOAT, sizeof(Vertex3D), (void *)(6 * sizeof(float)));
+    m_VAO.linkAttribute(VBO, 3, 2, GL_FLOAT, sizeof(Vertex3D), (void *)(9 * sizeof(float)));
 
     m_VAO.unbind();
     VBO.unbind();

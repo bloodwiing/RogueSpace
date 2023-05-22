@@ -1,8 +1,8 @@
-#include "jage/graphics/model/ebo.hpp"
+#include "jage/graphics/mesh3d/ebo3d.hpp"
 
-using jage::graphics::model::EBO;
+using jage::graphics::mesh3d::EBO3D;
 
-EBO::EBO(std::vector<GLuint> indices)
+EBO3D::EBO3D(std::vector<GLuint> indices)
     : m_ID(0)
 {
     glGenBuffers(1, &m_ID);
@@ -10,18 +10,18 @@ EBO::EBO(std::vector<GLuint> indices)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLint)(indices.size() * sizeof(GLuint)), indices.data(), GL_STATIC_DRAW);
 }
 
-void EBO::bind() const {
+void EBO3D::bind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ID);
 }
 
-void EBO::unbind() const {
+void EBO3D::unbind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void EBO::destroy() const {
+void EBO3D::destroy() const {
     glDeleteBuffers(1, &m_ID);
 }
 
-GLuint EBO::getID() const {
+GLuint EBO3D::getID() const {
     return m_ID;
 }

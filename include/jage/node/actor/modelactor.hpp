@@ -4,7 +4,7 @@
 #include "jage/node/actor/dynamicactor.hpp"
 #include "jage/node/actor/abc/actor_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
-#include "jage/graphics/model/model.hpp"
+#include "jage/graphics/mesh3d/model3d.hpp"
 
 namespace jage::node::actor {
 
@@ -18,7 +18,7 @@ namespace jage::node::actor {
         [[nodiscard]] std::string getTypeName() const override;
 
     private:
-        std::shared_ptr<jage::graphics::model::Model> m_model;
+        std::shared_ptr<jage::graphics::mesh3d::Model3D> m_model;
         std::shared_ptr<jage::graphics::Shader> m_shader;
     };
 }

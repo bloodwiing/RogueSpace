@@ -14,7 +14,7 @@ std::string ModelActor::getTypeName() const {
 ModelActor::ModelActor(JAGE_ACTOR_ARGS, const char *fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */)
     : DynamicActor(parent, std::move(name), scene, tag, isVolatile)
 {
-    m_model = AssetManager::getInstance()->get<AssetManager::Types::Model>(fileName, priority);
+    m_model = AssetManager::getInstance()->get<AssetManager::Types::Model3D>(fileName, priority);
     m_shader = AssetManager::getInstance()->get<AssetManager::Types::Shader>("./res/default", 100);
 }
 

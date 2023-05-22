@@ -5,11 +5,11 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 
-namespace jage::graphics::model {
+namespace jage::graphics::mesh3d {
 
     /// \brief      A Mesh Vertex
     /// \details    Each Vertex containing relative data for a few attributes
-    struct Vertex {
+    struct Vertex3D {
         /// Position of the Vertex
         glm::vec3 position;
         /// Normal coordinate of the Vertex (outwards)
@@ -22,11 +22,11 @@ namespace jage::graphics::model {
 
     /// \brief      Vertex Buffer Object
     /// \details    OpenGL Array Buffer
-    class VBO {
+    class VBO3D {
     public:
         /// \brief          Creates the Buffer Object with Vertex data
         /// \param vertices The list of mesh vertices
-        explicit VBO(std::vector<Vertex>& vertices);
+        explicit VBO3D(std::vector<Vertex3D>& vertices);
 
         /// \brief          Makes the Vertex Buffer Object active
         void bind() const;

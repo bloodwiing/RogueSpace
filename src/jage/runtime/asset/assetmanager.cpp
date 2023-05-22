@@ -25,8 +25,8 @@ AssetManager *AssetManager::getInstance() {
 }
 
 template<>
-std::shared_ptr<Types::Model> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    return get<Types::Model>(m_modelMutex, m_models, fileName, priority);
+std::shared_ptr<Types::Model3D> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    return get<Types::Model3D>(m_modelMutex, m_models, fileName, priority);
 }
 
 template<>

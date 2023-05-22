@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "jage/runtime/asset/assetstream.hpp"
-#include "jage/graphics/model/model.hpp"
+#include "jage/graphics/mesh3d/model3d.hpp"
 #include "jage/graphics/texture.hpp"
 #include "jage/graphics/shader.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
@@ -18,7 +18,7 @@ namespace jage::runtime::asset {
     public:
         class Types {
         public:
-            typedef jage::graphics::model::Model Model;
+            typedef jage::graphics::mesh3d::Model3D Model3D;
             typedef jage::graphics::Texture Texture;
             typedef jage::graphics::Shader Shader;
         };
@@ -37,7 +37,7 @@ namespace jage::runtime::asset {
 
         static AssetManager* m_instance;
 
-        AssetMap<Types::Model> m_models;
+        AssetMap<Types::Model3D> m_models;
         AssetMap<Types::Texture> m_textures;
         AssetMap<Types::Shader> m_shaders;
 

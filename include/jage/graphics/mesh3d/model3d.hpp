@@ -6,7 +6,8 @@
 #include <memory>
 #include <mutex>
 
-#include "jage/graphics/model/mesh.hpp"
+#include "jage/graphics/mesh3d/mesh3d.hpp"
+#include "jage/graphics/mesh3d/vbo3d.hpp"
 #include "jage/graphics/material.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
@@ -15,15 +16,15 @@ namespace jage::runtime {
     class AssetManager;
 }
 
-namespace jage::graphics::model {
+namespace jage::graphics::mesh3d {
 
     using json = nlohmann::json;
 
-    class Model
-            : public jage::runtime::asset::abc::AssetABC<Model> {
+    class Model3D
+            : public jage::runtime::asset::abc::AssetABC<Model3D> {
     public:
-        explicit Model(std::string fileName);
-        static std::shared_ptr<Model> create(std::string fileName);
+        explicit Model3D(std::string fileName);
+        static std::shared_ptr<Model3D> create(std::string fileName);
 
         void onQueue(int priority) override;
 
@@ -38,7 +39,7 @@ namespace jage::graphics::model {
         json m_json;
 
         /// List of all Meshes detected while traversing glTF Nodes
-        std::vector<Mesh> m_meshes;
+        std::vector<Mesh3D> m_meshes;
         /// List of all Relative-to-Model Transformations for each of the Meshes
         std::vector<glm::mat4> m_meshMatrices;
 
@@ -76,7 +77,7 @@ namespace jage::graphics::model {
         /// \param normals      The Vertex Normal list
         /// \param texCoords    The Vertex UV coordinate list
         /// \return             Newly assembled list of Vertex objects
-        std::vector<Vertex> assembleVertices(
+        std::vector<Vertex3D> assembleVertices(
                 std::vector<glm::vec3> positions,
                 std::vector<glm::vec3> normals,
                 std::vector<glm::vec2> texCoords);

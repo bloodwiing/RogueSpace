@@ -3,15 +3,15 @@
 
 #include <glad/glad.h>
 
-#include "jage/graphics/model/vbo.hpp"
+#include "jage/graphics/mesh3d/vbo3d.hpp"
 
-namespace jage::graphics::model {
+namespace jage::graphics::mesh3d {
 
     /// \brief      OpenGL Vertex Array Object
     /// \details    Defines the Vertex data structure
-    class VAO {
+    class VAO3D {
     public:
-        VAO();
+        VAO3D();
 
         /// \brief          Defines a section of data in a Vertex buffer as an Attribute
         /// \param vbo      The Vertex buffer to reference
@@ -20,7 +20,7 @@ namespace jage::graphics::model {
         /// \param type     The type of the Attribute
         /// \param stride   The size of data per Vertex (in bytes)
         /// \param offset   The initial offset for this attribute in Vertex data
-        void linkAttribute(VBO& vbo, GLuint layout, GLint size, GLenum type, GLsizei stride, const GLvoid *offset) const;
+        void linkAttribute(VBO3D& vbo, GLuint layout, GLint size, GLenum type, GLsizei stride, const GLvoid *offset) const;
 
         /// \brief          Makes the Vertex Array Object active
         void bind() const;

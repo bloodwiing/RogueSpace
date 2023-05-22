@@ -1,27 +1,27 @@
-#include "jage/graphics/model/model.hpp"
+#include "jage/graphics/mesh3d/model3d.hpp"
 
 #include <utility>
 #include <glm/gtc/type_ptr.hpp>
 
 #include "jage/runtime/asset/assetmanager.hpp"
 
-using jage::graphics::model::Model;
+using jage::graphics::mesh3d::Model3D;
 using jage::runtime::asset::AssetStream;
 using jage::runtime::asset::AssetManager;
 
-Model::Model(std::string fileName)
+Model3D::Model3D(std::string fileName)
     : m_fileName(std::move(fileName))
 { }
 
-std::shared_ptr<Model> Model::create(std::string fileName) {
-    return std::make_shared<Model>(std::move(fileName));
+std::shared_ptr<Model3D> Model3D::create(std::string fileName) {
+    return std::make_shared<Model3D>(std::move(fileName));
 }
 
-void Model::onQueue(int priority) {
+void Model3D::onQueue(int priority) {
     AssetStream::getInstance().getTextAsset(
             m_fileName,
             [self = shared_from_this(), priority](const std::shared_ptr<const std::string>& content){
-                Model& model = self->asObject();
+                Model3D& model = self->asObject();
 
                 model.m_json = json::parse(*content);
 
@@ -30,7 +30,7 @@ void Model::onQueue(int priority) {
             });
 }
 
-void Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) {
+void Model3D::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) {
     prepare();
     if (!isReady())
         return;
@@ -39,7 +39,7 @@ void Model::draw(Shader& shader, glm::mat4 worldMatrix /* = glm::mat4(1.0f) */) 
     }
 }
 
-void Model::loadMesh(uint32_t meshIndex) {
+void Model3D::loadMesh(uint32_t meshIndex) {
     json& primitive = m_json["meshes"][meshIndex]["primitives"][0];
 
     uint8_t accPositionIndex = primitive["attributes"]["POSITION"];
@@ -70,7 +70,7 @@ void Model::loadMesh(uint32_t meshIndex) {
     }
 }
 
-void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
+void Model3D::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     json& node = m_json["nodes"][nodeIndex];
 
     glm::vec3 translation(0.0f);
@@ -124,7 +124,7 @@ void Model::traverseNode(uint16_t nodeIndex, glm::mat4 matrix) {
     }
 }
 
-void Model::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
+void Model3D::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     using std::string;
 
     string bytes_text;
@@ -135,7 +135,7 @@ void Model::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     AssetStream::getInstance().getBinaryAssetAsync(
             directory + uri,
             [self = shared_from_this()](const uint8_t* data, size_t size){
-                Model& model = self->asObject();
+                Model3D& model = self->asObject();
 
                 model.m_data = std::vector<uint8_t>(data, data + size);
 
@@ -148,7 +148,7 @@ void Model::getData(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
             }, priority);
 }
 
-std::vector<float> Model::getFloats(json accessor) {
+std::vector<float> Model3D::getFloats(json accessor) {
     std::vector<float> result;
 
     uint32_t bufferViewIndex = accessor.value("bufferView", 1);
@@ -178,7 +178,7 @@ std::vector<float> Model::getFloats(json accessor) {
     return result;
 }
 
-std::vector<GLuint> Model::getIndices(json accessor) {
+std::vector<GLuint> Model3D::getIndices(json accessor) {
     std::vector<GLuint> result;
 
     uint32_t bufferViewIndex = accessor.value("bufferView", 1);
@@ -226,7 +226,7 @@ std::vector<GLuint> Model::getIndices(json accessor) {
     return result;
 }
 
-void Model::getTextures(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
+void Model3D::getTextures(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     m_textures.clear();
 
     std::string directory = AssetStream::getFileDirectory(m_fileName);
@@ -237,7 +237,7 @@ void Model::getTextures(int priority /* = JAGE_ASSET_BASE_PRIORITY */) {
     }
 }
 
-jage::graphics::Material Model::getMaterial(json data, std::vector<std::shared_ptr<Texture>>& textures) {
+jage::graphics::Material Model3D::getMaterial(json data, std::vector<std::shared_ptr<Texture>>& textures) {
     std::string name = data["name"];
     Material result(name);
 
@@ -264,15 +264,15 @@ jage::graphics::Material Model::getMaterial(json data, std::vector<std::shared_p
     return result;
 }
 
-std::vector<jage::graphics::model::Vertex> Model::assembleVertices(
+std::vector<jage::graphics::mesh3d::Vertex3D> Model3D::assembleVertices(
         std::vector<glm::vec3> positions,
         std::vector<glm::vec3> normals,
         std::vector<glm::vec2> texCoords)
 {
-    std::vector<Vertex> vertices;
+    std::vector<Vertex3D> vertices;
     for (uint64_t i = 0; i < positions.size(); ++i) {
         vertices.push_back(
-                Vertex {
+                Vertex3D {
                         positions[i],
                         normals[i],
                         glm::vec3(1.0f, 1.0f, 1.0f),
@@ -283,7 +283,7 @@ std::vector<jage::graphics::model::Vertex> Model::assembleVertices(
 }
 
 template<class TVec>
-std::vector<TVec> Model::groupFloatsVec(std::vector<float> floats) {
+std::vector<TVec> Model3D::groupFloatsVec(std::vector<float> floats) {
     std::vector<TVec> vectors;
     for (auto i = floats.begin(); i < floats.end();) {
         TVec vec;
@@ -293,17 +293,17 @@ std::vector<TVec> Model::groupFloatsVec(std::vector<float> floats) {
     return vectors;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec2& vector) {
+void Model3D::setVector(std::vector<float>::iterator& iterator, glm::vec2& vector) {
     vector = { iterator[0], iterator[1] };
     iterator += 2;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec3& vector) {
+void Model3D::setVector(std::vector<float>::iterator& iterator, glm::vec3& vector) {
     vector = { iterator[0], iterator[1], iterator[2] };
     iterator += 3;
 }
 
-void Model::setVector(std::vector<float>::iterator& iterator, glm::vec4& vector) {
+void Model3D::setVector(std::vector<float>::iterator& iterator, glm::vec4& vector) {
     vector = { iterator[0], iterator[1], iterator[2], iterator[3] };
     iterator += 4;
 }

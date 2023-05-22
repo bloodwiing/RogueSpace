@@ -4,15 +4,15 @@
 #include <vector>
 #include <glad/glad.h>
 
-namespace jage::graphics::model {
+namespace jage::graphics::mesh3d {
 
     /// \brief      Index Buffer Object
     /// \details    Creates and manages an OpenGL Element Array Buffer
-    class EBO {
+    class EBO3D {
     public:
         /// \brief          Creates the Buffer Object with Index data
         /// \param indices  The list of mesh indices
-        explicit EBO(std::vector<GLuint> indices);
+        explicit EBO3D(std::vector<GLuint> indices);
 
         /// \brief          Makes the Index Buffer Object active
         void bind() const;

@@ -3,7 +3,8 @@ file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         event/*.cpp
         event/abc/*.cpp
         graphics/*.cpp
-        graphics/model/*.cpp
+        graphics/mesh2d/*.cpp
+        graphics/mesh3d/*.cpp
         node/*.cpp
         node/abc/*.cpp
         node/actor/*.cpp
