@@ -84,7 +84,7 @@ std::string jage::node::abc::NodeABC<TNode>::toHierarchyString(uint16_t indent /
 template<class TNode>
 void jage::node::abc::NodeABC<TNode>::update() {
     for (auto iter = m_children.begin(); iter != m_children.end();) {
-        auto& child = iter->second.value;
+        std::shared_ptr<NodeType> child = iter->second.value;
         if (child) {
             try {
                 child->update();

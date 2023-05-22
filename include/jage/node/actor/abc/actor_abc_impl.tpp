@@ -1,9 +1,9 @@
 template<class T>
-T* jage::node::actor::abc::ActorABC::addChild(JAGE_ACTOR_ARGS) {
-    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(parent, name, scene, tag, isVolatile);
+T* jage::node::actor::abc::ActorABC::addChild(std::string name, Tag tag) {
+    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(this, std::move(name), m_scene, tag, m_volatile);
 }
 
 template<class T, class... Args>
-T* jage::node::actor::abc::ActorABC::addChild(JAGE_ACTOR_ARGS, Args&&... args) {
-    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(parent, name, scene, tag, isVolatile, std::forward<Args>(args)...);
+T* jage::node::actor::abc::ActorABC::addChild(std::string name, Tag tag, Args&&... args) {
+    return jage::node::abc::NodeABC<ActorABC>::addChild<T>(this, std::move(name), m_scene, tag, m_volatile, std::forward<Args>(args)...);
 }

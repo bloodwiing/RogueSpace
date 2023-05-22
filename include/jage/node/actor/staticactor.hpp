@@ -23,23 +23,6 @@ namespace jage::node::actor {
         /// \see            Actor#addChild
         StaticActor(JAGE_ACTOR_ARGS);
 
-        /// \brief          Creates a new Child under this Parent Actor
-        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-        /// \param name     Name of the Actor node
-        /// \return         A pointer to the newly created Actor
-        template<class T>
-        T* addChild(std::string name, Tag tag);
-        /// \brief          Creates a new Child under this Parent Actor
-        /// \tparam T       The type of Actor (must be a subclass of <b>ActorBase</b>)
-        /// \param name     Name of the Actor node
-        /// \param args     The list of extra arguments to pass when creating the Actor
-        /// \return         A pointer to the newly created Actor
-        template<class T, class... Args>
-        T* addChild(std::string name, Tag tag, Args&&... args);
-
-        /// \returns        The containing Scene
-        [[nodiscard]] Scene* getScene() const;
-
         /// \return         The relative Translation
         [[nodiscard]] glm::vec3 getTranslation() const override;
         /// \return         The relative Rotation
@@ -64,17 +47,12 @@ namespace jage::node::actor {
         /// \param sca      New Scale
         void setScale(const glm::vec3& sca) override {};
 
-        void update() override;
+        using jage::node::actor::abc::ActorABC::update;
         void draw(jage::graphics::Shader &shader) override;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;
-
-        /// The containing Scene
-        Scene* m_scene;
     };
 }
-
-#include "staticactor_impl.tpp"
 
 #endif //JAGE_STATIC_ACTOR_HPP

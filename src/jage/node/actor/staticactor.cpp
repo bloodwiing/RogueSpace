@@ -14,13 +14,8 @@ std::string StaticActor::getTypeName() const {
 
 StaticActor::StaticActor(JAGE_ACTOR_ARGS)
     : ActorABC(parent, std::move(name), scene, tag, isVolatile)
-    , m_scene(scene)
 {
 
-}
-
-jage::node::Scene *StaticActor::getScene() const {
-    return m_scene;
 }
 
 glm::vec3 StaticActor::getTranslation() const {
@@ -45,12 +40,6 @@ glm::vec3 StaticActor::getUp() const {
 
 glm::vec3 StaticActor::getWorldPosition() const {
     return glm::vec3(0.0f);
-}
-
-void StaticActor::update() {
-    base::DyingBase::update();
-    script::abc::ScriptableABC::update();
-    abc::ActorABC::update();
 }
 
 void StaticActor::draw(jage::graphics::Shader& shader) {

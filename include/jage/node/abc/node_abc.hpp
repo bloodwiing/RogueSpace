@@ -17,11 +17,13 @@ namespace jage::node::abc {
     class NodeABC : public std::enable_shared_from_this<TNode> {
     public:
         struct ChildEntry {
+            typedef TNode NodeType;
             std::shared_ptr<TNode> value;
             uint16_t nameRepeat;
         };
 
         typedef TNode NodeType;
+        typedef std::map<std::string, ChildEntry> ChildrenMapType;
 
         NodeABC(JAGE_NODE_ARGS(TNode));
         NodeABC(const NodeABC&) = delete;

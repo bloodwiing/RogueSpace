@@ -59,7 +59,7 @@ namespace jage::node::actor {
         /// A flag for if the mouse is being captured and hidden
         bool m_flyClicked = false;
 
-        using DynamicActor::addChild;
+        using abc::ActorABC::addChild;
     };
 }
 

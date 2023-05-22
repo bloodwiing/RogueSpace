@@ -30,16 +30,18 @@ namespace jage::node::actor::abc {
     /// \note       Should not be used raw, but has 2 implementations as a test <b>Scene</b> or <b>Actor</b>
     /// \see        Scene
     /// \see        Actor
-    class ActorABC : public node::abc::NodeABC<ActorABC>, public jage::node::abc::Transformable3DABC, public script::abc::ScriptableABC, public jage::node::base::DyingBase {
-    protected:
-        ActorABC(JAGE_ACTOR_ARGS);
-
-        void tagToScene(Scene* scene);
+    class ActorABC
+            : public node::abc::NodeABC<ActorABC>
+            , public jage::node::abc::Transformable3DABC
+            , public script::abc::ScriptableABC
+            , public jage::node::base::DyingBase {
     public:
         template<class T>
-        T* addChild(JAGE_ACTOR_ARGS);
+        T* addChild(std::string name, Tag tag);
         template<class T, class... Args>
-        T* addChild(JAGE_ACTOR_ARGS, Args&&... args);
+        T* addChild(std::string name, Tag tag, Args&&... args);
+
+        [[nodiscard]] Scene* getScene() const;
 
         [[nodiscard]] Tag getTag() const;
         [[nodiscard]] bool isVolatile() const;
@@ -49,18 +51,30 @@ namespace jage::node::actor::abc {
 
         void setTag(Tag tag);
 
-        using jage::node::abc::NodeABC<ActorABC>::update;
-        using jage::node::base::DyingBase::isDead;
+        void update() override;
+
+        void kill() override;
+        void kill(float delay) override;
+        bool isDead() const override;
 
     protected:
+        ActorABC(JAGE_ACTOR_ARGS);
+
+        void tagToScene(Scene* scene);
+
         [[nodiscard]] std::string getTypeName() const override;
+
+        Scene* m_scene;
 
         /// The name of the Hierarchy element
         Tag m_tag = Tag::UNTAGGED;
         const bool m_volatile;
 
-    private:
         using node::abc::NodeABC<ActorABC>::addChild;
+
+    private:
+        using node::abc::NodeABC<ActorABC>::update;
+        using base::DyingBase::updateDeathTimer;
     };
 }
 
