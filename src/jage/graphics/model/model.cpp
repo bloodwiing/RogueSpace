@@ -237,7 +237,7 @@ void Model::getTextures(int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     }
 }
 
-jage::graphics::Material Model::getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures) {
+jage::graphics::Material Model::getMaterial(json data, std::vector<std::shared_ptr<Texture>>& textures) {
     std::string name = data["name"];
     Material result(name);
 

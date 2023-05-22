@@ -44,7 +44,7 @@ namespace jage::graphics::model {
 
         /// List of Materials assigned to each of the Meshes
         std::vector<Material> m_materials;
-        std::vector<std::shared_ptr<Texture> > m_textures;
+        std::vector<std::shared_ptr<Texture>> m_textures;
 
         /// \brief              Reads and saves a Mesh from the index
         /// \param meshIndex    The index of which Mesh to load
@@ -69,7 +69,7 @@ namespace jage::graphics::model {
         /// \param data         glTF Material entry
         /// \param textures     The list of textures, made via getTextures()
         /// \return             A compiled Material
-        Material getMaterial(json data, std::vector<std::shared_ptr<Texture> >& textures);
+        Material getMaterial(json data, std::vector<std::shared_ptr<Texture>>& textures);
 
         /// \brief              Combines all 3 lists of vertex data into a single list of Vertex objects
         /// \param positions    The Vertex Position list
