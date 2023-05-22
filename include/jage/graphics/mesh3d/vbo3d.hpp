@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 
+#include "jage/graphics/abc/vbo_abc.hpp"
+
 namespace jage::graphics::mesh3d {
 
     /// \brief      A Mesh Vertex
@@ -20,28 +22,7 @@ namespace jage::graphics::mesh3d {
         glm::vec2 texCoord;
     };
 
-    /// \brief      Vertex Buffer Object
-    /// \details    OpenGL Array Buffer
-    class VBO3D {
-    public:
-        /// \brief          Creates the Buffer Object with Vertex data
-        /// \param vertices The list of mesh vertices
-        explicit VBO3D(std::vector<Vertex3D>& vertices);
-
-        /// \brief          Makes the Vertex Buffer Object active
-        void bind() const;
-        /// \brief          Makes no Vertex Buffer Object active (inactive)
-        void unbind() const;
-        /// \brief          Deletes the Array Buffer
-        void destroy() const;
-
-        /// \return         Array Buffer OpenGL ID
-        [[nodiscard]] GLuint getID() const;
-
-    private:
-        /// Array Buffer OpenGL ID
-        GLuint m_ID;
-    };
+    typedef abc::VBObjectABC<Vertex3D> VBO3D;
 }
 
 #endif //JAGE_VBO_HPP

@@ -1,26 +1,19 @@
 #include "jage/graphics/mesh3d/mesh3d.hpp"
 
-#include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "jage/graphics/abc/ebo.hpp"
 
 using jage::graphics::mesh3d::Mesh3D;
 
-Mesh3D::Mesh3D(std::vector<Vertex3D>& vertices, std::vector<GLuint>& indices, Material& material)
-    : m_vertices(vertices)
-    , m_indices(indices)
-    , m_material(material)
-    , m_initialised(false)
-    , m_VAO()
+Mesh3D::Mesh3D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::Material &material)
+        : MeshABC(vertices, indices, material)
 {
 
 }
 
-Mesh3D::Mesh3D(const Mesh3D &mesh)
-    : m_vertices(mesh.m_vertices)
-    , m_indices(mesh.m_indices)
-    , m_material(mesh.m_material)
-    , m_initialised(false)
-    , m_VAO()
+Mesh3D::Mesh3D(const jage::graphics::abc::MeshABC<jage::graphics::mesh3d::VAO3D>& mesh)
+        : MeshABC(mesh)
 {
 
 }
@@ -54,11 +47,11 @@ void Mesh3D::draw(
 }
 
 void Mesh3D::initialise() {
-    m_VAO = VAO3D();
+    m_VAO.create();
     m_VAO.bind();
 
-    VBO3D VBO(m_vertices);
-    EBO3D EBO(m_indices);
+    auto VBO = VBO3D(m_vertices);
+    auto EBO = abc::EBO(m_indices);
 
     m_VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex3D), (void *)0);
     m_VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex3D), (void *)(3 * sizeof(float)));
