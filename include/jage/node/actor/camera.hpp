@@ -21,14 +21,11 @@ namespace jage::node::actor {
         /// \param name     Name of the Actor node
         /// \see            Scene#addChild
         /// \see            Actor#addChild
-        Camera(JAGE_ACTOR_ARGS);
+        Camera(JAGE_ACTOR_ARGS, float fov, float near, float far);
         ~Camera();
 
         /// \brief              Updates the Camera Matrix based off of the World Matrix and Camera settings
-        /// \param fov_degrees  The perspective degrees
-        /// \param near_plane   The nearest plane where geometry can intersect the viewing frustum
-        /// \param far_plane    The furthest plane where geometry can intersect the viewing frustum
-        void updateMatrix(float fov_degrees, float near_plane, float far_plane);
+        void updateMatrix();
         /// \brief          Sets the current Camera Matrix as a uniform for a Shader
         /// \param shader   The Shader program to update
         /// \param uniform  The name of the uniform to update
@@ -39,6 +36,7 @@ namespace jage::node::actor {
 
         /// \brief          Makes the Camera statically accessible and used as the main camera for rendering
         void setActive() const;
+        [[nodiscard]] bool isActive() const;
 
         void update() override;
 
@@ -50,7 +48,7 @@ namespace jage::node::actor {
         glm::mat4 m_matrix = glm::mat4(1.0f);
 
         /// The currently active Camera pointer
-        static Camera* m_active;
+        static Camera* active;
 
         /// The speed multiplier for translational flying
         float m_flySpeed = 1.0f;
@@ -58,6 +56,10 @@ namespace jage::node::actor {
         float m_flySensitivity = 100.0f;
         /// A flag for if the mouse is being captured and hidden
         bool m_flyClicked = false;
+
+        float m_fov;
+        float m_near;
+        float m_far;
 
         using abc::ActorABC::addChild;
     };

@@ -16,22 +16,28 @@ using glm::vec3;
 using glm::vec4;
 using glm::normalize;
 
-Camera* Camera::m_active = nullptr;
+Camera* Camera::active = nullptr;
 
 std::string Camera::getTypeName() const {
     return "Camera";
 }
 
-Camera::Camera(JAGE_ACTOR_ARGS)
+Camera::Camera(JAGE_ACTOR_ARGS, float fov, float near, float far)
     : DynamicActor(parent, std::move(name), scene, tag, isVolatile)
+    , m_fov(fov)
+    , m_near(near)
+    , m_far(far)
 {  }
 
 Camera::~Camera() {
-    if (m_active == this)
-        m_active = nullptr;
+    if (active == this)
+        active = nullptr;
 }
 
-void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) {
+void Camera::updateMatrix() {
+    if (!isActive())
+        return;
+
     using jage::runtime::Window;
 
     mat4 view(1.0f);
@@ -40,7 +46,7 @@ void Camera::updateMatrix(float fov_degrees, float near_plane, float far_plane) 
     vec3 point = glm::column(DynamicActor::getWorldMatrix(), 3);
 
     view = glm::lookAt(point, point + DynamicActor::getOrientation(), DynamicActor::getUp());
-    proj = glm::perspective(glm::radians(fov_degrees), Window::getActive()->getAspectRatio(), near_plane, far_plane);
+    proj = glm::perspective(glm::radians(m_fov), Window::getActive()->getAspectRatio(), m_near, m_far);
 
     m_matrix = proj * view;
 }
@@ -50,13 +56,18 @@ void Camera::applyMatrix(jage::graphics::Shader& shader, const char* uniform) {
 }
 
 Camera* Camera::getActiveCamera() {
-    return m_active;
+    return active;
 }
 
 void Camera::setActive() const {
-    m_active = (Camera*)this;
+    active = (Camera*)this;
+}
+
+bool Camera::isActive() const {
+    return active == this;
 }
 
 void Camera::update() {
     DynamicActor::update();
+    updateMatrix();
 }
