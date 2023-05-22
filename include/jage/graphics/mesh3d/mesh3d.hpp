@@ -1,5 +1,5 @@
-#ifndef JAGE_MESH_HPP
-#define JAGE_MESH_HPP
+#ifndef JAGE_MESH_3D_HPP
+#define JAGE_MESH_3D_HPP
 
 #include <vector>
 #include <string>
@@ -41,4 +41,4 @@ namespace jage::graphics::mesh3d {
     };
 }
 
-#endif //JAGE_MESH_HPP
+#endif //JAGE_MESH_3D_HPP

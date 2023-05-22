@@ -1,5 +1,5 @@
-#ifndef JAGE_MODEL_HPP
-#define JAGE_MODEL_HPP
+#ifndef JAGE_MODEL_3D_HPP
+#define JAGE_MODEL_3D_HPP
 
 #include <vector>
 #include <json/json.h>
@@ -104,4 +104,4 @@ namespace jage::graphics::mesh3d {
     };
 }
 
-#endif //JAGE_MODEL_HPP
+#endif //JAGE_MODEL_3D_HPP

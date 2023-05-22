@@ -1,5 +1,5 @@
-#ifndef JAGE_VAO_HPP
-#define JAGE_VAO_HPP
+#ifndef JAGE_VAO_3D_HPP
+#define JAGE_VAO_3D_HPP
 
 #include <glad/glad.h>
 
@@ -11,4 +11,4 @@ namespace jage::graphics::mesh3d {
     typedef abc::VAObjectABC<VBO3D> VAO3D;
 }
 
-#endif //JAGE_VAO_HPP
+#endif //JAGE_VAO_3D_HPP

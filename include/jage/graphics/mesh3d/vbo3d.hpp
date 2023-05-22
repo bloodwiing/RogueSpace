@@ -1,5 +1,5 @@
-#ifndef JAGE_VBO_HPP
-#define JAGE_VBO_HPP
+#ifndef JAGE_VBO_3D_HPP
+#define JAGE_VBO_3D_HPP
 
 #include <vector>
 #include <glm/glm.hpp>
@@ -25,4 +25,4 @@ namespace jage::graphics::mesh3d {
     typedef abc::VBObjectABC<Vertex3D> VBO3D;
 }
 
-#endif //JAGE_VBO_HPP
+#endif //JAGE_VBO_3D_HPP
