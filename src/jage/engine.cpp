@@ -8,6 +8,7 @@
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/node/actor/shipactor.hpp"
 #include "jage/node/actor/physicsactor.hpp"
+#include "jage/node/frame/basicframe.hpp"
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
 #include "jage/script/weaponscript.hpp"
@@ -79,8 +80,11 @@ void JAGEngine::loop() {
 
 void JAGEngine::loadScene() {
     using namespace jage::node::actor;
+    using namespace jage::node::frame;
 
     m_scene = std::make_unique<jage::node::Scene>();
+
+    // 3D
 
     auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
@@ -111,4 +115,10 @@ void JAGEngine::loadScene() {
     starship->translate(glm::vec3(100.0f, 0.0f, 0.0f));
 
     std::cout << m_scene.get();
+
+    // 2D
+
+    m_canvas = std::make_unique<jage::node::Canvas>(type::RectF(1000.0f, 1000.0f));
+
+//    m_canvas->addChild<BasicFrame>()
 }

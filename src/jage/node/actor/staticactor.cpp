@@ -47,28 +47,8 @@ glm::vec3 StaticActor::getWorldPosition() const {
     return glm::vec3(0.0f);
 }
 
-bool StaticActor::isDead() const {
-    return m_dead;
-}
-
-void StaticActor::markDead(float wait /* = -1.0f */) {
-    if (wait <= 0.0f)
-        m_dead = true;
-    else
-        m_deathTimer = wait;
-}
-
 void StaticActor::update() {
-    using jage::runtime::Time;
-
-    if (m_deathTimer >= 0.0f) {
-        m_deathTimer -= Time::getDeltaFloat();
-        if (m_deathTimer <= 0.0f) {
-            m_dead = true;
-            m_deathTimer = -1.0f;
-        }
-    }
-
+    base::DyingBase::update();
     script::abc::ScriptableABC::update();
     abc::ActorABC::update();
 }

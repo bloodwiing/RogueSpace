@@ -3,15 +3,15 @@
 
 #include <vector>
 #include <memory>
+
+#include "jage/node/abc/dying_abc.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
 namespace jage::script::abc {
 
-    class ScriptableABC {
+    class ScriptableABC : public node::abc::DyingABC {
     public:
         virtual void update();
-
-        [[nodiscard]] virtual bool isDead() const = 0;
 
         template<class T>
         T* attachScript();

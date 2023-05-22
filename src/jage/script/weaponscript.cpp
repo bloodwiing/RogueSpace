@@ -53,7 +53,7 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
     // Launch it
     bullet->setRotation(glm::quatLookAt((glm::vec3)glm::vec4(orientation, 0.0), up));
     bullet->addForce((glm::vec3)glm::vec4(orientation, 0.0) * m_bulletSpeed + extraVelocity);
-    bullet->markDead(10.0f);
+    bullet->kill(10.0f);
 
     // Remember for next projectile
     m_fireCoolDown = 0.1f;

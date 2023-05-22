@@ -12,7 +12,9 @@
 #include "jage/graphics/shader.hpp"
 #include "jage/tags.hpp"
 #include "jage/node/abc/node_abc.hpp"
-#include "jage/node/base/transformable3d.hpp"
+#include "jage/node/abc/transformable3d_abc.hpp"
+#include "jage/node/base/dying_base.hpp"
+#include "jage/script/abc/scriptable_abc.hpp"
 
 #define JAGE_ACTOR_ARGS JAGE_NODE_ARGS(jage::node::actor::abc::ActorABC), jage::node::Scene* scene, jage::Tag tag, bool isVolatile
 
@@ -28,7 +30,7 @@ namespace jage::node::actor::abc {
     /// \note       Should not be used raw, but has 2 implementations as a test <b>Scene</b> or <b>Actor</b>
     /// \see        Scene
     /// \see        Actor
-    class ActorABC : public node::abc::NodeABC<ActorABC>, public jage::node::base::Transformable3D {
+    class ActorABC : public node::abc::NodeABC<ActorABC>, public jage::node::abc::Transformable3DABC, public script::abc::ScriptableABC, public jage::node::base::DyingBase {
     protected:
         ActorABC(JAGE_ACTOR_ARGS);
 
@@ -46,6 +48,9 @@ namespace jage::node::actor::abc {
         [[nodiscard]] virtual glm::vec3 getUp() const = 0;
 
         void setTag(Tag tag);
+
+        using jage::node::abc::NodeABC<ActorABC>::update;
+        using jage::node::base::DyingBase::isDead;
 
     protected:
         [[nodiscard]] std::string getTypeName() const override;

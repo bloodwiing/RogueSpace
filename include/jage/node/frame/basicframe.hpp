@@ -16,13 +16,10 @@ namespace jage::node::frame {
         type::RectF getAnchor() const override;
         type::RectF getPhysicalRect() const override;
         [[nodiscard]] glm::vec4 getFill() const;
-        bool isDead() const override;
 
         void setRect(const type::RectF& rect);
         void setAnchor(const type::RectF& anchor);
         void setFill(glm::vec4 fill);
-
-        void markDead(float wait = -1.0f);
 
         void update() override;
 
@@ -38,9 +35,6 @@ namespace jage::node::frame {
 
     private:
         bool m_needsRectReflow = false;
-
-        float m_deathTimer = -1.0f;
-        bool m_dead = false;
     };
 }
 

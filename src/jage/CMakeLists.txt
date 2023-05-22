@@ -8,6 +8,7 @@ file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         node/abc/*.cpp
         node/actor/*.cpp
         node/actor/abc/*.cpp
+        node/base/*.cpp
         node/frame/*.cpp
         node/frame/abc/*.cpp
         runtime/*.cpp

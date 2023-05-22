@@ -8,14 +8,12 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include "jage/node/actor/abc/actor_abc.hpp"
-#include "jage/script/abc/script_abc.hpp"
-#include "jage/script/abc/scriptable_abc.hpp"
 
 namespace jage::node::actor {
 
     /// \brief          Main world object type.
     /// \details        This Actor can exist in the world but is static in Transformation and is able to die
-    class StaticActor : public abc::ActorABC, public script::abc::ScriptableABC {
+    class StaticActor : public abc::ActorABC {
     public:
         /// \note           Should not be used raw, please use addChild
         /// \param scene    Containing Scene of the Actor node
@@ -51,7 +49,6 @@ namespace jage::node::actor {
         [[nodiscard]] glm::vec3 getOrientation() const override;
         [[nodiscard]] glm::vec3 getUp() const override;
         [[nodiscard]] glm::vec3 getWorldPosition() const override;
-        bool isDead() const override;
 
         /// \brief          Sets the relative Translation of the object
         /// \note           Only implemented in <b>DynamicActor</b>
@@ -66,8 +63,6 @@ namespace jage::node::actor {
         /// \param sca      New Scale
         void setScale(const glm::vec3& sca) override {};
 
-        void markDead(float wait = -1.0f);
-
         void update() override;
         void draw(jage::graphics::Shader &shader) override;
 
@@ -76,12 +71,6 @@ namespace jage::node::actor {
 
         /// The containing Scene
         Scene* m_scene;
-
-    private:
-        using script::abc::ScriptableABC::update;
-
-        float m_deathTimer = -1.0f;
-        bool m_dead = false;
     };
 }
 
