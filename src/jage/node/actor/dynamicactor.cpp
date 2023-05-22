@@ -89,24 +89,8 @@ void DynamicActor::setScale(const glm::vec3 &sca) {
 void DynamicActor::setMatrix(const glm::mat4 &mat) {
     glm::vec3 skew;
     glm::vec4 perspective;
-    glm::decompose(mat, m_scale, m_rotation, m_translation, skew,perspective);
+    glm::decompose(mat, m_scale, m_rotation, m_translation, skew, perspective);
     m_rotation = glm::conjugate(m_rotation);
-    flagForMatrixUpdate();
-}
-
-void DynamicActor::translate(const glm::vec3 &tra) {
-    m_translation += tra;
-    flagForMatrixUpdate();
-}
-
-void DynamicActor::rotate(const glm::quat &rot) {
-    m_rotation = glm::normalize(rot * m_rotation);
-    flagForVectorUpdate();
-    flagForMatrixUpdate();
-}
-
-void DynamicActor::scale(const glm::vec3 &sca) {
-    m_scale *= sca;
     flagForMatrixUpdate();
 }
 

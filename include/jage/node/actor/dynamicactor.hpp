@@ -38,22 +38,6 @@ namespace jage::node::actor {
         /// \param mat      The Relative Transformation Matrix to process
         void setMatrix(const glm::mat4& mat);
 
-        /// \brief          A helper function to offset the current Translation with the given vector.
-        /// \details        The provided value is added onto the current Translation of the Actor
-        ///                 and then it is marked for a Matrix update.
-        /// \param tra      The Translation change
-        void translate(const glm::vec3& tra);
-        /// \brief          A helper function to offset the current Rotation with the given vector.
-        /// \details        The provided value is multiplied with the current Rotation of the Actor
-        ///                 and then it is marked for a Matrix update.
-        /// \param rot      The Rotation change
-        void rotate(const glm::quat& rot);
-        /// \brief          A helper function to offset the current Scale with the given vector.
-        /// \details        The provided value is multiplied with the current Scale of the Actor
-        ///                 and then it is marked for a Matrix update.
-        /// \param sca      The Scale change
-        void scale(const glm::vec3& sca);
-
         /// \brief          Marks the element as pending for a Matrix recalculation.
         void flagForMatrixUpdate();
         void flagForVectorUpdate();

@@ -31,10 +31,6 @@ bool ActorABC::isVolatile() const {
     return m_volatile;
 }
 
-glm::mat4 ActorABC::getWorldMatrix() const {
-    return glm::mat4(1.0f);
-}
-
 void ActorABC::setTag(jage::Tag tag) {
     m_tag = tag;
 }
