@@ -16,7 +16,7 @@ bool DyingBase::isDead() const {
     return m_dead;
 }
 
-void DyingBase::update() {
+void DyingBase::updateDeathTimer() {
     using jage::runtime::Time;
 
     if (m_deathTimer > 0.0f and !m_dead) {

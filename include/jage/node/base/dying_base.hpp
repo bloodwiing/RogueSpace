@@ -11,7 +11,7 @@ namespace jage::node::base {
         void kill(float delay) override;
         [[nodiscard]] bool isDead() const override;
 
-        void update();
+        void updateDeathTimer();
 
     private:
         float m_deathTimer = 0.0f;
