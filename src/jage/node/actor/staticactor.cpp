@@ -15,6 +15,10 @@ StaticActor::StaticActor(JAGE_ACTOR_ARGS)
 
 }
 
+glm::mat4 StaticActor::getWorldMatrix() const {
+    return glm::mat4(1.0f);
+}
+
 glm::vec3 StaticActor::getTranslation() const {
     return vec3(0.0f);
 }

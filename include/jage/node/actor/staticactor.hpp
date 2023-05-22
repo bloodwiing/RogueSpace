@@ -23,6 +23,7 @@ namespace jage::node::actor {
         /// \see            Actor#addChild
         StaticActor(JAGE_ACTOR_ARGS);
 
+        [[nodiscard]] glm::mat4 getWorldMatrix() const override;
         /// \return         The relative Translation
         [[nodiscard]] glm::vec3 getTranslation() const override;
         /// \return         The relative Rotation
