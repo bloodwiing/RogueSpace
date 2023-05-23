@@ -9,6 +9,7 @@
 
 using jage::graphics::Texture;
 using jage::runtime::asset::AssetStream;
+using jage::type::RectI32;
 
 std::shared_ptr<Texture> Texture::defaultTexture = std::shared_ptr<Texture>();
 
@@ -120,6 +121,10 @@ GLuint Texture::getID() const {
         return 0;
 
     return LOD->getID();
+}
+
+RectI32 Texture::getSizeRect() const {
+    return m_main->getSize();
 }
 
 void Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
@@ -300,4 +305,16 @@ GLuint Texture::LOD::getID() const {
 
 int Texture::LOD::getLevel() const {
     return m_level;
+}
+
+int Texture::LOD::getWidth() const {
+    return m_width;
+}
+
+int Texture::LOD::getHeight() const {
+    return m_height;
+}
+
+RectI32 Texture::LOD::getSize() const {
+    return {getWidth(), getHeight()};
 }

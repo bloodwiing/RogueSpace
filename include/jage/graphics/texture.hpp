@@ -11,6 +11,7 @@
 #include "jage/graphics/shader.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
+#include "jage/type/rect.hpp"
 
 namespace jage::graphics {
 
@@ -53,6 +54,8 @@ namespace jage::graphics {
 
         /// \return         Texture OpenGL ID
         [[nodiscard]] GLuint getID() const;
+
+        [[nodiscard]] jage::type::RectI32 getSizeRect() const;
 
     protected:
         class LOD;
@@ -97,6 +100,10 @@ namespace jage::graphics {
 
         [[nodiscard]] GLuint getID() const;
         [[nodiscard]] int getLevel() const;
+
+        [[nodiscard]] int getWidth() const;
+        [[nodiscard]] int getHeight() const;
+        [[nodiscard]] jage::type::RectI32 getSize() const;
 
     private:
         GLuint m_ID;
