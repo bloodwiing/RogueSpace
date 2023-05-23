@@ -119,7 +119,7 @@ void JAGEngine::loadScene() {
 
     // 2D
 
-    m_canvas = std::make_unique<jage::node::Canvas>(type::RectF(1000.0f, 1000.0f));
+    m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
-    m_canvas->addChild<BasicFrame>("Test");
+    m_canvas->addChild<BasicFrame>("Test", type::RectI32(500, 500), type::RectF(0.5f, 0.5f));
 }

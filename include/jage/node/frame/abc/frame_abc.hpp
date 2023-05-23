@@ -8,7 +8,7 @@
 #include "jage/node/base/dying_base.hpp"
 #include "jage/script/abc/scriptable_abc.hpp"
 
-#define JAGE_FRAME_ARGS JAGE_NODE_ARGS(jage::node::frame::abc::FrameABC), jage::node::Canvas* canvas, jage::node::abc::RectNodeABC* rectParent
+#define JAGE_FRAME_ARGS JAGE_NODE_ARGS(jage::node::frame::abc::FrameABC), jage::node::Canvas* canvas, jage::node::abc::RectNodeABC* rectParent, const type::RectI32& rect, const type::RectF& anchor
 
 namespace jage::node {
     class Canvas;
@@ -31,6 +31,13 @@ namespace jage::node::frame::abc {
         [[nodiscard]] Canvas* getCanvas() const;
         [[nodiscard]] RectNodeABC* getRectParent() const;
 
+        type::RectI32 getRect() const override;
+        type::RectF getAnchor() const override;
+        type::RectF getPhysicalRect() const override;
+
+        void setRect(const type::RectI32& rect);
+        void setAnchor(const type::RectF& anchor);
+
         void update() override;
 
         void kill() override;
@@ -42,12 +49,22 @@ namespace jage::node::frame::abc {
 
         [[nodiscard]] std::string getTypeName() const override;
 
+        type::RectI32 m_rect;
+        type::RectF m_anchor;
+        type::RectF m_physicalRect;
+
+        virtual void updateReflow();
+
+        void markForReflow();
+
     private:
         Canvas* m_canvas;
         RectNodeABC* m_rectParent;
 
         using node::abc::NodeABC<FrameABC>::addChild;
         using node::abc::NodeABC<FrameABC>::update;
+
+        bool m_needsRectReflow = false;
     };
 }
 

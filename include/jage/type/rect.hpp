@@ -6,6 +6,13 @@
 namespace jage::type {
 
     template<typename T, typename TPair>
+    struct Rect;
+
+    typedef Rect<float, glm::vec2> RectF;
+    typedef Rect<double, glm::vec<2, double>> RectD;
+    typedef Rect<int, glm::vec<2, int>> RectI32;
+
+    template<typename T, typename TPair>
     struct Rect {
         typedef T ValueType;
         typedef TPair PairType;
@@ -32,7 +39,8 @@ namespace jage::type {
         void setWidth(T width);
         void setHeight(T height);
 
-        Rect scalePhysical(const Rect<T, TPair>& parentImaginary, const Rect<T, TPair>& parentPhysical, const Rect<float, glm::vec2>& anchor);
+        template<class TRect>
+        Rect scalePhysical(const Rect<T, TPair>& parentImaginary, const TRect& parentPhysical, const TRect& anchor);
 
         Rect normalized();
 
@@ -66,10 +74,6 @@ namespace jage::type {
 
         Rect& operator=(const Rect& ref);
     };
-
-    typedef Rect<float, glm::vec2> RectF;
-    typedef Rect<double, glm::vec<2, double>> RectD;
-    typedef Rect<int, glm::vec<2, int>> RectI32;
 }
 
 template<typename T, typename TPair>

@@ -8,7 +8,8 @@ namespace jage::node::frame {
     class SolidFrame
             : public BasicFrame
     {
-
+    public:
+        void draw() override;
     };
 }
 

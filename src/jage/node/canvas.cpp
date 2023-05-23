@@ -5,14 +5,14 @@
 
 using jage::node::Canvas;
 
-Canvas::Canvas(const jage::type::RectF& rect)
+Canvas::Canvas(const jage::type::RectI32& rect)
     : abc::NodeABC<frame::abc::FrameABC>(nullptr, "root canvas")
     , m_rect(rect)
 {
 
 }
 
-jage::type::RectF Canvas::getRect() const {
+jage::type::RectI32 Canvas::getRect() const {
     return m_rect;
 }
 
