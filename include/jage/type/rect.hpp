@@ -5,21 +5,26 @@
 
 namespace jage::type {
 
-    template<typename T>
+    template<typename T, typename TPair>
     struct Rect {
+        typedef T ValueType;
+        typedef TPair PairType;
+
         T x1, y1;
         T x2, y2;
 
         Rect();
         Rect(T width, T height);
         Rect(T x1, T y1, T x2, T y2);
-        Rect(glm::vec2 corner, T width, T height);
-        Rect(glm::vec2 corner1, glm::vec2 corner2);
+        Rect(TPair corner, T width, T height);
+        Rect(TPair corner1, TPair corner2);
         Rect(const Rect& ref);
         ~Rect() = default;
 
-        template<typename TNew>
-        Rect<TNew> as();
+        template<typename TNew, typename TPairNew>
+        Rect<TNew, TPairNew> as();
+        template<typename TRect>
+        jage::type::Rect<typename TRect::ValueType, typename TRect::PairType> as();
 
         void moveX(T x);
         void moveY(T y);
@@ -27,12 +32,34 @@ namespace jage::type {
         void setWidth(T width);
         void setHeight(T height);
 
-        Rect scalePhysical(const Rect<T>& parentImaginary, const Rect<T>& parentPhysical, const Rect<float>& anchor);
+        Rect scalePhysical(const Rect<T, TPair>& parentImaginary, const Rect<T, TPair>& parentPhysical, const Rect<float, glm::vec2>& anchor);
 
         Rect normalized();
 
-        bool isContaining(const glm::vec2& point);
+        bool isContaining(const TPair& point);
         bool isIntersecting(const Rect& other);
+
+        [[nodiscard]] TPair getSize() const;
+
+        Rect<T, TPair>& operator+=(const T& val);
+        Rect<T, TPair>& operator+=(const TPair& val);
+        Rect<T, TPair> operator+(const T& val) const;
+        Rect<T, TPair> operator+(const TPair& val) const;
+
+        Rect<T, TPair>& operator-=(const T& val);
+        Rect<T, TPair>& operator-=(const TPair& val);
+        Rect<T, TPair> operator-(const T& val) const;
+        Rect<T, TPair> operator-(const TPair& val) const;
+
+        Rect<T, TPair>& operator*=(const T& val);
+        Rect<T, TPair>& operator*=(const TPair& val);
+        Rect<T, TPair> operator*(const T& val) const;
+        Rect<T, TPair> operator*(const TPair& val) const;
+
+        Rect<T, TPair>& operator/=(const T& val);
+        Rect<T, TPair>& operator/=(const TPair& val);
+        Rect<T, TPair> operator/(const T& val) const;
+        Rect<T, TPair> operator/(const TPair& val) const;
 
         bool operator==(const Rect& other) const;
         bool operator!=(const Rect& other) const;
@@ -40,9 +67,30 @@ namespace jage::type {
         Rect& operator=(const Rect& ref);
     };
 
-    typedef Rect<float> RectF;
-    typedef Rect<double> RectD;
+    typedef Rect<float, glm::vec2> RectF;
+    typedef Rect<double, glm::vec<2, double>> RectD;
+    typedef Rect<int, glm::vec<2, int>> RectI32;
 }
+
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator+(const T& val, const jage::type::Rect<T, TPair>& rect);
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator+(const TPair& val, const jage::type::Rect<T, TPair>& rect);
+
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator-(const T& val, const jage::type::Rect<T, TPair>& rect);
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator-(const TPair& val, const jage::type::Rect<T, TPair>& rect);
+
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator*(const T& val, const jage::type::Rect<T, TPair>& rect);
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator*(const TPair& val, const jage::type::Rect<T, TPair>& rect);
+
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator/(const T& val, const jage::type::Rect<T, TPair>& rect);
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> operator/(const TPair& val, const jage::type::Rect<T, TPair>& rect);
 
 #include "rect_impl.tpp"
 
