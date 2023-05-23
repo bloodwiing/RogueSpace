@@ -37,7 +37,7 @@ namespace jage::runtime {
         [[nodiscard]] int getWidth() const;
         /// \return         The Height of the Window
         [[nodiscard]] int getHeight() const;
-        [[nodiscard]] jage::type::Rect<int> getRect() const;
+        [[nodiscard]] jage::type::RectI32 getRect() const;
         /// \return         The Aspect Ratio or Width/Height Ratio of the Window
         [[nodiscard]] float getAspectRatio() const;
 

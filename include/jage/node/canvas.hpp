@@ -30,7 +30,7 @@ namespace jage::node {
         jage::type::RectF m_rect;
         jage::type::RectF m_screenRect;
 
-        jage::type::Rect<int> m_prevScreenRect = type::Rect<int>();
+        jage::type::RectI32 m_prevScreenRect = jage::type::RectI32();
 
         using jage::node::abc::NodeABC<jage::node::frame::abc::FrameABC>::addChild;
     };

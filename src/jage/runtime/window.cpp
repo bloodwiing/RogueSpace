@@ -53,7 +53,7 @@ int Window::getHeight() const {
     return m_height;
 }
 
-jage::type::Rect<int> Window::getRect() const {
+jage::type::RectI32 Window::getRect() const {
     return {m_width, m_height};
 }
 

@@ -27,7 +27,7 @@ jage::type::RectF Canvas::getPhysicalRect() const {
 void Canvas::update() {
     auto screen = jage::runtime::Window::getActive()->getRect();
     if (screen != m_prevScreenRect) {
-        m_screenRect = screen.as<float>();
+        m_screenRect = screen.as<jage::type::RectF>();
 
         for (auto& [name, child] : m_children) {
             auto canvasChild = dynamic_cast<frame::BasicFrame*>(child.value.get());
