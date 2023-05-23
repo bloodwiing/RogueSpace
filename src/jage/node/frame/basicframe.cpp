@@ -21,7 +21,7 @@ BasicFrame::BasicFrame(JAGE_FRAME_ARGS, const jage::type::RectF& rect, const jag
     , m_anchor(anchor)
     , m_fill(fill)
     , m_material(jage::graphics::Material::getDefaultMaterial())
-    , m_quad(Quad2D(rect, m_material))
+    , m_quad(Quad2D(rect, jage::graphics::Material::getDefaultMaterial()))
 {
     m_shader = AssetManager::getInstance()->get<AssetManager::Types::Shader>("./res/ui", 10);
 }

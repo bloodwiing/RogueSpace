@@ -7,10 +7,10 @@ using jage::graphics::Material;
 Material* Material::defaultMaterial = nullptr;
 
 Material::Material(std::string name)
-    : m_name(std::move(name))
-    , m_diffuseFactor(1.0)
-    , m_metallicFactor(1.0)
-    , m_roughnessFactor(1.0)
+        : m_name(std::move(name))
+        , m_diffuseFactor(1.0)
+        , m_metallicFactor(1.0)
+        , m_roughnessFactor(1.0)
 {
 
 }
