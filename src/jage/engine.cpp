@@ -87,7 +87,7 @@ void JAGEngine::loadScene() {
 
     // 3D
 
-    auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/sphere/sphere.gltf");
+    auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/model/builtin/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
 
 //    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
@@ -109,7 +109,7 @@ void JAGEngine::loadScene() {
     auto controller = starship->attachScript<script::AIControllerScript>();
     controller->setTarget(player);
     try {
-        auto starship_model = starship->addChild<ModelActor>("model", Tag::MESH, "./res/starship/Starship01.gltf");
+        auto starship_model = starship->addChild<ModelActor>("model", Tag::MESH, "./res/model/trailblazer/starship/Starship01.gltf");
     } catch (std::exception& e) {
         std::cerr << e.what();
     }

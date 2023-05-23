@@ -43,7 +43,7 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
 
     // Actor
     auto bullet = m_node->getScene()->addVolatileChild<node::actor::PhysicsActor>("Bullet", Tag::BULLET, 0.0f, 0.0f);
-    bullet->addChild<node::actor::ModelActor>("model", Tag::MESH, "./res/bullet/BulletTemp.gltf");
+    bullet->addChild<node::actor::ModelActor>("model", Tag::MESH, "./res/model/trailblazer/bullet/BulletTemp.gltf");
     bullet->attachScript<script::ColliderScript>(m_bulletTargetTag, 1.0f);
 
     // Translate to world position
