@@ -9,7 +9,7 @@ namespace jage::graphics::mesh2d {
     class Quad2D
             : public Mesh2D {
     public:
-        Quad2D(const jage::type::RectF& rect, const Sprite& sprite);
+        Quad2D(const jage::type::RectF& rect, const std::shared_ptr<Sprite> sprite);
 
     protected:
         static std::vector<Vertex2D> createVertices(const jage::type::RectF& rect);

@@ -9,6 +9,8 @@ using jage::type::RectF;
 using jage::type::RectI32;
 using jage::runtime::asset::AssetManager;
 
+std::shared_ptr<Sprite> Sprite::defaultSprite = nullptr;
+
 Sprite::Sprite(const std::shared_ptr<Texture>& texture, const jage::type::RectI32& rect)
         : m_data()
         , m_texture(texture)
@@ -28,6 +30,14 @@ Sprite::Sprite(std::string filePath)
     m_texture = AssetManager::getInstance()->get<AssetManager::Types::Texture>(m_filePath);
 }
 
+Sprite::Sprite()
+        : m_data()
+        , m_rect(1.0f, 1.0f)
+        , m_texture(Texture::getDefaultTexture())
+{
+
+}
+
 std::shared_ptr<Sprite> Sprite::create(std::string filePath) {
     return std::make_shared<Sprite>(std::move(filePath));
 }
@@ -39,6 +49,17 @@ Sprite::Sprite(const Sprite& ref)
         , m_texture(ref.m_texture)
 {
 
+}
+
+std::shared_ptr<Sprite> Sprite::getDefaultSprite() {
+    if (!defaultSprite)
+        defaultSprite = std::make_shared<Sprite>();
+    return defaultSprite;
+}
+
+void Sprite::clearDefaultSprite() {
+    defaultSprite.reset();
+    defaultSprite = nullptr;
 }
 
 RectI32 Sprite::getTextureXYRect() const {

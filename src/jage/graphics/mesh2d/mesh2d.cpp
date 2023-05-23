@@ -5,17 +5,11 @@
 #include "jage/graphics/abc/ebo.hpp"
 
 using jage::graphics::mesh2d::Mesh2D;
+using jage::graphics::mesh2d::Sprite;
 
-Mesh2D::Mesh2D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::mesh2d::Sprite& sprite)
+Mesh2D::Mesh2D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, std::shared_ptr<Sprite> sprite)
         : MeshABC(vertices, indices)
-        , m_sprite(sprite)
-{
-
-}
-
-Mesh2D::Mesh2D(const Mesh2D& mesh)
-        : MeshABC(mesh)
-        , m_sprite(mesh.m_sprite)
+        , m_sprite(std::move(sprite))
 {
 
 }
@@ -34,7 +28,7 @@ void Mesh2D::draw(
     shader.activate();
     m_VAO.bind();
 
-    if (!m_sprite.applyTexture(shader))
+    if (!m_sprite->applyTexture(shader))
         return;
 
     glUniformMatrix3fv(shader.getUniform("Frame"), 1, GL_FALSE, glm::value_ptr(frame));

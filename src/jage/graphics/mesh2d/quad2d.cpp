@@ -1,9 +1,10 @@
 #include "jage/graphics/mesh2d/quad2d.hpp"
 
 using jage::graphics::mesh2d::Quad2D;
+using jage::graphics::mesh2d::Sprite;
 
-Quad2D::Quad2D(const jage::type::RectF& rect, const jage::graphics::mesh2d::Sprite& sprite)
-        : Mesh2D(createVertices(rect), createIndices(), sprite)
+Quad2D::Quad2D(const jage::type::RectF& rect, std::shared_ptr<Sprite> sprite)
+        : Mesh2D(createVertices(rect), createIndices(), std::move(sprite))
 {
 
 }
