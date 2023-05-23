@@ -12,10 +12,6 @@
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
 
-namespace jage::runtime {
-    class AssetManager;
-}
-
 namespace jage::graphics::mesh3d {
 
     using json = nlohmann::json;

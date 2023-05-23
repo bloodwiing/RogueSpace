@@ -11,7 +11,7 @@
 #include "jage/graphics/mesh2d/vao2d.hpp"
 #include "jage/node/actor/camera.hpp"
 #include "jage/graphics/texture.hpp"
-#include "jage/graphics/mesh2d/sprite.hpp"
+#include "jage/graphics/material.hpp"
 
 namespace jage::graphics::mesh2d {
 

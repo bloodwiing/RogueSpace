@@ -29,6 +29,6 @@ namespace jage::script {
 
         Tag m_bulletTargetTag;
     };
-};
+}
 
 #endif //JAGE_WEAPON_SCRIPT_HPP
