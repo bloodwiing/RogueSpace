@@ -5,10 +5,11 @@
 #include "jage/runtime/time.hpp"
 #include "jage/system/super.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
+#include "jage/runtime/asset/assetmanager.hpp"
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/node/actor/shipactor.hpp"
 #include "jage/node/actor/physicsactor.hpp"
-#include "jage/node/frame/basicframe.hpp"
+#include "jage/node/frame/solidframe.hpp"
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
 #include "jage/script/weaponscript.hpp"
@@ -121,5 +122,5 @@ void JAGEngine::loadScene() {
 
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
-    m_canvas->addChild<BasicFrame>("Test", type::RectI32(500, 500), type::RectF(0.5f, 0.5f));
+    m_canvas->addChild<SolidFrame>("Test", type::RectI32(500, 500), type::RectF(0.5f, 0.5f), jage::runtime::asset::AssetManager::getInstance()->get<jage::graphics::Shader>("./res/shader/ui"));
 }
