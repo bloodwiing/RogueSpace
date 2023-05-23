@@ -1,0 +1,6 @@
+name: "Red"
+texture: "Normal.tga"
+top: 0
+left: 128
+width: 128
+height: 128
