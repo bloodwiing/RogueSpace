@@ -60,13 +60,13 @@ jage::type::Rect<T, TPair>::Rect(const Rect &ref)
 
 template<typename T, typename TPair>
 template<typename TNew, typename TNewPair>
-jage::type::Rect<TNew, TNewPair> jage::type::Rect<T, TPair>::as() {
+jage::type::Rect<TNew, TNewPair> jage::type::Rect<T, TPair>::as() const {
     return Rect<TNew, TNewPair>((TNew)x1, (TNew)y1, (TNew)x2, (TNew)y2);
 }
 
 template<typename T, typename TPair>
 template<class TRect>
-jage::type::Rect<typename TRect::ValueType, typename TRect::PairType> jage::type::Rect<T, TPair>::as() {
+jage::type::Rect<typename TRect::ValueType, typename TRect::PairType> jage::type::Rect<T, TPair>::as() const {
     using TNew = typename TRect::ValueType;
     return jage::type::Rect<TNew, typename TRect::PairType>((TNew)x1, (TNew)y1, (TNew)x2, (TNew)y2);
 }

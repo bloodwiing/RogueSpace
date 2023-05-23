@@ -29,9 +29,9 @@ namespace jage::type {
         ~Rect() = default;
 
         template<typename TNew, typename TPairNew>
-        Rect<TNew, TPairNew> as();
-        template<typename TRect>
-        jage::type::Rect<typename TRect::ValueType, typename TRect::PairType> as();
+        Rect<TNew, TPairNew> as() const;
+        template<class TRect>
+        jage::type::Rect<typename TRect::ValueType, typename TRect::PairType> as() const;
 
         void moveX(T x);
         void moveY(T y);
