@@ -1,6 +1,6 @@
 #include "jage/system/super.hpp"
 
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh3d/material.hpp"
 #include "jage/graphics/texture.hpp"
 
 using jage::system::Super;
@@ -33,7 +33,7 @@ void Super::initialise(int width, int height) {
 }
 
 void Super::destroy() {
-    jage::graphics::Material::clearDefaultMaterial();
+    jage::graphics::mesh3d::Material::clearDefaultMaterial();
     jage::graphics::Texture::clearDefaultTexture();
     instance.reset();
 }

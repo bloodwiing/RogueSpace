@@ -1,8 +1,8 @@
 #version 440
 
 layout (location = 0) in vec2 pos;
-layout (location = 2) in vec3 colour;
-layout (location = 3) in vec2 texCoord;
+layout (location = 1) in vec3 colour;
+layout (location = 2) in vec2 texCoord;
 
 out vec2 v_currentPos;
 out vec2 v_texCoord;

@@ -17,5 +17,5 @@ uniform vec3 LightPos;
 uniform vec3 CameraPos;
 
 void main() {
-    o_fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    o_fragColor = vec4(v_texCoord, 0.0, 1.0);
 }
