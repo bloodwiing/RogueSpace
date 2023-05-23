@@ -9,19 +9,15 @@ using std::mutex;
 
 AssetManager* AssetManager::m_instance = nullptr;
 
-AssetManager::AssetManager()
-    : m_models()
-    , m_textures()
-    , m_shaders()
-    , m_modelMutex()
-    , m_textureMutex()
-    , m_shaderMutex()
-{ }
-
 AssetManager *AssetManager::getInstance() {
     if (m_instance == nullptr)
         m_instance = new AssetManager();
     return m_instance;
+}
+
+template<>
+std::shared_ptr<Types::Shader> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    return get<Types::Shader>(m_shaderMutex, m_shaders, fileName, priority);
 }
 
 template<>
@@ -35,6 +31,6 @@ std::shared_ptr<Types::Texture> jage::runtime::asset::AssetManager::get(const st
 }
 
 template<>
-std::shared_ptr<Types::Shader> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
-    return get<Types::Shader>(m_shaderMutex, m_shaders, fileName, priority);
+std::shared_ptr<Types::Sprite> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+    return get<Types::Sprite>(m_spriteMutex, m_sprites, fileName, priority);
 }

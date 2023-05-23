@@ -10,18 +10,26 @@ using jage::type::RectI32;
 using jage::runtime::asset::AssetManager;
 
 Sprite::Sprite(const std::shared_ptr<Texture>& texture, const jage::type::RectI32& rect)
-        : m_texture(texture)
+        : m_data()
+        , m_texture(texture)
         , m_rect(rect)
         , m_filePath()
 {
 
 }
 
-Sprite::Sprite(std::string filePath, const jage::type::RectI32& rect)
-        : m_rect(rect)
+Sprite::Sprite(std::string filePath)
+        : m_data(YAML::LoadFile(filePath))
         , m_filePath(std::move(filePath))
 {
+    const auto corner = RectI32::PairType(m_data["top"].as<int>(), m_data["left"].as<int>());
+    m_rect = RectI32(corner, m_data["width"].as<int>(), m_data["height"].as<int>());
+
     m_texture = AssetManager::getInstance()->get<AssetManager::Types::Texture>(m_filePath);
+}
+
+std::shared_ptr<Sprite> Sprite::create(std::string filePath) {
+    return std::make_shared<Sprite>(std::move(filePath));
 }
 
 Sprite::Sprite(const Sprite& ref)
