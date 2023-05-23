@@ -1,8 +1,7 @@
 template<class TVAO>
-jage::graphics::abc::MeshABC<TVAO>::MeshABC(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material)
+jage::graphics::abc::MeshABC<TVAO>::MeshABC(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices)
         : m_vertices(vertices)
         , m_indices(indices)
-        , m_material(material)
         , m_VAO()
 {
 
@@ -10,7 +9,7 @@ jage::graphics::abc::MeshABC<TVAO>::MeshABC(const std::vector<VertexType>& verti
 
 template<class TVAO>
 jage::graphics::abc::MeshABC<TVAO>::MeshABC(const MeshABC<TVAO>& mesh)
-        : MeshABC(mesh.m_vertices, mesh.m_indices, mesh.m_material)
+        : MeshABC(mesh.m_vertices, mesh.m_indices)
 {
 
 }

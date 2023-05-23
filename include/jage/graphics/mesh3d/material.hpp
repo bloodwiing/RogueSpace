@@ -7,7 +7,7 @@
 
 #include "jage/graphics/texture.hpp"
 
-namespace jage::graphics {
+namespace jage::graphics::mesh3d {
 
     /// \brief      Texture and Multiplier value set
     /// \details    Can be applied onto a Shader to be immediately used

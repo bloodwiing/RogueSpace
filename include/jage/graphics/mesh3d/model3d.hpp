@@ -8,7 +8,7 @@
 
 #include "jage/graphics/mesh3d/mesh3d.hpp"
 #include "jage/graphics/mesh3d/vbo3d.hpp"
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh3d/material.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
 

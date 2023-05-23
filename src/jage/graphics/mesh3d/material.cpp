@@ -1,8 +1,8 @@
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh3d/material.hpp"
 
 #include <utility>
 
-using jage::graphics::Material;
+using jage::graphics::mesh3d::Material;
 
 Material* Material::defaultMaterial = nullptr;
 

@@ -11,7 +11,7 @@
 #include "jage/graphics/mesh3d/vao3d.hpp"
 #include "jage/node/actor/camera.hpp"
 #include "jage/graphics/texture.hpp"
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh3d/material.hpp"
 
 namespace jage::graphics::mesh3d {
 
@@ -21,7 +21,7 @@ namespace jage::graphics::mesh3d {
             : public graphics::abc::MeshABC<VAO3D> {
     public:
         Mesh3D(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material);
-        Mesh3D(const MeshABC<VAO3D>& mesh);
+        Mesh3D(const Mesh3D& mesh) = default;
 
         /// \brief          Draws the Mesh to the screen
         /// \param shader   The Shader program to use when rendering
@@ -38,6 +38,9 @@ namespace jage::graphics::mesh3d {
 
     protected:
         void initialise() override;
+
+        /// The Material used for rendering the Mesh
+        Material m_material;
     };
 }
 
