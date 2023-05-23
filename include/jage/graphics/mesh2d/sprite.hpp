@@ -13,7 +13,7 @@ namespace jage::graphics::mesh2d {
     {
     public:
         Sprite(const std::shared_ptr<Texture>& texture, const jage::type::RectI32& rect);
-        explicit Sprite(std::string filePath);
+        Sprite(std::string filePath, const jage::type::RectI32& rect);
         Sprite(const Sprite& ref);
         ~Sprite() = default;
 
