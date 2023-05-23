@@ -330,7 +330,7 @@ namespace Utility {
         }
 
         bool operator!=(iterator other) const {
-            return !(*this == other);
+            return !this->operator==(other);
         }
 
         T& operator*() const {

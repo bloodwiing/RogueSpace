@@ -21,7 +21,7 @@ namespace jage::graphics::mesh2d {
             : public graphics::abc::MeshABC<VAO2D> {
     public:
         Mesh2D(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material);
-        Mesh2D(const MeshABC<VAO2D>& mesh);
+        explicit Mesh2D(const MeshABC<VAO2D>& mesh);
 
         /// \brief          Draws the Mesh to the screen
         /// \param shader   The Shader program to use when rendering

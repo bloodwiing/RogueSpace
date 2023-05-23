@@ -21,7 +21,7 @@ namespace jage::graphics::mesh3d {
             : public graphics::abc::MeshABC<VAO3D> {
     public:
         Mesh3D(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material);
-        Mesh3D(const MeshABC<VAO3D>& mesh);
+        explicit Mesh3D(const MeshABC<VAO3D>& mesh);
 
         /// \brief          Draws the Mesh to the screen
         /// \param shader   The Shader program to use when rendering

@@ -54,7 +54,7 @@ namespace jage::runtime::asset {
 
     private:
         AssetStream();
-        ~AssetStream();
+        ~AssetStream() = default;
 
         std::thread m_thread;
 
