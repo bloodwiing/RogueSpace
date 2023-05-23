@@ -6,14 +6,16 @@
 
 using jage::graphics::mesh2d::Mesh2D;
 
-Mesh2D::Mesh2D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::Material &material)
-        : MeshABC(vertices, indices, material)
+Mesh2D::Mesh2D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::mesh2d::Sprite& sprite)
+        : MeshABC(vertices, indices)
+        , m_sprite(sprite)
 {
 
 }
 
-Mesh2D::Mesh2D(const jage::graphics::abc::MeshABC<jage::graphics::mesh2d::VAO2D>& mesh)
+Mesh2D::Mesh2D(const Mesh2D& mesh)
         : MeshABC(mesh)
+        , m_sprite(mesh.m_sprite)
 {
 
 }
@@ -32,7 +34,7 @@ void Mesh2D::draw(
     shader.activate();
     m_VAO.bind();
 
-    if (!m_material.apply(shader))
+    if (!m_sprite.applyTexture(shader))
         return;
 
     glUniformMatrix3fv(shader.getUniform("Frame"), 1, GL_FALSE, glm::value_ptr(frame));

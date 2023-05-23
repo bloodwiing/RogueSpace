@@ -2,8 +2,8 @@
 
 using jage::graphics::mesh2d::Quad2D;
 
-Quad2D::Quad2D(const jage::type::RectF& rect, const jage::graphics::Material &material)
-        : Mesh2D(createVertices(rect), createIndices(), material)
+Quad2D::Quad2D(const jage::type::RectF& rect, const jage::graphics::mesh2d::Sprite& sprite)
+        : Mesh2D(createVertices(rect), createIndices(), sprite)
 {
 
 }

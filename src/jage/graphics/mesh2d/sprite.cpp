@@ -20,6 +20,15 @@ Sprite::Sprite(std::string filePath)
 
 }
 
+Sprite::Sprite(const Sprite& ref)
+        : jage::runtime::asset::abc::AssetABC<Sprite>()
+        , m_rect(ref.m_rect)
+        , m_filePath(ref.m_filePath)
+        , m_texture(ref.m_texture)
+{
+
+}
+
 jage::type::RectI32 Sprite::getTextureXYRect() const {
     return jage::type::RectI32();
 }
@@ -28,8 +37,8 @@ jage::type::RectF Sprite::getTextureUVRect() const {
     return jage::type::RectF();
 }
 
-void Sprite::applyTexture(jage::graphics::Shader &shader) {
-
+bool Sprite::applyTexture(jage::graphics::Shader &shader) {
+    return false;
 }
 
 void Sprite::onQueue(int priority) {

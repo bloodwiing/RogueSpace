@@ -13,12 +13,14 @@ namespace jage::graphics::mesh2d {
     {
     public:
         Sprite(const std::shared_ptr<Texture>& texture, const jage::type::RectI32& rect);
-        explicit Sprite(std::string  filePath);
+        explicit Sprite(std::string filePath);
+        Sprite(const Sprite& ref);
+        ~Sprite() = default;
 
         [[nodiscard]] jage::type::RectI32 getTextureXYRect() const;
         [[nodiscard]] jage::type::RectF getTextureUVRect() const;
 
-        void applyTexture(Shader& shader);
+        bool applyTexture(Shader& shader);
 
     private:
         std::string m_filePath;
