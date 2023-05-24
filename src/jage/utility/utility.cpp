@@ -11,6 +11,7 @@ void glfwErrorCallback(int error, const char* description) {
 
 void utility::initializeOpenGL() {
     glfwSetErrorCallback(glfwErrorCallback);
+
     if (glfwInit() == GLFW_FALSE) {
         return;
     }
