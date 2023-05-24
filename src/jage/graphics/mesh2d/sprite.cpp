@@ -27,7 +27,9 @@ Sprite::Sprite(std::string filePath)
     const auto corner = RectI32::PairType(m_data["top"].as<int>(), m_data["left"].as<int>());
     m_rect = RectI32(corner, m_data["width"].as<int>(), m_data["height"].as<int>());
 
-    m_texture = AssetManager::getInstance()->get<AssetManager::Types::Texture>(m_filePath);
+    std::string directory = runtime::asset::AssetStream::getFileDirectory(m_filePath);
+
+    m_texture = AssetManager::getInstance()->get<AssetManager::Types::Texture>(directory + m_data["texture"].as<std::string>());
 }
 
 Sprite::Sprite()
