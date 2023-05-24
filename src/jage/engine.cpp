@@ -9,7 +9,7 @@
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/node/actor/shipactor.hpp"
 #include "jage/node/actor/physicsactor.hpp"
-#include "jage/node/frame/solidframe.hpp"
+#include "jage/node/frame/spriteframe.hpp"
 #include "jage/script/playercontrollerscript.hpp"
 #include "jage/script/aicontrollerscript.hpp"
 #include "jage/script/weaponscript.hpp"
@@ -123,12 +123,13 @@ void JAGEngine::loadScene() {
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
     auto uiShader = jage::runtime::asset::AssetManager::getInstance()->get<jage::graphics::Shader>("./res/shader/ui");
+    auto sprite = runtime::asset::AssetManager::getInstance()->get<jage::graphics::mesh2d::Sprite>("./res/sprite/spheres/Blue.sprite");
 
-    m_canvas->addChild<SolidFrame>(
+    m_canvas->addChild<SpriteFrame>(
             "Test CENTERED",
             type::RectI32(250, 250, 750, 750),
             type::RectF(0.5f, 0.5f, 0.5f, 0.5f),
-            uiShader);
+            sprite);
 
 //    m_canvas->addChild<SolidFrame>(
 //            "Test SCALE",
