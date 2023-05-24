@@ -5,7 +5,7 @@
 
 using jage::runtime::Window;
 
-Window* Window::m_active = nullptr;
+std::shared_ptr<Window> Window::m_active = nullptr;
 bool Window::m_wasGLLoaded = false;
 
 Window::Window(int width, int height)
@@ -24,7 +24,7 @@ Window::~Window() {
 }
 
 void Window::activate() {
-    m_active = this;
+    m_active = shared_from_this();
     glfwMakeContextCurrent(m_glWindow);
     if (!m_wasGLLoaded) {
         gladLoadGL();
@@ -33,7 +33,7 @@ void Window::activate() {
     glViewport(0, 0, m_width, m_height);
 }
 
-Window* Window::getActive() {
+std::shared_ptr<Window> Window::getActive() {
     return m_active;
 }
 

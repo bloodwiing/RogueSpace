@@ -11,9 +11,8 @@ Super& Super::getInstance() {
     return *instance;
 }
 
-Super::Super(int width, int height)
-    : m_window(new jage::runtime::Window(width, height))
-{
+Super::Super(int width, int height) {
+    m_window = std::make_shared<jage::runtime::Window>(width, height);
     m_window->activate();
 
     GLubyte whiteTextureBytes[] = {
@@ -24,7 +23,7 @@ Super::Super(int width, int height)
 
 Super::~Super() {
     m_window->close();
-    delete m_window;
+    m_window.reset();
     m_window = nullptr;
 }
 
@@ -38,6 +37,6 @@ void Super::destroy() {
     instance.reset();
 }
 
-jage::runtime::Window* Super::getWindow() {
+std::shared_ptr<jage::runtime::Window> Super::getWindow() {
     return m_window;
 }

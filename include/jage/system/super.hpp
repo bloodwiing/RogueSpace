@@ -22,7 +22,7 @@ namespace jage::system {
         static void destroy();
 
         /// \return         The created Window during the game's initialisation process
-        jage::runtime::Window* getWindow();
+        std::shared_ptr<jage::runtime::Window> getWindow();
 
     private:
         Super(const Super& ref);
@@ -30,7 +30,7 @@ namespace jage::system {
         static std::unique_ptr<Super> instance;
 
         /// The created Window
-        jage::runtime::Window* m_window;
+        std::shared_ptr<jage::runtime::Window> m_window;
 
         Super& operator=(const Super& ref);
     };

@@ -3,6 +3,7 @@
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <memory>
 
 #include "jage/type/rect.hpp"
 
@@ -16,7 +17,8 @@ namespace jage::runtime {
 
     /// \brief      A game window, can support multiple, but preferred to be only 1
     /// \details    Manages a glfwWindow
-    class Window {
+    class Window
+            : public std::enable_shared_from_this<Window> {
     public:
         /// \brief          Creates a new glfwWindow of the given size
         /// \param width    The Width of the new Window
@@ -28,7 +30,7 @@ namespace jage::runtime {
         /// \brief          Sets the current Window as the active context for OpenGL events
         void activate();
         /// \brief          Returns the currently active Window used for drawing
-        static Window* getActive();
+        static std::shared_ptr<Window> getActive();
 
         /// \brief          Updates the Physical size of the Window
         void updateSize(int width, int height);
@@ -91,7 +93,7 @@ namespace jage::runtime {
         m_height;
 
         /// The currently active window used as the context for OpenGL calls
-        static Window* m_active;
+        static std::shared_ptr<Window> m_active;
 
         /// A flag that stops OpenGL from loading multiple times
         static bool m_wasGLLoaded;
