@@ -122,5 +122,23 @@ void JAGEngine::loadScene() {
 
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
-    m_canvas->addChild<SolidFrame>("Test", type::RectI32(250, 250, 750, 750), type::RectF(0.5f, 0.5f, 0.5f, 0.5f), jage::runtime::asset::AssetManager::getInstance()->get<jage::graphics::Shader>("./res/shader/ui"));
+    auto uiShader = jage::runtime::asset::AssetManager::getInstance()->get<jage::graphics::Shader>("./res/shader/ui");
+
+    m_canvas->addChild<SolidFrame>(
+            "Test CENTERED",
+            type::RectI32(250, 250, 750, 750),
+            type::RectF(0.5f, 0.5f, 0.5f, 0.5f),
+            uiShader);
+
+    m_canvas->addChild<SolidFrame>(
+            "Test SCALE",
+            type::RectI32(50, 50, 950, 950),
+            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
+            uiShader);
+
+    m_canvas->addChild<SolidFrame>(
+            "Test CORNER",
+            type::RectI32(500, 0, 1000, 50),
+            type::RectF(0.5f, 0.0f, 1.0f, 0.0f),
+            uiShader);
 }
