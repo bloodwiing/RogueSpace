@@ -33,6 +33,8 @@ namespace jage::runtime {
         static std::shared_ptr<Window> getActive();
 
         /// \brief          Updates the Physical size of the Window
+        void resize(int width, int height);
+        /// \brief          Updates the Systemic size of the Window
         void updateSize(int width, int height);
 
         /// \return         The Width of the Window

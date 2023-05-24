@@ -8,6 +8,12 @@ using jage::runtime::Window;
 std::shared_ptr<Window> Window::m_active = nullptr;
 bool Window::m_wasGLLoaded = false;
 
+void glfwWindowResizeCallback(GLFWwindow* window, int width, int height) {
+    if (Window::getActive()->getWindow() == window) {
+        Window::getActive()->updateSize(width, height);
+    }
+}
+
 Window::Window(int width, int height)
     : m_width(width)
     , m_height(height)
@@ -31,18 +37,23 @@ void Window::activate() {
         m_wasGLLoaded = true;
     }
     glViewport(0, 0, m_width, m_height);
+    glfwSetWindowSizeCallback(m_glWindow, glfwWindowResizeCallback);
 }
 
 std::shared_ptr<Window> Window::getActive() {
     return m_active;
 }
 
-void Window::updateSize(int width, int height) {
+void Window::resize(int width, int height) {
     glfwSetWindowSize(m_glWindow, width, height);
-    if (m_active == this)
-        glViewport(0, 0, width, height);
+    updateSize(width, height);
+}
+
+void Window::updateSize(int width, int height) {
     m_width = width;
     m_height = height;
+    if (m_active == shared_from_this())
+        glViewport(0, 0, width, height);
 }
 
 int Window::getWidth() const {
