@@ -34,6 +34,7 @@ namespace jage::node::frame::abc {
         type::RectI32 getRect() const override;
         type::RectF getAnchor() const override;
         type::RectF getPhysicalRect() const override;
+        type::RectF getScreenRect() const;
 
         void setRect(const type::RectI32& rect);
         void setAnchor(const type::RectF& anchor);

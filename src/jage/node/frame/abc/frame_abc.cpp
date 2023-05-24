@@ -1,11 +1,15 @@
 #include "jage/node/frame/abc/frame_abc.hpp"
 
+#include "jage/node/canvas.hpp"
+
 using jage::node::frame::abc::FrameABC;
 
 FrameABC::FrameABC(JAGE_FRAME_ARGS)
         : node::abc::NodeABC<FrameABC>(parent, std::move(name))
         , m_canvas(canvas)
         , m_rectParent(rectParent)
+        , m_rect(rect)
+        , m_anchor(anchor)
 {
 
 }
@@ -28,6 +32,10 @@ jage::type::RectF FrameABC::getAnchor() const {
 
 jage::type::RectF FrameABC::getPhysicalRect() const {
     return m_physicalRect;
+}
+
+jage::type::RectF FrameABC::getScreenRect() const {
+    return (getPhysicalRect() / m_canvas->getPhysicalRect().getSize()) * 2.0f - 1.0f;
 }
 
 void FrameABC::setRect(const jage::type::RectI32& rect) {

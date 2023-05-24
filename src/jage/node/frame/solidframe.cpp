@@ -24,12 +24,12 @@ void SolidFrame::draw() {
 
 void SolidFrame::updateReflow() {
     FrameABC::updateReflow();
-    m_quad = Quad2D(getPhysicalRect(), getSprite());
+    m_quad = Quad2D(getScreenRect(), getSprite());
 }
 
 void SolidFrame::setSprite(std::shared_ptr<Sprite> sprite) {
     m_sprite = std::move(sprite);
-    m_quad = Quad2D(getPhysicalRect(), getSprite());
+    m_quad = Quad2D(getScreenRect(), getSprite());
 }
 
 std::shared_ptr<Sprite> SolidFrame::getSprite() const {
