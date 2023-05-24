@@ -1,5 +1,5 @@
 name: "Red"
-texture: "Normal.tga"
+texture: "SpriteSpheres.tga"
 top: 0
 left: 128
 width: 128

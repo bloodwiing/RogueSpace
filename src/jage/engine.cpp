@@ -130,15 +130,15 @@ void JAGEngine::loadScene() {
             type::RectF(0.5f, 0.5f, 0.5f, 0.5f),
             uiShader);
 
-    m_canvas->addChild<SolidFrame>(
-            "Test SCALE",
-            type::RectI32(50, 50, 950, 950),
-            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
-            uiShader);
-
-    m_canvas->addChild<SolidFrame>(
-            "Test CORNER",
-            type::RectI32(500, 0, 1000, 50),
-            type::RectF(0.5f, 0.0f, 1.0f, 0.0f),
-            uiShader);
+//    m_canvas->addChild<SolidFrame>(
+//            "Test SCALE",
+//            type::RectI32(50, 50, 950, 950),
+//            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
+//            uiShader);
+//
+//    m_canvas->addChild<SolidFrame>(
+//            "Test CORNER",
+//            type::RectI32(500, 0, 1000, 50),
+//            type::RectF(0.5f, 0.0f, 1.0f, 0.0f),
+//            uiShader);
 }
