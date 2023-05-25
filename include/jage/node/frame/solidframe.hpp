@@ -20,6 +20,8 @@ namespace jage::node::frame {
 
         void updateReflow() override;
 
+        virtual std::shared_ptr<jage::graphics::mesh2d::Sprite> getInternalSprite() const;
+
         graphics::mesh2d::Quad2D m_quad;
         std::shared_ptr<jage::graphics::Shader> m_shader;
     };

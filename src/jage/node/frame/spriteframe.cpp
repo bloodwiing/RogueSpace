@@ -29,3 +29,7 @@ void SpriteFrame::setSprite(std::shared_ptr<Sprite> sprite) {
 std::shared_ptr<Sprite> SpriteFrame::getSprite() const {
     return m_sprite;
 }
+
+std::shared_ptr<Sprite> SpriteFrame::getInternalSprite() const {
+    return getSprite();
+}

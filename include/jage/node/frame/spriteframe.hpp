@@ -18,6 +18,9 @@ namespace jage::node::frame {
         virtual std::shared_ptr<jage::graphics::mesh2d::Sprite> getSprite() const;
 
     protected:
+        std::shared_ptr<jage::graphics::mesh2d::Sprite> getInternalSprite() const override;
+
+    protected:
         std::shared_ptr<jage::graphics::mesh2d::Sprite> m_sprite;
     };
 }
