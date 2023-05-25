@@ -16,21 +16,29 @@ AssetManager *AssetManager::getInstance() {
 }
 
 template<>
-std::shared_ptr<Types::Shader> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+std::shared_ptr<Types::Shader> AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     return get<Types::Shader>(m_shaderMutex, m_shaders, fileName, priority);
 }
 
 template<>
-std::shared_ptr<Types::Model3D> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+std::shared_ptr<Types::Model3D> AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     return get<Types::Model3D>(m_modelMutex, m_models, fileName, priority);
 }
 
 template<>
-std::shared_ptr<Types::Texture> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+std::shared_ptr<Types::Texture> AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     return get<Types::Texture>(m_textureMutex, m_textures, fileName, priority);
 }
 
 template<>
-std::shared_ptr<Types::Sprite> jage::runtime::asset::AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
+std::shared_ptr<Types::Sprite> AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     return get<Types::Sprite>(m_spriteMutex, m_sprites, fileName, priority);
+}
+
+void AssetManager::reset() {
+    std::scoped_lock<std::mutex, std::mutex, std::mutex, std::mutex> lock(m_shaderMutex, m_modelMutex, m_textureMutex, m_spriteMutex);
+    m_shaders.clear();
+    m_models.clear();
+    m_textures.clear();
+    m_sprites.clear();
 }

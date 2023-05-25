@@ -30,6 +30,8 @@ namespace jage::runtime::asset {
         template<class T>
         std::shared_ptr<T> get(const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
 
+        void reset();
+
     private:
         AssetManager() = default;
         ~AssetManager() = default;
