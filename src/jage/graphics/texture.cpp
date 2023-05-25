@@ -246,6 +246,9 @@ void Texture::LOD::onQueue(int priority) {
             [self = shared_from_this()](const uint8_t* data, size_t size){
                 Texture::LOD& lod = self->asObject();
 
+                if (lod.isProcessed())
+                    return;
+
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
                 memcpy(lod.m_buffer, finalData, width * height * channels);
