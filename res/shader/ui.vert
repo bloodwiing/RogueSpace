@@ -16,5 +16,5 @@ void main() {
     v_currentPos = vec2(Frame * vec3(pos, 1.0));
 
     gl_Position = vec4(v_currentPos, 0.0, 1.0);
-    v_texCoord = texCoord * UVCorner1 + (1.0 - texCoord) * UVCorner2;
+    v_texCoord = UVCorner1 + texCoord * (UVCorner2 - UVCorner1);
 }
