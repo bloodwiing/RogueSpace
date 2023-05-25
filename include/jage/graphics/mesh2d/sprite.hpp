@@ -25,7 +25,7 @@ namespace jage::graphics::mesh2d {
         [[nodiscard]] jage::type::RectI32 getTextureXYRect() const;
         [[nodiscard]] jage::type::RectF getTextureUVRect() const;
 
-        bool applyTexture(Shader& shader);
+        bool apply(jage::graphics::Shader &shader);
 
     private:
         const YAML::Node m_data;

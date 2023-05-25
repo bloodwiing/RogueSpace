@@ -9,9 +9,12 @@ out vec2 v_texCoord;
 
 uniform mat3 Frame;
 
+uniform vec2 UVCorner1;
+uniform vec2 UVCorner2;
+
 void main() {
     v_currentPos = vec2(Frame * vec3(pos, 1.0));
 
     gl_Position = vec4(v_currentPos, 0.0, 1.0);
-    v_texCoord = texCoord;
+    v_texCoord = texCoord * UVCorner1 + (1.0 - texCoord) * UVCorner2;
 }

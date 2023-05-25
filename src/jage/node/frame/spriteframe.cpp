@@ -17,7 +17,7 @@ SpriteFrame::SpriteFrame(JAGE_FRAME_ARGS, std::shared_ptr<Sprite> sprite)
 }
 
 void jage::node::frame::SpriteFrame::draw() {
-    m_sprite->applyTexture(*m_shader);
+    m_sprite->apply(*m_shader);
     SolidFrame::draw();
 }
 

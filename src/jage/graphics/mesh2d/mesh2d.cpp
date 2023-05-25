@@ -28,7 +28,7 @@ void Mesh2D::draw(
     shader.activate();
     m_VAO.bind();
 
-    if (!m_sprite->applyTexture(shader))
+    if (!m_sprite->apply(shader))
         return;
 
     glUniformMatrix3fv(shader.getUniform("Frame"), 1, GL_FALSE, glm::value_ptr(frame));

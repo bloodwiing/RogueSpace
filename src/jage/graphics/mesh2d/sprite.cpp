@@ -72,7 +72,7 @@ RectF Sprite::getTextureUVRect() const {
     return m_rect.as<RectF>() / m_texture->getSizeRect().getSize();
 }
 
-bool Sprite::applyTexture(jage::graphics::Shader &shader) {
+bool Sprite::apply(jage::graphics::Shader& shader) {
     if (shader.isErrored())
         return false;
 
@@ -81,6 +81,10 @@ bool Sprite::applyTexture(jage::graphics::Shader &shader) {
         return false;
     m_texture->assign(shader, "Texture0", 0);
     m_texture->bind(0);
+
+    auto rect = getTextureUVRect();
+    glUniform2f(shader.getUniform("UVCorner1"), rect.x1, rect.y1);
+    glUniform2f(shader.getUniform("UVCorner2"), rect.x2, rect.y2);
 
     return true;
 }
