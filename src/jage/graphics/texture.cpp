@@ -165,7 +165,7 @@ bool Texture::setActiveLOD(int level) {
     return false;
 }
 
-Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* container)
+Texture::LOD::LOD(std::string fileName, const YAML::Node& node, Texture* container)
     : m_ID()
     , m_PBO()
     , m_fileName(std::move(fileName))
@@ -195,7 +195,7 @@ Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* contain
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 }
 
-std::shared_ptr<Texture::LOD> Texture::LOD::create(const std::string &fileName, const YAML::Node &node, Texture* container) {
+std::shared_ptr<Texture::LOD> Texture::LOD::create(const std::string &fileName, const YAML::Node& node, Texture* container) {
     return std::make_shared<LOD>(fileName, node, container);
 }
 
@@ -249,9 +249,13 @@ void Texture::LOD::onQueue(int priority) {
                 if (lod.isProcessed())
                     return;
 
+                stbi_set_flip_vertically_on_load(true);
+
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
+
                 memcpy(lod.m_buffer, finalData, width * height * channels);
+
                 stbi_image_free(finalData);
                 lod.markProcessed();
 
