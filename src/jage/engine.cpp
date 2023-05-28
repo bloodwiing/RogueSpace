@@ -68,13 +68,17 @@ void JAGEngine::loop() {
 
         Time::update();
 
-        m_scene->update();
-        m_scene->draw();
+        if (m_scene) {
+            m_scene->update();
+            m_scene->draw();
+        }
 
         glDisable(GL_DEPTH_TEST);
 
-        m_canvas->update();
-        m_canvas->draw();
+        if (m_canvas) {
+            m_canvas->update();
+            m_canvas->draw();
+        }
 
         Window::getActive()->swapBuffers();
 
@@ -84,54 +88,20 @@ void JAGEngine::loop() {
     }
 }
 
-void JAGEngine::loadScene() {
-    using namespace jage::node::actor;
-    using namespace jage::node::frame;
-
-    m_scene = std::make_unique<jage::node::Scene>();
-
-    // 3D
-
-    auto sphere = m_scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/model/builtin/sphere/sphere.gltf");
-    sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
-
-//    auto map = m_scene->addChild<ModelActor>("map", "./res/map/scene.gltf");
-//    map->translate(glm::vec3(0.0f, -7.0f, 0.0f));
-
-    auto player = m_scene->addChild<ShipActor>("Player", Tag::PLAYER);
-    auto camera = player->addChild<Camera>("Camera", Tag::CAMERA, 45.0f, 0.001f, 1000.0f);
-    auto cameraShakeScript = camera->attachScript<script::CameraShakeScript>(0.0f, 0.05f);
-    camera->setActive();
-    player->attachScript<script::WeaponScript>(60.0f, Tag::ENEMY);
-    player->attachScript<script::PlayerControllerScript>(cameraShakeScript);
-    player->attachScript<script::CollisionReceiverScript>(1.0f);
-    player->attachScript<script::HealthScript>(100.0f);
-
-    auto starship = m_scene->addChild<ShipActor>("Starship", Tag::ENEMY);
-    starship->attachScript<script::WeaponScript>(60.0f, Tag::PLAYER);
-    starship->attachScript<script::CollisionReceiverScript>(1.0f);
-    starship->attachScript<script::HealthScript>(100.0f);
-    auto controller = starship->attachScript<script::AIControllerScript>();
-    controller->setTarget(player);
-    try {
-        auto starship_model = starship->addChild<ModelActor>("model", Tag::MESH, "./res/model/trailblazer/starship/Starship01.gltf");
-    } catch (std::exception& e) {
-        std::cerr << e.what();
+void JAGEngine::loadScene(std::function<std::unique_ptr<node::Scene>()> sceneGenerator) {
+    if (m_scene) {
+        m_scene.reset();
+        m_scene = nullptr;
     }
-    starship->translate(glm::vec3(100.0f, 0.0f, 0.0f));
 
-    std::cout << m_scene.get();
+    m_scene = sceneGenerator();
+}
 
-    // 2D
+void JAGEngine::loadCanvas(std::function<std::unique_ptr<node::Canvas>()> canvasGenerator) {
+    if (m_canvas) {
+        m_canvas.reset();
+        m_canvas = nullptr;
+    }
 
-    m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
-
-    auto frame = m_canvas->addChild<SpriteFrame>(
-            "Test",
-            type::RectI32(0, 0, 1000, 1000),
-            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
-            "./res/sprite/Flash.sprite");
-
-    frame->setMultiply(0.835f, 0.082f, 0.416f, 0.5f);
-    frame->setAdd(0.0f, 0.0f, 0.0f, 0.5f);
+    m_canvas = canvasGenerator();
 }
