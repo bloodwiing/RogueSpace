@@ -1,6 +1,6 @@
 name: "Orange"
 texture: "SpriteSpheres.tga"
-y: 0
 x: 128
+y: 0
 width: 128
 height: 128
