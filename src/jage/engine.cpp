@@ -126,27 +126,12 @@ void JAGEngine::loadScene() {
 
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
-    m_canvas->addChild<SpriteFrame>(
+    auto frame = m_canvas->addChild<SpriteFrame>(
             "Test",
-            type::RectI32(0, 0, 100, 100),
-            type::RectF(0.0f, 0.0f, 0.0f, 0.0f),
-            "./res/sprite/spheres/Green.sprite");
+            type::RectI32(0, 0, 1000, 1000),
+            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
+            "./res/sprite/Flash.sprite");
 
-    m_canvas->addChild<SpriteFrame>(
-            "Test",
-            type::RectI32(0, 900, 100, 1000),
-            type::RectF(0.0f, 1.0f, 0.0f, 1.0f),
-            "./res/sprite/spheres/Blue.sprite");
-
-    m_canvas->addChild<SpriteFrame>(
-            "Test",
-            type::RectI32(900, 0, 1000, 100),
-            type::RectF(1.0f, 0.0f, 1.0f, 0.0f),
-            "./res/sprite/spheres/Orange.sprite");
-
-    m_canvas->addChild<SpriteFrame>(
-            "Test",
-            type::RectI32(900, 900, 1000, 1000),
-            type::RectF(1.0f, 1.0f, 1.0f, 1.0f),
-            "./res/sprite/spheres/Red.sprite");
+    frame->setMultiply(0.835f, 0.082f, 0.416f, 0.5f);
+    frame->setAdd(0.0f, 0.0f, 0.0f, 0.5f);
 }
