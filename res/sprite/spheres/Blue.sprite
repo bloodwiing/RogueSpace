@@ -1,6 +1,6 @@
 name: "Blue"
 texture: "SpriteSpheres.tga"
-top: 0
-left: 0
+y: 128
+x: 0
 width: 128
 height: 128

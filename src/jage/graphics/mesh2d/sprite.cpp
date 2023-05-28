@@ -24,7 +24,7 @@ Sprite::Sprite(std::string filePath)
         : m_data(YAML::LoadFile(filePath))
         , m_filePath(std::move(filePath))
 {
-    const auto corner = RectI32::PairType(m_data["top"].as<int>(), m_data["left"].as<int>());
+    const auto corner = RectI32::PairType(m_data["x"].as<int>(), m_data["y"].as<int>());
     m_rect = RectI32(corner, m_data["width"].as<int>(), m_data["height"].as<int>());
 
     std::string directory = runtime::asset::AssetStream::getFileDirectory(m_filePath);

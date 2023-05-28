@@ -1,6 +1,6 @@
 name: "Green"
 texture: "SpriteSpheres.tga"
-top: 128
-left: 0
+y: 0
+x: 0
 width: 128
 height: 128
