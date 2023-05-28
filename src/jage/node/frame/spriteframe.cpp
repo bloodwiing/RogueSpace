@@ -16,6 +16,12 @@ SpriteFrame::SpriteFrame(JAGE_FRAME_ARGS, std::shared_ptr<Sprite> sprite)
 
 }
 
+SpriteFrame::SpriteFrame(JAGE_FRAME_ARGS, const std::string& filePath)
+        : SpriteFrame(parent, std::move(name), canvas, rectParent, rect, anchor, Assets::get<Assets::Sprite>(filePath))
+{
+
+}
+
 void jage::node::frame::SpriteFrame::draw() {
     m_sprite->apply(*m_shader);
     SolidFrame::draw();

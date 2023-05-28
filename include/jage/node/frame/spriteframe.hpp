@@ -10,6 +10,7 @@ namespace jage::node::frame {
     {
     public:
         SpriteFrame(JAGE_FRAME_ARGS, std::shared_ptr<jage::graphics::mesh2d::Sprite> sprite);
+        SpriteFrame(JAGE_FRAME_ARGS, const std::string& filePath);
 
         void draw() override;
 
