@@ -126,24 +126,27 @@ void JAGEngine::loadScene() {
 
     m_canvas = std::make_unique<jage::node::Canvas>(type::RectI32(1000, 1000));
 
-    auto uiShader = jage::runtime::asset::AssetManager::getInstance()->get<jage::graphics::Shader>("./res/shader/ui");
-    auto sprite = runtime::asset::AssetManager::getInstance()->get<jage::graphics::mesh2d::Sprite>("./res/sprite/spheres/Blue.sprite");
+    m_canvas->addChild<SpriteFrame>(
+            "Test",
+            type::RectI32(0, 0, 100, 100),
+            type::RectF(0.0f, 0.0f, 0.0f, 0.0f),
+            "./res/sprite/spheres/Green.sprite");
 
     m_canvas->addChild<SpriteFrame>(
-            "Test CENTERED",
-            type::RectI32(250, 250, 750, 750),
-            type::RectF(0.5f, 0.5f, 0.5f, 0.5f),
-            sprite);
+            "Test",
+            type::RectI32(0, 900, 100, 1000),
+            type::RectF(0.0f, 1.0f, 0.0f, 1.0f),
+            "./res/sprite/spheres/Blue.sprite");
 
-//    m_canvas->addChild<SolidFrame>(
-//            "Test SCALE",
-//            type::RectI32(50, 50, 950, 950),
-//            type::RectF(0.0f, 0.0f, 1.0f, 1.0f),
-//            uiShader);
-//
-//    m_canvas->addChild<SolidFrame>(
-//            "Test CORNER",
-//            type::RectI32(500, 0, 1000, 50),
-//            type::RectF(0.5f, 0.0f, 1.0f, 0.0f),
-//            uiShader);
+    m_canvas->addChild<SpriteFrame>(
+            "Test",
+            type::RectI32(900, 0, 1000, 100),
+            type::RectF(1.0f, 0.0f, 1.0f, 0.0f),
+            "./res/sprite/spheres/Orange.sprite");
+
+    m_canvas->addChild<SpriteFrame>(
+            "Test",
+            type::RectI32(900, 900, 1000, 1000),
+            type::RectF(1.0f, 1.0f, 1.0f, 1.0f),
+            "./res/sprite/spheres/Red.sprite");
 }
