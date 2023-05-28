@@ -68,6 +68,7 @@ namespace jage::graphics::mesh3d {
         /// \return             A compiled Material
         Material getMaterial(json data, std::vector<std::shared_ptr<Texture>>& textures);
 
+        static glm::vec2 flipUVVertically(const glm::vec2& vec);
         /// \brief              Combines all 3 lists of vertex data into a single list of Vertex objects
         /// \param positions    The Vertex Position list
         /// \param normals      The Vertex Normal list

@@ -264,6 +264,10 @@ jage::graphics::mesh3d::Material Model3D::getMaterial(json data, std::vector<std
     return result;
 }
 
+glm::vec2 Model3D::flipUVVertically(const glm::vec2& vec) {
+    return {vec.x, 1.0 - vec.y};
+}
+
 std::vector<jage::graphics::mesh3d::Vertex3D> Model3D::assembleVertices(
         std::vector<glm::vec3> positions,
         std::vector<glm::vec3> normals,
@@ -276,7 +280,7 @@ std::vector<jage::graphics::mesh3d::Vertex3D> Model3D::assembleVertices(
                         positions[i],
                         normals[i],
                         glm::vec3(1.0f, 1.0f, 1.0f),
-                        texCoords[i]
+                        flipUVVertically(texCoords[i])
                 });
     }
     return vertices;
