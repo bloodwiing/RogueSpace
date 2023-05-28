@@ -1,0 +1,6 @@
+name: "EnemyIndicator"
+texture: "HUD.tga"
+x: 850
+y: 668
+width: 100
+height: 67

@@ -1,0 +1,6 @@
+name: "Gradient"
+texture: "HUD.tga"
+x: 509
+y: 110
+width: 500
+height: 64

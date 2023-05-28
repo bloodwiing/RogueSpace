@@ -1,0 +1,6 @@
+name: "Digit9"
+texture: "HUD.tga"
+x: 940
+y: 738
+width: 44
+height: 60

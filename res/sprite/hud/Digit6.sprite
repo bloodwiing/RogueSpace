@@ -1,0 +1,6 @@
+name: "Digit6"
+texture: "HUD.tga"
+x: 940
+y: 801
+width: 44
+height: 60

@@ -1,0 +1,6 @@
+name: "RingDeadzone"
+texture: "HUD.tga"
+x: 947
+y: 925
+width: 22
+height: 22
