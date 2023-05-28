@@ -9,12 +9,13 @@
 #include "jage/script/weaponscript.hpp"
 
 using game::scene::GameScene;
+using jage::node::Scene;
 using jage::Tag;
 using namespace jage::node::actor;
 using namespace jage::script;
 
-std::unique_ptr<jage::node::Scene> GameScene::create() {
-    auto scene = std::make_unique<jage::node::Scene>();
+std::unique_ptr<Scene> GameScene::create() {
+    auto scene = std::make_unique<Scene>();
 
     auto sphere = scene->addChild<ModelActor>("sphere", Tag::ENVIRONMENT, "./res/model/builtin/sphere/sphere.gltf");
     sphere->translate(glm::vec3(10.0f, 2.0f, 0.0f));
