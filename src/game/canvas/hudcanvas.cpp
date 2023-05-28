@@ -1,6 +1,6 @@
 #include "game/canvas/hudcanvas.hpp"
 
-#include "jage/node/frame/anchors.hpp"
+#include "jage/node/frame/anchor.hpp"
 #include "jage/node/frame/spriteframe.hpp"
 
 using game::canvas::HUDCanvas;
