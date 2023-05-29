@@ -3,6 +3,7 @@
 #include "jage/node/frame/anchor.hpp"
 #include "jage/node/frame/spriteframe.hpp"
 #include "jage/node/frame/scoreframe.hpp"
+#include "jage/node/frame/progressbarframe.hpp"
 #include "jage/script/actor/healthscript.hpp"
 #include "jage/script/frame/opacitydamageflashscript.hpp"
 
@@ -31,7 +32,8 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     healthFx->setOpacity(0.0f);
     auto healthFlashScript = healthFx->attachScript<frame::OpacityDamageFlashScript>(2.0f, 1.0f);
     healthScript.lock()->onDamage += healthFlashScript;
-    canvas->addChild<SpriteFrame>("HealthValueBar", RectI32(50, 50, 380, 106), Anchor::BottomLeft, "./res/sprite/hud/BarFull.sprite");
+    auto bar = canvas->addChild<ProgressBarFrame>("HealthValueBar", RectI32(50, 50, 380, 106), Anchor::BottomLeft, "./res/sprite/hud/BarFull.sprite", "./res/sprite/hud/BarEmpty.sprite");
+    bar->setProgress(0.2f);
     canvas->addChild<SpriteFrame>("IconWarning", RectI32(405, 50, 461, 106), Anchor::BottomLeft, "./res/sprite/hud/IconWarning.sprite");
 
     canvas->addChild<SpriteFrame>("ScoreFX", RectI32::Grow(1705, 80, 165, 32), Anchor::BottomRight, "./res/sprite/hud/Gradient.sprite");
