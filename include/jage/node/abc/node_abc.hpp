@@ -46,6 +46,7 @@ namespace jage::node::abc {
 
         [[nodiscard]] std::string toHierarchyString(uint16_t indent = 0) const;
 
+        virtual void spawn() {};
         virtual void update();
         virtual void draw();
 

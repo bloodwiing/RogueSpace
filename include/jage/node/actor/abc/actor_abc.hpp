@@ -53,14 +53,13 @@ namespace jage::node::actor::abc {
 
         void update() override;
 
+        void spawn() override;
         void kill() override;
         void kill(float delay) override;
         bool isDead() const override;
 
     protected:
         ActorABC(JAGE_ACTOR_ARGS);
-
-        void tagToScene(Scene* scene);
 
         [[nodiscard]] std::string getTypeName() const override;
 
