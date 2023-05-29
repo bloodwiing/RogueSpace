@@ -1,5 +1,5 @@
-#ifndef JAGE_COLLISION_RECEIVER_SCRIPT_HPP
-#define JAGE_COLLISION_RECEIVER_SCRIPT_HPP
+#ifndef JAGE_COLLISION_LISTENER_SCRIPT_HPP
+#define JAGE_COLLISION_LISTENER_SCRIPT_HPP
 
 #include "jage/node/actor/dynamicactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
@@ -28,4 +28,4 @@ namespace jage::script::actor {
     };
 }
 
-#endif //JAGE_COLLISION_RECEIVER_SCRIPT_HPP
+#endif //JAGE_COLLISION_LISTENER_SCRIPT_HPP
