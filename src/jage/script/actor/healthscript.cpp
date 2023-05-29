@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "jage/script/actor/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionlistenerscript.hpp"
 
 using jage::script::actor::HealthScript;
 
@@ -11,7 +11,7 @@ HealthScript::HealthScript(abc::ScriptableABC* node, float maxHealth)
     , m_health(maxHealth)
 {
     validate(node);
-    m_collider = dependsOn<CollisionReceiverScript>();
+    m_collider = dependsOn<CollisionListenerScript>();
 }
 
 void HealthScript::onAttach() {

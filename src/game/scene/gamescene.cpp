@@ -22,12 +22,12 @@ std::unique_ptr<Scene> GameScene::create() {
     camera->setActive();
     player->attachScript<WeaponScript>(60.0f, Tag::ENEMY);
     player->attachScript<PlayerControllerScript>(cameraShakeScript);
-    player->attachScript<CollisionReceiverScript>(1.0f);
+    player->attachScript<CollisionListenerScript>(1.0f);
     player->attachScript<HealthScript>(100.0f);
 
     auto starship = scene->addChild<ShipActor>("Starship", Tag::ENEMY);
     starship->attachScript<WeaponScript>(60.0f, Tag::PLAYER);
-    starship->attachScript<CollisionReceiverScript>(1.0f);
+    starship->attachScript<CollisionListenerScript>(1.0f);
     starship->attachScript<HealthScript>(100.0f);
     auto controller = starship->attachScript<AIControllerScript>();
     controller->setTarget(player);

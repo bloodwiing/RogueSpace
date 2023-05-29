@@ -6,9 +6,9 @@
 
 namespace jage::script::actor {
 
-    class ColliderScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
+    class CollisionNotifierScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        ColliderScript(abc::ScriptableABC* node, Tag tagFilter, float radius);
+        CollisionNotifierScript(abc::ScriptableABC* node, Tag tagFilter, float radius);
 
         void onAttach() override;
         void onSpawn() override;

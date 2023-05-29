@@ -3,7 +3,7 @@
 #include "jage/node/actor/physicsactor.hpp"
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
-#include "jage/script/actor/colliderscript.hpp"
+#include "jage/script/actor/collidisionnotifierscript.hpp"
 
 using jage::script::actor::WeaponScript;
 
@@ -44,7 +44,7 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
     // Actor
     auto bullet = m_node->getScene()->addVolatileChild<node::actor::PhysicsActor>("Bullet", Tag::BULLET, 0.0f, 0.0f);
     bullet->addChild<node::actor::ModelActor>("model", Tag::MESH, "./res/model/trailblazer/bullet/BulletTemp.gltf");
-    bullet->attachScript<ColliderScript>(m_bulletTargetTag, 1.0f);
+    bullet->attachScript<CollisionNotifierScript>(m_bulletTargetTag, 1.0f);
 
     // Translate to world position
     glm::vec3 spawnOffset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;

@@ -7,9 +7,9 @@
 
 namespace jage::script::actor {
 
-    class CollisionReceiverScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
+    class CollisionListenerScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        explicit CollisionReceiverScript(abc::ScriptableABC* node, float radius);
+        explicit CollisionListenerScript(abc::ScriptableABC* node, float radius);
 
         void onAttach() override;
         void onSpawn() override;

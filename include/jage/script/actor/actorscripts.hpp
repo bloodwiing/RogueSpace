@@ -3,8 +3,8 @@
 
 #include "./aicontrollerscript.hpp"
 #include "./camerashakescript.hpp"
-#include "./colliderscript.hpp"
-#include "./collisionreceiverscript.hpp"
+#include "./collidisionnotifierscript.hpp"
+#include "./collisionlistenerscript.hpp"
 #include "./healthscript.hpp"
 #include "./playercontrollerscript.hpp"
 #include "./weaponscript.hpp"

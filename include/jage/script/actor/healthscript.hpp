@@ -3,7 +3,7 @@
 
 #include "jage/node/actor/staticactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
-#include "jage/script/actor/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionlistenerscript.hpp"
 #include "jage/event/collisionevent.hpp"
 
 namespace jage::script::actor {
@@ -23,7 +23,7 @@ class HealthScript : public abc::AttachableScriptABC<jage::node::actor::StaticAc
         float m_maxHealth;
         float m_health;
 
-        CollisionReceiverScript* m_collider;
+        CollisionListenerScript* m_collider;
     };
 }
 
