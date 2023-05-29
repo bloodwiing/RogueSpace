@@ -1,5 +1,5 @@
-#ifndef JAGE_BASIC_CANVAS_HPP
-#define JAGE_BASIC_CANVAS_HPP
+#ifndef JAGE_BASIC_FRAME_HPP
+#define JAGE_BASIC_FRAME_HPP
 
 #include "jage/node/frame/abc/frame_abc.hpp"
 #include "jage/graphics/mesh2d/quad2d.hpp"
@@ -39,4 +39,4 @@ namespace jage::node::frame {
     };
 }
 
-#endif //JAGE_BASIC_CANVAS_HPP
+#endif //JAGE_BASIC_FRAME_HPP
