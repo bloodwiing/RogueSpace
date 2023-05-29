@@ -17,7 +17,7 @@ namespace jage {
         void loop();
 
         void loadScene(std::function<std::unique_ptr<node::Scene>()> sceneGenerator);
-        void loadCanvas(std::function<std::unique_ptr<node::Canvas>()> canvasGenerator);
+        void loadCanvas(std::function<std::unique_ptr<node::Canvas>(node::Scene*)> canvasGenerator);
 
     private:
         static JAGEngine instance;

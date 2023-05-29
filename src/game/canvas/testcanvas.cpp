@@ -5,12 +5,13 @@
 
 using game::canvas::TestCanvas;
 using jage::node::Canvas;
+using jage::node::Scene;
 using jage::type::RectF;
 using jage::type::RectI32;
 using jage::node::frame::Anchor;
 using namespace jage::node::frame;
 
-std::unique_ptr<Canvas> TestCanvas::create() {
+std::unique_ptr<Canvas> TestCanvas::create(Scene* scene) {
     auto canvas = std::make_unique<Canvas>(RectI32(1000, 1000));
 
     canvas->addChild<SpriteFrame>("", RectI32::Grow(80, 80, 30, 30), Anchor::BottomLeft, "./res/sprite/spheres/Blue.sprite")

@@ -85,11 +85,11 @@ void JAGEngine::loadScene(std::function<std::unique_ptr<node::Scene>()> sceneGen
     m_scene = sceneGenerator();
 }
 
-void JAGEngine::loadCanvas(std::function<std::unique_ptr<node::Canvas>()> canvasGenerator) {
+void JAGEngine::loadCanvas(std::function<std::unique_ptr<node::Canvas>(node::Scene*)> canvasGenerator) {
     if (m_canvas) {
         m_canvas.reset();
         m_canvas = nullptr;
     }
 
-    m_canvas = canvasGenerator();
+    m_canvas = canvasGenerator(m_scene.get());
 }

@@ -3,22 +3,34 @@
 #include "jage/node/frame/anchor.hpp"
 #include "jage/node/frame/spriteframe.hpp"
 #include "jage/node/frame/scoreframe.hpp"
+#include "jage/script/actor/healthscript.hpp"
+#include "jage/script/frame/opacitydamageflashscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
+using jage::node::Scene;
 using jage::type::RectF;
 using jage::type::RectI32;
 using jage::node::frame::Anchor;
 using namespace jage::node::frame;
+using namespace jage::script;
 
-std::unique_ptr<Canvas> HUDCanvas::create() {
+std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
+    auto player = scene->getChild("Player");
+    auto healthScript = player->findScript<actor::HealthScript>();
+
     auto canvas = std::make_unique<Canvas>(RectI32(1920, 1080));
 
     auto flash = canvas->addChild<SpriteFrame>("Flash", RectI32(1920, 1080), Anchor::Full, "./res/sprite/flash.sprite");
-    flash->setMultiply(0.835f, 0.082f, 0.416f, 0.2f);
+    flash->setMultiply(0.835f, 0.082f, 0.416f, 0.0f);
+    auto flashScript = flash->attachScript<frame::OpacityDamageFlashScript>(0.5f, 0.2f);
+    healthScript.lock()->onDamage += flashScript;
 
     auto healthFx = canvas->addChild<SpriteFrame>("HealthFX", RectI32::Grow(215, 78, 165, 32), Anchor::BottomLeft, "./res/sprite/hud/Gradient.sprite");
     healthFx->flipHorizontally(true);
+    healthFx->setOpacity(0.0f);
+    auto healthFlashScript = healthFx->attachScript<frame::OpacityDamageFlashScript>(2.0f, 1.0f);
+    healthScript.lock()->onDamage += healthFlashScript;
     canvas->addChild<SpriteFrame>("HealthValueBar", RectI32(50, 50, 380, 106), Anchor::BottomLeft, "./res/sprite/hud/BarFull.sprite");
     canvas->addChild<SpriteFrame>("IconWarning", RectI32(405, 50, 461, 106), Anchor::BottomLeft, "./res/sprite/hud/IconWarning.sprite");
 
