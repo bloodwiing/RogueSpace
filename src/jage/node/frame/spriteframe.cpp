@@ -31,6 +31,8 @@ void SpriteFrame::draw() {
     glUniform4fv(m_shader->getUniform("Multiply"), 1, glm::value_ptr(m_multiply));
     glUniform4fv(m_shader->getUniform("Add"), 1, glm::value_ptr(m_add));
 
+    glUniformMatrix3fv(m_shader->getUniform("UVMatrix"), 1, GL_FALSE, glm::value_ptr(m_uvMatrix));
+
     SolidFrame::draw();
 }
 
@@ -55,6 +57,16 @@ void SpriteFrame::setAdd(float r, float g, float b, float a /* = 0.0f */) {
     setAdd(glm::vec4(r, g, b, a));
 }
 
+void SpriteFrame::flipHorizontally(bool value) {
+    m_flipHor = value;
+    updateUVMatrix();
+}
+
+void SpriteFrame::flipVertically(bool value) {
+    m_flipVer = value;
+    updateUVMatrix();
+}
+
 std::shared_ptr<Sprite> SpriteFrame::getSprite() const {
     return m_sprite;
 }
@@ -69,4 +81,18 @@ glm::vec4 SpriteFrame::getAdd() const {
 
 std::shared_ptr<Sprite> SpriteFrame::getInternalSprite() const {
     return getSprite();
+}
+
+void SpriteFrame::updateUVMatrix() {
+    m_uvMatrix = glm::mat3(1.0f);
+
+    if (m_flipHor) {
+        m_uvMatrix[0][0] = -1.0f;
+        m_uvMatrix[2][0] = 1.0f;
+    }
+
+    if (m_flipVer) {
+        m_uvMatrix[1][1] = -1.0f;
+        m_uvMatrix[2][1] = 1.0f;
+    }
 }
