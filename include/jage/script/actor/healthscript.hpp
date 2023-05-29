@@ -5,10 +5,15 @@
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/script/actor/collisionlistenerscript.hpp"
 #include "jage/event/collisionevent.hpp"
+#include "jage/event/damageevent.hpp"
 
 namespace jage::script::actor {
 
-class HealthScript : public abc::AttachableScriptABC<jage::node::actor::StaticActor>, public jage::event::CollisionEvent, public std::enable_shared_from_this<HealthScript> {
+class HealthScript
+        : public abc::AttachableScriptABC<jage::node::actor::StaticActor>
+        , public jage::event::CollisionEvent
+        , public std::enable_shared_from_this<HealthScript>
+    {
     public:
         HealthScript(abc::ScriptableABC* node, float maxHealth);
 
@@ -18,6 +23,10 @@ class HealthScript : public abc::AttachableScriptABC<jage::node::actor::StaticAc
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
+
+        void damage(float amount);
+
+        event::DamageEvent::Manager onDamage;
 
     private:
         float m_maxHealth;

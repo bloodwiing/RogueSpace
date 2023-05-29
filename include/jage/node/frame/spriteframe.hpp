@@ -17,6 +17,7 @@ namespace jage::node::frame {
         virtual void setSprite(std::shared_ptr<jage::graphics::mesh2d::Sprite> sprite);
         virtual void setMultiply(glm::vec4 multiply);
         void setMultiply(float r, float g, float b, float a = 1.0f);
+        void setOpacity(float a);
         virtual void setAdd(glm::vec4 add);
         void setAdd(float r, float g, float b, float a = 0.0f);
 

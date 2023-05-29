@@ -30,7 +30,12 @@ void HealthScript::onDeath() {
 
 }
 
-void HealthScript::notify(jage::node::actor::StaticActor* notifier) {
-    m_health -= 1.0f;
+void jage::script::actor::HealthScript::damage(float amount) {
+    m_health -= amount;
     std::cout << m_node->getName() << " " << m_health << "/" << m_maxHealth << "HP" << std::endl;
+    onDamage.notifyAll(amount, m_health, m_maxHealth);
+}
+
+void HealthScript::notify(jage::node::actor::StaticActor* notifier) {
+    damage(1.0f);
 }
