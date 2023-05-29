@@ -98,13 +98,13 @@ template<class TRect>
 jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::scalePhysical(const Rect<T, TPair>& parentImaginary, const TRect& parentPhysical, const TRect& anchor) {
     const T diffX1 = parentPhysical.x1 - parentImaginary.x1;
     const T diffY1 = parentPhysical.y1 - parentImaginary.y1;
-    const T diffX2 = parentPhysical.x2 - parentImaginary.x2;
-    const T diffY2 = parentPhysical.y2 - parentImaginary.y2;
+    const T diffX2 = parentPhysical.x2 - parentImaginary.x2 - diffX1;
+    const T diffY2 = parentPhysical.y2 - parentImaginary.y2 - diffY1;
 
-    const T newX1 = x1 + diffX1 * (1.0 - anchor.x1) + diffX2 * anchor.x1;
-    const T newY1 = y1 + diffY1 * (1.0 - anchor.y1) + diffY2 * anchor.y1;
-    const T newX2 = x2 + diffX2 * anchor.x2 - diffX1 * (1.0 - anchor.x2);
-    const T newY2 = y2 + diffY2 * anchor.y2 - diffY1 * (1.0 - anchor.y2);
+    const T newX1 = x1 + diffX2 * anchor.x1 + parentPhysical.x1;
+    const T newY1 = y1 + diffY2 * anchor.y1 + parentPhysical.y1;
+    const T newX2 = x2 + diffX2 * anchor.x2 + parentPhysical.x1;
+    const T newY2 = y2 + diffY2 * anchor.y2 + parentPhysical.y1;
 
     return {newX1, newY1, newX2, newY2};
 }
