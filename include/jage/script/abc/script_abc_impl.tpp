@@ -10,9 +10,9 @@ void jage::script::abc::AttachableScriptABC<TNode>::validate(jage::script::abc::
 
 template<class TNode>
 template<class T>
-T* jage::script::abc::AttachableScriptABC<TNode>::dependsOn() {
-   T* result = m_node->template findScript<T>();
-   if (result == nullptr)
+std::weak_ptr<T> jage::script::abc::AttachableScriptABC<TNode>::dependsOn() {
+    std::weak_ptr<T> result = m_node->template findScript<T>();
+   if (result.expired())
        throw abc::AttachableScriptABC<TNode>::RequireError();
    return result;
 }

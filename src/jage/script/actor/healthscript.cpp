@@ -15,7 +15,7 @@ HealthScript::HealthScript(abc::ScriptableABC* node, float maxHealth)
 }
 
 void HealthScript::onAttach() {
-    m_collider->onCollide += shared_from_this();
+    m_collider.lock()->onCollide += shared_from_this();
 }
 
 void HealthScript::onSpawn() {

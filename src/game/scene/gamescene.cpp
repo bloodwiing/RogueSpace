@@ -30,7 +30,7 @@ std::unique_ptr<Scene> GameScene::create() {
     starship->attachScript<CollisionListenerScript>(1.0f);
     starship->attachScript<HealthScript>(100.0f);
     auto controller = starship->attachScript<AIControllerScript>();
-    controller->setTarget(player);
+    controller.lock()->setTarget(player);
     starship->addChild<ModelActor>("model", Tag::MESH, "./res/model/trailblazer/starship/Starship01.gltf");
     starship->translate(glm::vec3(100.0f, 0.0f, 0.0f));
 

@@ -3,6 +3,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
+#include <utility>
 
 #include "jage/node/actor/physicsactor.hpp"
 #include "jage/node/actor/modelactor.hpp"
@@ -11,11 +12,11 @@
 
 using jage::script::actor::PlayerControllerScript;
 
-PlayerControllerScript::PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake) {
+PlayerControllerScript::PlayerControllerScript(abc::ScriptableABC* node, std::weak_ptr<CameraShakeScript> cameraShake)
+        : m_cameraShakeScript(std::move(cameraShake))
+{
     validate(node);
     m_weaponScript = dependsOn<WeaponScript>();
-
-    m_cameraShakeScript = cameraShake;
 }
 
 void PlayerControllerScript::onAttach() {
@@ -55,7 +56,7 @@ void PlayerControllerScript::onKeyboardInput() {
     }
 
     const float shakeAmplitude = (glm::sqrt(glm::abs(m_node->getThrottle()) / m_node->getMaxForwardSpeed()) - 0.8f) * 0.015f;
-    m_cameraShakeScript->setAmplitude(shakeAmplitude);
+    m_cameraShakeScript.lock()->setAmplitude(shakeAmplitude);
 }
 
 void PlayerControllerScript::onMouseInput() {
@@ -74,6 +75,6 @@ void PlayerControllerScript::onMouseInput() {
     bulletOrientation = glm::rotate(glm::radians(-(float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
 
     if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
-        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
+        m_weaponScript.lock()->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
     }
 }

@@ -8,9 +8,11 @@
 
 namespace jage::script::actor {
 
-    class PlayerControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
+    class PlayerControllerScript
+            : public abc::AttachableScriptABC<jage::node::actor::ShipActor>
+    {
     public:
-        explicit PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake);
+        explicit PlayerControllerScript(abc::ScriptableABC* node, std::weak_ptr<CameraShakeScript> cameraShake);
 
         void onAttach() override;
         void onSpawn() override;
@@ -23,8 +25,8 @@ namespace jage::script::actor {
     private:
         float m_sensitivity = 2.5f;
 
-        CameraShakeScript* m_cameraShakeScript;
-        WeaponScript* m_weaponScript;
+        std::weak_ptr<CameraShakeScript> m_cameraShakeScript;
+        std::weak_ptr<WeaponScript> m_weaponScript;
     };
 }
 

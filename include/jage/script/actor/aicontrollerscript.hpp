@@ -77,7 +77,7 @@ namespace jage::script::actor {
 
         jage::node::actor::ShipActor* m_target = nullptr;
 
-        WeaponScript* m_weaponScript;
+        std::weak_ptr<WeaponScript> m_weaponScript;
     };
 }
 

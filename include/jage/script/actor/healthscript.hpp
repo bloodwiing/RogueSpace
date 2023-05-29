@@ -32,7 +32,7 @@ class HealthScript
         float m_maxHealth;
         float m_health;
 
-        CollisionListenerScript* m_collider;
+        std::weak_ptr<CollisionListenerScript> m_collider;
     };
 }
 

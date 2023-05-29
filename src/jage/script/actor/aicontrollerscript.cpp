@@ -84,7 +84,7 @@ void AIControllerScript::runSeek(const glm::vec3& predicted, float distance) {
         m_state = State::FLEEING;
         m_fleeVector = glm::normalize(predicted + m_node->getUp());
     } else if (distance < m_attackDistance) {
-        m_weaponScript->shootThisFrame(m_node->getThrottleVelocity());
+        m_weaponScript.lock()->shootThisFrame(m_node->getThrottleVelocity());
     }
 }
 
@@ -125,7 +125,7 @@ float AIControllerScript::getTargetDistance(const glm::vec3& target) {
 }
 
 glm::vec3 AIControllerScript::predictTargetPosition(const glm::vec3& target, float distance) {
-    glm::vec3 bulletVelocity = (m_node->getMaxForwardSpeed() + m_weaponScript->getBulletSpeed()) * m_node->getOrientation();
+    glm::vec3 bulletVelocity = (m_node->getMaxForwardSpeed() + m_weaponScript.lock()->getBulletSpeed()) * m_node->getOrientation();
 
     float approachSpeed = glm::length(bulletVelocity - m_target->getThrottleVelocity());
     // Assume approach speed even if it's invalid

@@ -22,10 +22,15 @@ void CollisionNotifierScript::onSpawn() {
 void CollisionNotifierScript::onUpdate() {
     node::Scene& scene = *m_node->getScene();
     for (auto iter = scene.beginTagged(m_tagFilter); iter != scene.endTagged(m_tagFilter); ++iter) {
-        auto* target = iter->findScript<CollisionListenerScript>();
+        auto target = iter->findScript<CollisionListenerScript>();
 
-        if (target != nullptr and (target->getRadius() + getRadius()) >= glm::distance(iter->getWorldPosition(), m_node->getWorldPosition())) {
-            target->runCollision(m_node);
+        if (target.expired())
+            return;
+
+        auto targetPtr = target.lock();
+
+        if (target.lock()->getRadius() + getRadius() >= glm::distance(iter->getWorldPosition(), m_node->getWorldPosition())) {
+            targetPtr->runCollision(m_node);
             m_node->kill();
         }
     }
