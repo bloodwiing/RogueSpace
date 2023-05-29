@@ -3,13 +3,13 @@
 using jage::node::frame::Anchor;
 using jage::type::RectF;
 
-const RectF Anchor::TopLeft = RectF(1.0f, 0.0f, 1.0f, 0.0f);
-const RectF Anchor::TopCenter = RectF(1.0f, 0.5f, 1.0f, 0.5f);
+const RectF Anchor::TopLeft = RectF(0.0f, 1.0f, 0.0f, 1.0f);
+const RectF Anchor::TopCenter = RectF(0.5f, 1.0f, 0.5f, 1.0f);
 const RectF Anchor::TopRight = RectF(1.0f, 1.0f, 1.0f, 1.0f);
 
-const RectF Anchor::MiddleLeft = RectF(0.5f, 0.0f, 0.5f, 0.0f);
+const RectF Anchor::MiddleLeft = RectF(0.0f, 0.5f, 0.0f, 0.5f);
 const RectF Anchor::MiddleCenter = RectF(0.5f, 0.5f, 0.5f, 0.5f);
-const RectF Anchor::MiddleRight = RectF(0.5f, 1.0f, 0.5f, 1.0f);
+const RectF Anchor::MiddleRight = RectF(1.0f, 0.5f, 1.0f, 0.5f);
 
 const RectF Anchor::BottomLeft = RectF(0.0f, 0.0f, 0.0f, 0.0f);
 const RectF Anchor::BottomCenter = RectF(0.5f, 0.0f, 0.5f, 0.0f);
