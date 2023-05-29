@@ -33,6 +33,11 @@ void SpriteFrame::draw() {
 
     glUniformMatrix3fv(m_shader->getUniform("UVMatrix"), 1, GL_FALSE, glm::value_ptr(m_uvMatrix));
 
+    glUniform1f(m_shader->getUniform("CropLeft"), m_crop.x1);
+    glUniform1f(m_shader->getUniform("CropBottom"), m_crop.y1);
+    glUniform1f(m_shader->getUniform("CropRight"), m_crop.x2);
+    glUniform1f(m_shader->getUniform("CropTop"), m_crop.y2);
+
     SolidFrame::draw();
 }
 
@@ -69,6 +74,22 @@ void SpriteFrame::flipHorizontally(bool value) {
 void SpriteFrame::flipVertically(bool value) {
     m_flipVer = value;
     updateUVMatrix();
+}
+
+void SpriteFrame::setCropLeft(float value) {
+    m_crop.x1 = value;
+}
+
+void SpriteFrame::setCropBottom(float value) {
+    m_crop.y1 = value;
+}
+
+void SpriteFrame::setCropRight(float value) {
+    m_crop.x2 = value;
+}
+
+void SpriteFrame::setCropTop(float value) {
+    m_crop.y2 = value;
 }
 
 std::shared_ptr<Sprite> SpriteFrame::getSprite() const {

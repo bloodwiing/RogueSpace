@@ -24,6 +24,11 @@ namespace jage::node::frame {
         void flipHorizontally(bool value);
         void flipVertically(bool value);
 
+        void setCropLeft(float value);
+        void setCropBottom(float value);
+        void setCropRight(float value);
+        void setCropTop(float value);
+
         [[nodiscard]] virtual std::shared_ptr<jage::graphics::mesh2d::Sprite> getSprite() const;
         [[nodiscard]] virtual glm::vec4 getMultiply() const;
         [[nodiscard]] virtual glm::vec4 getAdd() const;
@@ -43,6 +48,8 @@ namespace jage::node::frame {
         bool m_flipVer = false;
 
         glm::mat3 m_uvMatrix = glm::mat3(1.0f);
+
+        type::RectF m_crop = type::RectF(1.0f, 1.0f);
     };
 }
 
