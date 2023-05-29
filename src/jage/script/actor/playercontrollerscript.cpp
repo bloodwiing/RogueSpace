@@ -68,11 +68,11 @@ void PlayerControllerScript::onMouseInput() {
     const auto& orientation = m_node->getOrientation();
     const auto& up = m_node->getUp();
 
-    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * -(float)rot_y + up * -(float)rot_x;
+    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)rot_y + up * -(float)rot_x;
     m_node->setSteer(steer * m_sensitivity);
 
     glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
-    bulletOrientation = glm::rotate(glm::radians(-(float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
+    bulletOrientation = glm::rotate(glm::radians((float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
 
     if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
         m_weaponScript.lock()->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
