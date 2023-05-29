@@ -121,17 +121,17 @@ jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::scalePhysical(const Rect<
 
 template<typename T, typename TPair>
 jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::normalized() {
-    return Rect();
+    return *this - TPair(x1, y1);
 }
 
 template<typename T, typename TPair>
 bool jage::type::Rect<T, TPair>::isContaining(const TPair& point) {
-    return false;
+    return x1 <= point.x and point.x <= x2 and y1 <= point.y and point.y <= y2;
 }
 
 template<typename T, typename TPair>
 bool jage::type::Rect<T, TPair>::isIntersecting(const Rect& other) {
-    return false;
+    return x1 <= other.x2 and other.x1 <= x2 and y1 <= other.y2 and other.y1 <= y2;
 }
 
 template<typename T, typename TPair>
