@@ -60,7 +60,7 @@ jage::type::Rect<T, TPair>::Rect(const Rect &ref)
 
 template<typename T, typename TPair>
 jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::Grow(T x, T y, T hor, T ver) {
-    return Rect<T, TPair>(x - hor, y - hor, x + hor, y + hor);
+    return Rect<T, TPair>(x - hor, y - ver, x + hor, y + ver);
 }
 
 template<typename T, typename TPair>
