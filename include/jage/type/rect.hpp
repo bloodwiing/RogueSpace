@@ -28,6 +28,9 @@ namespace jage::type {
         Rect(const Rect& ref);
         ~Rect() = default;
 
+        static Rect<T, TPair> Grow(T x, T y, T hor, T ver);
+        static Rect<T, TPair> Grow(TPair middle, T hor, T ver);
+
         template<typename TNew, typename TPairNew>
         Rect<TNew, TPairNew> as() const;
         template<class TRect>

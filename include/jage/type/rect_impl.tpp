@@ -59,6 +59,16 @@ jage::type::Rect<T, TPair>::Rect(const Rect &ref)
 }
 
 template<typename T, typename TPair>
+jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::Grow(T x, T y, T hor, T ver) {
+    return Rect<T, TPair>(x - hor, y - hor, x + hor, y + hor);
+}
+
+template<typename T, typename TPair>
+jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::Grow(TPair middle, T hor, T ver) {
+    return Rect<T, TPair>::Grow(middle.x, middle.y, hor, ver);
+}
+
+template<typename T, typename TPair>
 template<typename TNew, typename TNewPair>
 jage::type::Rect<TNew, TNewPair> jage::type::Rect<T, TPair>::as() const {
     return Rect<TNew, TNewPair>((TNew)x1, (TNew)y1, (TNew)x2, (TNew)y2);
