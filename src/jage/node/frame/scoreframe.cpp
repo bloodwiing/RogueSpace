@@ -42,7 +42,7 @@ void ScoreFrame::update() {
         for (; newSize > m_size; ++m_size) {
             m_scoreFrames.push_back(addChild<SpriteFrame>(
                     "Digit",
-                    RectI32(-94, 50, -50, 110) + glm::vec<2, int>(getRectParent()->getRect().getSize().x, 0) - glm::vec<2, int>(m_size * 49, 0),
+                    RectI32(-44, 0, 0, 60) - glm::vec<2, int>(m_size * 49, 0),
                     Anchor::BottomRight,
                     m_digits[0]));
         }
