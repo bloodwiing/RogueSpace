@@ -7,6 +7,7 @@
 #include "jage/script/actor/healthscript.hpp"
 #include "jage/script/frame/opacitydamageflashscript.hpp"
 #include "jage/script/frame/progressdamagescript.hpp"
+#include "jage/script/frame/followcursorscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -61,13 +62,14 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto ring = canvas->addChild<SpriteFrame>("Ring", RectI32::Grow(960, 540, 422, 422), Anchor::MiddleCenter, "./res/sprite/hud/RingOuter.sprite");
 
     // CROSSHAIR INNER
-    ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
+    auto ringInner = ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
+    ringInner->attachScript<frame::FollowCursorScript>();
 
     // CROSSHAIR WEAPON
-    ring->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(422, 422, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
+    ringInner->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(47, 47, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
 
     // CROSSHAIR DEADZONE
-    ring->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(422, 422, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
+    ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
 
     // ELIMINATION NOTIFICATION
     canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 340, 150, 19), Anchor::Custom(0.5f, 0.25f, 0.5f, 0.25f), "./res/sprite/hud/NotificationEliminated.sprite");
