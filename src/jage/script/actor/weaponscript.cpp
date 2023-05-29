@@ -1,11 +1,11 @@
-#include "jage/script/weaponscript.hpp"
+#include "jage/script/actor/weaponscript.hpp"
 
 #include "jage/node/actor/physicsactor.hpp"
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
-#include "jage/script/colliderscript.hpp"
+#include "jage/script/actor/colliderscript.hpp"
 
-using jage::script::WeaponScript;
+using jage::script::actor::WeaponScript;
 
 WeaponScript::WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag)
     : m_bulletSpeed(bulletSpeed)
@@ -44,7 +44,7 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
     // Actor
     auto bullet = m_node->getScene()->addVolatileChild<node::actor::PhysicsActor>("Bullet", Tag::BULLET, 0.0f, 0.0f);
     bullet->addChild<node::actor::ModelActor>("model", Tag::MESH, "./res/model/trailblazer/bullet/BulletTemp.gltf");
-    bullet->attachScript<script::ColliderScript>(m_bulletTargetTag, 1.0f);
+    bullet->attachScript<ColliderScript>(m_bulletTargetTag, 1.0f);
 
     // Translate to world position
     glm::vec3 spawnOffset = (m_fireFromLeft ? -right : right) * 0.35f + up * -0.15f;
@@ -64,10 +64,10 @@ void WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
     shootThisFrame(extraVelocity, m_node->getOrientation(), m_node->getUp());
 }
 
-float jage::script::WeaponScript::getBulletSpeed() const {
+float WeaponScript::getBulletSpeed() const {
     return m_bulletSpeed;
 }
 
-void jage::script::WeaponScript::setBulletSpeed(float bulletSpeed) {
+void WeaponScript::setBulletSpeed(float bulletSpeed) {
     m_bulletSpeed = bulletSpeed;
 }

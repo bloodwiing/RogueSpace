@@ -1,8 +1,8 @@
-#include "jage/script/colliderscript.hpp"
+#include "jage/script/actor/colliderscript.hpp"
 
-#include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionreceiverscript.hpp"
 
-using jage::script::ColliderScript;
+using jage::script::actor::ColliderScript;
 
 ColliderScript::ColliderScript(abc::ScriptableABC* node, jage::Tag tagFilter, float radius)
     : m_tagFilter(tagFilter)

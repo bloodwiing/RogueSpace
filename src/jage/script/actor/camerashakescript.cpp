@@ -1,10 +1,10 @@
-#include "jage/script/camerashakescript.hpp"
+#include "jage/script/actor/camerashakescript.hpp"
 
 #include <glm/glm.hpp>
 
 #include "jage/runtime/time.hpp"
 
-using jage::script::CameraShakeScript;
+using jage::script::actor::CameraShakeScript;
 
 std::mt19937 CameraShakeScript::random = std::mt19937(time(nullptr));
 

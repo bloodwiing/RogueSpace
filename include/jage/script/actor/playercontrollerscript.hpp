@@ -2,11 +2,11 @@
 #define JAGE_PLAYER_CONTROLLER_SCRIPT_HPP
 
 #include "jage/node/actor/shipactor.hpp"
-#include "jage/script/camerashakescript.hpp"
-#include "jage/script/weaponscript.hpp"
+#include "jage/script/actor/camerashakescript.hpp"
+#include "jage/script/actor/weaponscript.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
     class PlayerControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
     public:

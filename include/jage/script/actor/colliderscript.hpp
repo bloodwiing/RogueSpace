@@ -4,7 +4,7 @@
 #include "jage/node/actor/dynamicactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
     class ColliderScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:

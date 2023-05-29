@@ -5,7 +5,7 @@
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/event/collisionevent.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
     class CollisionReceiverScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:

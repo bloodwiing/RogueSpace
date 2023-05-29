@@ -2,17 +2,13 @@
 
 #include "jage/node/actor/actors.hpp"
 #include "jage/tags.hpp"
-#include "jage/script/playercontrollerscript.hpp"
-#include "jage/script/aicontrollerscript.hpp"
-#include "jage/script/healthscript.hpp"
-#include "jage/script/camerashakescript.hpp"
-#include "jage/script/weaponscript.hpp"
+#include "jage/script/actor/actorscripts.hpp"
 
 using game::scene::GameScene;
 using jage::node::Scene;
 using jage::Tag;
 using namespace jage::node::actor;
-using namespace jage::script;
+using namespace jage::script::actor;
 
 std::unique_ptr<Scene> GameScene::create() {
     auto scene = std::make_unique<Scene>();

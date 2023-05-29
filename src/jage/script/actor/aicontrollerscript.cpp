@@ -1,4 +1,4 @@
-#include "jage/script/aicontrollerscript.hpp"
+#include "jage/script/actor/aicontrollerscript.hpp"
 
 #include <glm/gtx/rotate_vector.hpp>
 
@@ -6,7 +6,7 @@
 #include "jage/node/actor/modelactor.hpp"
 #include "jage/runtime/time.hpp"
 
-using jage::script::AIControllerScript;
+using jage::script::actor::AIControllerScript;
 
 std::mt19937 AIControllerScript::random = std::mt19937(time(nullptr));
 
@@ -167,11 +167,11 @@ void AIControllerScript::turnToVector(const glm::vec3& prevVector, glm::vec3 vec
     m_node->setRotation(glm::normalize(glm::slerp(m_node->getRotation(), targetQuaternion, turnRate * jage::runtime::Time::getDeltaFloat())));
 }
 
-void jage::script::AIControllerScript::resetEasing() {
+void AIControllerScript::resetEasing() {
     m_vectorChangeEase = 0.0f;
 }
 
-glm::vec3 jage::script::AIControllerScript::easeBetweenVectors(const glm::vec3 &a, const glm::vec3 &b) {
+glm::vec3 AIControllerScript::easeBetweenVectors(const glm::vec3 &a, const glm::vec3 &b) {
     if (m_vectorChangeEase < 1.0f) {
         m_vectorChangeEase += jage::runtime::Time::getDeltaFloat() * m_easeMultiplier;
         return glm::normalize(glm::mix(a, b, m_vectorChangeEase));

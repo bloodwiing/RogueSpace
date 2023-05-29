@@ -3,10 +3,10 @@
 
 #include "jage/node/actor/staticactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
-#include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionreceiverscript.hpp"
 #include "jage/event/collisionevent.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
 class HealthScript : public abc::AttachableScriptABC<jage::node::actor::StaticActor>, public jage::event::CollisionEvent, public std::enable_shared_from_this<HealthScript> {
     public:

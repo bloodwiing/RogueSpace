@@ -1,21 +1,9 @@
 #include "jage/engine.hpp"
 
-#include <iostream>
-
 #include "jage/runtime/time.hpp"
 #include "jage/system/super.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
 #include "jage/runtime/asset/assetmanager.hpp"
-#include "jage/node/actor/modelactor.hpp"
-#include "jage/node/actor/shipactor.hpp"
-#include "jage/node/actor/physicsactor.hpp"
-#include "jage/node/frame/spriteframe.hpp"
-#include "jage/script/playercontrollerscript.hpp"
-#include "jage/script/aicontrollerscript.hpp"
-#include "jage/script/weaponscript.hpp"
-#include "jage/script/colliderscript.hpp"
-#include "jage/script/collisionreceiverscript.hpp"
-#include "jage/script/healthscript.hpp"
 #include "jage/utility/utility.hpp"
 
 using jage::JAGEngine;

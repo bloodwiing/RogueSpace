@@ -1,4 +1,4 @@
-#include "jage/script/playercontrollerscript.hpp"
+#include "jage/script/actor/playercontrollerscript.hpp"
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -9,7 +9,7 @@
 #include "jage/runtime/time.hpp"
 #include "jage/runtime/window.hpp"
 
-using jage::script::PlayerControllerScript;
+using jage::script::actor::PlayerControllerScript;
 
 PlayerControllerScript::PlayerControllerScript(abc::ScriptableABC* node, CameraShakeScript* cameraShake) {
     validate(node);

@@ -1,6 +1,6 @@
-#include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionreceiverscript.hpp"
 
-using jage::script::CollisionReceiverScript;
+using jage::script::actor::CollisionReceiverScript;
 
 CollisionReceiverScript::CollisionReceiverScript(abc::ScriptableABC* node, float radius)
     : m_radius(radius)

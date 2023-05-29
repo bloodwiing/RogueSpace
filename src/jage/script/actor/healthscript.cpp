@@ -1,10 +1,10 @@
-#include "jage/script/healthscript.hpp"
+#include "jage/script/actor/healthscript.hpp"
 
 #include <iostream>
 
-#include "jage/script/collisionreceiverscript.hpp"
+#include "jage/script/actor/collisionreceiverscript.hpp"
 
-using jage::script::HealthScript;
+using jage::script::actor::HealthScript;
 
 HealthScript::HealthScript(abc::ScriptableABC* node, float maxHealth)
     : m_maxHealth(maxHealth)

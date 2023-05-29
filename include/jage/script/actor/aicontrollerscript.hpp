@@ -5,9 +5,9 @@
 
 #include "jage/node/actor/shipactor.hpp"
 #include "jage/script/abc/script_abc.hpp"
-#include "jage/script/weaponscript.hpp"
+#include "jage/script/actor/weaponscript.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
     class AIControllerScript : public abc::AttachableScriptABC<jage::node::actor::ShipActor> {
     public:

@@ -4,7 +4,7 @@
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/node/actor/dynamicactor.hpp"
 
-namespace jage::script {
+namespace jage::script::actor {
 
     class WeaponScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
