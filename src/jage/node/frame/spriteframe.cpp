@@ -25,20 +25,20 @@ SpriteFrame::SpriteFrame(JAGE_FRAME_ARGS, const std::string& filePath)
 }
 
 void SpriteFrame::draw() {
-    if (!m_sprite->apply(*m_shader))
-        return;
-
-    glUniform4fv(m_shader->getUniform("Multiply"), 1, glm::value_ptr(m_multiply));
-    glUniform4fv(m_shader->getUniform("Add"), 1, glm::value_ptr(m_add));
-
-    glUniformMatrix3fv(m_shader->getUniform("UVMatrix"), 1, GL_FALSE, glm::value_ptr(m_uvMatrix));
-
-    glUniform1f(m_shader->getUniform("CropLeft"), m_crop.x1);
-    glUniform1f(m_shader->getUniform("CropBottom"), m_crop.y1);
-    glUniform1f(m_shader->getUniform("CropRight"), m_crop.x2);
-    glUniform1f(m_shader->getUniform("CropTop"), m_crop.y2);
-
-    SolidFrame::draw();
+//    if (!m_sprite->apply(*m_shader))
+//        return;
+//
+//    glUniform4fv(m_shader->getUniform("Multiply"), 1, glm::value_ptr(m_multiply));
+//    glUniform4fv(m_shader->getUniform("Add"), 1, glm::value_ptr(m_add));
+//
+//    glUniformMatrix3fv(m_shader->getUniform("UVMatrix"), 1, GL_FALSE, glm::value_ptr(m_uvMatrix));
+//
+//    glUniform1f(m_shader->getUniform("CropLeft"), m_crop.x1);
+//    glUniform1f(m_shader->getUniform("CropBottom"), m_crop.y1);
+//    glUniform1f(m_shader->getUniform("CropRight"), m_crop.x2);
+//    glUniform1f(m_shader->getUniform("CropTop"), m_crop.y2);
+//
+//    SolidFrame::draw();
 }
 
 void SpriteFrame::setSprite(std::shared_ptr<Sprite> sprite) {
