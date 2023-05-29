@@ -2,8 +2,8 @@
 
 using jage::script::frame::OpacityDamageFlashScript;
 
-OpacityDamageFlashScript::OpacityDamageFlashScript(jage::script::abc::ScriptableABC* node, float duration)
-        : OpacityFlashScript(node, duration)
+OpacityDamageFlashScript::OpacityDamageFlashScript(jage::script::abc::ScriptableABC* node, float duration, float maxValue)
+        : OpacityFlashScript(node, duration, maxValue)
 {
 
 }

@@ -8,7 +8,7 @@ namespace jage::script::frame {
 
     class OpacityFlashScript : public abc::AttachableScriptABC<jage::node::frame::SpriteFrame> {
     public:
-        OpacityFlashScript(abc::ScriptableABC* node, float duration);
+        OpacityFlashScript(abc::ScriptableABC* node, float duration, float maxValue);
 
         void onAttach() override;
         void onSpawn() override;
@@ -19,6 +19,7 @@ namespace jage::script::frame {
 
     private:
         float m_duration;
+        float m_maxValue;
         float m_timer = -1.0f;
     };
 }

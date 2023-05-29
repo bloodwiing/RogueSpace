@@ -11,7 +11,7 @@ namespace jage::script::frame {
             , public jage::event::DamageEvent
     {
     public:
-        OpacityDamageFlashScript(abc::ScriptableABC* node, float duration);
+        OpacityDamageFlashScript(abc::ScriptableABC* node, float duration, float maxValue);
 
         void notify(const float& delta, const float& current, const float& max) override;
     };

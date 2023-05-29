@@ -4,8 +4,9 @@
 
 using jage::script::frame::OpacityFlashScript;
 
-OpacityFlashScript::OpacityFlashScript(jage::script::abc::ScriptableABC* node, float duration)
+OpacityFlashScript::OpacityFlashScript(jage::script::abc::ScriptableABC* node, float duration, float maxValue)
         : m_duration(duration)
+        , m_maxValue(maxValue)
 {
     validate(node);
 }
@@ -26,7 +27,7 @@ void OpacityFlashScript::onUpdate() {
 
     m_timer -= Time::getDeltaFloat();
 
-    m_node->setOpacity(m_timer / m_duration);
+    m_node->setOpacity(std::pow(m_timer / m_duration, 3.0f) * m_maxValue);
 }
 
 void OpacityFlashScript::onDeath() {
