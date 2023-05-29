@@ -1,5 +1,5 @@
-#ifndef GAME_HUD_CANVAS_HPP
-#define GAME_HUD_CANVAS_HPP
+#ifndef GAME_TEST_CANVAS_HPP
+#define GAME_TEST_CANVAS_HPP
 
 #include "jage/node/canvas.hpp"
 
@@ -11,4 +11,4 @@ namespace game::canvas {
     };
 }
 
-#endif //GAME_HUD_CANVAS_HPP
+#endif //GAME_TEST_CANVAS_HPP

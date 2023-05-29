@@ -28,6 +28,8 @@ namespace jage::node::frame {
         static const type::RectF Right;
 
         static const type::RectF Full;
+
+        typedef type::RectF Custom;
     };
 }
 
