@@ -32,7 +32,7 @@ void BasicFrame::updateTransformations() {
     for (auto& [name, child] : m_children) {
         auto canvasChild = dynamic_cast<BasicFrame*>(child.value.get());
         if (canvasChild != nullptr) {
-            canvasChild->markForReflow();
+            canvasChild->markForMatrixUpdate();
         }
     }
 }
