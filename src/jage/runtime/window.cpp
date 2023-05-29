@@ -118,14 +118,22 @@ void Window::getAbsoluteMouse(int &x, int &y) const {
     double mouseX, mouseY;
     glfwGetCursorPos(m_glWindow, &mouseX, &mouseY);
     x = (int)mouseX;
-    y = (int)mouseY;
+    y = m_height - (int)mouseY;
+}
+
+void Window::getScreenMouse(double &x, double &y) const {
+    if (m_glWindow == nullptr)
+        return;
+    glfwGetCursorPos(m_glWindow, &x, &y);
+    x = x * 2 / m_width - 1;
+    y = - y * 2 / m_height + 1;
 }
 
 void Window::getRelativeMouse(double &x, double &y) const {
     if (m_glWindow == nullptr)
         return;
     glfwGetCursorPos(m_glWindow, &x, &y);
-    float bounds = m_width > m_height ? (float)m_height : (float)m_width;
-    x = (x - ((float)m_width / 2)) / bounds;
-    y = (y - ((float)m_height / 2)) / bounds;
+    double bounds = (m_width > m_height ? (double)m_height : (double)m_width);
+    x = (x - ((double)m_width) * 0.5) / bounds;
+    y = - (y - ((double)m_height) * 0.5) / bounds;
 }
