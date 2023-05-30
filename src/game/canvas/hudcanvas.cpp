@@ -14,6 +14,7 @@
 #include "jage/script/frame/scoreupdatescript.hpp"
 #include "jage/script/frame/opacityscoreflashscript.hpp"
 #include "jage/script/frame/notificationkillscript.hpp"
+#include "jage/script/frame/opacitycombatflickerscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -104,7 +105,10 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     scoreScript.lock()->onKill += notificationScript;
 
     // "IN-COMBAT" WARNING LABEL
-    canvas->addChild<SpriteFrame>("Warning", RectI32::Grow(960, 1025, 252, 16), Anchor::TopCenter, "./res/sprite/hud/Warning.sprite");
+    auto warning = canvas->addChild<SpriteFrame>("Warning", RectI32::Grow(960, 1025, 252, 16), Anchor::TopCenter, "./res/sprite/hud/Warning.sprite");
+    warning->setOpacity(0.0f);
+    auto warningScript = warning->attachScript<frame::OpacityCombatFlickerScript>(1.0f, 0.5f, 0.6f, 5.0f);
+    healthScript.lock()->onDamage += warningScript;
 
     return canvas;
 }
