@@ -5,6 +5,7 @@
 #include "jage/node/frame/scoreframe.hpp"
 #include "jage/node/frame/progressbarframe.hpp"
 #include "jage/node/frame/squareframe.hpp"
+#include "jage/node/frame/enemyindicatorframe.hpp"
 #include "jage/script/actor/healthscript.hpp"
 #include "jage/script/actor/scorescript.hpp"
 #include "jage/script/actor/weaponscript.hpp"
@@ -90,6 +91,10 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto ringOuter = ringContainer->addChild<SpriteFrame>("Ring", RectI32(0, 0, 1920, 1080), Anchor::Full, "./res/sprite/hud/RingOuter.sprite");
     ringOuter->setMultiply(0.235f, 0.192f, 0.729f, 0.20f);
 
+    // ENEMY INDICATORS
+    auto indicators = ringContainer->addChild<EnemyIndicatorFrame>("Indicators", RectI32(0, 0, 1920, 1080), Anchor::Full);
+    indicators->scale(glm::vec2(1.1f));
+
     // CROSSHAIR INNER BLUE (WEAPON LIMIT)
     auto ringInnerBlue = canvas->addChild<SpriteFrame>("RingInner", RectI32::Grow(960, 540, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
     ringInnerBlue->setMultiply(0.455f, 0.42f, 0.847f, 0.2f);
@@ -114,7 +119,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
 
     // ELIMINATION NOTIFICATION
     auto notification = canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 540, 150, 19), Anchor::MiddleCenter, "./res/sprite/hud/NotificationEliminated.sprite");
-    notification->translate(glm::vec2(0.0f, -0.2f));
+    notification->translate(glm::vec2(0.0f, -200.0f));
     notification->setOpacity(0.0f);
     auto notificationScript = notification->attachScript<frame::NotificationKillScript>(0.15f, 2.5f, 3.0f);
     scoreScript.lock()->onKill += notificationScript;

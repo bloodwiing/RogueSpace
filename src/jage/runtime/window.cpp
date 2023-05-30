@@ -125,8 +125,8 @@ void Window::getScreenMouse(double &x, double &y) const {
     if (m_glWindow == nullptr)
         return;
     glfwGetCursorPos(m_glWindow, &x, &y);
-    x = x * 2 / m_width - 1;
-    y = - y * 2 / m_height + 1;
+    x = x * 2 - m_width;
+    y = - y * 2 + m_height;
 }
 
 void Window::getRelativeMouse(double &x, double &y) const {

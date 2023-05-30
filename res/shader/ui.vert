@@ -8,6 +8,7 @@ out vec2 v_currentPos;
 out vec2 v_relCoord;
 out vec2 v_texCoord;
 
+uniform mat3 Screen;
 uniform mat3 Frame;
 
 uniform vec2 UVCorner1;
@@ -16,7 +17,7 @@ uniform vec2 UVCorner2;
 uniform mat3 UVMatrix;
 
 void main() {
-    v_currentPos = vec2(Frame * vec3(pos, 1.0));
+    v_currentPos = vec2(Screen * Frame * vec3(pos, 1.0));
 
     gl_Position = vec4(v_currentPos, 0.0, 1.0);
 
