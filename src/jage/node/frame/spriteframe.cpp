@@ -55,7 +55,7 @@ void SpriteFrame::setMultiply(float r, float g, float b, float a /* = 1.0f */) {
 }
 
 void SpriteFrame::setOpacity(float a) {
-    m_multiply.a = a;
+    m_multiply.a = glm::clamp(a, 0.0f, 1.0f);
 }
 
 void SpriteFrame::setAdd(glm::vec4 add) {

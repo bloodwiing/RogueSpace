@@ -46,7 +46,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     // WARNING ICON
     auto iconWarning = canvas->addChild<SpriteFrame>("IconWarning", RectI32(405, 50, 461, 106), Anchor::BottomLeft, "./res/sprite/hud/IconWarning.sprite");
     iconWarning->setOpacity(0.0f);
-    auto iconScript = iconWarning->attachScript<frame::OpacityDamageFlashScript>(5.0f, 1.0f);
+    auto iconScript = iconWarning->attachScript<frame::OpacityDamageFlashScript>(5.0f, 20.0f);
     healthScript.lock()->onDamage += iconScript;
 
     // SCORE GLOW
