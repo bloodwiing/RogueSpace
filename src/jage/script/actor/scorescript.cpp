@@ -30,7 +30,9 @@ long ScoreScript::getScore() const {
 
 void ScoreScript::notify(jage::node::actor::DynamicActor *source, const float &delta, const float &current, const float &maximum) {
     m_score += (long)std::round(delta);
-    if (current <= 0)
+    if (current <= 0) {
         m_score += 200;
+        onKill.notifyAll(source);
+    }
     onScoreUpdate.notifyAll(m_score);
 }

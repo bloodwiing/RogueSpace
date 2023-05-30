@@ -5,6 +5,7 @@
 #include "jage/node/actor/dynamicactor.hpp"
 #include "jage/event/damageevent.hpp"
 #include "jage/event/scoreupdateevent.hpp"
+#include "jage/event/killevent.hpp"
 
 namespace jage::script::actor {
 
@@ -25,6 +26,7 @@ namespace jage::script::actor {
         void notify(node::actor::DynamicActor* source, const float& delta, const float& current, const float& maximum) override;
 
         event::ScoreUpdateEvent::Manager onScoreUpdate;
+        event::KillEvent::Manager onKill;
 
     private:
         long m_score;

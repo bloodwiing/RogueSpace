@@ -13,6 +13,7 @@
 #include "jage/script/frame/cursordistanceopacityscript.hpp"
 #include "jage/script/frame/scoreupdatescript.hpp"
 #include "jage/script/frame/opacityscoreflashscript.hpp"
+#include "jage/script/frame/notificationkillscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -96,7 +97,11 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     ringDeadzone->attachScript<frame::CursorDistanceOpacityScript>(0.005f, 0.02f, 1.0f);
 
     // ELIMINATION NOTIFICATION
-    canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 340, 150, 19), Anchor::Custom(0.5f, 0.25f, 0.5f, 0.25f), "./res/sprite/hud/NotificationEliminated.sprite");
+    auto notification = canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 540, 150, 19), Anchor::MiddleCenter, "./res/sprite/hud/NotificationEliminated.sprite");
+    notification->translate(glm::vec2(0.0f, -0.2f));
+    notification->setOpacity(0.0f);
+    auto notificationScript = notification->attachScript<frame::NotificationKillScript>(0.15f, 2.5f, 3.0f);
+    scoreScript.lock()->onKill += notificationScript;
 
     // "IN-COMBAT" WARNING LABEL
     canvas->addChild<SpriteFrame>("Warning", RectI32::Grow(960, 1025, 252, 16), Anchor::TopCenter, "./res/sprite/hud/Warning.sprite");
