@@ -125,6 +125,11 @@ jage::type::Rect<T, TPair> jage::type::Rect<T, TPair>::normalized() {
 }
 
 template<typename T, typename TPair>
+TPair jage::type::Rect<T, TPair>::middle() {
+    return TPair((x1 + x2) / 2, (y1 + y2) / 2);
+}
+
+template<typename T, typename TPair>
 bool jage::type::Rect<T, TPair>::isContaining(const TPair& point) {
     return x1 <= point.x and point.x <= x2 and y1 <= point.y and point.y <= y2;
 }

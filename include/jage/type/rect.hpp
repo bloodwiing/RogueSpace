@@ -47,6 +47,8 @@ namespace jage::type {
 
         Rect normalized();
 
+        TPair middle();
+
         bool isContaining(const TPair& point);
         bool isIntersecting(const Rect& other);
 
