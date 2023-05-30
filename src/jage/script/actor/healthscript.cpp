@@ -39,6 +39,18 @@ void HealthScript::damage(node::actor::DynamicActor* source, float amount) {
     onDamage.notifyAll(source, amount, m_health, m_maxHealth);
 }
 
+void HealthScript::heal(float amount) {
+    if (m_health >= m_maxHealth)
+        return;
+
+    m_health += amount;
+    onHeal.notifyAll(amount, m_health, m_maxHealth);
+
+    if (m_health > m_maxHealth) {
+        m_health = m_maxHealth;
+    }
+}
+
 void HealthScript::notify(node::actor::DynamicActor* notifier) {
     auto bullet = notifier->findScript<BulletScript>();
     if (bullet.expired())

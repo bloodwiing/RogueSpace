@@ -6,6 +6,7 @@
 #include "jage/script/actor/collisionlistenerscript.hpp"
 #include "jage/event/collisionevent.hpp"
 #include "jage/event/damageevent.hpp"
+#include "jage/event/healevent.hpp"
 
 namespace jage::script::actor {
 
@@ -25,8 +26,10 @@ class HealthScript
         void onDeath() override;
 
         void damage(node::actor::DynamicActor* source, float amount);
+        void heal(float amount);
 
         event::DamageEvent::Manager onDamage;
+        event::HealEvent::Manager onHeal;
 
     private:
         float m_maxHealth;
