@@ -15,11 +15,10 @@ BasicFrame::BasicFrame(JAGE_FRAME_ARGS)
 
 }
 
-void BasicFrame::update() {
-    base::DyingBase::updateDeathTimer();
+void BasicFrame::scriptUpdate() {
+    abc::FrameABC::scriptUpdate();
     updateReflow();
     updateTransformations();
-    abc::FrameABC::update();
 }
 
 void BasicFrame::updateTransformations() {

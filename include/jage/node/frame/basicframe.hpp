@@ -23,7 +23,7 @@ namespace jage::node::frame {
         void setRotation(const float& rot) override;
         void setScale(const glm::vec2& sca) override;
 
-        void update() override;
+        void scriptUpdate() override;
 
     protected:
         glm::vec2 m_translation = glm::vec2(0.0f);
