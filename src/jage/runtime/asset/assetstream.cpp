@@ -100,7 +100,15 @@ void AssetStream::getBinaryAsset(const std::string &filePath, const AssetStream:
 }
 
 void AssetStream::shutdown() {
+    unique_lock<std::mutex> lock(getInstance().m_assetQueueMutex);
     getInstance().m_active = false;
+    lock.unlock();
+
+    getInstance().m_assetQueueCV.notify_all();
+    getInstance().m_thread.join();
+
+    delete m_instance;
+    m_instance = nullptr;
 }
 
 void AssetStream::asyncLoop() {
