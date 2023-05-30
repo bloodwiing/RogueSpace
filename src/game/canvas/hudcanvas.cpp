@@ -7,6 +7,7 @@
 #include "jage/node/frame/squareframe.hpp"
 #include "jage/script/actor/healthscript.hpp"
 #include "jage/script/actor/scorescript.hpp"
+#include "jage/script/actor/weaponscript.hpp"
 #include "jage/script/frame/opacitydamageflashscript.hpp"
 #include "jage/script/frame/progressdamagescript.hpp"
 #include "jage/script/frame/followcursorscript.hpp"
@@ -15,6 +16,7 @@
 #include "jage/script/frame/opacityscoreflashscript.hpp"
 #include "jage/script/frame/notificationkillscript.hpp"
 #include "jage/script/frame/opacitycombatflickerscript.hpp"
+#include "jage/script/frame/weaponcursorscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -29,6 +31,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto player = scene->getChild("Player");
     auto healthScript = player->findScript<actor::HealthScript>();
     auto scoreScript = player->findScript<actor::ScoreScript>();
+    auto weaponScript = player->findScript<actor::WeaponScript>();
 
     // CANVAS
     auto canvas = std::make_unique<Canvas>(RectI32(1920, 1080));
@@ -91,6 +94,8 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto ringWeapon = ringInner->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(47, 47, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
     ringWeapon->setMultiply(0.929f, 0.298f, 0.392f, 0.6f);
     ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.45f, 0.6f);
+    auto ringWeaponScript = ringWeapon->attachScript<frame::WeaponCursorScript>(0.6f, 0.15f);
+    weaponScript.lock()->onFire += ringWeaponScript;
 
     // CROSSHAIR DEADZONE
     auto ringDeadzone = ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
