@@ -9,10 +9,18 @@ using std::mutex;
 
 AssetManager* AssetManager::m_instance = nullptr;
 
-AssetManager *AssetManager::getInstance() {
+AssetManager* AssetManager::getInstance() {
     if (m_instance == nullptr)
         m_instance = new AssetManager();
     return m_instance;
+}
+
+void AssetManager::destroyInstance() {
+    if (m_instance != nullptr) {
+        m_instance->reset();
+        delete m_instance;
+    }
+    m_instance = nullptr;
 }
 
 template<>
