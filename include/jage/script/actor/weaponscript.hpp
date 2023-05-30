@@ -8,7 +8,7 @@ namespace jage::script::actor {
 
     class WeaponScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
     public:
-        WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag);
+        WeaponScript(abc::ScriptableABC* node, float bulletSpeed, Tag bulletTargetTag, float bulletDamage);
 
         void onAttach() override;
         void onSpawn() override;
@@ -26,6 +26,8 @@ namespace jage::script::actor {
 
         float m_fireCoolDown = 0.0f;
         bool m_fireFromLeft = true;
+
+        float m_bulletDamage;
 
         Tag m_bulletTargetTag;
     };

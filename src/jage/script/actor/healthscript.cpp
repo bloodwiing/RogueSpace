@@ -4,8 +4,10 @@
 
 #include "jage/script/actor/collisionlistenerscript.hpp"
 #include "jage/node/actor/dynamicactor.hpp"
+#include "jage/script/actor/bulletscript.hpp"
 
 using jage::script::actor::HealthScript;
+using jage::script::actor::BulletScript;
 
 HealthScript::HealthScript(abc::ScriptableABC* node, float maxHealth)
     : m_maxHealth(maxHealth)
@@ -38,5 +40,8 @@ void HealthScript::damage(node::actor::DynamicActor* source, float amount) {
 }
 
 void HealthScript::notify(node::actor::DynamicActor* notifier) {
-    damage(notifier, 1.0f);
+    auto bullet = notifier->findScript<BulletScript>();
+    if (bullet.expired())
+        return;
+    damage(notifier, bullet.lock()->getDamage());
 }

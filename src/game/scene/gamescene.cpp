@@ -20,14 +20,14 @@ std::unique_ptr<Scene> GameScene::create() {
     auto camera = player->addChild<Camera>("Camera", Tag::CAMERA, 45.0f, 0.001f, 1000.0f);
     auto cameraShakeScript = camera->attachScript<CameraShakeScript>(0.0f, 0.05f);
     camera->setActive();
-    player->attachScript<WeaponScript>(60.0f, Tag::ENEMY);
+    player->attachScript<WeaponScript>(60.0f, Tag::ENEMY, 3.0f);
     player->attachScript<PlayerControllerScript>(cameraShakeScript);
     player->attachScript<CollisionListenerScript>(1.0f);
     player->attachScript<HealthScript>(100.0f);
     auto scoreScript = player->attachScript<ScoreScript>();
 
     auto starship = scene->addChild<ShipActor>("Starship", Tag::ENEMY);
-    starship->attachScript<WeaponScript>(60.0f, Tag::PLAYER);
+    starship->attachScript<WeaponScript>(60.0f, Tag::PLAYER, 1.0f);
     starship->attachScript<CollisionListenerScript>(1.0f);
     auto starshipHealthScript = starship->attachScript<HealthScript>(100.0f);
     starshipHealthScript.lock()->onDamage += scoreScript;

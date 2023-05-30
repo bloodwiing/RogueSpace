@@ -6,7 +6,9 @@
 
 namespace jage::script::actor {
 
-    class CollisionNotifierScript : public abc::AttachableScriptABC<jage::node::actor::DynamicActor> {
+    class CollisionNotifierScript
+            : public abc::AttachableScriptABC<jage::node::actor::DynamicActor>
+    {
     public:
         CollisionNotifierScript(abc::ScriptableABC* node, Tag tagFilter, float radius);
 

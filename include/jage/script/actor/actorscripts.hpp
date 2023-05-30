@@ -9,5 +9,6 @@
 #include "./playercontrollerscript.hpp"
 #include "./weaponscript.hpp"
 #include "./scorescript.hpp"
+#include "./bulletscript.hpp"
 
 #endif //TRAILBLAZER_ACTOR_SCRIPTS_HPP
