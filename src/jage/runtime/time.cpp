@@ -7,14 +7,16 @@ using jage::runtime::Time;
 
 namespace chrono = std::chrono;
 
-Time::TTimePoint Time::m_frameStart = chrono::steady_clock::now();
-Time::TTimePoint Time::m_frameEnd = Time::m_frameStart;
+Time::TTimePoint Time::m_gameStart = chrono::steady_clock::now();
+Time::TTimePoint Time::m_frameStart = Time::m_gameStart;
+Time::TTimePoint Time::m_frameEnd = Time::m_gameStart;
 Time::TDoubleSec Time::m_delta = TDoubleSec(0.0);
 chrono::microseconds Time::m_requiredFrameTime(0);
 double Time::m_timeScale = 1.0;
 
 void Time::init() {
-    m_frameStart = chrono::steady_clock::now();
+    m_gameStart = chrono::steady_clock::now();
+    m_frameStart = m_gameStart;
     update();
 }
 
@@ -34,6 +36,10 @@ void Time::setMaxFramerate(int framerate) {
 
 std::chrono::microseconds Time::getMinimumFrameTime() {
     return m_requiredFrameTime;
+}
+
+Time::TDoubleSec Time::getFrameTime() {
+    return m_gameStart - m_frameStart;
 }
 
 float Time::getDeltaFloat() {
