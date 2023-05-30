@@ -50,7 +50,7 @@ void JAGEngine::loop() {
 
     while (!Window::getActive()->isClosing()) {
 
-        glClearColor(0.005f, 0.008f, 0.058f, 1.0f);
+        glClearColor(0.024f, 0.047f, 0.118f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
 
