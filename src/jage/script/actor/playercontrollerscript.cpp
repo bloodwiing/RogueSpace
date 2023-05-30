@@ -79,8 +79,11 @@ void PlayerControllerScript::onMouseInput() {
         m_node->setSteer(glm::vec3(0.0f));
     }
 
+    auto weaponRot = glm::vec2(rot_x, rot_y);
+    weaponRot = weaponRot / (glm::max(glm::length(weaponRot), 0.4f) / 0.4f);
+
     glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
-    bulletOrientation = glm::rotate(glm::radians((float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
+    bulletOrientation = glm::rotate(glm::radians((float)weaponRot.y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)weaponRot.x * 45.0f), up) * bulletOrientation;
 
     if (JAGE_IS_MOUSE(GLFW_MOUSE_BUTTON_LEFT, GLFW_PRESS)) {
         m_weaponScript.lock()->shootThisFrame(m_node->getThrottleVelocity(), bulletOrientation, up);
