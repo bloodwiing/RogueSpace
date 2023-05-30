@@ -76,7 +76,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     // CROSSHAIR DEADZONE
     auto ringDeadzone = ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
     ringDeadzone->setMultiply(1.0f, 1.0f, 1.0f, 0.20f);
-    ringDeadzone->attachScript<frame::CursorDistanceOpacityScript>(0.02f, 0.03f, 0.20f);
+    ringDeadzone->attachScript<frame::CursorDistanceOpacityScript>(0.005f, 0.02f, 0.20f);
 
     // ELIMINATION NOTIFICATION
     canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 340, 150, 19), Anchor::Custom(0.5f, 0.25f, 0.5f, 0.25f), "./res/sprite/hud/NotificationEliminated.sprite");

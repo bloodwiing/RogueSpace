@@ -62,6 +62,7 @@ void PlayerControllerScript::onKeyboardInput() {
 void PlayerControllerScript::onMouseInput() {
     double rot_x = 0.0, rot_y = 0.0;
     JAGE_GET_RELATIVE_MOUSE(rot_x, rot_y);
+    float length = glm::length(glm::vec2(rot_x, rot_y));
 
     using jage::runtime::Time;
 
@@ -69,7 +70,14 @@ void PlayerControllerScript::onMouseInput() {
     const auto& up = m_node->getUp();
 
     glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)rot_y + up * -(float)rot_x;
-    m_node->setSteer(steer * m_sensitivity);
+
+    if (length > 0.02f) {
+        m_node->setSteer(steer * m_sensitivity);
+    } else if (length > 0.005f) {
+        m_node->setSteer(steer * m_sensitivity * ((length - 0.005f) / 0.015f));
+    } else {
+        m_node->setSteer(glm::vec3(0.0f));
+    }
 
     glm::vec4 bulletOrientation = glm::vec4(orientation, 0.0);
     bulletOrientation = glm::rotate(glm::radians((float)rot_y * 45.0f), glm::normalize(glm::cross(orientation, up))) * glm::rotate(glm::radians(-(float)rot_x * 45.0f), up) * bulletOrientation;
