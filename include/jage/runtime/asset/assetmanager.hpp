@@ -26,11 +26,20 @@ namespace jage::runtime::asset {
         };
 
         static AssetManager* getInstance();
+        static void destroyInstance();
 
         template<class T>
         std::shared_ptr<T> get(const std::string& fileName, int priority = JAGE_ASSET_BASE_PRIORITY);
 
+        template<class T>
+        std::shared_ptr<T> getDefault();
+
         void reset();
+
+        struct Defaults {
+            std::shared_ptr<Types::Texture> texture;
+            std::shared_ptr<Types::Sprite> sprite;
+        } m_default;
 
     private:
         AssetManager() = default;

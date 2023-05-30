@@ -43,6 +43,20 @@ std::shared_ptr<Types::Sprite> AssetManager::get(const std::string &fileName, in
     return get<Types::Sprite>(m_spriteMutex, m_sprites, fileName, priority);
 }
 
+template<>
+std::shared_ptr<Types::Texture> AssetManager::getDefault() {
+    if (!m_default.texture)
+        m_default.texture = Types::Texture::createDefault();
+    return m_default.texture;
+}
+
+template<>
+std::shared_ptr<Types::Sprite> AssetManager::getDefault() {
+    if (!m_default.sprite)
+        m_default.sprite = Types::Sprite::createDefault();
+    return m_default.sprite;
+}
+
 void AssetManager::reset() {
     std::scoped_lock<std::mutex, std::mutex, std::mutex, std::mutex> lock(m_shaderMutex, m_modelMutex, m_textureMutex, m_spriteMutex);
     m_shaders.clear();

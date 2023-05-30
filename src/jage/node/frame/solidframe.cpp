@@ -1,15 +1,17 @@
 #include <utility>
 
 #include "jage/node/frame/solidframe.hpp"
+#include "jage/runtime/asset/assets.hpp"
 
 using jage::node::frame::SolidFrame;
 using jage::type::RectF;
 using jage::graphics::mesh2d::Sprite;
 using jage::graphics::mesh2d::Quad2D;
 using jage::graphics::Shader;
+using jage::runtime::asset::Assets;
 
 SolidFrame::SolidFrame(JAGE_FRAME_ARGS, std::shared_ptr<Shader> shader)
-        : SolidFrame(parent, std::move(name), canvas, rectParent, rect, anchor, std::move(shader), std::move(Sprite::getDefaultSprite()))
+        : SolidFrame(parent, std::move(name), canvas, rectParent, rect, anchor, std::move(shader), std::move(Assets::get<Assets::Sprite>()))
 {
 
 }
@@ -33,5 +35,5 @@ void SolidFrame::updateReflow() {
 }
 
 std::shared_ptr<Sprite> SolidFrame::getInternalSprite() const {
-    return Sprite::getDefaultSprite();
+    return Assets::get<Assets::Sprite>();
 }

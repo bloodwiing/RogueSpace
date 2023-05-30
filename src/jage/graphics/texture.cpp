@@ -11,8 +11,6 @@ using jage::graphics::Texture;
 using jage::runtime::asset::AssetStream;
 using jage::type::RectI32;
 
-std::shared_ptr<Texture> Texture::defaultTexture = std::shared_ptr<Texture>();
-
 Texture::Texture(const std::string& filePath)
     : m_metadata(YAML::LoadFile(filePath + ".meta"))
     , m_activeLOD(-1)
@@ -44,17 +42,11 @@ std::shared_ptr<Texture> Texture::create(GLubyte *bytes, int width, int height, 
     return std::make_shared<Texture>(bytes, width, height, channels);
 }
 
-void Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int channels) {
-    defaultTexture = create(bytes, width, height, channels);
-}
-
-void Texture::clearDefaultTexture() {
-    defaultTexture.reset();
-    defaultTexture = nullptr;
-}
-
-std::shared_ptr<Texture> Texture::getDefaultTexture() {
-    return defaultTexture;
+std::shared_ptr<Texture> Texture::createDefault() {
+    GLubyte whiteTextureBytes[] = {
+            0xFF, 0xFF, 0xFF, 0xFF
+    };
+    return create(whiteTextureBytes, 1, 1, 4);
 }
 
 void Texture::onQueue(int priority) {

@@ -2,7 +2,10 @@
 
 #include <utility>
 
+#include "jage/runtime/asset/assets.hpp"
+
 using jage::graphics::mesh3d::Material;
+using jage::runtime::asset::Assets;
 
 Material* Material::defaultMaterial = nullptr;
 
@@ -44,7 +47,7 @@ void Material::setDiffuseFactor(glm::vec4 factor) {
 std::shared_ptr<jage::graphics::Texture> Material::getDiffuse0() const {
     if (m_diffuse0.texture)
         return m_diffuse0.texture;
-    return Texture::getDefaultTexture();
+    return Assets::get<Assets::Texture>();
 }
 
 void Material::setSpecular0(std::shared_ptr<Texture> texture, uint8_t texCoord) {
@@ -65,7 +68,7 @@ void Material::setRoughnessFactor(float factor) {
 std::shared_ptr<jage::graphics::Texture> Material::getSpecular0() const {
     if (m_specular0.texture)
         return m_specular0.texture;
-    return Texture::getDefaultTexture();
+    return Assets::get<Assets::Texture>();
 }
 
 bool Material::apply(Shader &shader) const {

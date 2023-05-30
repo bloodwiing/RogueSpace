@@ -2,6 +2,7 @@
 #define JAGE_ENGINE_HPP
 
 #include <memory>
+#include <functional>
 
 #include "jage/graphics/shader.hpp"
 #include "jage/node/scene.hpp"

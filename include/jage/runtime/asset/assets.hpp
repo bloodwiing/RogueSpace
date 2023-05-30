@@ -12,6 +12,9 @@ namespace jage::runtime::asset {
     public:
         template<class T>
         static std::shared_ptr<T> get(std::string filePath, int priority = JAGE_ASSET_BASE_PRIORITY);
+
+        template<class T>
+        static std::shared_ptr<T> get();
     };
 }
 

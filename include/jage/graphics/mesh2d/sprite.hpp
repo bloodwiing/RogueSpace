@@ -16,11 +16,8 @@ namespace jage::graphics::mesh2d {
         explicit Sprite(std::string filePath);
         Sprite();
         static std::shared_ptr<Sprite> create(std::string filePath);
+        static std::shared_ptr<Sprite> createDefault();
         Sprite(const Sprite& ref);
-        ~Sprite() = default;
-
-        [[nodiscard]] static std::shared_ptr<Sprite> getDefaultSprite();
-        static void clearDefaultSprite();
 
         [[nodiscard]] jage::type::RectI32 getTextureXYRect() const;
         [[nodiscard]] jage::type::RectF getTextureUVRect() const;
@@ -36,8 +33,6 @@ namespace jage::graphics::mesh2d {
         jage::type::RectI32 m_rect;
 
         void onQueue(int priority) override;
-
-        static std::shared_ptr<Sprite> defaultSprite;
 
         Sprite& operator=(const Sprite& ref);
     };
