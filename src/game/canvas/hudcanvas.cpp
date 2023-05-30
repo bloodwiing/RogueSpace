@@ -4,6 +4,7 @@
 #include "jage/node/frame/spriteframe.hpp"
 #include "jage/node/frame/scoreframe.hpp"
 #include "jage/node/frame/progressbarframe.hpp"
+#include "jage/node/frame/squareframe.hpp"
 #include "jage/script/actor/healthscript.hpp"
 #include "jage/script/frame/opacitydamageflashscript.hpp"
 #include "jage/script/frame/progressdamagescript.hpp"
@@ -60,23 +61,25 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     canvas->addChild<SpriteFrame>("ScoreText", RectI32(1703, 122, 1810, 146), Anchor::BottomRight, "./res/sprite/hud/TextScore.sprite");
 
     // CROSSHAIR OUTER
-    auto ring = canvas->addChild<SpriteFrame>("Ring", RectI32::Grow(960, 540, 422, 422), Anchor::MiddleCenter, "./res/sprite/hud/RingOuter.sprite");
-    ring->setMultiply(0.235f, 0.192f, 0.729f, 0.20f);
+    auto ringContainer = canvas->addChild<SquareFrame>("RingContainer", RectI32(0, 0, 1920, 1080), Anchor::Full);
+    ringContainer->scale(glm::vec2(0.8f));
+    auto ringOuter = ringContainer->addChild<SpriteFrame>("Ring", RectI32(0, 0, 1920, 1080), Anchor::Full, "./res/sprite/hud/RingOuter.sprite");
+    ringOuter->setMultiply(0.235f, 0.192f, 0.729f, 0.20f);
 
     // CROSSHAIR INNER BLUE (WEAPON LIMIT)
-    auto ringInnerBlue = ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
+    auto ringInnerBlue = canvas->addChild<SpriteFrame>("RingInner", RectI32::Grow(960, 540, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
     ringInnerBlue->setMultiply(0.455f, 0.42f, 0.847f, 0.2f);
     ringInnerBlue->attachScript<frame::FollowCursorScript>(0.4f);
 
     // CROSSHAIR INNER
-    auto ringInner = ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
+    auto ringInner = canvas->addChild<SpriteFrame>("RingInner", RectI32::Grow(960, 540, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
     ringInner->setMultiply(1.0f, 1.0f, 1.0f, 0.6f);
     ringInner->attachScript<frame::FollowCursorScript>(-1.0f);
 
     // CROSSHAIR WEAPON
     auto ringWeapon = ringInner->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(47, 47, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
-    ringWeapon->setMultiply(0.929f, 0.298f, 0.392f, 0.4f);
-    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.41f, 0.4f);
+    ringWeapon->setMultiply(0.929f, 0.298f, 0.392f, 0.6f);
+    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.41f, 0.6f);
 
     // CROSSHAIR DEADZONE
     auto ringDeadzone = ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
