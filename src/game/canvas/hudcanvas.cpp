@@ -63,20 +63,25 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto ring = canvas->addChild<SpriteFrame>("Ring", RectI32::Grow(960, 540, 422, 422), Anchor::MiddleCenter, "./res/sprite/hud/RingOuter.sprite");
     ring->setMultiply(0.235f, 0.192f, 0.729f, 0.20f);
 
+    // CROSSHAIR INNER BLUE (WEAPON LIMIT)
+    auto ringInnerBlue = ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
+    ringInnerBlue->setMultiply(0.455f, 0.42f, 0.847f, 0.2f);
+    ringInnerBlue->attachScript<frame::FollowCursorScript>(0.4f);
+
     // CROSSHAIR INNER
     auto ringInner = ring->addChild<SpriteFrame>("RingInner", RectI32::Grow(422, 422, 47, 47), Anchor::MiddleCenter, "./res/sprite/hud/RingInner.sprite");
-    ringInner->setMultiply(1.0f, 1.0f, 1.0f, 0.20f);
-    ringInner->attachScript<frame::FollowCursorScript>();
+    ringInner->setMultiply(1.0f, 1.0f, 1.0f, 0.6f);
+    ringInner->attachScript<frame::FollowCursorScript>(-1.0f);
 
     // CROSSHAIR WEAPON
     auto ringWeapon = ringInner->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(47, 47, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
-    ringWeapon->setMultiply(1.0f, 1.0f, 1.0f, 0.10f);
-    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.41f, 0.10f);
+    ringWeapon->setMultiply(0.929f, 0.298f, 0.392f, 0.4f);
+    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.41f, 0.4f);
 
     // CROSSHAIR DEADZONE
     auto ringDeadzone = ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
-    ringDeadzone->setMultiply(1.0f, 1.0f, 1.0f, 0.20f);
-    ringDeadzone->attachScript<frame::CursorDistanceOpacityScript>(0.005f, 0.02f, 0.20f);
+    ringDeadzone->setMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+    ringDeadzone->attachScript<frame::CursorDistanceOpacityScript>(0.005f, 0.02f, 1.0f);
 
     // ELIMINATION NOTIFICATION
     canvas->addChild<SpriteFrame>("Notification", RectI32::Grow(960, 340, 150, 19), Anchor::Custom(0.5f, 0.25f, 0.5f, 0.25f), "./res/sprite/hud/NotificationEliminated.sprite");
