@@ -79,7 +79,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     // CROSSHAIR WEAPON
     auto ringWeapon = ringInner->addChild<SpriteFrame>("RingWeapon", RectI32::Grow(47, 47, 35, 35), Anchor::MiddleCenter, "./res/sprite/hud/RingWeapon.sprite");
     ringWeapon->setMultiply(0.929f, 0.298f, 0.392f, 0.6f);
-    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.41f, 0.6f);
+    ringWeapon->attachScript<frame::CursorDistanceOpacityScript>(0.40f, 0.45f, 0.6f);
 
     // CROSSHAIR DEADZONE
     auto ringDeadzone = ringInner->addChild<SpriteFrame>("RingDeadzone", RectI32::Grow(47, 47, 11, 11), Anchor::MiddleCenter, "./res/sprite/hud/RingDeadzone.sprite");
