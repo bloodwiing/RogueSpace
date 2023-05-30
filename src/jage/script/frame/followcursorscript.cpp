@@ -4,7 +4,9 @@
 
 using jage::script::frame::FollowCursorScript;
 
-FollowCursorScript::FollowCursorScript(abc::ScriptableABC *node) {
+FollowCursorScript::FollowCursorScript(abc::ScriptableABC* node, float maxDistance)
+        : m_maxDistance(maxDistance)
+{
     validate(node);
 }
 
@@ -17,10 +19,18 @@ void FollowCursorScript::onSpawn() {
 }
 
 void FollowCursorScript::onUpdate() {
-    double x, y;
-    jage::runtime::Window::getActive()->getScreenMouse(x, y);
+    double u, v;
+    jage::runtime::Window::getActive()->getScreenMouse(u, v);
 
-    m_node->setTranslation(glm::vec2(x, y));
+    double x, y;
+    jage::runtime::Window::getActive()->getRelativeMouse(x, y);
+
+    auto point = glm::vec2(u, v);
+    if (m_maxDistance != -1.0f) {
+        point = point / (glm::max(glm::length(glm::vec2(x, y)), m_maxDistance) / m_maxDistance);
+    }
+
+    m_node->setTranslation(point);
 }
 
 void FollowCursorScript::onDeath() {

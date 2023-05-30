@@ -10,12 +10,15 @@ namespace jage::script::frame {
             : public abc::AttachableScriptABC<jage::node::frame::BasicFrame>
     {
     public:
-        FollowCursorScript(abc::ScriptableABC* node);
+        FollowCursorScript(abc::ScriptableABC* node, float maxDistance);
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
+
+    private:
+        float m_maxDistance;
     };
 }
 
