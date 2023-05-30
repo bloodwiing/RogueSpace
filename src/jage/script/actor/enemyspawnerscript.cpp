@@ -12,6 +12,7 @@ using jage::script::abc::ScriptableABC;
 using jage::node::Scene;
 using jage::node::actor::ShipActor;
 using jage::node::actor::ModelActor;
+using jage::node::actor::DynamicActor;
 using jage::script::actor::WeaponScript;
 using jage::script::actor::AIControllerScript;
 using jage::script::actor::ScoreScript;
@@ -23,6 +24,8 @@ Scene* EnemySpawnerScript::scene = nullptr;
 ShipActor* EnemySpawnerScript::playerTarget = nullptr;
 std::weak_ptr<ScoreScript> EnemySpawnerScript::scoreScript = std::weak_ptr<ScoreScript>();
 
+std::vector<DynamicActor*> EnemySpawnerScript::enemies = std::vector<DynamicActor*>();
+
 EnemySpawnerScript::EnemySpawnerScript(ScriptableABC* node) {
     validate(node);
     m_healthScript = dependsOn<HealthScript>();
@@ -31,6 +34,7 @@ EnemySpawnerScript::EnemySpawnerScript(ScriptableABC* node) {
 void EnemySpawnerScript::onAttach() {
     ++alive;
     m_healthScript.lock()->onDamage += shared_from_this();
+    enemies.push_back(m_node);
 }
 
 void EnemySpawnerScript::onSpawn() {
@@ -43,6 +47,7 @@ void EnemySpawnerScript::onUpdate() {
 
 void EnemySpawnerScript::onDeath() {
     --alive;
+    enemies.erase(std::find(enemies.begin(), enemies.end(), m_node));
     if (alive == 0) {
         ++wave;
         spawnWave();
@@ -83,4 +88,8 @@ void EnemySpawnerScript::spawnWave() {
     for (; spawnCount > 0; --spawnCount) {
         spawnOne(maxHealth);
     }
+}
+
+std::vector<DynamicActor*> EnemySpawnerScript::getEnemies() {
+    return enemies;
 }

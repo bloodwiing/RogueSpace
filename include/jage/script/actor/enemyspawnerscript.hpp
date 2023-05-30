@@ -30,6 +30,8 @@ namespace jage::script::actor {
         static void spawnOne(float maxHealth);
         static void spawnWave();
 
+        static std::vector<node::actor::DynamicActor*> getEnemies();
+
     private:
         std::weak_ptr<HealthScript> m_healthScript;
 
@@ -39,6 +41,8 @@ namespace jage::script::actor {
         static node::Scene* scene;
         static node::actor::ShipActor* playerTarget;
         static std::weak_ptr<ScoreScript> scoreScript;
+
+        static std::vector<node::actor::DynamicActor*> enemies;
     };
 }
 
