@@ -66,7 +66,7 @@ namespace jage::node::frame::abc {
         using node::abc::NodeABC<FrameABC>::addChild;
         using node::abc::NodeABC<FrameABC>::update;
 
-        bool m_needsRectReflow = false;
+        bool m_needsRectReflow = true;
     };
 }
 

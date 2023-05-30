@@ -31,7 +31,7 @@ namespace jage::node::frame {
         glm::vec2 m_scale = glm::vec2(1.0f);
         glm::mat3 m_worldMatrix = glm::mat3(1.0f);
 
-        bool m_needsMatrixUpdate = false;
+        bool m_needsMatrixUpdate = true;
 
         void updateTransformations();
 
