@@ -32,6 +32,8 @@ void JAGEngine::init() {
     jage::system::Super::initialise(width, height);
     jage::runtime::Time::setMaxFramerate(framerate);
 
+    srand(time(nullptr));
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 

@@ -10,5 +10,6 @@
 #include "./weaponscript.hpp"
 #include "./scorescript.hpp"
 #include "./bulletscript.hpp"
+#include "./enemyspawnerscript.hpp"
 
 #endif //TRAILBLAZER_ACTOR_SCRIPTS_HPP
