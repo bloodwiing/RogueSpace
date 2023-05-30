@@ -18,7 +18,7 @@ namespace jage::node::frame {
     protected:
         SolidFrame(JAGE_FRAME_ARGS, std::shared_ptr<jage::graphics::Shader> shader, std::shared_ptr<jage::graphics::mesh2d::Sprite> sprite);
 
-        void updateReflow() override;
+        bool updateReflow() override;
 
         virtual std::shared_ptr<jage::graphics::mesh2d::Sprite> getInternalSprite() const;
 

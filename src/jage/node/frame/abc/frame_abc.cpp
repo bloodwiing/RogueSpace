@@ -50,8 +50,12 @@ void FrameABC::setAnchor(const jage::type::RectF& anchor) {
 
 void FrameABC::update() {
     DyingBase::updateDeathTimer();
-    script::abc::ScriptableABC::update();
+    scriptUpdate();
     NodeABC::update();
+}
+
+void FrameABC::scriptUpdate() {
+    script::abc::ScriptableABC::update();
 }
 
 void FrameABC::kill() {
@@ -66,15 +70,18 @@ bool FrameABC::isDead() const {
     return DyingBase::isDead();
 }
 
-void FrameABC::updateReflow() {
+bool FrameABC::updateReflow() {
     if (!m_needsRectReflow)
-        return;
+        return false;
 
     m_physicalRect = m_rect.scalePhysical(getRectParent()->getRect(), getRectParent()->getPhysicalRect(), m_anchor).as<jage::type::RectF>();
+    m_needsRectReflow = false;
 
     for (auto& [name, child] : m_children) {
         child.value->markForReflow();
     }
+
+    return true;
 }
 
 void FrameABC::markForReflow() {

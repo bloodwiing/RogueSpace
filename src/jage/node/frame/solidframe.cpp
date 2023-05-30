@@ -29,9 +29,12 @@ void SolidFrame::draw() {
     BasicFrame::draw();
 }
 
-void SolidFrame::updateReflow() {
-    FrameABC::updateReflow();
+bool SolidFrame::updateReflow() {
+    if (!FrameABC::updateReflow())
+        return false;
+
     m_quad = Quad2D(getScreenRect(), getInternalSprite());
+    return true;
 }
 
 std::shared_ptr<Sprite> SolidFrame::getInternalSprite() const {
