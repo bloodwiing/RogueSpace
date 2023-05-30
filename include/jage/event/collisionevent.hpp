@@ -7,7 +7,7 @@
 namespace jage::event {
 
     class CollisionEvent
-            : public abc::EventABC<CollisionEvent, jage::node::actor::StaticActor*>
+            : public abc::EventABC<CollisionEvent, node::actor::DynamicActor*>
     {
 
     };

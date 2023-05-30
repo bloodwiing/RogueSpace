@@ -1,7 +1,5 @@
 #include "jage/node/frame/squareframe.hpp"
 
-#include <iostream>
-
 using jage::node::frame::SquareFrame;
 using jage::type::RectF;
 
@@ -30,8 +28,6 @@ bool SquareFrame::updateReflow() {
     float anchorY = (m_anchor.y1 + m_anchor.y2) * 0.5f;
 
     m_squarePhysicalRect = RectF(glm::vec2(m_physicalRect.x1 + diffX * anchorX, m_physicalRect.y1 + diffY * anchorY), smaller, smaller);
-
-    std::cout << m_squarePhysicalRect.x1 << "\t" << m_squarePhysicalRect.y1 << "\t" << m_squarePhysicalRect.x2 << "\t" << m_squarePhysicalRect.y2 << std::endl;
 
     return true;
 }

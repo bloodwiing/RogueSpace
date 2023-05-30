@@ -17,14 +17,14 @@ class HealthScript
     public:
         HealthScript(abc::ScriptableABC* node, float maxHealth);
 
-        void notify(jage::node::actor::StaticActor* notifier) override;
+        void notify(node::actor::DynamicActor* notifier) override;
 
         void onAttach() override;
         void onSpawn() override;
         void onUpdate() override;
         void onDeath() override;
 
-        void damage(float amount);
+        void damage(node::actor::DynamicActor* source, float amount);
 
         event::DamageEvent::Manager onDamage;
 

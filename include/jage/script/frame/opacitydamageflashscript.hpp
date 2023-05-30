@@ -13,7 +13,7 @@ namespace jage::script::frame {
     public:
         OpacityDamageFlashScript(abc::ScriptableABC* node, float duration, float maxValue);
 
-        void notify(const float& delta, const float& current, const float& max) override;
+        void notify(node::actor::DynamicActor* source, const float& delta, const float& current, const float& max) override;
     };
 }
 

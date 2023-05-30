@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "jage/script/actor/collisionlistenerscript.hpp"
+#include "jage/node/actor/dynamicactor.hpp"
 
 using jage::script::actor::HealthScript;
 
@@ -30,12 +31,12 @@ void HealthScript::onDeath() {
 
 }
 
-void jage::script::actor::HealthScript::damage(float amount) {
+void HealthScript::damage(node::actor::DynamicActor* source, float amount) {
     m_health -= amount;
     std::cout << m_node->getName() << " " << m_health << "/" << m_maxHealth << "HP" << std::endl;
-    onDamage.notifyAll(amount, m_health, m_maxHealth);
+    onDamage.notifyAll(source, amount, m_health, m_maxHealth);
 }
 
-void HealthScript::notify(jage::node::actor::StaticActor* notifier) {
-    damage(1.0f);
+void HealthScript::notify(node::actor::DynamicActor* notifier) {
+    damage(notifier, 1.0f);
 }

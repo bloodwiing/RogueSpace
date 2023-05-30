@@ -21,7 +21,7 @@ namespace jage::event::abc {
     public:
         Manager() = default;
 
-        void notifyAll(Args&&... args);
+        void notifyAll(Args&... args);
 
         void addListener(const std::weak_ptr<Type>& event);
         typename Type::Manager& operator+=(const std::weak_ptr<Type>& event);

@@ -19,7 +19,7 @@ namespace jage::script::frame {
         void onUpdate() override;
         void onDeath() override;
 
-        void notify(const float& delta, const float& current, const float& max) override;
+        void notify(node::actor::DynamicActor* source, const float& delta, const float& current, const float& max) override;
     };
 }
 

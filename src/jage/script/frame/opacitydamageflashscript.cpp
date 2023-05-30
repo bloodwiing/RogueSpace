@@ -8,6 +8,6 @@ OpacityDamageFlashScript::OpacityDamageFlashScript(jage::script::abc::Scriptable
 
 }
 
-void OpacityDamageFlashScript::notify(const float& delta, const float& current, const float& max) {
+void OpacityDamageFlashScript::notify(node::actor::DynamicActor* source, const float& delta, const float& current, const float& max) {
     resetTimer();
 }

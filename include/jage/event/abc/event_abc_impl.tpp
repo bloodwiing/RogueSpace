@@ -1,5 +1,5 @@
 template<class Type, class... Args>
-void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&&... args) {
+void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&... args) {
     for (auto iter = m_listeners.begin(); iter != m_listeners.end();) {
         if (iter->expired()) {
             iter = m_listeners.erase(iter);
