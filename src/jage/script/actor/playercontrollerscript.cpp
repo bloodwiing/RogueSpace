@@ -69,7 +69,10 @@ void PlayerControllerScript::onMouseInput() {
     const auto& orientation = m_node->getOrientation();
     const auto& up = m_node->getUp();
 
-    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)rot_y + up * -(float)rot_x;
+    auto shipRot = glm::vec2(rot_x, rot_y);
+    shipRot = shipRot / glm::max(glm::length(shipRot), 1.0f);
+
+    glm::vec3 steer = glm::normalize(glm::cross(orientation, up)) * (float)shipRot.y + up * -(float)shipRot.x;
 
     if (length > 0.02f) {
         m_node->setSteer(steer * m_sensitivity);
