@@ -38,6 +38,8 @@ namespace jage::node::actor {
         void setActive() const;
         [[nodiscard]] bool isActive() const;
 
+        [[nodiscard]] glm::mat4 getViewMatrix() const;
+
         void update() override;
 
     protected:
