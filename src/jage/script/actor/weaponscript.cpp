@@ -38,8 +38,6 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
     if (m_fireCoolDown > 0.0f)
         return;
 
-    return;
-
     // relative vectors
     const auto right = glm::cross(orientation, up);
 
