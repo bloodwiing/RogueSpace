@@ -3,6 +3,7 @@
 
 #include "jage/script/abc/script_abc.hpp"
 #include "jage/node/actor/dynamicactor.hpp"
+#include "jage/event/fireevent.hpp"
 
 namespace jage::script::actor {
 
@@ -17,6 +18,8 @@ namespace jage::script::actor {
 
         void shootThisFrame(const glm::vec3& extraVelocity, const glm::vec3& orientation, const glm::vec3& up);
         void shootThisFrame(const glm::vec3& extraVelocity);
+
+        event::FireEvent::Manager onFire;
 
         [[nodiscard]] float getBulletSpeed() const;
         void setBulletSpeed(float bulletSpeed);

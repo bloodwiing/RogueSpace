@@ -59,6 +59,8 @@ void WeaponScript::shootThisFrame(const glm::vec3& extraVelocity, const glm::vec
     // Remember for next projectile
     m_fireCoolDown = 0.1f;
     m_fireFromLeft = !m_fireFromLeft;
+
+    onFire.notifyAll();
 }
 
 void WeaponScript::shootThisFrame(const glm::vec3 &extraVelocity) {
