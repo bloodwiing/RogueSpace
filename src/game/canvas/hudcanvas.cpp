@@ -6,10 +6,12 @@
 #include "jage/node/frame/progressbarframe.hpp"
 #include "jage/node/frame/squareframe.hpp"
 #include "jage/script/actor/healthscript.hpp"
+#include "jage/script/actor/scorescript.hpp"
 #include "jage/script/frame/opacitydamageflashscript.hpp"
 #include "jage/script/frame/progressdamagescript.hpp"
 #include "jage/script/frame/followcursorscript.hpp"
 #include "jage/script/frame/cursordistanceopacityscript.hpp"
+#include "jage/script/frame/scoreupdatescript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -23,6 +25,7 @@ using namespace jage::script;
 std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto player = scene->getChild("Player");
     auto healthScript = player->findScript<actor::HealthScript>();
+    auto scoreScript = player->findScript<actor::ScoreScript>();
 
     // CANVAS
     auto canvas = std::make_unique<Canvas>(RectI32(1920, 1080));
@@ -55,7 +58,9 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     canvas->addChild<SpriteFrame>("ScoreFX", RectI32::Grow(1705, 80, 165, 32), Anchor::BottomRight, "./res/sprite/hud/Gradient.sprite");
 
     // SCORE NUMBER
-    canvas->addChild<ScoreFrame>("ScoreNumber", RectI32(1870, 50, 1870, 50), Anchor::BottomRight, "./res/sprite/hud/Digit", 4);
+    auto scoreUI = canvas->addChild<ScoreFrame>("ScoreNumber", RectI32(1870, 50, 1870, 50), Anchor::BottomRight, "./res/sprite/hud/Digit", 4);
+    auto scoreUIScript = scoreUI->attachScript<frame::ScoreUpdateScript>();
+    scoreScript.lock()->onScoreUpdate += scoreUIScript;
 
     // "SCORE" TEXT
     canvas->addChild<SpriteFrame>("ScoreText", RectI32(1703, 122, 1810, 146), Anchor::BottomRight, "./res/sprite/hud/TextScore.sprite");

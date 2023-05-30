@@ -8,5 +8,6 @@
 #include "./healthscript.hpp"
 #include "./playercontrollerscript.hpp"
 #include "./weaponscript.hpp"
+#include "./scorescript.hpp"
 
 #endif //TRAILBLAZER_ACTOR_SCRIPTS_HPP

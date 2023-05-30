@@ -25,7 +25,7 @@ namespace jage::node::frame {
 
         std::vector<SpriteFrame*> m_scoreFrames;
 
-        int getSizeOfNumber(long number);
+        int getSizeOfNumber(long number) const;
 
         bool m_outdatedScore = false;
 

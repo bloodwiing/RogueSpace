@@ -30,13 +30,6 @@ long ScoreFrame::getScore() const {
 }
 
 void ScoreFrame::update() {
-    static float timer = 0.0f;
-    timer += jage::runtime::Time::getDeltaFloat();
-    if (timer > 0.02f) {
-        setScore(m_score + 1);
-        timer = 0.0f;
-    }
-
     int newSize = getSizeOfNumber(m_score);
     if (newSize > m_size) {
         for (; newSize > m_size; ++m_size) {
@@ -62,7 +55,7 @@ void ScoreFrame::update() {
 }
 
 
-int ScoreFrame::getSizeOfNumber(long number) {
+int ScoreFrame::getSizeOfNumber(long number) const {
     int size = number ? (int)floor(log10((double)number)) + 1 : 0;
     if (size < m_minSize)
         return m_minSize;
