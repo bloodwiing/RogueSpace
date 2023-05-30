@@ -23,7 +23,9 @@ std::unique_ptr<Scene> GameScene::create() {
     player->attachScript<WeaponScript>(60.0f, Tag::ENEMY, 3.0f);
     player->attachScript<PlayerControllerScript>(cameraShakeScript);
     player->attachScript<CollisionListenerScript>(1.0f);
-    player->attachScript<HealthScript>(100.0f);
+    auto healthScript = player->attachScript<HealthScript>(100.0f);
+    auto regenScript = player->attachScript<HealthRegenerationScript>(5.0f, 2.0f);
+    healthScript.lock()->onDamage += regenScript;
     auto scoreScript = player->attachScript<ScoreScript>();
 
     EnemySpawnerScript::setup(scene.get(), player, scoreScript);

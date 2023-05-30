@@ -2,14 +2,15 @@
 #define TRAILBLAZER_ACTOR_SCRIPTS_HPP
 
 #include "./aicontrollerscript.hpp"
+#include "./bulletscript.hpp"
 #include "./camerashakescript.hpp"
 #include "./collidisionnotifierscript.hpp"
 #include "./collisionlistenerscript.hpp"
+#include "./enemyspawnerscript.hpp"
+#include "./healthregenerationscript.hpp"
 #include "./healthscript.hpp"
 #include "./playercontrollerscript.hpp"
-#include "./weaponscript.hpp"
 #include "./scorescript.hpp"
-#include "./bulletscript.hpp"
-#include "./enemyspawnerscript.hpp"
+#include "./weaponscript.hpp"
 
 #endif //TRAILBLAZER_ACTOR_SCRIPTS_HPP

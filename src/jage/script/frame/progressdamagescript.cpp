@@ -22,6 +22,10 @@ void ProgressDamageScript::onDeath() {
 
 }
 
+void ProgressDamageScript::notify(const float& delta, const float& current, const float& max) {
+    m_node->setProgress(current / max);
+}
+
 void ProgressDamageScript::notify(node::actor::DynamicActor* source, const float& delta, const float& current, const float& max) {
     m_node->setProgress(current / max);
 }

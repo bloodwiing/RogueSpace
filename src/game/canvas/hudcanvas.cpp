@@ -53,6 +53,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto bar = canvas->addChild<ProgressBarFrame>("HealthValueBar", RectI32(50, 50, 380, 106), Anchor::BottomLeft, "./res/sprite/hud/BarFull.sprite", "./res/sprite/hud/BarEmpty.sprite");
     auto barScript = bar->attachScript<frame::ProgressDamageScript>();
     healthScript.lock()->onDamage += barScript;
+    healthScript.lock()->onHeal += barScript;
 
     // WARNING ICON
     auto iconWarning = canvas->addChild<SpriteFrame>("IconWarning", RectI32(405, 50, 461, 106), Anchor::BottomLeft, "./res/sprite/hud/IconWarning.sprite");
