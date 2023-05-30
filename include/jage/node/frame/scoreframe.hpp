@@ -27,7 +27,7 @@ namespace jage::node::frame {
 
         int getSizeOfNumber(long number) const;
 
-        bool m_outdatedScore = false;
+        bool m_outdatedScore = true;
 
         long m_score;
         int m_size = 0;
