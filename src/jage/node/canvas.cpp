@@ -35,6 +35,7 @@ void Canvas::update() {
                 canvasChild->markForReflow();
             }
         }
+        m_prevScreenRect = screen;
     }
 
     jage::node::abc::NodeABC<NodeType>::update();

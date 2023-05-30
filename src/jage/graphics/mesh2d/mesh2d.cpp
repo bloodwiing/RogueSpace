@@ -36,6 +36,10 @@ void Mesh2D::draw(
     glDrawElements(GL_TRIANGLES, (GLint)m_indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
+void Mesh2D::setSprite(std::shared_ptr<Sprite> sprite) {
+    m_sprite = std::move(sprite);
+}
+
 void Mesh2D::initialise() {
     m_VAO.create();
     m_VAO.bind();

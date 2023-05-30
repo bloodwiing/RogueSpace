@@ -26,7 +26,7 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto canvas = std::make_unique<Canvas>(RectI32(1920, 1080));
 
     // FLASH OVERLAY
-    auto flash = canvas->addChild<SpriteFrame>("Flash", RectI32(1920, 1080), Anchor::Full, "./res/sprite/flash.sprite");
+    auto flash = canvas->addChild<SpriteFrame>("Flash", RectI32(1920, 1080), Anchor::Full, "./res/sprite/Flash.sprite");
     flash->setMultiply(0.835f, 0.082f, 0.416f, 0.0f);
     auto flashScript = flash->attachScript<frame::OpacityDamageFlashScript>(0.5f, 0.2f);
     healthScript.lock()->onDamage += flashScript;

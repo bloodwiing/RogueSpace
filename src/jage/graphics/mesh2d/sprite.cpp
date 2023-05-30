@@ -2,14 +2,13 @@
 
 #include <utility>
 
-#include "jage/runtime/asset/assetmanager.hpp"
+#include "jage/runtime/asset/assets.hpp"
 
 using jage::graphics::mesh2d::Sprite;
 using jage::type::RectF;
 using jage::type::RectI32;
 using jage::runtime::asset::AssetManager;
-
-std::shared_ptr<Sprite> Sprite::defaultSprite = nullptr;
+using jage::runtime::asset::Assets;
 
 Sprite::Sprite(const std::shared_ptr<Texture>& texture, const jage::type::RectI32& rect)
         : m_data()
@@ -29,19 +28,23 @@ Sprite::Sprite(std::string filePath)
 
     std::string directory = runtime::asset::AssetStream::getFileDirectory(m_filePath);
 
-    m_texture = AssetManager::getInstance()->get<AssetManager::Types::Texture>(directory + m_data["texture"].as<std::string>());
+    m_texture = Assets::get<Assets::Texture>(directory + m_data["texture"].as<std::string>());
 }
 
 Sprite::Sprite()
         : m_data()
         , m_rect(1.0f, 1.0f)
-        , m_texture(Texture::getDefaultTexture())
+        , m_texture(Assets::get<Assets::Texture>())
 {
 
 }
 
 std::shared_ptr<Sprite> Sprite::create(std::string filePath) {
     return std::make_shared<Sprite>(std::move(filePath));
+}
+
+std::shared_ptr<Sprite> Sprite::createDefault() {
+    return std::make_shared<Sprite>();
 }
 
 Sprite::Sprite(const Sprite& ref)
@@ -51,17 +54,6 @@ Sprite::Sprite(const Sprite& ref)
         , m_texture(ref.m_texture)
 {
 
-}
-
-std::shared_ptr<Sprite> Sprite::getDefaultSprite() {
-    if (!defaultSprite)
-        defaultSprite = std::make_shared<Sprite>();
-    return defaultSprite;
-}
-
-void Sprite::clearDefaultSprite() {
-    defaultSprite.reset();
-    defaultSprite = nullptr;
 }
 
 RectI32 Sprite::getTextureXYRect() const {

@@ -14,7 +14,7 @@ JAGEngine::~JAGEngine() {
     m_scene.reset();
     m_canvas.reset();
 
-    jage::runtime::asset::AssetManager::getInstance()->reset();
+    jage::runtime::asset::AssetManager::destroyInstance();
     jage::system::Super::destroy();
 
     jage::runtime::asset::AssetStream::shutdown();

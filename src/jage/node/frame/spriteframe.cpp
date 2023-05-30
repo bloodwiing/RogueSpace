@@ -43,7 +43,7 @@ void SpriteFrame::draw() {
 
 void SpriteFrame::setSprite(std::shared_ptr<Sprite> sprite) {
     m_sprite = std::move(sprite);
-    m_quad = Quad2D(getScreenRect(), getSprite());
+    m_quad.setSprite(m_sprite);
 }
 
 void SpriteFrame::setMultiply(glm::vec4 multiply) {

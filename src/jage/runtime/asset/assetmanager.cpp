@@ -9,10 +9,18 @@ using std::mutex;
 
 AssetManager* AssetManager::m_instance = nullptr;
 
-AssetManager *AssetManager::getInstance() {
+AssetManager* AssetManager::getInstance() {
     if (m_instance == nullptr)
         m_instance = new AssetManager();
     return m_instance;
+}
+
+void AssetManager::destroyInstance() {
+    if (m_instance != nullptr) {
+        m_instance->reset();
+        delete m_instance;
+    }
+    m_instance = nullptr;
 }
 
 template<>
@@ -33,6 +41,20 @@ std::shared_ptr<Types::Texture> AssetManager::get(const std::string &fileName, i
 template<>
 std::shared_ptr<Types::Sprite> AssetManager::get(const std::string &fileName, int priority /* = ASSET_STREAM_BASE_PRIORITY */) {
     return get<Types::Sprite>(m_spriteMutex, m_sprites, fileName, priority);
+}
+
+template<>
+std::shared_ptr<Types::Texture> AssetManager::getDefault() {
+    if (!m_default.texture)
+        m_default.texture = Types::Texture::createDefault();
+    return m_default.texture;
+}
+
+template<>
+std::shared_ptr<Types::Sprite> AssetManager::getDefault() {
+    if (!m_default.sprite)
+        m_default.sprite = Types::Sprite::createDefault();
+    return m_default.sprite;
 }
 
 void AssetManager::reset() {

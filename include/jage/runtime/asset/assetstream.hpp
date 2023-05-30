@@ -10,6 +10,7 @@
 #include <memory>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
 
 #define JAGE_ASSET_STREAM_BASE_PRIORITY 5
 
@@ -67,7 +68,7 @@ namespace jage::runtime::asset {
             bool operator<(const AssetQuery& other) const;
         };
 
-        bool m_active = true;
+        std::atomic<bool> m_active = true;
 
         static AssetStream* m_instance;
 

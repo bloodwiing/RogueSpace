@@ -15,11 +15,6 @@ Super& Super::getInstance() {
 Super::Super(int width, int height) {
     m_window = std::make_shared<jage::runtime::Window>(width, height);
     m_window->activate();
-
-    GLubyte whiteTextureBytes[] = {
-            0xFF, 0xFF, 0xFF, 0xFF
-    };
-    jage::graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4);
 }
 
 Super::~Super() {
@@ -34,8 +29,6 @@ void Super::initialise(int width, int height) {
 
 void Super::destroy() {
     jage::graphics::mesh3d::Material::clearDefaultMaterial();
-    jage::graphics::mesh2d::Sprite::clearDefaultSprite();
-    jage::graphics::Texture::clearDefaultTexture();
     instance.reset();
 }
 

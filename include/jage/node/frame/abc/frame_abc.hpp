@@ -40,6 +40,7 @@ namespace jage::node::frame::abc {
         void setAnchor(const type::RectF& anchor);
 
         void update() override;
+        virtual void scriptUpdate();
 
         void kill() override;
         void kill(float delay) override;
@@ -54,7 +55,7 @@ namespace jage::node::frame::abc {
         type::RectF m_anchor;
         type::RectF m_physicalRect;
 
-        virtual void updateReflow();
+        virtual bool updateReflow();
 
         void markForReflow();
 

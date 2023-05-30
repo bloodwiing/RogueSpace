@@ -31,6 +31,8 @@ namespace jage::graphics::mesh2d {
                 Shader& shader,
                 glm::mat3 frame = glm::mat3(1.0f));
 
+        void setSprite(const std::shared_ptr<Sprite> sprite);
+
     protected:
         void initialise() override;
 
