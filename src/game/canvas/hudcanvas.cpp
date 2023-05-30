@@ -12,6 +12,7 @@
 #include "jage/script/frame/followcursorscript.hpp"
 #include "jage/script/frame/cursordistanceopacityscript.hpp"
 #include "jage/script/frame/scoreupdatescript.hpp"
+#include "jage/script/frame/opacityscoreflashscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -55,7 +56,10 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     healthScript.lock()->onDamage += iconScript;
 
     // SCORE GLOW
-    canvas->addChild<SpriteFrame>("ScoreFX", RectI32::Grow(1705, 80, 165, 32), Anchor::BottomRight, "./res/sprite/hud/Gradient.sprite");
+    auto scoreFx = canvas->addChild<SpriteFrame>("ScoreFX", RectI32::Grow(1705, 80, 165, 32), Anchor::BottomRight, "./res/sprite/hud/Gradient.sprite");
+    scoreFx->setOpacity(0.0f);
+    auto scoreFlashScript = scoreFx->attachScript<frame::OpacityScoreFlashScript>(2.0f, 1.0f);
+    scoreScript.lock()->onScoreUpdate += scoreFlashScript;
 
     // SCORE NUMBER
     auto scoreUI = canvas->addChild<ScoreFrame>("ScoreNumber", RectI32(1870, 50, 1870, 50), Anchor::BottomRight, "./res/sprite/hud/Digit", 4);
