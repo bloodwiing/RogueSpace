@@ -17,6 +17,7 @@
 #include "jage/script/frame/notificationkillscript.hpp"
 #include "jage/script/frame/opacitycombatflickerscript.hpp"
 #include "jage/script/frame/weaponcursorscript.hpp"
+#include "jage/script/frame/opacitylowhpperiodicflashscript.hpp"
 
 using game::canvas::HUDCanvas;
 using jage::node::Canvas;
@@ -46,14 +47,22 @@ std::unique_ptr<Canvas> HUDCanvas::create(Scene* scene) {
     auto healthFx = canvas->addChild<SpriteFrame>("HealthFX", RectI32::Grow(215, 78, 165, 32), Anchor::BottomLeft, "./res/sprite/hud/Gradient.sprite");
     healthFx->flipHorizontally(true);
     healthFx->setOpacity(0.0f);
-    auto healthFlashScript = healthFx->attachScript<frame::OpacityDamageFlashScript>(2.0f, 1.0f);
-    healthScript.lock()->onDamage += healthFlashScript;
+    auto healthFXScript = healthFx->attachScript<frame::OpacityDamageFlashScript>(2.0f, 1.0f);
+    healthScript.lock()->onDamage += healthFXScript;
 
     // HEALTH BAR
     auto bar = canvas->addChild<ProgressBarFrame>("HealthValueBar", RectI32(50, 50, 380, 106), Anchor::BottomLeft, "./res/sprite/hud/BarFull.sprite", "./res/sprite/hud/BarEmpty.sprite");
     auto barScript = bar->attachScript<frame::ProgressDamageScript>();
     healthScript.lock()->onDamage += barScript;
     healthScript.lock()->onHeal += barScript;
+
+    // HEALTH BAR LOW HP GLOW
+    auto healthFlash = canvas->addChild<SpriteFrame>("HealthWarningFlash", RectI32::Grow(215, 78, 165, 32), Anchor::BottomLeft, "./res/sprite/hud/Gradient.sprite");
+    healthFlash->flipHorizontally(true);
+    healthFlash->setOpacity(0.0f);
+    auto healthFlashScript = healthFlash->attachScript<frame::OpacityLowHPPeriodicFlashScript>(1.5f, 0.4f, 0.2f, 0.3f);
+    healthScript.lock()->onDamage += healthFlashScript;
+    healthScript.lock()->onHeal += healthFlashScript;
 
     // WARNING ICON
     auto iconWarning = canvas->addChild<SpriteFrame>("IconWarning", RectI32(405, 50, 461, 106), Anchor::BottomLeft, "./res/sprite/hud/IconWarning.sprite");
