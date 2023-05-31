@@ -7,8 +7,15 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/lib)
 set(CMAKE_COMPILE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/pdb)
 include(CTest)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
+option( JAGE_BUILD_DEBUG "Sets the compiler to build with Optimisations for Debugging, alternatively builds for Release, but takes longer" ON )
+
+if( JAGE_BUILD_DEBUG )
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Og" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Og" )
+else()
+    set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3" )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3" )
+endif()
 
 # -----
 

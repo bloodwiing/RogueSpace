@@ -11,7 +11,7 @@
       "displayName": "Default Config",
       "description": "Default build using Ninja generator",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/",
+      "binaryDir": "${sourceDir}/build/debug/",
       "errors": {
         "dev": true
       },
@@ -24,7 +24,36 @@
           "type": "BOOL",
           "value": "ON"
         },
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "JAGE_BUILD_DEBUG": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
+      "name": "configRelease",
+      "displayName": "Release Config",
+      "description": "Heavily Optimised build, but slower compilation time",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release/",
+      "errors": {
+        "dev": true
+      },
+      "cacheVariables": {
+        "YAML_CPP_BUILD_TOOLS": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "YAML_CPP_INSTALL": {
+          "type": "BOOL",
+          "value": "ON"
+        },
+        "CMAKE_BUILD_TYPE": "Release",
+        "JAGE_BUILD_DEBUG": {
+          "type": "BOOL",
+          "value": "OFF"
+        }
       }
     }
   ],
@@ -32,6 +61,10 @@
     {
       "name": "buildDebug",
       "configurePreset": "configDebug"
+    },
+    {
+      "name": "buildRelease",
+      "configurePreset": "configRelease"
     }
   ],
   "testPresets": [
@@ -62,6 +95,19 @@
         {
           "type": "test",
           "name": "testDebug"
+        }
+      ]
+    },
+    {
+      "name": "buildRelease",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "configRelease"
+        },
+        {
+          "type": "build",
+          "name": "buildRelease"
         }
       ]
     }
