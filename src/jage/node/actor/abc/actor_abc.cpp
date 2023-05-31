@@ -42,7 +42,8 @@ void ActorABC::update() {
 }
 
 void ActorABC::spawn() {
-    m_scene->tagActorToMap(shared_from_this());
+    if (m_scene != nullptr)
+        m_scene->tagActorToMap(shared_from_this());
 }
 
 void ActorABC::kill() {
