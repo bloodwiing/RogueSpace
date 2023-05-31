@@ -1,5 +1,5 @@
 template<class Type, class... Args>
-void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&&... args) {
+void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&... args) {
     for (auto iter = m_listeners.begin(); iter != m_listeners.end();) {
         if (iter->expired()) {
             iter = m_listeners.erase(iter);
@@ -11,12 +11,12 @@ void jage::event::abc::EventABC<Type, Args...>::Manager::notifyAll(Args&&... arg
 }
 
 template<class Type, class... Args>
-void jage::event::abc::EventABC<Type, Args...>::Manager::addListener(const std::shared_ptr<Type>& event) {
+void jage::event::abc::EventABC<Type, Args...>::Manager::addListener(const std::weak_ptr<Type>& event) {
     m_listeners.push_back(event);
 }
 
 template<class Type, class... Args>
-typename Type::Manager& jage::event::abc::EventABC<Type, Args...>::Manager::operator+=(const std::shared_ptr<Type>& event) {
+typename Type::Manager& jage::event::abc::EventABC<Type, Args...>::Manager::operator+=(const std::weak_ptr<Type>& event) {
     addListener(event);
     return *this;
 }

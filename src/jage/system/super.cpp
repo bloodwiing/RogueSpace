@@ -1,6 +1,7 @@
 #include "jage/system/super.hpp"
 
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh3d/material.hpp"
+#include "jage/graphics/mesh2d/sprite.hpp"
 #include "jage/graphics/texture.hpp"
 
 using jage::system::Super;
@@ -11,20 +12,14 @@ Super& Super::getInstance() {
     return *instance;
 }
 
-Super::Super(int width, int height)
-    : m_window(new jage::runtime::Window(width, height))
-{
+Super::Super(int width, int height) {
+    m_window = std::make_shared<jage::runtime::Window>(width, height);
     m_window->activate();
-
-    GLubyte whiteTextureBytes[] = {
-            0xFF, 0xFF, 0xFF, 0xFF
-    };
-    jage::graphics::Texture::createDefaultTexture(whiteTextureBytes, 1, 1, 4);
 }
 
 Super::~Super() {
     m_window->close();
-    delete m_window;
+    m_window.reset();
     m_window = nullptr;
 }
 
@@ -33,11 +28,10 @@ void Super::initialise(int width, int height) {
 }
 
 void Super::destroy() {
-    jage::graphics::Material::clearDefaultMaterial();
-    jage::graphics::Texture::clearDefaultTexture();
+    jage::graphics::mesh3d::Material::clearDefaultMaterial();
     instance.reset();
 }
 
-jage::runtime::Window* Super::getWindow() {
+std::shared_ptr<jage::runtime::Window> Super::getWindow() {
     return m_window;
 }

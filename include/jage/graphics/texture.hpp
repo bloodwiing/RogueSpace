@@ -11,6 +11,7 @@
 #include "jage/graphics/shader.hpp"
 #include "jage/runtime/asset/abc/asset_abc.hpp"
 #include "jage/runtime/asset/assetstream.hpp"
+#include "jage/type/rect.hpp"
 
 namespace jage::graphics {
 
@@ -26,11 +27,8 @@ namespace jage::graphics {
         static std::shared_ptr<Texture> create(const std::string& fileName);
         explicit Texture(GLubyte *bytes, int width, int height, int channels);
         static std::shared_ptr<Texture> create(GLubyte *bytes, int width, int height, int channels);
-        static void createDefaultTexture(GLubyte *bytes, int width, int height, int channels);
-        static void clearDefaultTexture();
+        static std::shared_ptr<Texture> createDefault();
         ~Texture() = default;
-
-        [[nodiscard]] static std::shared_ptr<Texture> getDefaultTexture();
 
         void onQueue(int priority) override;
         void onPrepare() override;
@@ -54,6 +52,8 @@ namespace jage::graphics {
         /// \return         Texture OpenGL ID
         [[nodiscard]] GLuint getID() const;
 
+        [[nodiscard]] jage::type::RectI32 getSizeRect() const;
+
     protected:
         class LOD;
 
@@ -69,8 +69,6 @@ namespace jage::graphics {
         std::atomic<int> m_LODsLoaded = 0;
 
         [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
-
-        static std::shared_ptr<Texture> defaultTexture;
 
         Texture& operator=(const Texture& ref);
     };
@@ -97,6 +95,10 @@ namespace jage::graphics {
 
         [[nodiscard]] GLuint getID() const;
         [[nodiscard]] int getLevel() const;
+
+        [[nodiscard]] int getWidth() const;
+        [[nodiscard]] int getHeight() const;
+        [[nodiscard]] jage::type::RectI32 getSize() const;
 
     private:
         GLuint m_ID;

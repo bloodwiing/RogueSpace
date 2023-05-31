@@ -3,6 +3,7 @@
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <memory>
 
 #include "jage/type/rect.hpp"
 
@@ -16,7 +17,8 @@ namespace jage::runtime {
 
     /// \brief      A game window, can support multiple, but preferred to be only 1
     /// \details    Manages a glfwWindow
-    class Window {
+    class Window
+            : public std::enable_shared_from_this<Window> {
     public:
         /// \brief          Creates a new glfwWindow of the given size
         /// \param width    The Width of the new Window
@@ -28,16 +30,18 @@ namespace jage::runtime {
         /// \brief          Sets the current Window as the active context for OpenGL events
         void activate();
         /// \brief          Returns the currently active Window used for drawing
-        static Window* getActive();
+        static std::shared_ptr<Window> getActive();
 
         /// \brief          Updates the Physical size of the Window
+        void resize(int width, int height);
+        /// \brief          Updates the Systemic size of the Window
         void updateSize(int width, int height);
 
         /// \return         The Width of the Window
         [[nodiscard]] int getWidth() const;
         /// \return         The Height of the Window
         [[nodiscard]] int getHeight() const;
-        [[nodiscard]] jage::type::Rect<int> getRect() const;
+        [[nodiscard]] jage::type::RectI32 getRect() const;
         /// \return         The Aspect Ratio or Width/Height Ratio of the Window
         [[nodiscard]] float getAspectRatio() const;
 
@@ -76,6 +80,11 @@ namespace jage::runtime {
         /// \param[out] y   The absolute Y position
         void getAbsoluteMouse(int& x, int& y) const;
         /// \brief          Reads the Cursor position and updates the coordinate parameters to match them
+        /// \details        This function is in screen space, within the [-1; 1] range for the shorter component and aspect relative other
+        /// \param[out] x   The relative X position
+        /// \param[out] y   The relative Y position
+        void getScreenMouse(double& x, double& y) const;
+        /// \brief          Reads the Cursor position and updates the coordinate parameters to match them
         /// \details        This function is in screen space, within the [-0.5; 0.5] range for the shorter component and aspect relative other
         /// \param[out] x   The relative X position
         /// \param[out] y   The relative Y position
@@ -91,7 +100,7 @@ namespace jage::runtime {
         m_height;
 
         /// The currently active window used as the context for OpenGL calls
-        static Window* m_active;
+        static std::shared_ptr<Window> m_active;
 
         /// A flag that stops OpenGL from loading multiple times
         static bool m_wasGLLoaded;

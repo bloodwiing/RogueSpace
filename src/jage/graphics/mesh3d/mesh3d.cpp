@@ -6,14 +6,9 @@
 
 using jage::graphics::mesh3d::Mesh3D;
 
-Mesh3D::Mesh3D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::Material &material)
-        : MeshABC(vertices, indices, material)
-{
-
-}
-
-Mesh3D::Mesh3D(const jage::graphics::abc::MeshABC<jage::graphics::mesh3d::VAO3D>& mesh)
-        : MeshABC(mesh)
+Mesh3D::Mesh3D(const std::vector<VertexType> &vertices, const std::vector<GLuint> &indices, const jage::graphics::mesh3d::Material &material)
+        : MeshABC(vertices, indices)
+        , m_material(material)
 {
 
 }

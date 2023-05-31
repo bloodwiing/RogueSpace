@@ -14,12 +14,12 @@ namespace jage::script::abc {
         virtual void update();
 
         template<class T>
-        T* attachScript();
+        std::weak_ptr<T> attachScript();
         template<class T, class... Args>
-        T* attachScript(Args&&... args);
+        std::weak_ptr<T> attachScript(Args&&... args);
 
         template<class T>
-        T* findScript();
+        std::weak_ptr<T> findScript();
 
     private:
         /// A list of attachable Scripts

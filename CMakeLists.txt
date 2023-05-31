@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(RogueSpace)
+project( Trailblazer )
 
 set(CMAKE_VERBOSE_MAKEFILE TRUE)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -45,10 +45,13 @@ add_subdirectory( test )
 include_directories( ${CMAKE_SOURCE_DIR}/include )
 target_include_directories( BuildTest PRIVATE ${CMAKE_SOURCE_DIR}/include )
 
-link_libraries( $<TARGET_OBJECTS:jage> )
-target_link_libraries( BuildTest $<TARGET_OBJECTS:jage> )
+link_libraries( $<TARGET_OBJECTS:jage> $<TARGET_OBJECTS:game> )
+target_link_libraries( BuildTest $<TARGET_OBJECTS:jage> $<TARGET_OBJECTS:game> )
 
 add_executable( Build ${CMAKE_SOURCE_DIR}/src/main.cpp )
+set_target_properties( Build
+        PROPERTIES
+            OUTPUT_NAME "Trailblazer" )
 
 # -----
 

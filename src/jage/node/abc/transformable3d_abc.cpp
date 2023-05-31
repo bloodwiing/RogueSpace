@@ -5,7 +5,7 @@
 using jage::node::abc::Transformable3DABC;
 
 glm::vec3 Transformable3DABC::getWorldPosition() const {
-    return {getWorldMatrix()[4]};
+    return {getWorldMatrix()[3]};
 }
 
 void Transformable3DABC::translate(const glm::vec3& tra) {

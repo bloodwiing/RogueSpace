@@ -15,7 +15,7 @@ ModelActor::ModelActor(JAGE_ACTOR_ARGS, const char *fileName, int priority /* = 
     : DynamicActor(parent, std::move(name), scene, tag, isVolatile)
 {
     m_model = AssetManager::getInstance()->get<AssetManager::Types::Model3D>(fileName, priority);
-    m_shader = AssetManager::getInstance()->get<AssetManager::Types::Shader>("./res/default", 100);
+    m_shader = AssetManager::getInstance()->get<AssetManager::Types::Shader>("./res/shader/default", 100);
 }
 
 void ModelActor::draw() {

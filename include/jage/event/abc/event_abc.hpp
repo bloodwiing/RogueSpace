@@ -21,10 +21,10 @@ namespace jage::event::abc {
     public:
         Manager() = default;
 
-        void notifyAll(Args&&... args);
+        void notifyAll(Args&... args);
 
-        void addListener(const std::shared_ptr<Type>& event);
-        typename Type::Manager& operator+=(const std::shared_ptr<Type>& event);
+        void addListener(const std::weak_ptr<Type>& event);
+        typename Type::Manager& operator+=(const std::weak_ptr<Type>& event);
 
     protected:
         std::vector<std::weak_ptr<Type>> m_listeners;

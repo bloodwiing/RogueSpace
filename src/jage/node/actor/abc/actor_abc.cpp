@@ -19,11 +19,6 @@ ActorABC::ActorABC(JAGE_ACTOR_ARGS)
 
 }
 
-void ActorABC::tagToScene(Scene *scene) {
-    if (scene != nullptr)
-        scene->tagActorToMap(shared_from_this());
-}
-
 jage::node::Scene* ActorABC::getScene() const {
     return m_scene;
 }
@@ -44,6 +39,11 @@ void ActorABC::update() {
     DyingBase::updateDeathTimer();
     script::abc::ScriptableABC::update();
     NodeABC::update();
+}
+
+void ActorABC::spawn() {
+    if (m_scene != nullptr)
+        m_scene->tagActorToMap(shared_from_this());
 }
 
 void ActorABC::kill() {

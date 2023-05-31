@@ -17,6 +17,8 @@ file( GLOB_RECURSE _jage_SOURCE CONFIGURE_DEPENDS
         runtime/asset/*.cpp
         script/*.cpp
         script/abc/*.cpp
+        script/actor/*.cpp
+        script/frame/*.cpp
         system/*.cpp
         types/*.cpp
         utility/*.cpp )

@@ -11,7 +11,7 @@
 #include "jage/graphics/mesh2d/vao2d.hpp"
 #include "jage/node/actor/camera.hpp"
 #include "jage/graphics/texture.hpp"
-#include "jage/graphics/material.hpp"
+#include "jage/graphics/mesh2d/sprite.hpp"
 
 namespace jage::graphics::mesh2d {
 
@@ -20,8 +20,8 @@ namespace jage::graphics::mesh2d {
     class Mesh2D
             : public graphics::abc::MeshABC<VAO2D> {
     public:
-        Mesh2D(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material);
-        Mesh2D(const MeshABC<VAO2D>& mesh);
+        Mesh2D(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const std::shared_ptr<Sprite> sprite);
+        Mesh2D(const Mesh2D& mesh) = default;
 
         /// \brief          Draws the Mesh to the screen
         /// \param shader   The Shader program to use when rendering
@@ -31,8 +31,12 @@ namespace jage::graphics::mesh2d {
                 Shader& shader,
                 glm::mat3 frame = glm::mat3(1.0f));
 
+        void setSprite(const std::shared_ptr<Sprite> sprite);
+
     protected:
         void initialise() override;
+
+        std::shared_ptr<Sprite> m_sprite;
     };
 }
 

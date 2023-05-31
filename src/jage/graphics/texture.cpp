@@ -9,8 +9,7 @@
 
 using jage::graphics::Texture;
 using jage::runtime::asset::AssetStream;
-
-std::shared_ptr<Texture> Texture::defaultTexture = std::shared_ptr<Texture>();
+using jage::type::RectI32;
 
 Texture::Texture(const std::string& filePath)
     : m_metadata(YAML::LoadFile(filePath + ".meta"))
@@ -43,17 +42,11 @@ std::shared_ptr<Texture> Texture::create(GLubyte *bytes, int width, int height, 
     return std::make_shared<Texture>(bytes, width, height, channels);
 }
 
-void Texture::createDefaultTexture(GLubyte *bytes, int width, int height, int channels) {
-    defaultTexture = create(bytes, width, height, channels);
-}
-
-void Texture::clearDefaultTexture() {
-    defaultTexture.reset();
-    defaultTexture = nullptr;
-}
-
-std::shared_ptr<Texture> Texture::getDefaultTexture() {
-    return defaultTexture;
+std::shared_ptr<Texture> Texture::createDefault() {
+    GLubyte whiteTextureBytes[] = {
+            0xFF, 0xFF, 0xFF, 0xFF
+    };
+    return create(whiteTextureBytes, 1, 1, 4);
 }
 
 void Texture::onQueue(int priority) {
@@ -122,6 +115,10 @@ GLuint Texture::getID() const {
     return LOD->getID();
 }
 
+RectI32 Texture::getSizeRect() const {
+    return m_main->getSize();
+}
+
 void Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
     if (!shader.isErrored()) {
         GLint uniformID = shader.getUniform(uniform);
@@ -160,7 +157,7 @@ bool Texture::setActiveLOD(int level) {
     return false;
 }
 
-Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* container)
+Texture::LOD::LOD(std::string fileName, const YAML::Node& node, Texture* container)
     : m_ID()
     , m_PBO()
     , m_fileName(std::move(fileName))
@@ -190,7 +187,7 @@ Texture::LOD::LOD(std::string fileName, const YAML::Node &node, Texture* contain
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RED, GL_UNSIGNED_BYTE, nullptr);
 }
 
-std::shared_ptr<Texture::LOD> Texture::LOD::create(const std::string &fileName, const YAML::Node &node, Texture* container) {
+std::shared_ptr<Texture::LOD> Texture::LOD::create(const std::string &fileName, const YAML::Node& node, Texture* container) {
     return std::make_shared<LOD>(fileName, node, container);
 }
 
@@ -241,9 +238,16 @@ void Texture::LOD::onQueue(int priority) {
             [self = shared_from_this()](const uint8_t* data, size_t size){
                 Texture::LOD& lod = self->asObject();
 
+                if (lod.isProcessed())
+                    return;
+
+                stbi_set_flip_vertically_on_load(true);
+
                 int height, width, channels;
                 stbi_uc* finalData = stbi_load_from_memory((const stbi_uc*)data, (int)size, &width, &height, &channels, 0);
+
                 memcpy(lod.m_buffer, finalData, width * height * channels);
+
                 stbi_image_free(finalData);
                 lod.markProcessed();
 
@@ -300,4 +304,16 @@ GLuint Texture::LOD::getID() const {
 
 int Texture::LOD::getLevel() const {
     return m_level;
+}
+
+int Texture::LOD::getWidth() const {
+    return m_width;
+}
+
+int Texture::LOD::getHeight() const {
+    return m_height;
+}
+
+RectI32 Texture::LOD::getSize() const {
+    return {getWidth(), getHeight()};
 }

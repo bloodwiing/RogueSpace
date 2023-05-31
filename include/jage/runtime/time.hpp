@@ -28,6 +28,8 @@ namespace jage::runtime {
         /// \see        Time#setMaxFramerate
         static std::chrono::microseconds getMinimumFrameTime();
 
+        static TDoubleSec getFrameTime();
+
         /// \return     The delta of time between updates as a float
         static float getDeltaFloat();
         /// \return     The delta of time between updates as a double
@@ -45,6 +47,7 @@ namespace jage::runtime {
     private:
         /// The calculated time delta
         static TDoubleSec m_delta;
+        static TTimePoint m_gameStart;
         /// The expected time stamp when a frame should end
         static TTimePoint m_frameEnd;
         /// The timestamp when the current frame started

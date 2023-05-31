@@ -1,0 +1,6 @@
+name: "NotificationEliminated"
+texture: "HUD.tga"
+x: 3
+y: 101
+width: 300
+height: 38

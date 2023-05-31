@@ -1,0 +1,6 @@
+name: "RingInner"
+texture: "HUD.tga"
+x: 850
+y: 927
+width: 94
+height: 94

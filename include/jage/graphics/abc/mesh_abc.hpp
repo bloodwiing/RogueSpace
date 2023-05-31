@@ -8,7 +8,6 @@
 #include <glm/detail/type_quat.hpp>
 
 #include "jage/node/actor/camera.hpp"
-#include "jage/graphics/material.hpp"
 #include "jage/graphics/abc/ebo.hpp"
 
 namespace jage::graphics::abc {
@@ -21,9 +20,8 @@ namespace jage::graphics::abc {
         /// \brief          Creates a 3D Mesh by making and storing a Vertex Array Object
         /// \param vertices The list of Vertex objects
         /// \param indices  The list of Indices that build a stream of Triangles from Vertices
-        /// \param material The Material used for rendering the Mesh
         /// \see            Vertex
-        MeshABC(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices, const Material& material);
+        MeshABC(const std::vector<VertexType>& vertices, const std::vector<GLuint>& indices);
         MeshABC(const MeshABC<TVAO>& mesh);
 
     protected:
@@ -34,9 +32,6 @@ namespace jage::graphics::abc {
 
         /// The Vertex Array Object created from the Vertex and Index arrays
         TVAO m_VAO;
-
-        /// The Material used for rendering the Mesh
-        Material m_material;
 
         bool m_initialised = false;
 

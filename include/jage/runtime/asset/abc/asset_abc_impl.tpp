@@ -5,7 +5,7 @@ void jage::runtime::asset::abc::AssetABC<T>::enqueue() {
 
 template<class T>
 void jage::runtime::asset::abc::AssetABC<T>::enqueue(int priority) {
-    if (isReady())
+    if (isProcessed() or isReady())
         return;
     onQueue(priority);
 }

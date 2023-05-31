@@ -6,9 +6,10 @@
 
 namespace jage::event {
 
-    class CollisionEvent : public abc::EventABC<CollisionEvent, jage::node::actor::StaticActor*> {
-    public:
-        void notify(jage::node::actor::StaticActor* notifier) override;
+    class CollisionEvent
+            : public abc::EventABC<CollisionEvent, node::actor::DynamicActor*>
+    {
+
     };
 }
 

@@ -1,0 +1,6 @@
+name: "Warning"
+texture: "HUD.tga"
+x: 3
+y: 142
+width: 504
+height: 32

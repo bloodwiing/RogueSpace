@@ -67,6 +67,10 @@ bool Camera::isActive() const {
     return active == this;
 }
 
+glm::mat4 Camera::getViewMatrix() const {
+    return m_matrix;
+}
+
 void Camera::update() {
     DynamicActor::update();
     updateMatrix();

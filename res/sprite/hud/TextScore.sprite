@@ -1,0 +1,6 @@
+name: "TextScore"
+texture: "HUD.tga"
+x: 850
+y: 641
+width: 107
+height: 24

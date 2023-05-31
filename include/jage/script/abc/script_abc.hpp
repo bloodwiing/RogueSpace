@@ -2,6 +2,7 @@
 #define JAGE_SCRIPT_ABC_HPP
 
 #include <stdexcept>
+#include <memory>
 
 namespace jage::node::actor::abc {
     class ActorABC;
@@ -39,7 +40,7 @@ namespace jage::script::abc {
 
         void validate(ScriptableABC* node);
         template<class T>
-        T* dependsOn();
+        std::weak_ptr<T> dependsOn();
     };
 
     template<class TNode>

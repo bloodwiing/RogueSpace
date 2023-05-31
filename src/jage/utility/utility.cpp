@@ -7,10 +7,11 @@ namespace utility = jage::utility;
 
 void glfwErrorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
-};
+}
 
 void utility::initializeOpenGL() {
     glfwSetErrorCallback(glfwErrorCallback);
+
     if (glfwInit() == GLFW_FALSE) {
         return;
     }

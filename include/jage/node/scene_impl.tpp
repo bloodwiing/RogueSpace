@@ -13,6 +13,7 @@ T *jage::node::Scene::addVolatileChild(JAGE_SCENE_ACTOR_ARGS) {
     static_assert(std::is_base_of<NodeType, T>::value, "Cannot add a non-Hierarchy child");
     auto child = std::make_shared<T>(nullptr, std::move(name), this, tag, true);
     m_volatileActors.add(child);
+    child->spawn();
     return child.get();
 }
 
@@ -21,5 +22,6 @@ T *jage::node::Scene::addVolatileChild(JAGE_SCENE_ACTOR_ARGS, Args&&... args) {
     static_assert(std::is_base_of<NodeType, T>::value, "Cannot add a non-Hierarchy child");
     auto child = std::make_shared<T>(nullptr, std::move(name), this, tag, true, std::forward<Args>(args)...);
     m_volatileActors.add(child);
+    child->spawn();
     return child.get();
 }

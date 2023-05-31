@@ -1,0 +1,6 @@
+name: "Red"
+texture: "SpriteSpheres.tga"
+x: 128
+y: 128
+width: 128
+height: 128

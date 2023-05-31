@@ -37,6 +37,7 @@ T* jage::node::abc::NodeABC<TNode>::addChild(JAGE_NODE_ARGS(TNode)) {
     static_assert(std::is_base_of<NodeType, T>::value, "Cannot add a non-Hierarchy child");
     auto child = std::make_shared<T>(parent, name);
     internalRegisterChild(child);
+    child->spawn();
     return child.get();
 }
 
@@ -46,6 +47,7 @@ T* jage::node::abc::NodeABC<TNode>::addChild(JAGE_NODE_ARGS(TNode), Args&&... ar
     static_assert(std::is_base_of<NodeType, T>::value, "Cannot add a non-Hierarchy child");
     auto child = std::make_shared<T>(parent, name, std::forward<Args>(args)...);
     internalRegisterChild(child);
+    child->spawn();
     return child.get();
 }
 
