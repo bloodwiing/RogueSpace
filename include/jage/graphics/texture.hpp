@@ -68,7 +68,7 @@ namespace jage::graphics {
         std::atomic<int> m_activeLOD;
         std::atomic<int> m_LODsLoaded = 0;
 
-        [[nodiscard]] bool getActiveLOD(std::shared_ptr<LOD>& LOD) const;
+        [[nodiscard]] std::shared_ptr<LOD> getActiveLOD() const;
 
         Texture& operator=(const Texture& ref);
     };

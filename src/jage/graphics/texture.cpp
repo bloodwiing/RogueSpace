@@ -44,9 +44,12 @@ std::shared_ptr<Texture> Texture::create(GLubyte *bytes, int width, int height, 
 
 std::shared_ptr<Texture> Texture::createDefault() {
     GLubyte whiteTextureBytes[] = {
+            0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF,
+            0xFF, 0xFF, 0xFF, 0xFF,
             0xFF, 0xFF, 0xFF, 0xFF
     };
-    return create(whiteTextureBytes, 1, 1, 4);
+    return create(whiteTextureBytes, 2, 2, 4);
 }
 
 void Texture::onQueue(int priority) {
@@ -57,40 +60,40 @@ void Texture::onQueue(int priority) {
 }
 
 void Texture::onPrepare() {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return;
 
     LOD->prepare();
 }
 
 bool Texture::isProcessed() const {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return false;
 
     return LOD->isProcessed();
 }
 
 bool Texture::isPrepared() const {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return false;
 
     return LOD->isPrepared();
 }
 
 bool Texture::isReady() const {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return false;
 
     return LOD->isReady();
 }
 
 void Texture::bind(GLint unit) const {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return;
 
     return LOD->bind(unit);
@@ -108,8 +111,8 @@ void Texture::destroy() const {
 }
 
 GLuint Texture::getID() const {
-    std::shared_ptr<LOD> LOD;
-    if (!getActiveLOD(LOD))
+    std::shared_ptr<LOD> LOD = getActiveLOD();
+    if (!LOD)
         return 0;
 
     return LOD->getID();
@@ -127,16 +130,14 @@ void Texture::assign(Shader &shader, const char *uniform, GLint unit) const {
     }
 }
 
-bool Texture::getActiveLOD(std::shared_ptr<LOD> &LOD) const {
+std::shared_ptr<Texture::LOD> Texture::getActiveLOD() const {
     if (m_activeLOD == -1)
-        return false;
+        return nullptr;
 
     if (m_activeLOD == 0)
-        LOD = m_main;
+        return m_main;
     else
-        LOD = m_levels[m_activeLOD - 1];
-
-    return true;
+        return m_levels[m_activeLOD - 1];
 }
 
 bool Texture::setActiveLOD(int level) {
@@ -203,6 +204,16 @@ Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level
     , m_priority(priority)
     , m_fileName()
 {
+    glGenBuffers(1, &m_PBO);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_PBO);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_STREAM_DRAW);
+    glBufferStorage(GL_PIXEL_UNPACK_BUFFER, m_width * m_height * m_channels, nullptr, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT);
+
+    m_buffer = glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, m_width * m_height * m_channels, GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_FLUSH_EXPLICIT_BIT);
+    memcpy(m_buffer, bytes, width * height * channels);
+
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+
     glGenTextures(1, &m_ID);
 
     bind(0);
@@ -210,10 +221,12 @@ Texture::LOD::LOD(GLubyte *bytes, int width, int height, int channels, int level
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, bytes);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, getChannelEnumFromCount(m_channels), GL_UNSIGNED_BYTE, nullptr);
 
     unbind();
 
