@@ -28,7 +28,7 @@ void EnemyIndicatorFrame::update() {
         m_sprites.push_back(sprite);
     }
 
-    const auto matrix = Camera::getActiveCamera()->getViewMatrix();
+    const auto cameraMatrix = Camera::getActiveCamera()->getViewMatrix();
 
     const auto aspectRatio = Window::getActive()->getAspectRatio();
 
@@ -38,6 +38,8 @@ void EnemyIndicatorFrame::update() {
             continue;
         }
 
+        /*
+         *
         const auto clipPos = matrix * glm::vec4(enemies[i]->getWorldPosition(), 0.0);
         const auto screenPos = glm::normalize(glm::vec2(clipPos));
 
@@ -45,10 +47,38 @@ void EnemyIndicatorFrame::update() {
                 screenPos.x / glm::max(aspectRatio, 1.0f) * (float)Window::getActive()->getWidth(),
                 screenPos.y / glm::max(1 / aspectRatio, 1.0f) * (float)Window::getActive()->getHeight());
 
+         */
+
+        const auto clipPos = cameraMatrix * enemies[i]->getWorldMatrix() * glm::vec4(0, 0, 0, 1.0);
+        auto ndc = glm::vec2(clipPos / clipPos.w);
+
+        if (clipPos.z < 0.0f) {
+            ndc.x = -ndc.x;
+            ndc.y = -ndc.y;
+        }
+
+        const auto screenPos = glm::vec2(
+                ndc.x * (float)Window::getActive()->getWidth(),
+                ndc.y * (float)Window::getActive()->getHeight());
+
+        const auto normalScreenPos = glm::normalize(screenPos);
+
+        auto spritePos = glm::vec2(
+                normalScreenPos.x / glm::max(aspectRatio, 1.0f) * (float)Window::getActive()->getWidth(),
+                normalScreenPos.y / glm::max(1 / aspectRatio, 1.0f) * (float)Window::getActive()->getHeight()
+                );
+
+        const auto opacityRing = glm::max(aspectRatio, 1.0f) * (float)Window::getActive()->getWidth() * 0.25f;
+        const auto oapcityTransition = opacityRing * 0.75f;
+
         m_sprites[i]->setTranslation(spritePos);
-        m_sprites[i]->setRotation(glm::acos(screenPos.x) * (screenPos.y >= 0.0f ? 1.0f : -1.0f) - glm::pi<float>() * 0.5f);
+        m_sprites[i]->setRotation(glm::acos(normalScreenPos.x) * (normalScreenPos.y >= 0.0f ? 1.0f : -1.0f) - glm::pi<float>() * 0.5f);
         m_sprites[i]->setScale(glm::vec2(1.0f) * (0.8f + clipPos.z * 0.001f));
-        m_sprites[i]->setOpacity(glm::clamp(glm::length(glm::vec2(clipPos)) * 0.05f - 3.0f, 0.0f, 1.0f));
+        if (clipPos.z < 0.0f) {
+            m_sprites[i]->setOpacity(1.0f);
+        } else {
+            m_sprites[i]->setOpacity(glm::clamp(glm::length(glm::vec2(screenPos)) / oapcityTransition - 0.75f, 0.0f, 1.0f));
+        }
     }
 
     FrameABC::update();
